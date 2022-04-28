@@ -1,9 +1,6 @@
 stages:
     - build
 
-before_script:
-  - chmod 600 $DEPLOY_KEY $STAGING_KEY
-
 variables:
   GIT_DEPTH: "16"
   GIT_STRATEGY: fetch
