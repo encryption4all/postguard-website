@@ -6,7 +6,7 @@ variables:
   GIT_STRATEGY: fetch
   GIT_SUBMODULE_STRATEGY: recursive
   STOREPATH: postguard/website
-  BPSTOREC: bpstorec --verbose --host $STOREHOST --port $STOREPORT --username $STOREUSER --token $STORETOKEN --naclcerts $STORECERTS
+  BPSTOREC: bpstorec --verbose --host $STOREHOST --port $STOREPORT --username $STOREUSER --token $STORETOKEN
 
 deploy-main:
     tags: [docker]
@@ -22,7 +22,7 @@ deploy-main:
     - curl -L https://bitpowder.com/packages/linux-packages.gpg > /etc/apt/trusted.gpg.d/bitpowder.asc
     - apt update
     - apt install -y indigo
-    - cd src && find . -type f -print0 | xargs -n 1 -0 -I %FILE% $BPSTOREC put -f %FILE% $STOREPATH/file/%FILE%
+    - cd src && find . -type f -print0 | xargs -n 1 -0 -I %FILE% $BPSTOREC --naclcerts $STORECERTS put -f %FILE% $STOREPATH/file/%FILE%
 
 deploy-stable:
     tags:
