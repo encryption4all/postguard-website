@@ -1,0 +1,44 @@
+stages:
+    - build
+
+before_script:
+  - chmod 600 $DEPLOY_KEY $STAGING_KEY
+
+variables:
+  GIT_DEPTH: "16"
+  GIT_STRATEGY: fetch
+  GIT_SUBMODULE_STRATEGY: recursive
+
+deploy-main:
+    tags:
+    - docker
+    only:
+    - main
+    stage: build
+    environment: main
+    script:
+    - apt update
+    - apt install -y openssh-client
+    - tar -C src -c . | ssh -i $DEPLOY_KEY -F sshconfig deploy-acc
+    - tar -C src -cf archive.tar .
+    artifacts:
+      expire_in: 1 day
+      paths:
+        - "archive.tar"
+
+deploy-stable:
+    tags:
+    - docker
+    only:
+    - stable
+    stage: build
+    environment: stable
+    script:
+    - apt update
+    - apt install -y openssh-client
+    - tar -C src -c . | ssh -i $DEPLOY_KEY -F sshconfig deploy-prod
+    - tar -C src -cf archive.tar .
+    artifacts:
+      expire_in: 1 day
+      paths:
+        - "archive.tar"

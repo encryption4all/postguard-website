@@ -1,0 +1,9 @@
+HostKeyAlgorithms ssh-ed25519
+UserKnownHostsFile known_hosts
+
+Host deploy-prod
+  User deploywebsite
+  Hostname 131.174.142.12
+Host deploy-acc
+  User deploywebsite-acc
+  Hostname 131.174.142.14
