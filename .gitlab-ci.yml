@@ -14,12 +14,12 @@ deploy-main:
     - main
     stage: build
     environment: main
-    image: "debian:bullseye"
+    image: "registry.science.ru.nl/ilab/docker-build/debian:bullseye"
     script:
     - apt update
     - apt install -y curl
     - echo "deb http://packages.bitpowder.com/indigo-debian-bullseye stable core"  > /etc/apt/sources.list.d/bitpowder-indigo.list
-    - curl -L https://bitpowder.com/packages/linux-packages.gpg | sudo tee /etc/apt/trusted.gpg.d/bitpowder.asc
+    - curl -L https://bitpowder.com/packages/linux-packages.gpg > /etc/apt/trusted.gpg.d/bitpowder.asc
     - apt update
     - apt install -y indigo
     - cd src && find . -type f -print0 | xargs -n 1 -0 -I %FILE% $BPSTOREC put -f %FILE% $STOREPATH/file/%FILE%
