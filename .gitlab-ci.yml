@@ -6,7 +6,7 @@ variables:
   GIT_STRATEGY: fetch
   GIT_SUBMODULE_STRATEGY: recursive
   STOREPATH: postguard/website
-  BPSTOREC: bpstorec --verbose --host $STOREHOST --port $STOREPORT --username $STOREUSER --token $STORETOKEN
+  BPSTOREC: bpstorec --verbose --host $STOREHOST --port $STOREPORT --username $STOREUSER --token $STORETOKEN --naclcerts $STORECERTS
 
 deploy-main:
     tags: [docker]
