@@ -8,23 +8,25 @@ variables:
   GIT_DEPTH: "16"
   GIT_STRATEGY: fetch
   GIT_SUBMODULE_STRATEGY: recursive
+  STOREPATH: postguard/website
+  BPSTOREC: bpstorec --verbose --host $STOREHOST --port $STOREPORT --username $STOREUSER --token $STORETOKEN
 
 deploy-main:
-    tags:
-    - docker
+    tags: [docker]
     only:
     - main
     stage: build
     environment: main
+    image: "debian:bullseye"
     script:
     - apt update
-    - apt install -y openssh-client
-    - tar -C src -c . | ssh -i $DEPLOY_KEY -F sshconfig deploy-acc
-    - tar -C src -cf archive.tar .
-    artifacts:
-      expire_in: 1 day
-      paths:
-        - "archive.tar"
+    - apt install -y curl
+    - echo "deb http://packages.bitpowder.com/indigo-debian-bullseye stable core"  > /etc/apt/sources.list.d/bitpowder-indigo.list
+    - curl -L https://bitpowder.com/packages/linux-packages.gpg | sudo tee /etc/apt/trusted.gpg.d/bitpowder.asc
+
+    - apt update
+    - apt install -y indigo
+	  - cd src && find . -type f -print0 | xargs -n 1 -0 -I %FILE% $BPSTOREC put -f %FILE% $STOREPATH/file/%FILE%
 
 deploy-stable:
     tags:
