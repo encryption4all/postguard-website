@@ -8,12 +8,12 @@ variables:
   STOREPATH: postguard/website
   BPSTOREC: bpstorec --verbose --host $STOREHOST --port $STOREPORT --username $STOREUSER --token $STORETOKEN
 
-deploy-main:
+deploy-stable:
     tags: [docker]
     only:
-    - main
+    - stable
     stage: build
-    environment: main
+    environment: stable
     image: "registry.science.ru.nl/ilab/docker-build/debian:bullseye"
     script:
     - apt update
@@ -23,20 +23,3 @@ deploy-main:
     - apt update
     - apt install -y indigo file
     - cd src && find . -type f -print0 | xargs -n 1 -0 -I %FILE% $BPSTOREC --naclcerts $STORECERTS put -f %FILE% $STOREPATH/file/%FILE%
-
-deploy-stable:
-    tags:
-    - docker
-    only:
-    - stable
-    stage: build
-    environment: stable
-    script:
-    - apt update
-    - apt install -y openssh-client
-    - tar -C src -c . | ssh -i $DEPLOY_KEY -F sshconfig deploy-prod
-    - tar -C src -cf archive.tar .
-    artifacts:
-      expire_in: 1 day
-      paths:
-        - "archive.tar"
