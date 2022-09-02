@@ -1,3 +1,3 @@
 <div>
-	<img src="images/decrypt.svg" />
+    <img src="images/decrypt.svg" />
 </div>

@@ -1,70 +1,79 @@
 <script>
-	export let selected = 1;
-	const items = ['File sharing', 'Home', 'Addons', 'Fallback', 'About', 'Privacy Policy'];
+    export let selected = 1
+    const items = [
+        'File sharing',
+        'Home',
+        'Addons',
+        'Fallback',
+        'About',
+        'Privacy Policy',
+    ]
 </script>
 
 <div class="pg-topbar">
-	<img src="logo.svg" />
-	<ul class="pg-menu">
-		{#each items as item, i}
-			<li class:selected={selected === i}>
-				<a href="/" on:click|preventDefault={() => (selected = i)}>{item}</a>
-			</li>
-		{/each}
-	</ul>
+    <img src="logo.svg" />
+    <ul class="pg-menu">
+        {#each items as item, i}
+            <li class:selected={selected === i}>
+                <a href="/" on:click|preventDefault={() => (selected = i)}
+                    >{item}</a
+                >
+            </li>
+        {/each}
+    </ul>
 </div>
 
 <style lang="scss">
-	.pg-topbar {
-		width: auto;
-		height: 96px;
-		margin: 25px 25px auto 25px;
+    .pg-topbar {
+        width: auto;
+        height: 96px;
+        margin: 25px 25px auto 25px;
 
-		display: flex;
-		flex-direction: row;
-		align-items: center;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
 
-		img {
-			width: 96px;
-			height: 96px;
-		}
-	}
+        img {
+            width: 96px;
+            height: 96px;
+        }
+    }
 
-	.pg-menu {
-		margin-left: auto;
-	}
+    .pg-menu {
+        margin-left: auto;
+    }
 
-	ul.pg-menu li {
-		display: inline-block;
-		position: relative;
-		list-style-type: none;
-		margin-left: 15px;
+    ul.pg-menu li {
+        display: inline-block;
+        position: relative;
+        list-style-type: none;
+        margin-left: 15px;
 
-		&.selected {
-			text-decoration: 2px underline;
-			text-underline-offset: 4px;
-		}
+        &.selected {
+            text-decoration: 2px underline;
+            text-underline-offset: 4px;
+        }
 
-		&:not(.selected) a {
-			text-decoration: none;
+        &:not(.selected) a {
+            text-decoration: none;
 
-			&:after {
-				content: '';
-				position: absolute;
-				width: 100%;
-				transform: scaleX(0);
-				height: 2px;
-				bottom: 0;
-				left: 0;
-				background-color: #5fd9ad;
-				transform-origin: bottom right;
-				transition: transform 0.25s ease-out;
-			}
+            &:after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                transform: scaleX(0);
+                height: 2px;
+                bottom: 0;
+                left: 0;
+                background-color: #5fd9ad;
+                transform-origin: bottom right;
+                transition: transform 0.25s ease-out;
+            }
 
-			&:hover:after {
-				transform: scaleX(1);
-				transform-origin: bottom left;
-			}
-		}
-	}
+            &:hover:after {
+                transform: scaleX(1);
+                transform-origin: bottom left;
+            }
+        }
+    }
 </style>
