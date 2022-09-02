@@ -1,45 +1,47 @@
-<div class="grid-container header">
-    <h2><span>Send encrypted files and emails</span></h2>
-    <p>
-        Send & encrypt files, download the PostGuard add-on for your mail
-        client, or decrypt PostGuard encrypted mails. Read more.
-    </p>
-</div>
 <div class="grid-container">
-    <img src="images/signpost.svg" alt="signpost" usemap="#signpost" />
-
-    <map name="signpost">
-        <area
-            shape="rect"
-            coords="259, 237, 67, 116"
-            alt="filesharing"
-            href="#filesharing"
-        />
-        <area
-            shape="rect"
-            coords="287, 139, 505, 4"
-            alt="emailing"
-            href="#addons"
-        />
-    </map>
+    <div class="grid-item header">
+        <h2><span>Send encrypted files and emails</span></h2>
+        <p>
+            Send & encrypt files, download the PostGuard add-on for your mail
+            client, or decrypt PostGuard encrypted mails. Read more.
+        </p>
+    </div>
+    <div class="grid-item">
+        <img src="images/signpost.svg" alt="signpost" usemap="#signpost" />
+        <map name="signpost">
+            <area
+                shape="rect"
+                coords="259, 237, 67, 116"
+                alt="filesharing"
+                href="#filesharing"
+            />
+            <area
+                shape="rect"
+                coords="287, 139, 505, 4"
+                alt="emailing"
+                href="#addons"
+            />
+        </map>
+    </div>
+    <div class="grid-item" />
 </div>
-<div class="grid-container" />
 
 <style lang="scss">
     .grid-container {
         display: grid;
-        grid-auto-columns: 1fr;
+        grid-template-columns: 1fr auto 1fr;
         grid-auto-flow: column;
         height: auto;
+        justify-content: center;
+        align-content: center;
+        margin: auto 25px auto 25px;
 
-        &.header {
+        .grid-item.header {
             display: flex;
             flex-direction: column;
             position: relative;
             height: 100%;
-            min-width: 200px;
-            max-width: 400px;
-            top: 50px;
+            width: 400px;
             text-align: left;
         }
     }
