@@ -1,5 +1,5 @@
 <script>
-    import { Pagination, A11y, HashNavigation } from 'swiper'
+    import { Pagination, A11y, HashNavigation, Mousewheel } from 'swiper'
     import { Swiper, SwiperSlide } from 'swiper/svelte'
     import 'swiper/css'
     import 'swiper/css/pagination'
@@ -26,10 +26,11 @@
 <Header bind:selected />
 
 <Swiper
-    modules={[Pagination, HashNavigation, A11y]}
+    modules={[Pagination, HashNavigation, A11y, Mousewheel]}
     pagination={{ clickable: true, el: '.swiper-pagination', type: 'bullets' }}
     initialSlide={selected}
     hashNavigation={{ watchState: true }}
+    mousewheel={true}
     on:slideChange={(e) => {
         selected = e.detail[0].activeIndex
     }}
