@@ -11,7 +11,7 @@
 </script>
 
 <div class="pg-topbar">
-    <img src="logo.svg" />
+    <img src="logo.svg" alt="postguard logo" />
     <ul class="pg-menu">
         {#each items as item, i}
             <li class:selected={selected === i}>
