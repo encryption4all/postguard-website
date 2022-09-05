@@ -1,13 +1,9 @@
 <script>
+    import { _ } from 'svelte-i18n'
     export let selected = 1
-    const items = [
-        'File sharing',
-        'Home',
-        'Addons',
-        'Fallback',
-        'About',
-        'Privacy Policy',
-    ]
+    const items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map(
+        (s) => $_(`header.${s}`)
+    )
 </script>
 
 <div class="pg-topbar">

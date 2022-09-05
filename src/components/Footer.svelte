@@ -1,14 +1,9 @@
 <script>
+    import { _ } from 'svelte-i18n'
     export let selected
-
-    const items = [
-        'Send & Encrypt',
-        'Back to home',
-        'Download add-on',
-        'Decrypt emails',
-        'About',
-        'Privacy Policy',
-    ]
+    const items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map(
+        (s) => $_(`footer.${s}`)
+    )
 
     const next2imgs = ['images/forward_icon.svg', 'images/rightarrow.svg']
     const prev2imgs = ['images/leftarrow.svg', 'images/back_icon.svg']

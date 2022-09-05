@@ -1,31 +1,25 @@
+<script>
+    import { _ } from 'svelte-i18n'
+</script>
+
 <div class="grid-container">
     <div class="grid-item">
-        <h2>About PostGuard</h2>
-        <h3>Why PostGuard</h3>
+        <h2>{$_('about.title')}</h2>
+        <h3>{$_('about.subtitle1')}</h3>
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius
-            netus mattis in pharetra elementum. Augue dapibus a mauris, et
-            ultricies. Quam tempor volutpat sit quam a donec et. Facilisis sed
-            lacus tellus sodales integer ultricies venenatis amet tristique.
+            {$_('about.subpar1')}
         </p>
-        <h3>How does it work?</h3>
+        <h3>{$_('about.subtitle1')}</h3>
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius
-            netus mattis in pharetra elementum. Augue dapibus a mauris, et
-            ultricies. Quam tempor volutpat sit quam a donec et. Facilisis sed
-            lacus tellus sodales integer ultricies venenatis amet tristique.
+            {$_('about.subpar2')}
         </p>
     </div>
     <div class="grid-item">
         <img src="images/about.svg" alt="about" />
         <div id="team">
-            <h3>About the PostGuard team</h3>
+            <h3>{$_('about.about_team')}</h3>
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius
-                netus mattis in pharetra elementum. Augue dapibus a mauris, et
-                ultricies. Quam tempor volutpat sit quam a donec et. Facilisis
-                sed lacus tellus sodales integer ultricies venenatis amet
-                tristique.
+                {$_('lorum')}
             </p>
         </div>
     </div>

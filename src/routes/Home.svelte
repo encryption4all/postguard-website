@@ -1,10 +1,11 @@
+<script>
+    import { _ } from 'svelte-i18n'
+</script>
+
 <div class="grid-container">
     <div class="grid-item header">
-        <h2><span>Send encrypted files and emails</span></h2>
-        <p>
-            Send & encrypt files, download the PostGuard add-on for your mail
-            client, or decrypt PostGuard encrypted mails. Read more.
-        </p>
+        <h2><span>{$_('home.title')}</span></h2>
+        <p>{$_('home.par')}</p>
     </div>
     <div class="grid-item">
         <img src="images/signpost.svg" alt="signpost" usemap="#signpost" />

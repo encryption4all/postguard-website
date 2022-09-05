@@ -1,0 +1,35 @@
+{
+    "header": {
+        "fs": "Filesharing",
+        "home": "Home",
+        "addons": "Addons",
+        "fallback": "Fallback",
+        "about": "About",
+        "pol": "Privacy Policy"
+    },
+    "footer": {
+        "fs": "Send & Encrypt",
+        "home": "Back to home",
+        "addons": "Download add-on",
+        "fallback": "Decrypt emails",
+        "about": "About",
+        "pol": "Privacy Policy"
+    },
+    "home": {
+        "title": "Send encrypted files & emails",
+        "par": "Send & encrypt files, download the PostGuard add-on for your mail            client, or decrypt PostGuard encrypted mails."
+    },
+    "about": {
+        "title": "About PostGuard",
+        "subtitle1": "Why PostGuard?",
+        "subpar1": "",
+        "subtitle2": "How does it work?",
+        "subpar2": "",
+        "about_team": "About the PostGuard team"
+    },
+    "addons": {},
+    "fallback": {},
+    "filesharing": {},
+    "privacypolicy": {},
+    "lorum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius netus mattis in pharetra elementum. Augue dapibus a mauris, et ultricies. Quam tempor volutpat sit quam a donec et. Facilisis sed lacus tellus sodales integer ultricies venenatis amet tristique."
+}
