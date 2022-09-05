@@ -1,6 +1,8 @@
 <script>
     import { _ } from 'svelte-i18n'
+
     export let selected
+
     const items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map(
         (s) => $_(`footer.${s}`)
     )
@@ -66,18 +68,20 @@
                     right: 0;
                     bottom: 3px;
                     height: 0;
-                    border: 2px solid rgba(84, 214, 167, 0.5);
+                    border: 2px solid rgba(var(--pg-accent-color-rgb), 50%);
                     border-radius: 10px;
                 }
             }
         }
     }
+
     .swiper-pagination {
         position: relative;
         bottom: 0;
         margin: auto;
         grid-column-start: 2;
     }
+
     .swiper-button-prev {
         width: 100%;
         display: flex;
@@ -95,6 +99,7 @@
             }
         }
     }
+
     .swiper-button-next {
         width: 100%;
         grid-column-start: 3;

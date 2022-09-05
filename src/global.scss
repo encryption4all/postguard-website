@@ -39,6 +39,11 @@ body {
     overflow: hidden;
 }
 
+:root {
+    --pg-accent-color: #3095de;
+    --pg-accent-color-rgb: 48, 149, 222;
+}
+
 #app {
     height: 100%;
     width: 100%;
@@ -69,4 +74,37 @@ body {
 
 .swiper-pagination-bullet-active {
     background-color: black;
+}
+
+.grid-item.header {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 100%;
+    max-width: 400px;
+    text-align: left;
+
+    h2 {
+        position: relative;
+        inline-size: 300px;
+        overflow-wrap: break-word;
+        margin-bottom: 0;
+
+        span {
+            background-color: white;
+            padding-right: 10px;
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: var(--pg-accent-color);
+            border-radius: 3.5px;
+            z-index: -1;
+        }
+    }
 }

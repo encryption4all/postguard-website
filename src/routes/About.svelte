@@ -3,8 +3,8 @@
 </script>
 
 <div class="grid-container">
-    <div class="grid-item">
-        <h2>{$_('about.title')}</h2>
+    <div class="grid-item header">
+        <h2><span>{$_('about.title')}</span></h2>
         <h3>{$_('about.subtitle1')}</h3>
         <p>
             {$_('about.subpar1')}
@@ -30,11 +30,11 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         margin: auto 5% auto 5%;
-        grid-gap: 20%;
+        grid-gap: 10%;
     }
 
     .grid-item {
-        max-width: 600px;
+        max-width: 500px;
         display: flex;
         flex-direction: column;
         text-align: left;
@@ -45,24 +45,5 @@
         border-radius: 16px;
         margin-top: 80px;
         padding: 40px;
-    }
-
-    h2 {
-        position: relative;
-        display: inline-block;
-        z-index: 0;
-
-        &:before {
-            content: '';
-            position: absolute;
-            z-index: -1;
-            width: 193px;
-            left: 0;
-            right: 0;
-            bottom: 5px;
-            height: 0;
-            border: 2px solid rgba(84, 214, 167, 0.5);
-            border-radius: 10px;
-        }
     }
 </style>

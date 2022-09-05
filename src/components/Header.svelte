@@ -61,7 +61,7 @@
                 height: 2px;
                 bottom: 0;
                 left: 0;
-                background-color: #5fd9ad;
+                background-color: var(--pg-accent-color);
                 transform-origin: bottom right;
                 transition: transform 0.25s ease-out;
             }

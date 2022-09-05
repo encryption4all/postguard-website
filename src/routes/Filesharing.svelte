@@ -1,34 +1,19 @@
 <script>
+    import { _ } from 'svelte-i18n'
     export let cryptifySrc = ''
 </script>
 
 <div class="grid-container">
-    <div class="grid-item left-grid">
-        <h2>Encrypt & Send files</h2>
-        <h3>How does file encryption work?</h3>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-        <h3>How does file encryption work?</h3>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-        </p>
+    <div class="grid-item header">
+        <h2><span>{$_('filesharing.title')}</span></h2>
+        <h3>{$_('filesharing.subtitle1')}</h3>
+        <p>{$_('filesharing.subpar1')}</p>
+        <h3>{$_('filesharing.subtitle2')}</h3>
+        <p>{$_('filesharing.subpar2')}</p>
     </div>
-    <img class="grid-item middle-grid" src="images/basket.svg" alt="basket" />
+    <img class="grid-item" src="images/basket.svg" alt="basket" />
     <embed
-        class="grid-item right-grid"
+        class="grid-item"
         src={cryptifySrc}
         type="text/html"
         width="400"
@@ -40,7 +25,7 @@
     .grid-container {
         display: grid;
         grid-auto-flow: column;
-        grid-gap: 5%;
+        grid-gap: 10%;
         margin: auto 5% auto 5%;
         align-items: end;
         justify-content: center;
@@ -52,9 +37,10 @@
     }
 
     .grid-item {
+        max-width: 333px;
+        display: flex;
+        justify-content: flex-end;
         text-align: left;
-        min-width: 300px;
-        max-width: 600px;
     }
 
     embed {

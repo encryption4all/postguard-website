@@ -20,10 +20,14 @@
 
     let selected = 1
     let swiper
-    let cryptifySrc = ''
+    let cryptifySrc,
+        fallbackSrc = ''
 
     $: if (swiper && swiper.activeIndex !== selected) swiper.slideTo(selected)
-    $: if (swiper) cryptifySrc = 'http://localhost:8080'
+    $: if (swiper) {
+        cryptifySrc = 'http://localhost:8080'
+        fallbackSrc = 'http://localhost:8081'
+    }
 </script>
 
 {#if !$isLoading}
@@ -51,7 +55,9 @@
         >
         <SwiperSlide><Home /></SwiperSlide>
         <SwiperSlide data-hash="addons"><Addons /></SwiperSlide>
-        <SwiperSlide data-hash="fallback"><Fallback /></SwiperSlide>
+        <SwiperSlide data-hash="fallback"
+            ><Fallback bind:fallbackSrc /></SwiperSlide
+        >
         <SwiperSlide data-hash="about"><About /></SwiperSlide>
         <SwiperSlide data-hash="privacy"><PrivacyPolicy /></SwiperSlide>
     </Swiper>
