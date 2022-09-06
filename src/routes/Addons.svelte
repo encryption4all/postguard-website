@@ -13,9 +13,6 @@
 
 <style lang="scss">
     .grid-container {
-        display: grid;
         grid-template-columns: 1fr 1fr;
-        margin: auto 5% auto 5%;
-        grid-gap: 20%;
     }
 </style>

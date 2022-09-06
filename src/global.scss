@@ -76,6 +76,13 @@ body {
     background-color: black;
 }
 
+.grid-container {
+    display: grid;
+    max-width: 900px;
+    margin: auto 5% auto 5%;
+    grid-gap: 5%;
+}
+
 .grid-item.header {
     display: flex;
     flex-direction: column;

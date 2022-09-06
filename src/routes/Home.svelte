@@ -29,12 +29,10 @@
 
 <style lang="scss">
     .grid-container {
-        display: grid;
         grid-template-columns: 1fr auto 1fr;
         grid-auto-flow: column;
         height: auto;
         justify-content: center;
         align-content: center;
-        margin: auto 25px auto 25px;
     }
 </style>

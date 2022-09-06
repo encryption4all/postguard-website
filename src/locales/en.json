@@ -3,7 +3,7 @@
         "fs": "Filesharing",
         "home": "Home",
         "addons": "Addons",
-        "fallback": "Fallback",
+        "fallback": "Decrypt emails",
         "about": "About",
         "pol": "Privacy Policy"
     },
@@ -40,6 +40,6 @@
         "subtitle2": "How does it work?",
         "subpar2": "blabla"
     },
-    "privacypolicy": {},
+    "privacypolicy": "Complete privacy policy",
     "lorum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius netus mattis in pharetra elementum. Augue dapibus a mauris, et ultricies. Quam tempor volutpat sit quam a donec et. Facilisis sed lacus tellus sodales integer ultricies venenatis amet tristique."
 }

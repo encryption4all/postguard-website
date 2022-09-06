@@ -1,6 +1,9 @@
 <script>
+    import { page } from '$app/stores'
     import { _ } from 'svelte-i18n'
+
     export let cryptifySrc = ''
+    const uuid = $page.url.searchParams.get('download')
 </script>
 
 <div class="grid-container">
@@ -12,21 +15,19 @@
         <p>{$_('filesharing.subpar2')}</p>
     </div>
     <img class="grid-item" src="images/basket.svg" alt="basket" />
+    <div class="overlay" />
     <embed
         class="grid-item"
-        src={cryptifySrc}
+        src={`${cryptifySrc}${uuid ? `?download=${uuid}` : ''}`}
         type="text/html"
         width="400"
-        height="600"
+        height="700"
     />
 </div>
 
 <style lang="scss">
     .grid-container {
-        display: grid;
         grid-auto-flow: column;
-        grid-gap: 10%;
-        margin: auto 5% auto 5%;
         align-items: end;
         justify-content: center;
 
@@ -37,7 +38,7 @@
     }
 
     .grid-item {
-        max-width: 333px;
+        max-width: 400px;
         display: flex;
         justify-content: flex-end;
         text-align: left;
@@ -47,5 +48,6 @@
         padding: 10px;
         border: 1px dashed #1e1e1e;
         border-radius: 16px;
+        overflow: hidden;
     }
 </style>
