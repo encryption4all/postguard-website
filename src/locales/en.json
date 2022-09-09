@@ -25,8 +25,10 @@
         "subpar1": "",
         "subtitle2": "How does it work?",
         "subpar2": "",
-        "about_team": "About the PostGuard team"
+        "team.header": "About the team",
+        "team.par": "<a href=\"https://ihub.ru.nl\">iHub at Radboud University</a> PostGuard is being developed by a multidisciplinary team from , in the Netherlands, funded by NWO. The aim is to foster secure communication by offering free email encryption based on advanced (identity-based) encryption techniques. The team focuses on usability and accessibility of encryption technology by combing expertise in computing science, security, and user experience design. This project partners with several public and private organisations in the Netherlands, including <a href=\"https://nedap-healthcare.com/\">Nedap Healthcare</a>, <a href=\"https://www.vgz.nl/\">VGZ</a>, <a href=\"https://www.surf.nl/en\">SURFnet</a>, <a href=\"https://www.nijmegen.nl/\">the Municipality of Nijmegen</a> and <a href=\"https://www.compumatica.com/\">Compumatica</a>."
     },
+
     "addons": {
         "title": "Add the Postguard add-on to your mail client",
         "subtitle": "some subtitle",

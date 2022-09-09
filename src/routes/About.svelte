@@ -1,5 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n'
+    import './../global.scss'
 </script>
 
 <div class="grid-container">
@@ -17,9 +18,9 @@
     <div class="grid-item">
         <img src="images/about.svg" alt="about" />
         <div id="team">
-            <h3>{$_('about.about_team')}</h3>
+            <h3>{$_('about.team.header')}</h3>
             <p>
-                {$_('lorum')}
+                {@html $_('about.team.par')}
             </p>
         </div>
     </div>

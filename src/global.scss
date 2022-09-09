@@ -24,6 +24,10 @@ p {
     color: #022e3d;
 }
 
+a {
+    text-decoration-color: var(--pg-accent-color);
+}
+
 h2 {
     font-size: 24px;
     font-weight: 800;
