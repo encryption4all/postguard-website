@@ -44,6 +44,11 @@
         position: relative;
         list-style-type: none;
         margin-left: 15px;
+        padding-right: 15px;
+
+        &:not(:last-child) {
+            border-right: 1px solid black;
+        }
 
         &.selected {
             text-decoration: 2px underline;
@@ -56,7 +61,7 @@
             &:after {
                 content: '';
                 position: absolute;
-                width: 100%;
+                width: calc(100% - 15px);
                 transform: scaleX(0);
                 height: 2px;
                 bottom: 0;
