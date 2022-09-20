@@ -1,47 +1,48 @@
 <script>
     import { _ } from 'svelte-i18n'
 
+    import { fly } from 'svelte/transition'
+
     export let selected
 
     const items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map(
         (s) => $_(`footer.${s}`)
     )
-
-    const next2imgs = ['images/forward_icon.svg', 'images/rightarrow.svg']
-    const prev2imgs = ['images/leftarrow.svg', 'images/back_icon.svg']
-
-    let next2, prev2
-    $: prev2 = items.slice(Math.max(selected - 2, 0), selected)
-    $: next2 = items.slice(selected + 1, selected + 3)
 </script>
 
 <div class="pg-footer">
     <div class={'swiper-button-prev'}>
-        {#each prev2 as label, i}
-            <a href={'#'}>
-                <div on:click={() => (selected -= prev2.length - i)}>
-                    <img src={prev2imgs[i]} alt={`Go back back by ${i + 1}`} />
-                    <p>{prev2[i]}</p>
+        {#if items[selected - 1]}
+            <a in:fly={{ x: -300 }} out:fly={{ x: -300 }} href={'#'}>
+                <div on:click={() => selected--}>
+                    <img
+                        class="arrow"
+                        src="images/leftarrow.svg"
+                        alt={`Go back back by 1`}
+                    />
+                    <p>{items[selected - 1]}</p>
+                    <img src="images/back_icon.svg" />
                 </div>
             </a>
-        {/each}
+        {/if}
     </div>
 
     <div class="swiper-pagination" />
 
     <div class={'swiper-button-next'}>
-        {#each next2 as label, i}
-            <a href={'#'}>
-                <div on:click={() => (selected += i + 1)}>
-                    <p>{next2[i]}</p>
+        {#if items[selected + 1]}
+            <a in:fly={{ x: 300 }} out:fly={{ x: 300 }} href={'#'}>
+                <div on:click={() => selected++}>
+                    <img src="images/forward_icon.svg" />
+                    <p>{items[selected + 1]}</p>
                     <img
-                        src={next2imgs[i]}
-                        class:arrow={next2imgs[i].includes('arrow')}
-                        alt={`Go forward by ${i + 1}`}
+                        class="arrow"
+                        src="images/rightarrow.svg"
+                        alt={`Go forward by 1`}
                     />
                 </div>
             </a>
-        {/each}
+        {/if}
     </div>
 </div>
 
@@ -51,7 +52,7 @@
         grid-template-columns: 1fr 1fr 1fr;
         grid-column-gap: 5px;
         justify-items: center;
-        margin: auto 25px 25px 25px;
+        margin: auto 1rem 1rem 1rem;
 
         a {
             text-decoration: none;
