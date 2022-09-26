@@ -21,7 +21,7 @@
                         alt={`Go back back by 1`}
                     />
                     <p>{items[selected - 1]}</p>
-                    <img src="images/back_icon.svg" />
+                    <img src="images/back_icon.svg" alt="" />
                 </div>
             </a>
         {/if}
@@ -33,7 +33,7 @@
         {#if items[selected + 1]}
             <a in:fly={{ x: 300 }} out:fly={{ x: 300 }} href={'#'}>
                 <div on:click={() => selected++}>
-                    <img src="images/forward_icon.svg" />
+                    <img src="images/forward_icon.svg" alt="" />
                     <p>{items[selected + 1]}</p>
                     <img
                         class="arrow"
@@ -84,6 +84,7 @@
     }
 
     .swiper-button-prev {
+        min-width: 200px;
         width: 100%;
         display: flex;
         grid-column-start: 1;
@@ -98,10 +99,16 @@
                 width: 65px;
                 height: 10px;
             }
+            @media only screen and (max-width: 800px) {
+                img:not(.arrow) {
+                    display: none;
+                }
+            }
         }
     }
 
     .swiper-button-next {
+        min-width: 200px;
         width: 100%;
         grid-column-start: 3;
         display: flex;
@@ -116,6 +123,11 @@
                 display: block;
                 width: 65px;
                 height: 10px;
+            }
+            @media only screen and (max-width: 800px) {
+                img:not(.arrow) {
+                    display: none;
+                }
             }
         }
     }

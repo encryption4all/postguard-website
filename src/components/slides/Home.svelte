@@ -6,6 +6,10 @@
     <div class="grid-item header">
         <h2><span>{$_('home.title')}</span></h2>
         <p>{$_('home.par')}</p>
+        <!--
+        <h3><span>{$_('home.subtitle1')}</span></h3>
+        <p>{$_('home.subpar1')}</p>
+        -->
     </div>
     <div class="grid-item">
         <img src="images/signpost.svg" alt="signpost" usemap="#signpost" />
@@ -31,8 +35,18 @@
     .grid-container {
         grid-template-columns: 1fr auto 1fr;
         grid-auto-flow: column;
-        height: auto;
-        justify-content: center;
-        align-content: center;
+    }
+
+    @media only screen and (max-width: 800px) {
+        .grid-container {
+            grid-auto-flow: row;
+            grid-template-columns: unset;
+            border-bottom: unset;
+        }
+        img {
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+        }
     }
 </style>

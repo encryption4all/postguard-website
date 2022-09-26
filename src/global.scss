@@ -18,10 +18,15 @@ h3,
 h4,
 h5,
 a,
-p {
+p,
+li {
     font-family: 'Overpass';
     font-style: normal;
     color: #022e3d;
+}
+
+p {
+    font-size: 16px;
 }
 
 a {
@@ -65,6 +70,7 @@ body {
     text-align: center;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 }
 
 .swiper-pagination-bullet {
@@ -81,10 +87,34 @@ body {
 }
 
 .grid-container {
+    position: relative;
     display: grid;
     max-width: 900px;
-    margin: auto 5% auto 5%;
+    margin: 5%;
     grid-gap: 5%;
+    height: 90%;
+    align-items: center;
+    justify-content: center;
+}
+
+@media only screen and (max-width: 800px) {
+    .grid-container {
+        grid-auto-flow: row;
+        max-width: 800px;
+        max-height: 100%;
+        overflow-y: scroll;
+        margin: 5% 5% 0 5%;
+        padding-bottom: 5%;
+        border-bottom: 1px solid black;
+
+        .grid-item {
+            max-width: 550px;
+        }
+    }
+
+    .swiper-pagination-bullet {
+        display: none;
+    }
 }
 
 .grid-item.header {
@@ -95,9 +125,13 @@ body {
     max-width: 400px;
     text-align: left;
 
+    h3 r {
+        margin-bottom: 0;
+    }
+
     h2 {
         position: relative;
-        inline-size: 300px;
+        inline-size: 350px;
         overflow-wrap: break-word;
         margin-bottom: 0;
 
@@ -111,7 +145,7 @@ body {
             position: absolute;
             bottom: 12px;
             left: 0;
-            right: 0;
+            right: 50px;
             height: 4px;
             background-color: var(--pg-accent-color);
             border-radius: 3.5px;

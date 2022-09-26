@@ -23,7 +23,7 @@
     .pg-topbar {
         width: auto;
         height: 96px;
-        margin: 25px 25px auto 25px;
+        margin: 1rem 1rem auto 1rem;
 
         display: flex;
         flex-direction: row;
