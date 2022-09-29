@@ -36,8 +36,8 @@
 
     $: if (swiper && swiper.activeIndex !== selected) swiper.slideTo(selected)
     $: if (swiper) {
-        cryptifySrc = 'http://localhost:8080'
-        fallbackSrc = 'http://localhost:8081'
+        cryptifySrc = '/filesharing'
+        fallbackSrc = '/fallback'
     }
 </script>
 

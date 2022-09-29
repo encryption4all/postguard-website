@@ -7,8 +7,8 @@
     <embed
         class="grid-item"
         src={fallbackSrc}
-        width="400"
-        height={clientHeight > 800 ? 600 : 300}
+        width="600"
+        height={clientHeight > 800 ? 800 : 400}
     />
     <img class="grid-item" src="images/decrypt.svg" alt="decrypt" />
 </div>

@@ -15,6 +15,7 @@
     "devDependencies": {
         "@playwright/test": "^1.25.0",
         "@sveltejs/adapter-auto": "next",
+        "@sveltejs/adapter-node": "^1.0.0-next.96",
         "@sveltejs/kit": "next",
         "@typescript-eslint/eslint-plugin": "^5.27.0",
         "@typescript-eslint/parser": "^5.27.0",
@@ -26,13 +27,13 @@
         "sass": "^1.54.7",
         "svelte": "^3.44.0",
         "svelte-check": "^2.7.1",
+        "svelte-i18n": "^3.4.0",
         "svelte-preprocess": "^4.10.6",
+        "swiper": "^8.3.2",
         "tslib": "^2.3.1",
         "typescript": "^4.7.4",
-        "vite": "^3.0.4",
-        "svelte-i18n": "^3.4.0",
-        "swiper": "^8.3.2"
-     },
+        "vite": "^3.0.4"
+    },
     "type": "module",
     "prettier": {
         "trailingComma": "es5",
