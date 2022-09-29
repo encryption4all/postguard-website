@@ -1,5 +1,7 @@
 stages:
+    - build-build-image
     - build
+    - build-image
     - deploy
 
 variables:
@@ -22,7 +24,7 @@ build-root:
         expire_in: 1 day
 
 build-fallback-build-image:
-    stage: build
+    stage: build-build-image
     tags: [docker]
     image: docker:stable
     script:
@@ -32,19 +34,19 @@ build-fallback-build-image:
 
 build-fallback:
     stage: build
-    dependencies: [build-fallback-build-image]
+    dependencies:
+        - build-fallback-build-image
     tags: [docker]
     image: ${FALLBACK_CONTAINER_IMAGE}
     script:
-        - cd frontend
+        - cd postguard-fallback/frontend
         - yarnpkg
         - yarnpkg build
         - yarnpkg minify
         - trunk build --release --public-url /fallback
-        - mv frontend/dist fallback/
     artifacts:
         paths:
-            - fallback
+            - postguard-fallback/frontend/dist
         expire_in: 1 days
 
 build-cryptify:
@@ -55,16 +57,18 @@ build-cryptify:
         - cd cryptify/cryptify-front-end
         - npm install --legacy-peer-deps
         - CI=false npm run build
-        - mv cryptify-front-end/build cryptify/
     artifacts:
         paths:
-            - cryptify
+            - cryptify/cryptify-front-end/build
         expire_in: 1 day
 
 build-image:
-    stage: build
+    stage: build-image
     tags: [docker]
-    dependencies: [build-root, build-fallback, build-cryptify]
+    dependencies:
+        - build-root
+        - build-fallback
+        - build-cryptify
     image: docker:stable
     script:
         - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
@@ -73,7 +77,8 @@ build-image:
 
 deploy-main:
     stage: deploy
-    dependencies: [build-image]
+    dependencies:
+        - build-image
     environment: $CI_COMMIT_REF_NAME
     tags: [docker]
     image: ubuntu:rolling
@@ -81,4 +86,4 @@ deploy-main:
         - apt update
         - apt install -y openssh-client
         - chmod 600 $ILAB_VM_TRIGGER_UPDATE_KEY
-        - ssh -o UserKnownHostsFile=$ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS $ILAB_VM_TRIGGER_UPDATE_USER@$ILAB_VM_TRIGGER_UPDATE_HOST_MAIN -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-webserver-main
+        - ssh -o UserKnownHostsFile=$ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS $ILAB_VM_TRIGGER_UPDATE_USER@$ILAB_VM_TRIGGER_UPDATE_HOST_MAIN -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-main
