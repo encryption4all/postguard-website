@@ -1,4 +1,4 @@
 [submodule "cryptify"]
 	path = cryptify
-	url = git@github.com:encryption4all/cryptify.git
+	url = https://github.com/encryption4all/cryptify.git
 	branch = postguard-embed

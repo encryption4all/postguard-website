@@ -1,25 +1,67 @@
 stages:
     - build
+    - deploy
 
 variables:
     GIT_DEPTH: '16'
-    GIT_STRATEGY: fetch
+    GIT_STRATEGY: clone
     GIT_SUBMODULE_STRATEGY: recursive
-    STOREPATH: postguard/website
-    BPSTOREC: bpstorec --verbose --host $STOREHOST --port $STOREPORT --username $STOREUSER --token $STORETOKEN
+    FALLBACK_CONTAINER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}/postguard-fallback:${CI_COMMIT_REF_NAME}
 
-deploy-stable:
-    tags: [docker]
-    only:
-        - stable
+# jobs:
+# build-website (node server): node + yarn, build (this repo).
+# build-fallback (static page): submodule, trunk build in fallback-build-image.
+# build-cryptify (static page): submodule npm install
+# build-image: nginx, node, nginx conf, all of the above
+# deploy-website: trigger vm update postguard-webserver
+
+build-root:
     stage: build
-    environment: stable
-    image: 'registry.science.ru.nl/ilab/docker-build/debian:bullseye'
+    tags: [docker]
+    image: node:18-alpine3.15
     script:
-        - apt update
-        - apt install -y curl
-        - echo "deb http://packages.bitpowder.com/indigo-debian-bullseye stable core"  > /etc/apt/sources.list.d/bitpowder-indigo.list
-        - curl -L https://bitpowder.com/packages/linux-packages.gpg > /etc/apt/trusted.gpg.d/bitpowder.asc
-        - apt update
-        - apt install -y indigo file
-        - cd src && find . -type f -print0 | xargs -n 1 -0 -I %FILE% $BPSTOREC --naclcerts $STORECERTS put -f %FILE% $STOREPATH/file/%FILE%
+        - yarn
+        - yarn build
+    artifacts:
+        paths:
+            - build
+        expire_in: 1 day
+
+build-fallback-build-image:
+    stage: build
+    tags: [docker]
+    image: docker:stable
+    script:
+        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+        - docker build -f docker/frontend.Dockerfile -t ${FALLBACK_CONTAINER_IMAGE} .
+        - docker push ${FALLBACK_CONTAINER_IMAGE}
+
+build-fallback:
+    stage: build
+    dependencies: [build-fallback-build-image]
+    tags: [docker]
+    image: ${FALLBACK_CONTAINER_IMAGE}
+    script:
+        - cd frontend
+        - yarnpkg
+        - yarnpkg build
+        - yarnpkg minify
+        - trunk build --release #--public-url /decrypt
+    artifacts:
+        paths:
+            - frontend/dist
+        expire_in: 1 days
+
+build-cryptify:
+    stage: build
+    tags: [docker]
+    image: node:18-alpine3.15
+    script:
+        - ls -l
+        - cd cryptify
+        - npm install --legacy-peer-deps
+        - npm run build
+    artifacts:
+        paths:
+            - cryptify-frontend/build
+        expire_in: 1 day
