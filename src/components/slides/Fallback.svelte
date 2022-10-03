@@ -10,7 +10,7 @@
         width="600"
         height={clientHeight > 800 ? 800 : 400}
     />
-    <img class="grid-item" src="images/decrypt.svg" alt="decrypt" />
+    <img class="grid-item" src="/images/decrypt.svg" alt="decrypt" />
 </div>
 
 <style lang="scss">

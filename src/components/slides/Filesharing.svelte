@@ -16,7 +16,7 @@
         <p>{$_('filesharing.subpar2')}</p>
         -->
     </div>
-    <img class="grid-item" src="images/basket.svg" alt="basket" />
+    <img class="grid-item" src="/images/basket.svg" alt="basket" />
     <div class="overlay" />
     <embed
         class="grid-item"

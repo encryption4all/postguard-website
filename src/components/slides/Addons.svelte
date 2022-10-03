@@ -62,7 +62,7 @@
 
     .grid-item {
         &.header {
-            background: url('images/compose.svg') no-repeat left 0 bottom 0 /
+            background: url('/images/compose.svg') no-repeat left 0 bottom 0 /
                 contain;
             max-width: 100%;
             height: 500px;
@@ -114,7 +114,7 @@
             width: 85%;
             height: 100%;
             &.header {
-                background: url('images/compose.svg') no-repeat left 0 bottom 0 /
+                background: url('/images/compose.svg') no-repeat left 0 bottom 0 /
                     contain;
                 height: 350px;
                 align-self: center;

@@ -19,7 +19,7 @@
         </p>
     </div>
     <div class="grid-item">
-        <img src="images/about.svg" alt="about" />
+        <img src="/images/about.svg" alt="about" />
         <div id="team">
             <h3>{$_('about.team.header')}</h3>
             <p>

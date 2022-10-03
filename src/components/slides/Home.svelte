@@ -12,7 +12,7 @@
         -->
     </div>
     <div class="grid-item">
-        <img src="images/signpost.svg" alt="signpost" usemap="#signpost" />
+        <img src="/images/signpost.svg" alt="signpost" usemap="#signpost" />
         <map name="signpost">
             <area
                 shape="rect"

@@ -17,11 +17,11 @@
                 <div on:click={() => selected--}>
                     <img
                         class="arrow"
-                        src="images/leftarrow.svg"
+                        src="/images/leftarrow.svg"
                         alt={`Go back back by 1`}
                     />
                     <p>{items[selected - 1]}</p>
-                    <img src="images/back_icon.svg" alt="" />
+                    <img src="/images/back_icon.svg" alt="" />
                 </div>
             </a>
         {/if}
@@ -33,11 +33,11 @@
         {#if items[selected + 1]}
             <a in:fly={{ x: 300 }} out:fly={{ x: 300 }} href={'#'}>
                 <div on:click={() => selected++}>
-                    <img src="images/forward_icon.svg" alt="" />
+                    <img src="/images/forward_icon.svg" alt="" />
                     <p>{items[selected + 1]}</p>
                     <img
                         class="arrow"
-                        src="images/rightarrow.svg"
+                        src="/images/rightarrow.svg"
                         alt={`Go forward by 1`}
                     />
                 </div>

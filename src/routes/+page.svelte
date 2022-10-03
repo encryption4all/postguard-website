@@ -1,5 +1,5 @@
 <script>
-    import { page } from '$app/stores'
+    import { onMount } from 'svelte'
     import {
         Pagination,
         A11y,
@@ -30,14 +30,18 @@
     let swiper
     let cryptifySrc,
         fallbackSrc = ''
-    const params = $page.url.searchParams
 
-    $: downloadUuid = params.get('download')
+    let params, downloadUuid
+
+    onMount(() => {
+        params = new URLSearchParams(window.location.search)
+        downloadUuid = params.get('download')
+    })
 
     $: if (swiper && swiper.activeIndex !== selected) swiper.slideTo(selected)
     $: if (swiper) {
-        cryptifySrc = '/filesharing'
-        fallbackSrc = '/fallback'
+        cryptifySrc = '/filesharing/'
+        fallbackSrc = '/fallback/'
     }
 </script>
 
@@ -61,7 +65,7 @@
             // Remove downloadUuid when sliding away, resetting the filesharing slide.
             if (!initial && selected !== 0 && downloadUuid) {
                 params.delete('download')
-                const url = (params ? '?' + params : '') + $page.url.hash
+                const url = (params ? '?' + params : '') + window.location.hash
                 window.history.pushState(null, '', url)
                 downloadUuid = null
             }
