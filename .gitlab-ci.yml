@@ -23,6 +23,19 @@ build-root:
             - build
         expire_in: 1 day
 
+build-downloads:
+    stage: build
+    tags: [docker]
+    image: node:18-alpine3.15
+    script:
+        - cd postguard-tb-addon
+        - yarn
+        - yarn build
+    artifacts:
+        paths:
+            - dist
+        expire_in: 1 day
+
 build-fallback-build-image:
     stage: build-build-image
     tags: [docker]
@@ -69,6 +82,7 @@ build-image:
         - build-root
         - build-fallback
         - build-cryptify
+        - build-downloads
     image: docker:stable
     script:
         - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
