@@ -23,19 +23,6 @@ build-root:
             - build
         expire_in: 1 day
 
-build-downloads:
-    stage: build
-    tags: [docker]
-    image: node:18-alpine3.15
-    script:
-        - cd postguard-tb-addon
-        - yarn
-        - yarn build
-    artifacts:
-        paths:
-            - dist
-        expire_in: 1 day
-
 build-fallback-build-image:
     stage: build-build-image
     tags: [docker]
@@ -73,6 +60,19 @@ build-cryptify:
     artifacts:
         paths:
             - cryptify/cryptify-front-end/build
+        expire_in: 1 day
+
+build-downloads:
+    stage: build
+    tags: [docker]
+    image: node:18-alpine3.15
+    script:
+        - cd postguard-tb-addon
+        - yarn
+        - yarn build
+    artifacts:
+        paths:
+            - postguard-tb-addon/dist
         expire_in: 1 day
 
 build-image:
