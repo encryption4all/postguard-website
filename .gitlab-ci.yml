@@ -69,7 +69,9 @@ build-downloads:
     script:
         - cd postguard-tb-addon
         - yarn
-        - yarn build
+        - NODE_ENV=production yarn build
+        - cd dist
+        - ln -s postguard-tb-addon-*.xpi postguard-tb-addon.xpi 
     artifacts:
         paths:
             - postguard-tb-addon/dist
