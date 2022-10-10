@@ -35,6 +35,7 @@
     .grid-container {
         grid-template-columns: 1fr auto 1fr;
         grid-auto-flow: column;
+        max-height: 500px;
     }
 
     @media only screen and (max-width: 800px) {
@@ -42,6 +43,7 @@
             grid-auto-flow: row;
             grid-template-columns: unset;
             border-bottom: unset;
+            max-height: unset;
         }
         img {
             object-fit: contain;
