@@ -1,0 +1,155 @@
+@font-face {
+    font-family: 'Overpass';
+    src: url('/fonts/Overpass-Regular.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Overpass';
+    src: url('/fonts/Overpass-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: bold;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+a,
+p,
+li {
+    font-family: 'Overpass';
+    font-style: normal;
+    color: #022e3d;
+}
+
+p {
+    font-size: 16px;
+}
+
+a {
+    text-decoration-color: var(--pg-accent-color);
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 30px;
+    letter-spacing: 0em;
+}
+
+html,
+body {
+    position: relative;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+:root {
+    --pg-accent-color: #3095de;
+    --pg-accent-color-rgb: 48, 149, 222;
+}
+
+#app {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.swiper {
+    width: 100%;
+    height: auto;
+}
+
+.swiper-slide {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.swiper-pagination-bullet {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 1px solid #000000;
+    background-color: white;
+    opacity: 100%;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: black;
+}
+
+.grid-container {
+    position: relative;
+    display: grid;
+    max-width: 900px;
+    margin: 5%;
+    grid-gap: 5%;
+    height: 90%;
+    align-items: center;
+    justify-content: center;
+}
+
+@media only screen and (max-width: 800px) {
+    .grid-container {
+        grid-auto-flow: row;
+        max-width: 800px;
+        max-height: 100%;
+        overflow-y: scroll;
+        margin: 5% 5% 0 5%;
+        padding-bottom: 5%;
+        border-bottom: 1px solid black;
+
+        .grid-item {
+            max-width: 550px;
+        }
+    }
+
+    .swiper-pagination-bullet {
+        display: none;
+    }
+}
+
+.grid-item.header {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 100%;
+    max-width: 400px;
+    text-align: left;
+
+    h3 r {
+        margin-bottom: 0;
+    }
+
+    h2 {
+        position: relative;
+        inline-size: 350px;
+        overflow-wrap: break-word;
+        margin-bottom: 0;
+
+        span {
+            background-color: white;
+            padding-right: 10px;
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            right: 50px;
+            height: 4px;
+            background-color: var(--pg-accent-color);
+            border-radius: 3.5px;
+            z-index: -1;
+        }
+    }
+}

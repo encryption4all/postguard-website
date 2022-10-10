@@ -1,25 +1,105 @@
 stages:
+    - build-build-image
     - build
+    - build-image
+    - deploy
 
 variables:
-  GIT_DEPTH: "16"
-  GIT_STRATEGY: fetch
-  GIT_SUBMODULE_STRATEGY: recursive
-  STOREPATH: postguard/website
-  BPSTOREC: bpstorec --verbose --host $STOREHOST --port $STOREPORT --username $STOREUSER --token $STORETOKEN
+    GIT_DEPTH: '16'
+    GIT_STRATEGY: clone
+    GIT_SUBMODULE_STRATEGY: recursive
+    FALLBACK_CONTAINER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}/postguard-fallback:${CI_COMMIT_REF_NAME}
+    CONTAINER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}/postguard-website:${CI_COMMIT_REF_NAME}
 
-deploy-stable:
-    tags: [docker]
-    only:
-    - stable
+build-root:
     stage: build
-    environment: stable
-    image: "registry.science.ru.nl/ilab/docker-build/debian:bullseye"
+    tags: [docker]
+    image: node:18-alpine3.15
     script:
-    - apt update
-    - apt install -y curl
-    - echo "deb http://packages.bitpowder.com/indigo-debian-bullseye stable core"  > /etc/apt/sources.list.d/bitpowder-indigo.list
-    - curl -L https://bitpowder.com/packages/linux-packages.gpg > /etc/apt/trusted.gpg.d/bitpowder.asc
-    - apt update
-    - apt install -y indigo file
-    - cd src && find . -type f -print0 | xargs -n 1 -0 -I %FILE% $BPSTOREC --naclcerts $STORECERTS put -f %FILE% $STOREPATH/file/%FILE%
+        - yarn
+        - yarn build
+    artifacts:
+        paths:
+            - build
+        expire_in: 1 day
+
+build-fallback-build-image:
+    stage: build-build-image
+    tags: [docker]
+    image: docker:stable
+    script:
+        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+        - docker build -f docker/frontend.Dockerfile -t ${FALLBACK_CONTAINER_IMAGE} .
+        - docker push ${FALLBACK_CONTAINER_IMAGE}
+
+build-fallback:
+    stage: build
+    dependencies:
+        - build-fallback-build-image
+    tags: [docker]
+    image: ${FALLBACK_CONTAINER_IMAGE}
+    script:
+        - cd postguard-fallback/frontend
+        - yarnpkg
+        - yarnpkg build
+        - yarnpkg minify
+        - trunk build --release --public-url /fallback
+    artifacts:
+        paths:
+            - postguard-fallback/frontend/dist
+        expire_in: 1 days
+
+build-cryptify:
+    stage: build
+    tags: [docker]
+    image: node:18-alpine3.15
+    script:
+        - cd cryptify/cryptify-front-end
+        - npm install --legacy-peer-deps
+        - CI=false npm run build
+    artifacts:
+        paths:
+            - cryptify/cryptify-front-end/build
+        expire_in: 1 day
+
+build-downloads:
+    stage: build
+    tags: [docker]
+    image: node:18-alpine3.15
+    script:
+        - cd postguard-tb-addon
+        - yarn
+        - NODE_ENV=production yarn build
+        - cd dist
+        - ln -s postguard-tb-addon-*.xpi postguard-tb-addon.xpi 
+    artifacts:
+        paths:
+            - postguard-tb-addon/dist
+        expire_in: 1 day
+
+build-image:
+    stage: build-image
+    tags: [docker]
+    dependencies:
+        - build-root
+        - build-fallback
+        - build-cryptify
+        - build-downloads
+    image: docker:stable
+    script:
+        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+        - docker build -f docker/nginx.Dockerfile -t ${CONTAINER_IMAGE} .
+        - docker push ${CONTAINER_IMAGE}
+
+deploy-main:
+    stage: deploy
+    dependencies:
+        - build-image
+    environment: $CI_COMMIT_REF_NAME
+    tags: [docker]
+    image: ubuntu:rolling
+    script:
+        - apt update
+        - apt install -y openssh-client
+        - chmod 600 $ILAB_VM_TRIGGER_UPDATE_KEY
+        - ssh -o UserKnownHostsFile=$ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS $ILAB_VM_TRIGGER_UPDATE_USER@$ILAB_VM_TRIGGER_UPDATE_HOST_MAIN -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-main
