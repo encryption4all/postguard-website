@@ -22,7 +22,6 @@
 <style lang="scss">
     .pg-topbar {
         width: auto;
-        height: 96px;
         margin: 1rem 1rem auto 1rem;
 
         display: flex;
@@ -31,7 +30,6 @@
 
         img {
             width: 96px;
-            height: 96px;
         }
     }
 
