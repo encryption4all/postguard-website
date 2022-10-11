@@ -26,6 +26,13 @@
         max-width: 100%;
     }
 
+    iframe {
+        padding: 10px;
+        border: 1px dashed #1e1e1e;
+        border-radius: 16px;
+        overflow-y: auto;
+    }
+
     @media only screen and (max-width: 800px) {
         .grid-container {
             display: grid;
