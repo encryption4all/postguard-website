@@ -17,7 +17,7 @@
 
     let height
     $: height =
-        (containerWidth > 800 ? 375 : 500) +
+        (containerWidth > 800 ? 400 : 500) +
         $tween * (containerWidth > 800 ? 125 : 175)
 
     const triggerTabChange = (event) => {
