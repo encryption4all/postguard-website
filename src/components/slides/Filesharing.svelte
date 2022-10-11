@@ -18,7 +18,8 @@
     </div>
     <img class="grid-item" src="/images/basket.svg" alt="basket" />
     <div class="overlay" />
-    <embed
+    <iframe
+        title="filesharing"
         class="grid-item"
         src={`${cryptifySrc}${uuid ? `?download=${uuid}` : ''}`}
         type="text/html"
@@ -39,7 +40,7 @@
         object-fit: contain;
     }
 
-    embed {
+    iframe {
         padding: 10px;
         border: 1px dashed #1e1e1e;
         border-radius: 16px;

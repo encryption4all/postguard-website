@@ -4,7 +4,8 @@
 </script>
 
 <div class="grid-container" bind:clientHeight>
-    <embed
+    <iframe
+        title="fallback"
         class="grid-item"
         src={fallbackSrc}
         width="600"
