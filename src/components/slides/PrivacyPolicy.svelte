@@ -9,6 +9,6 @@
 <style>
     .grid-container {
         text-align: left;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 </style>
