@@ -3,12 +3,25 @@
 </script>
 
 <div class="grid-container">
-    <p>{@html $_('privacypolicy')}</p>
+    <div class="grid-item header">
+        <h2><span>{$_('privacypolicy.title')}</span></h2>
+    </div>
+    <div class="grid-item">
+        <p>{@html $_('privacypolicy.full')}</p>
+    </div>
 </div>
 
-<style>
-    .grid-container {
-        text-align: left;
-        overflow-y: auto;
+<style lang="scss">
+    div.grid-item {
+        height: 100%;
+
+        &:not(.header) {
+            overflow-y: scroll;
+        }
+
+        p {
+            height: 100%;
+            text-align: left;
+        }
     }
 </style>
