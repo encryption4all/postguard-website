@@ -75,6 +75,8 @@
         on:swiper={(e) => {
             swiper = e.detail[0]
         }}
+        on:touchStart={swiper.setGrabCursor()}
+        on:touchEnd={swiper.unsetGrabCursor()}
     >
         <SwiperSlide data-hash="filesharing"
             ><Filesharing
