@@ -40,7 +40,6 @@
         {#if activeItem}
             {#key activeItem}
                 <div
-                    class="swiper-no-swiping"
                     id="client-instruction"
                     in:fade={{ delay: 250, duration: 250 }}
                     out:fade={{ duration: 250 }}
