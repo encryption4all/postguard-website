@@ -1,15 +1,14 @@
 <script>
     export let fallbackSrc = ''
-    let clientHeight
 </script>
 
-<div class="grid-container" bind:clientHeight>
+<div class="grid-container">
     <iframe
         title="fallback"
         class="grid-item"
         src={fallbackSrc}
         width="600"
-        height={clientHeight > 800 ? 800 : 400}
+        height="600"
     />
     <img class="grid-item" src="/images/decrypt.svg" alt="decrypt" />
 </div>
@@ -27,7 +26,6 @@
     }
 
     iframe {
-        padding: 10px;
         border: 1px dashed #1e1e1e;
         border-radius: 16px;
         overflow-y: auto;
