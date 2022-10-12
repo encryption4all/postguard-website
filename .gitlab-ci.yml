@@ -29,7 +29,7 @@ build-fallback-build-image:
     image: docker:stable
     script:
         - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-        - docker build -f docker/frontend.Dockerfile -t ${FALLBACK_CONTAINER_IMAGE} .
+        - docker build -f docker/yew.Dockerfile -t ${FALLBACK_CONTAINER_IMAGE} .
         - docker push ${FALLBACK_CONTAINER_IMAGE}
 
 build-fallback:
