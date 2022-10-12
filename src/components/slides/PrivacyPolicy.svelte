@@ -16,7 +16,7 @@
         height: 100%;
 
         &:not(.header) {
-            overflow-y: scroll;
+            overflow-y: auto;
         }
 
         p {
