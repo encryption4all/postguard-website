@@ -77,6 +77,7 @@
         }}
         on:touchStart={swiper.setGrabCursor()}
         on:touchEnd={swiper.unsetGrabCursor()}
+        noSwipingSelector={'p'}
     >
         <SwiperSlide data-hash="filesharing"
             ><Filesharing
