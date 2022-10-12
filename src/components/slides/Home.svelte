@@ -6,10 +6,6 @@
     <div class="grid-item header">
         <h2><span>{$_('home.title')}</span></h2>
         <p>{$_('home.par')}</p>
-        <!--
-        <h3><span>{$_('home.subtitle1')}</span></h3>
-        <p>{$_('home.subpar1')}</p>
-        -->
     </div>
     <div class="grid-item">
         <img src="/images/signpost.svg" alt="signpost" usemap="#signpost" />

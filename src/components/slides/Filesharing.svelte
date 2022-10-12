@@ -11,10 +11,6 @@
     <div class="grid-item header">
         <h2><span>{$_('filesharing.title')}</span></h2>
         <p>{@html $_('filesharing.subpar1')}</p>
-        <!--
-        <h3>{$_('filesharing.subtitle2')}</h3>
-        <p>{$_('filesharing.subpar2')}</p>
-        -->
     </div>
     <img class="grid-item" src="/images/basket.svg" alt="basket" />
     <div class="overlay" />
@@ -33,6 +29,7 @@
         grid-auto-flow: column;
         max-width: 930px;
         max-height: 650px;
+        grid-gap: 3%;
     }
 
     img.grid-item {
