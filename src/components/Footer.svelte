@@ -48,9 +48,7 @@
 
 <style lang="scss">
     .pg-footer {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-column-gap: 5px;
+        display: flex;
         justify-items: center;
         margin: auto 1rem 1rem 1rem;
 
@@ -80,14 +78,11 @@
         position: relative;
         bottom: 0;
         margin: auto;
-        grid-column-start: 2;
     }
 
-    .swiper-button-prev {
-        min-width: 200px;
-        width: 100%;
-        display: flex;
-        grid-column-start: 1;
+    .swiper-button-prev,
+    .swiper-button-next {
+        display: inline-block;
 
         div {
             display: flex;
@@ -99,36 +94,31 @@
                 width: 65px;
                 height: 10px;
             }
+
+            p {
+                white-space: nowrap;
+            }
+
             @media only screen and (max-width: 800px) {
-                img:not(.arrow) {
+                img:not(.arrow),
+                p {
                     display: none;
+                }
+
+                img.arrow {
+                    margin-top: 1.5rem;
                 }
             }
         }
     }
 
     .swiper-button-next {
-        min-width: 200px;
-        width: 100%;
-        grid-column-start: 3;
-        display: flex;
         justify-content: right;
 
         div {
-            display: flex;
+            margin-right: unset;
             margin-left: 15px;
             align-items: center;
-
-            img.arrow {
-                display: block;
-                width: 65px;
-                height: 10px;
-            }
-            @media only screen and (max-width: 800px) {
-                img:not(.arrow) {
-                    display: none;
-                }
-            }
         }
     }
 </style>

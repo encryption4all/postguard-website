@@ -1,16 +1,27 @@
 <script>
     export let fallbackSrc = ''
+    let windowWidth
+
+    $: console.log(windowWidth)
 </script>
+
+<svelte:window bind:innerWidth={windowWidth} />
 
 <div class="grid-container">
     <iframe
         title="fallback"
         class="grid-item"
         src={fallbackSrc}
-        width="600"
+        width={windowWidth > 1000 ? 500 : 350}
         height="600"
     />
-    <img class="grid-item" src="/images/decrypt.svg" alt="decrypt" />
+    <img
+        class="grid-item"
+        src="/images/decrypt.svg"
+        alt="decrypt"
+        width="400"
+        height="500"
+    />
 </div>
 
 <style lang="scss">
@@ -21,14 +32,15 @@
         align-items: center;
     }
 
-    .grid-item {
-        max-width: 100%;
+    img {
+        max-width: 400px;
+        object-fit: contain;
     }
 
     iframe {
-        border: 1px dashed #1e1e1e;
-        border-radius: 16px;
         overflow-y: auto;
+        border: 1px dashed black;
+        border-radius: 15px;
     }
 
     @media only screen and (max-width: 800px) {
@@ -36,8 +48,11 @@
             display: grid;
             grid-template-columns: unset;
             max-height: unset;
-            overflow: hidden;
-            border-bottom: unset;
+            overflow-y: scroll;
+
+            .grid-item {
+                width: 96%;
+            }
         }
 
         img.grid-item {

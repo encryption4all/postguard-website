@@ -36,7 +36,7 @@
         align-items: center;
         justify-content: center;
         align-content: center;
-        grid-gap: 10%;
+        grid-gap: 4rem;
         max-width: 1000px;
     }
 
@@ -55,6 +55,10 @@
             p {
                 padding-left: 1.5rem;
             }
+        }
+
+        img {
+            max-width: 450px;
         }
     }
 
@@ -81,7 +85,6 @@
         .grid-container {
             grid-auto-flow: row;
             grid-template-columns: unset;
-            overflow-x: hidden;
             overflow-y: scroll;
             justify-items: center;
             align-items: center;
@@ -89,7 +92,7 @@
         }
 
         .grid-item {
-            max-width: 350px;
+            width: 96%;
             &.header {
                 min-width: unset;
                 overflow-y: unset;
@@ -102,10 +105,12 @@
             #team {
                 margin-top: 4rem;
             }
-        }
 
-        img {
-            object-fit: contain;
+            img {
+                object-fit: contain;
+                position: relative;
+                width: 100%;
+            }
         }
     }
 </style>

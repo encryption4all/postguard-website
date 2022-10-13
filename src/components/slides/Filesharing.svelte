@@ -27,14 +27,15 @@
 <style lang="scss">
     .grid-container {
         grid-auto-flow: column;
-        max-width: 930px;
+        max-width: 1000px;
         max-height: 650px;
-        grid-gap: 3%;
+        grid-gap: 2rem;
     }
 
     img.grid-item {
         align-self: end;
         object-fit: contain;
+        max-width: 350px;
     }
 
     iframe {
@@ -42,13 +43,12 @@
         border: 1px dashed #1e1e1e;
         border-radius: 16px;
         overflow: scroll;
-        width: 400px;
+        width: 375px;
         overflow-y: scroll;
         overflow-x: hidden;
     }
 
     .grid-item {
-        max-width: 333px;
         display: flex;
         justify-content: center;
         text-align: left;

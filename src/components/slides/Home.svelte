@@ -34,6 +34,11 @@
         max-height: 500px;
     }
 
+    img {
+        object-fit: contain;
+        max-width: 550px;
+    }
+
     @media only screen and (max-width: 800px) {
         .grid-container {
             grid-auto-flow: row;
@@ -42,9 +47,7 @@
             max-height: unset;
         }
         img {
-            object-fit: contain;
-            width: 100%;
-            height: 100%;
+            max-width: 100%;
         }
     }
 </style>

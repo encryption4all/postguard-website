@@ -105,13 +105,14 @@
 
     @media only screen and (max-width: 800px) {
         .grid-container {
+            margin-top: 0;
+            max-height: unset;
             grid-auto-flow: row;
             grid-template-columns: unset;
             justify-items: center;
         }
         .grid-item {
             object-fit: contain;
-            width: 85%;
             height: 100%;
             &.header {
                 background: url('/images/compose.svg') no-repeat left 0 bottom 0 /
@@ -121,7 +122,8 @@
             }
 
             &.instruction {
-                width: 85%;
+                width: 90%;
+                border: none;
             }
         }
     }

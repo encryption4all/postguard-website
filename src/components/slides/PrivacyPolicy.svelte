@@ -12,7 +12,12 @@
 </div>
 
 <style lang="scss">
+    .grid-container {
+        grid-gap: 1rem;
+    }
+
     div.grid-item {
+        width: 92%;
         height: 100%;
 
         &:not(.header) {

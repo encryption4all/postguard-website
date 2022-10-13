@@ -100,15 +100,20 @@ body {
 @media only screen and (max-width: 800px) {
     .grid-container {
         grid-auto-flow: row;
-        max-width: 800px;
         max-height: 100%;
         overflow-y: scroll;
-        margin: 5% 5% 0 5%;
+        margin: 0 3% 0 3%;
         padding-bottom: 5%;
+        grid-gap: 1rem;
         border-bottom: 1px solid black;
 
         .grid-item {
             max-width: 550px;
+            width: 92%;
+
+            &.header h2 {
+                inline-size: unset;
+            }
         }
     }
 
