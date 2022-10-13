@@ -1,8 +1,6 @@
 <script>
     export let fallbackSrc = ''
     let windowWidth
-
-    $: console.log(windowWidth)
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
