@@ -1,6 +1,5 @@
 <script>
     import { _ } from 'svelte-i18n'
-
     import { fly } from 'svelte/transition'
 
     export let selected
@@ -48,8 +47,8 @@
 
 <style lang="scss">
     .pg-footer {
-        display: flex;
-        justify-items: center;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
         margin: auto 1rem 1rem 1rem;
 
         a {
@@ -77,12 +76,17 @@
     .swiper-pagination {
         position: relative;
         bottom: 0;
-        margin: auto;
+        width: 100%;
+        grid-column-start: 2;
+        align-self: center;
     }
 
     .swiper-button-prev,
     .swiper-button-next {
-        display: inline-block;
+        display: flex;
+        min-width: 100px;
+        min-height: 50px;
+        grid-column-start: 1;
 
         div {
             display: flex;
@@ -113,6 +117,7 @@
     }
 
     .swiper-button-next {
+        grid-column-start: 3;
         justify-content: right;
 
         div {
