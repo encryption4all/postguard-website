@@ -3,6 +3,7 @@
     src: url('/fonts/Overpass-Regular.ttf') format('truetype');
     font-weight: 600;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -10,6 +11,7 @@
     src: url('/fonts/Overpass-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: bold;
+    font-display: swap;
 }
 
 h1,
