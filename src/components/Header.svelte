@@ -1,5 +1,7 @@
 <script>
     import { _ } from 'svelte-i18n'
+    import logo from '$lib/assets/images/logo.svg'
+
     export let selected = 1
     const items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map(
         (s) => $_(`header.${s}`)
@@ -7,7 +9,7 @@
 </script>
 
 <div class="pg-topbar">
-    <img src="logo.svg" alt="postguard logo" />
+    <img src={logo} alt="postguard logo" width="84" height="46" />
     <ul class="pg-menu">
         {#each items as item, i}
             <li class:selected={selected === i}>
@@ -27,10 +29,6 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-
-        img {
-            width: 96px;
-        }
     }
 
     .pg-menu {

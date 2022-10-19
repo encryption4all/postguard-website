@@ -1,5 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n'
+    import signPostImg from '$lib/assets/images/signpost.svg'
 </script>
 
 <div class="grid-container">
@@ -8,7 +9,13 @@
         <p>{$_('home.par')}</p>
     </div>
     <div class="grid-item">
-        <img src="/images/signpost.svg" alt="signpost" usemap="#signpost" />
+        <img
+            src={signPostImg}
+            alt="signpost"
+            usemap="#signpost"
+            width="619"
+            height="411"
+        />
         <map name="signpost">
             <area
                 shape="rect"

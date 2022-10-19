@@ -1,5 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n'
+    import aboutImg from '$lib/assets/images/about.svg'
 </script>
 
 <div class="grid-container">
@@ -19,7 +20,7 @@
         </p>
     </div>
     <div class="grid-item">
-        <img src="/images/about.svg" alt="about" />
+        <img src={aboutImg} alt="about" width="567" height="128" />
         <div id="team">
             <h3>{$_('about.team.header')}</h3>
             <p>

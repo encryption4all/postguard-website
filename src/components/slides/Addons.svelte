@@ -5,9 +5,13 @@
     import { tweened } from 'svelte/motion'
     import { cubicOut } from 'svelte/easing'
 
+    import tbLogo from '$lib/assets/images/tb_logo.svg'
+    import olLogo from '$lib/assets/images/ol_logo.svg'
+    import composeImg from '$lib/assets/images/compose.svg'
+
     let tabItems = [
-        { item: 'Thunderbird', logo: '/images/tb_logo.svg' },
-        { item: 'Outlook', logo: '/images/ol_logo.svg' },
+        { item: 'Thunderbird', logo: tbLogo },
+        { item: 'Outlook', logo: olLogo },
     ]
 
     let activeItem = 'Thunderbird'
@@ -29,7 +33,10 @@
 </script>
 
 <div class="grid-container" bind:clientWidth={containerWidth}>
-    <div class="grid-item header">
+    <div
+        class="grid-item header"
+        style="background: url({composeImg}) no-repeat left 0 bottom 0 / contain;"
+    >
         <h2><span>{$_('addons.title')}</span></h2>
         <p>{$_('addons.par')}</p>
     </div>
@@ -62,8 +69,6 @@
 
     .grid-item {
         &.header {
-            background: url('/images/compose.svg') no-repeat left 0 bottom 0 /
-                contain;
             max-width: 100%;
             height: 500px;
             align-self: center;

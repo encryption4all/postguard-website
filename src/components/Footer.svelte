@@ -2,6 +2,11 @@
     import { _ } from 'svelte-i18n'
     import { fly } from 'svelte/transition'
 
+    import leftArrow from '$lib/assets/images/leftarrow.svg'
+    import rightArrow from '$lib/assets/images/rightarrow.svg'
+    import backIcon from '$lib/assets/images/back_icon.svg'
+    import nextIcon from '$lib/assets/images/forward_icon.svg'
+
     export let selected
 
     const items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map(
@@ -16,11 +21,16 @@
                 <div on:click={() => selected--}>
                     <img
                         class="arrow"
-                        src="/images/leftarrow.svg"
+                        src={leftArrow}
                         alt={`Go back back by 1`}
                     />
                     <p>{items[selected - 1]}</p>
-                    <img src="/images/back_icon.svg" alt="" />
+                    <img
+                        src={backIcon}
+                        alt="go back icon"
+                        width="29"
+                        height="29"
+                    />
                 </div>
             </a>
         {/if}
@@ -32,11 +42,16 @@
         {#if items[selected + 1]}
             <a in:fly={{ x: 300 }} out:fly={{ x: 300 }} href={'#'}>
                 <div on:click={() => selected++}>
-                    <img src="/images/forward_icon.svg" alt="" />
+                    <img
+                        src={nextIcon}
+                        alt="go forward icon"
+                        width="29"
+                        height="29"
+                    />
                     <p>{items[selected + 1]}</p>
                     <img
                         class="arrow"
-                        src="/images/rightarrow.svg"
+                        src={rightArrow}
                         alt={`Go forward by 1`}
                     />
                 </div>

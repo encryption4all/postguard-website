@@ -1,4 +1,6 @@
 <script>
+    import decryptImg from '$lib/assets/images/decrypt.svg'
+
     export let fallbackSrc = ''
     let windowWidth
 </script>
@@ -15,7 +17,7 @@
     />
     <img
         class="grid-item"
-        src="/images/decrypt.svg"
+        src={decryptImg}
         alt="decrypt"
         width="400"
         height="500"

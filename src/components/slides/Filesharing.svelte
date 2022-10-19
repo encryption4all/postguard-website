@@ -1,6 +1,7 @@
 <script>
     import { page } from '$app/stores'
     import { _ } from 'svelte-i18n'
+    import basketImg from '$lib/assets/images/basket.svg'
 
     export let cryptifySrc = ''
     export let uuid
@@ -12,7 +13,13 @@
         <h2><span>{$_('filesharing.title')}</span></h2>
         <p>{@html $_('filesharing.subpar1')}</p>
     </div>
-    <img class="grid-item" src="/images/basket.svg" alt="basket" />
+    <img
+        class="grid-item"
+        src={basketImg}
+        alt="basket"
+        width="509"
+        height="278"
+    />
     <div class="overlay" />
     <iframe
         title="filesharing"
