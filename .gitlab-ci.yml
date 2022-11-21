@@ -4,8 +4,9 @@ stages:
     - build-image
     - deploy
 
-only:
-    - main
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 variables:
     GIT_DEPTH: '16'
