@@ -4,6 +4,9 @@ stages:
     - build-image
     - deploy
 
+only:
+    - main
+
 variables:
     GIT_DEPTH: '16'
     GIT_STRATEGY: clone
