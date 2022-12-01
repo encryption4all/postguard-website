@@ -1,9 +1,10 @@
 import { register, init, getLocaleFromNavigator } from 'svelte-i18n'
+import { browser } from "$app/environment";
 
-register('en', () => import('./locales/en.json'))
-register('nl', () => import('./locales/nl.json'))
+register('en-US', () => import('./locales/en.json'))
+register('nl-NL', () => import('./locales/nl.json'))
 
 init({
-    fallbackLocale: 'en',
-    initialLocale: getLocaleFromNavigator(),
+    fallbackLocale: 'en-US',
+    initialLocale: browser ? localStorage.getItem('preferredLanguage') : getLocaleFromNavigator(),
 })
