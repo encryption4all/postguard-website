@@ -1,9 +1,10 @@
 <script>
-    import { _ } from 'svelte-i18n'
+    import { _, locale, init } from 'svelte-i18n'
     import logo from '$lib/assets/images/logo.svg'
+    import LocaleSwitcher from './LocaleSwitcher.svelte'
 
     export let selected = 1
-    const items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map(
+    $:items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map(
         (s) => $_(`header.${s}`)
     )
 </script>
@@ -19,6 +20,7 @@
             </li>
         {/each}
     </ul>
+    <LocaleSwitcher value={$locale} on:locale-changed={e => locale.set(e.detail)}/>
 </div>
 
 <style lang="scss">
