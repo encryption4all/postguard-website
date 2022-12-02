@@ -2,10 +2,15 @@
     import { page } from '$app/stores'
     import { _ } from 'svelte-i18n'
     import basketImg from '$lib/assets/images/basket.svg'
+    import { cryptifyIframe } from './../../stores.js'
 
     export let cryptifySrc = ''
     export let uuid
+
     let containerHeight
+    let el
+
+    $: el && cryptifyIframe.set(el)
 </script>
 
 <div class="grid-container" bind:clientHeight={containerHeight}>
@@ -22,6 +27,7 @@
     />
     <div class="overlay" />
     <iframe
+        bind:this={el}
         title="filesharing"
         class="grid-item"
         src={`${cryptifySrc}${uuid ? `?download=${uuid}` : ''}`}

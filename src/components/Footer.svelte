@@ -9,8 +9,8 @@
 
     export let selected
 
-    const items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map(
-        (s) => $_(`footer.${s}`)
+    $: items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map((s) =>
+        $_(`footer.${s}`)
     )
 </script>
 

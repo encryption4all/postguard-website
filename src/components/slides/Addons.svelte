@@ -17,12 +17,12 @@
     let activeItem = 'Thunderbird'
     $: sign = activeItem === 'Thunderbird' ? -1 : 1
 
-    const tween = tweened(0, { duration: 500, easing: cubicOut })
+    const tween = tweened(0, { delay: 150, duration: 500, easing: cubicOut })
 
     let height
     $: height =
         (containerWidth > 800 ? 400 : 500) +
-        $tween * (containerWidth > 800 ? 125 : 175)
+        $tween * (containerWidth > 800 ? 150 : 200)
 
     const triggerTabChange = (event) => {
         activeItem = event.detail
