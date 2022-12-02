@@ -4,8 +4,8 @@
     import LocaleSwitcher from './LocaleSwitcher.svelte'
 
     export let selected = 1
-    $:items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map(
-        (s) => $_(`header.${s}`)
+    $: items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map((s) =>
+        $_(`header.${s}`)
     )
 </script>
 
@@ -20,7 +20,11 @@
             </li>
         {/each}
     </ul>
-    <LocaleSwitcher value={$locale} on:locale-changed={e => locale.set(e.detail)}/>
+    <LocaleSwitcher
+        style="margin-left: 1rem"
+        lang={$locale}
+        on:locale-changed={(e) => locale.set(e.detail)}
+    />
 </div>
 
 <style lang="scss">
