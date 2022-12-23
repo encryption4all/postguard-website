@@ -2,8 +2,8 @@
     import { _, locale, init } from 'svelte-i18n'
     import logo from '$lib/assets/images/logo.svg'
     import LocaleSwitcher from './LocaleSwitcher.svelte'
+    import { selected } from '$lib/stores'
 
-    export let selected = 1
     $: items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map((s) =>
         $_(`header.${s}`)
     )
@@ -13,8 +13,8 @@
     <img src={logo} alt="postguard logo" width="84" height="46" />
     <ul class="pg-menu">
         {#each items as item, i}
-            <li class:selected={selected === i}>
-                <a href="/" on:click|preventDefault={() => (selected = i)}
+            <li class:selected={$selected === i}>
+                <a href="/" on:click|preventDefault={() => selected.set(i)}
                     >{item}</a
                 >
             </li>
