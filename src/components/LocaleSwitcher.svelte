@@ -5,20 +5,14 @@
 
     export let lang
 
-    let cryptify
     let style = $$props.style
-
-    cryptifyIframe.subscribe((value) => {
-        cryptify = value
-    })
 
     const dispatch = createEventDispatcher()
 
     const handleLocaleChange = (lang) => {
         dispatch('locale-changed', lang)
         if (browser) localStorage.setItem('preferredLanguage', lang)
-
-        cryptify?.contentWindow.postMessage({ lang: lang })
+        $cryptifyIframe?.contentWindow.postMessage({ lang: lang })
     }
 
     $: handleLocaleChange(lang)

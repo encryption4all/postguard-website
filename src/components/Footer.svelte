@@ -7,7 +7,7 @@
     import backIcon from '$lib/assets/images/back_icon.svg'
     import nextIcon from '$lib/assets/images/forward_icon.svg'
 
-    export let selected
+    import { selected } from '$lib/stores'
 
     $: items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map((s) =>
         $_(`footer.${s}`)
@@ -16,15 +16,15 @@
 
 <div class="pg-footer">
     <div class={'swiper-button-prev'}>
-        {#if items[selected - 1]}
+        {#if items[$selected - 1]}
             <a in:fly={{ x: -300 }} out:fly={{ x: -300 }} href={'#'}>
-                <div on:click={() => selected--}>
+                <div on:click={() => selected.update((i) => i - 1)}>
                     <img
                         class="arrow"
                         src={leftArrow}
                         alt={`Go back back by 1`}
                     />
-                    <p>{items[selected - 1]}</p>
+                    <p>{items[$selected - 1]}</p>
                     <img
                         src={backIcon}
                         alt="go back icon"
@@ -39,16 +39,16 @@
     <div class="swiper-pagination" />
 
     <div class={'swiper-button-next'}>
-        {#if items[selected + 1]}
+        {#if items[$selected + 1]}
             <a in:fly={{ x: 300 }} out:fly={{ x: 300 }} href={'#'}>
-                <div on:click={() => selected++}>
+                <div on:click={() => selected.update((i) => i + 1)}>
                     <img
                         src={nextIcon}
                         alt="go forward icon"
                         width="29"
                         height="29"
                     />
-                    <p>{items[selected + 1]}</p>
+                    <p>{items[$selected + 1]}</p>
                     <img
                         class="arrow"
                         src={rightArrow}
