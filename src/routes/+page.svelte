@@ -21,6 +21,7 @@
     } from '$lib/components/slides'
 
     import { selected } from '$lib/stores'
+    import lazySizes from 'lazysizes'
 
     let initial = true
     let swiper
@@ -35,10 +36,6 @@
     })
 
     $: if (swiper && swiper.activeIndex !== $selected) swiper.slideTo($selected)
-    $: if (swiper) {
-        cryptifySrc = '/filesharing/'
-        fallbackSrc = '/fallback/'
-    }
 </script>
 
 <Swiper
@@ -67,6 +64,9 @@
     }}
     on:swiper={(e) => {
         swiper = e.detail[0]
+        cryptifySrc = '/filesharing/'
+        fallbackSrc = '/fallback/'
+        lazySizes.init()
     }}
     on:touchStart={swiper.setGrabCursor()}
     on:touchEnd={swiper.unsetGrabCursor()}

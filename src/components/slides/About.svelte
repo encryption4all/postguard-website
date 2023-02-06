@@ -1,6 +1,7 @@
 <script>
     import { _ } from 'svelte-i18n'
     import aboutImg from '$lib/assets/images/about.svg'
+    import aboutImgLq from '$lib/assets/images/lqip/about.svg'
 </script>
 
 <div class="grid-container">
@@ -20,7 +21,14 @@
         </p>
     </div>
     <div class="grid-item">
-        <img src={aboutImg} alt="about" width="567" height="128" />
+        <img
+            src={aboutImgLq}
+            data-src={aboutImg}
+            class="lazyload"
+            alt="about"
+            width="567"
+            height="128"
+        />
         <div id="team">
             <h3>{$_('about.team.header')}</h3>
             <p>

@@ -8,6 +8,7 @@
     import tbLogo from '$lib/assets/images/tb_logo.svg'
     import olLogo from '$lib/assets/images/ol_logo.svg'
     import composeImg from '$lib/assets/images/compose.svg'
+    import composeImgLq from '$lib/assets/images/lqip/compose.svg'
 
     let tabItems = [
         { item: 'Thunderbird', logo: tbLogo },
@@ -33,12 +34,17 @@
 </script>
 
 <div class="grid-container" bind:clientWidth={containerWidth}>
-    <div
-        class="grid-item header"
-        style="background: url({composeImg}) no-repeat left 0 bottom 0 / contain;"
-    >
+    <div class="grid-item header">
         <h2><span>{$_('addons.title')}</span></h2>
         <p>{$_('addons.par')}</p>
+        <img
+            class="lazyload"
+            src={composeImgLq}
+            data-src={composeImg}
+            width={450}
+            height={204}
+            alt="compose"
+        />
     </div>
     <div class="grid-item instruction" style="height: {height}px">
         <h2>{$_('addons.instruction.header')}</h2>
@@ -76,6 +82,11 @@
             h2 {
                 inline-size: 300px;
                 margin-bottom: 0;
+            }
+
+            img {
+                position: absolute;
+                bottom: 0;
             }
         }
 
