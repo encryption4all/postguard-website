@@ -25,8 +25,6 @@
 
     let initial = true
     let swiper
-    let cryptifySrc,
-        fallbackSrc = ''
 
     let params, downloadUuid
 
@@ -64,8 +62,6 @@
     }}
     on:swiper={(e) => {
         swiper = e.detail[0]
-        cryptifySrc = '/filesharing/'
-        fallbackSrc = '/fallback/'
         lazySizes.init()
     }}
     on:touchStart={swiper.setGrabCursor()}
@@ -73,12 +69,11 @@
     noSwipingSelector={'p, li'}
 >
     <SwiperSlide data-hash="filesharing"
-        ><Filesharing bind:cryptifySrc bind:uuid={downloadUuid} /></SwiperSlide
+        ><Filesharing bind:uuid={downloadUuid} /></SwiperSlide
     >
     <SwiperSlide><Home /></SwiperSlide>
     <SwiperSlide data-hash="addons"><Addons /></SwiperSlide>
-    <SwiperSlide data-hash="fallback"><Fallback bind:fallbackSrc /></SwiperSlide
-    >
+    <SwiperSlide data-hash="fallback"><Fallback /></SwiperSlide>
     <SwiperSlide data-hash="about"><About /></SwiperSlide>
     <SwiperSlide data-hash="privacy"><PrivacyPolicy /></SwiperSlide>
 </Swiper>
