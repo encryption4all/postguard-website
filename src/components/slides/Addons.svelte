@@ -87,6 +87,7 @@
             img {
                 position: absolute;
                 bottom: 0;
+                width: 100%;
             }
         }
 
@@ -131,8 +132,6 @@
             object-fit: contain;
             height: 100%;
             &.header {
-                background: url('/images/compose.svg') no-repeat left 0 bottom 0 /
-                    contain;
                 height: 350px;
                 align-self: center;
             }
