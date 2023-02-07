@@ -1,8 +1,8 @@
 <script>
     import Header from '$lib/components/Header.svelte'
     import Footer from '$lib/components/Footer.svelte'
-    import '$lib/i18n'
     import { isLoading } from 'svelte-i18n'
+    import '$lib/i18n'
 </script>
 
 <svelte:head>
@@ -14,8 +14,8 @@
     <meta
         name="keywords"
         content="Encryption, Usability, Privacy, Security, Identity-Based Encryption"
-    /></svelte:head
->
+    />
+</svelte:head>
 
 {#if !$isLoading}
     <Header />

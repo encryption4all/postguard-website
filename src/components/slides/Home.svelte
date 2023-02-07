@@ -15,6 +15,7 @@
             usemap="#signpost"
             width="619"
             height="411"
+            fetchpriority="high"
         />
         <map name="signpost">
             <area
@@ -35,6 +36,10 @@
 </div>
 
 <style lang="scss">
+    img:-moz-loading {
+        visibility: hidden;
+    }
+
     .grid-container {
         grid-template-columns: 1fr auto 1fr;
         grid-auto-flow: column;

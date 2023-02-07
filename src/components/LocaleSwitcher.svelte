@@ -119,7 +119,8 @@
     }
 
     .language-control:checked + .language-label {
-        background-color: $language-checked;
+        text-decoration: underline 2px;
+        text-decoration-color: var(--pg-accent-color);
     }
 
     .language-control:focus + .language-label,
