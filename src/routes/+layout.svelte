@@ -1,8 +1,9 @@
 <script>
     import Header from '$lib/components/Header.svelte'
     import Footer from '$lib/components/Footer.svelte'
-    import '$lib/i18n'
     import { isLoading } from 'svelte-i18n'
+    import signPostImg from '$lib/assets/images/signpost.svg'
+    import '$lib/i18n'
 </script>
 
 <svelte:head>
@@ -14,8 +15,15 @@
     <meta
         name="keywords"
         content="Encryption, Usability, Privacy, Security, Identity-Based Encryption"
-    /></svelte:head
->
+    />
+    <link
+        rel="preload"
+        fetchpriority="high"
+        as="image"
+        href={signPostImg}
+        type="image/svg"
+    />
+</svelte:head>
 
 {#if !$isLoading}
     <Header />

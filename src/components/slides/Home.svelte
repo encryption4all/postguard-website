@@ -1,7 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n'
     import signPostImg from '$lib/assets/images/signpost.svg'
-    import signPostImgLq from '$lib/assets/images/lqip/signpost.svg'
 </script>
 
 <div class="grid-container">
@@ -11,9 +10,7 @@
     </div>
     <div class="grid-item">
         <img
-            src={signPostImgLq}
-            data-src={signPostImg}
-            class="lazyload"
+            src={signPostImg}
             alt="signpost"
             usemap="#signpost"
             width="619"
