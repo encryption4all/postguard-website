@@ -5,7 +5,6 @@
     import basketImgLq from '$lib/assets/images/lqip/basket.svg'
     import { cryptifyIframe } from './../../stores.js'
 
-    export let cryptifySrc = ''
     export let uuid
 
     let containerHeight
@@ -32,7 +31,7 @@
         bind:this={el}
         title="filesharing"
         class="grid-item lazyload"
-        data-src={`${cryptifySrc}${uuid ? `?download=${uuid}` : ''}`}
+        data-src={`/filesharing/${uuid ? `?download=${uuid}` : ''}`}
         type="text/html"
         style="max-height: {uuid ? 700 : 600}px; height: {containerHeight -
             20}px;"

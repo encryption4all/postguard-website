@@ -2,7 +2,6 @@
     import decryptImg from '$lib/assets/images/decrypt.svg'
     import decryptImgLq from '$lib/assets/images/lqip/decrypt.svg'
 
-    export let fallbackSrc = ''
     let windowWidth
 </script>
 
@@ -12,7 +11,7 @@
     <iframe
         title="fallback"
         class="grid-item lazyload"
-        data-src={fallbackSrc}
+        data-src="/fallback/"
         width={windowWidth > 1000 ? 500 : 350}
         height="600"
     />
