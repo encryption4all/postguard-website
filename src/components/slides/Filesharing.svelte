@@ -1,19 +1,15 @@
 <script>
-    import { page } from '$app/stores'
     import { _ } from 'svelte-i18n'
     import basketImg from '$lib/assets/images/basket.svg'
     import basketImgLq from '$lib/assets/images/lqip/basket.svg'
     import { cryptifyIframe } from './../../stores.js'
 
-    export let uuid
-
-    let containerHeight
     let el
 
     $: el && cryptifyIframe.set(el)
 </script>
 
-<div class="grid-container" bind:clientHeight={containerHeight}>
+<div class="grid-container">
     <div class="grid-item header">
         <h2><span>{$_('filesharing.title')}</span></h2>
         <p>{@html $_('filesharing.subpar1')}</p>
@@ -30,11 +26,10 @@
     <iframe
         bind:this={el}
         title="filesharing"
-        class="grid-item lazyload"
-        data-src={`/filesharing/${uuid ? `?download=${uuid}` : ''}`}
+        class="grid-item"
+        src=""
         type="text/html"
-        style="max-height: {uuid ? 700 : 600}px; height: {containerHeight -
-            20}px;"
+        style="height: 100%; max-height: 750px;"
     />
 </div>
 
