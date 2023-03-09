@@ -29,7 +29,7 @@
         class="grid-item"
         src=""
         type="text/html"
-        style="height: 100%; max-height: 750px;"
+        style="min-height: 700px; max-height: 750px;"
     />
 </div>
 
