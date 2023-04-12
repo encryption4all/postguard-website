@@ -1,0 +1,407 @@
+<script>
+    // imports
+    // icons
+    import DownloadBoxOutline from 'svelte-material-icons/DownloadBoxOutline.svelte'
+    import UploadLock from 'svelte-material-icons/UploadLock.svelte'
+
+    // Yivi
+    import * as YiviCore from '@privacybydesign/yivi-core'
+    import * as YiviClient from '@privacybydesign/yivi-client'
+    import * as YiviPopup from '@privacybydesign/yivi-popup'
+    import '@privacybydesign/yivi-css'
+
+    // extra
+    import jwt_decode from 'jwt-decode'
+    import { onMount } from 'svelte'
+
+    // stores
+    import { boolCacheEmail, boolCacheIRMA, emails, krCache } from './stores'
+
+    // logic
+    import * as decrypt from './decrypt.js'
+    import * as email from './email'
+
+    // components
+    import EmailView from './EmailView.svelte'
+
+    // constants
+    // server URL for private key generator
+    const pkg = 'https://main.irmaseal-pkg.ihub.ru.nl'
+
+    // vars
+    let mod // WASM module
+    let unsealer
+
+    let inFile // input file
+    let outFile = '' // output file
+    const unsealerWritable = new WritableStream({
+        write: (chunk) => {
+            outFile += new TextDecoder().decode(chunk)
+        },
+    })
+
+    let policies // hidden policies
+    let usk // user secret key
+    let keylist // list of keys (if there are multiple recipients)
+    let key // key (email of recipient)
+    let keyRequest // key request: sent to server
+    let recipientAndCreds // chosen recipient and their credentials
+    let recipientStripped // chosen recipient stripepd from credentials: sent to server
+    let timestamp
+
+    let boolRecipientCached
+    let jwtCached // cached jwt, if it exists
+
+    let enableSubmit = false
+    let enableDownload = false
+    let showSelection = false
+    let showCreds = false
+
+    let keySelection = ''
+    let credslist = []
+
+    // JWT cache
+    let krCacheTemp = {
+        jwt: '',
+        jwtValid: '',
+        key: '',
+        krCon: {},
+    }
+
+    let decryptedMail
+
+    onMount(async () => {
+        // load WASM module and get key
+        mod = await import('@e4a/irmaseal-wasm-bindings')
+
+        // listen for file upload
+        const buttons = document.querySelectorAll('input')
+        buttons.forEach((btn) => btn.addEventListener('change', listener))
+    })
+
+    // take input file and get hidden policies
+    const listener = async (event) => {
+        ;[inFile] = event.srcElement.files
+        const readable = inFile.stream()
+
+        try {
+            unsealer = await mod.Unsealer.new(readable)
+            policies = unsealer.get_hidden_policies()
+            checkRecipients()
+        } catch (e) {
+            console.log('error during unsealing: ', e)
+        }
+    }
+
+    // takes the hidden policies from the encrypted file, and checks whether
+    // there is one recipient or multiple
+    function checkRecipients() {
+        if (Object.keys(policies).length == 1) {
+            key = Object.keys(policies)[0]
+            krCacheTemp.key = key
+            processPolicy()
+            processCredentials(key)
+        } else {
+            showSelection = true
+            keylist = Object.keys(policies)
+        }
+        enableSubmit = true
+    }
+
+    // the chosen recipient is now checked for whether it is already cached in
+    // the store
+    function processPolicy() {
+        timestamp = policies[key].ts
+        recipientAndCreds = decrypt.sortPolicies(policies[key]['con']) // sort the recipient credentials on alphabetical order
+        boolRecipientCached = checkRecipientCached()
+    }
+
+    // check if the recipient with the credentials is already in the store
+    function checkRecipientCached() {
+        for (const kr of $krCache) {
+            if (
+                kr.key === key &&
+                JSON.stringify(kr.krCon) === JSON.stringify(recipientAndCreds)
+            ) {
+                if (Date.now() / 1000 < kr.jwtValid) {
+                    jwtCached = kr.jwt
+                    return true
+                } else {
+                    // jwt expired, so delete it
+                    $krCache = $krCache.filter((x) => x.exp != kr.exp)
+                    break
+                }
+            }
+        }
+        return false
+    }
+
+    // send processed policy to the server and decrypt file
+    async function doDecrypt() {
+        if (showSelection) {
+            key = keySelection
+            krCacheTemp.key = key
+            processPolicy()
+        }
+
+        if (boolRecipientCached) {
+            await getUskCachedJWT()
+        } else {
+            stripCredentials()
+            createKr()
+            await getUsk()
+        }
+    }
+
+    // cache the current credentials if user has chosen to
+    function cacheCredentials() {
+        let jwtdecoded = jwt_decode(krCacheTemp.jwt)
+        krCacheTemp.jwtValid = jwtdecoded.exp
+
+        if ($boolCacheIRMA) {
+            $krCache = [...$krCache, krCacheTemp]
+        }
+    }
+
+    // check if there are credentials with hints
+    // if so, show them
+    function processCredentials(key) {
+        credslist = []
+        showCreds = false
+        let pol = policies[key]['con']
+
+        for (var i = 0; i < pol.length; i++) {
+            if (pol[i]['t'] == 'pbdf.sidn-pbdf.mobilenumber.mobilenumber') {
+                showCreds = true
+                credslist.push('Mobile number: ' + pol[i]['v'])
+            } else if (pol[i]['t'] == 'pbdf.pbdf.surfnet-2.id') {
+                showCreds = true
+                credslist.push('Student ID: ' + pol[i]['v'])
+            }
+        }
+    }
+
+    // strip the recipient of credentials, to prepare for key request
+    function stripCredentials() {
+        krCacheTemp.krCon = recipientAndCreds
+        recipientStripped = JSON.parse(JSON.stringify(recipientAndCreds)) // deep copy of recipient
+        for (const c of recipientStripped) {
+            delete c.v
+        }
+    }
+
+    // create the key request
+    function createKr() {
+        keyRequest = {
+            con: recipientStripped,
+            validity: decrypt.secondsTill4AM(),
+        }
+    }
+
+    // get the usk using a cached jwt value
+    async function getUskCachedJWT() {
+        usk = await fetch(`${pkg}/v2/request/key/${timestamp.toString()}`, {
+            headers: {
+                Authorization: `Bearer ${jwtCached}`,
+            },
+        })
+            .then((r) => r.json().then((o) => o.key))
+            .catch((e) => {
+                console.log(e)
+                return e
+            })
+
+        await decryptFile()
+    }
+
+    async function getUsk() {
+        const session = {
+            url: pkg,
+            start: {
+                url: (o) => `${o.url}/v2/request/start`,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(keyRequest),
+            },
+            mapping: {
+                sessionPtr: (r) => {
+                    const ptr = r.sessionPtr
+                    ptr.u = `https://ihub.ru.nl/irma/1/${ptr.u}`
+                    return ptr
+                },
+            },
+            result: {
+                url: (o, { sessionToken }) =>
+                    `${o.url}/v2/request/jwt/${sessionToken}`,
+                parseResponse: (r) => {
+                    return r
+                        .text()
+                        .then((jwt) => {
+                            krCacheTemp.jwt = jwt
+                            return fetch(
+                                `${pkg}/v2/request/key/${timestamp.toString()}`,
+                                {
+                                    headers: {
+                                        Authorization: `Bearer ${jwt}`,
+                                    },
+                                }
+                            )
+                        })
+                        .then((r) => r.json())
+                        .then((json) => {
+                            if (
+                                json.status !== 'DONE' ||
+                                json.proofStatus !== 'VALID'
+                            )
+                                throw new Error('not done and valid')
+                            return json.key
+                        })
+                        .catch((e) => console.log('error: ', e))
+                },
+            },
+        }
+
+        const yivi = new YiviCore({ debugging: false, session })
+
+        yivi.use(YiviClient)
+        yivi.use(YiviPopup)
+        usk = await yivi.start()
+
+        cacheCredentials()
+        await decryptFile()
+    }
+
+    async function decryptFile() {
+        console.log(key, usk, unsealerWritable)
+        await unsealer.unseal(key, usk, unsealerWritable)
+        decryptedMail = await email.parseMail(outFile)
+        storeMail(outFile)
+        enableDownload = true
+    }
+
+    function storeMail(unparsed) {
+        // only cache email if option is checked
+        if ($boolCacheEmail) {
+            let currentID
+            if ($emails[0]) {
+                currentID = $emails[0].id + 1
+            } else {
+                currentID = 0
+            }
+
+            $emails = [
+                {
+                    id: currentID,
+                    from: decryptedMail.from,
+                    to: decryptedMail.to,
+                    date: decryptedMail.headers[0]['value'],
+                    subject: decryptedMail.subject,
+                    raw: unparsed,
+                },
+                ...$emails,
+            ]
+        }
+    }
+</script>
+
+<h2>Decrypt E-mail</h2>
+
+<!-- encrypted file selections -->
+<p>
+    Download the "postguard.encrypted" file that is attached to the encrypted
+    email you received. Next, add the file here.
+</p>
+
+<div id="block">
+    <UploadLock />
+    <input type="file" id="decrypt" class="button" />
+</div>
+
+<!-- show selection dropdown when there are multiple recipients-->
+<div id="block">
+    {#if showSelection}
+        <p><b>Please select which email belongs to you:</b></p>
+        <select
+            bind:value={keySelection}
+            on:change={() => processCredentials(keySelection)}
+        >
+            {#each keylist as key}
+                <option value={key}>
+                    {key}
+                </option>
+            {/each}
+        </select>
+
+        <p>You selected {keySelection}</p>
+    {/if}
+</div>
+
+<!-- if there are credentials with a preview, show them -->
+<div id="block">
+    {#if showCreds}
+        <b>Your credentials:</b><br />
+        {#each credslist as cred}
+            {cred}<br />
+        {/each}
+    {/if}
+</div>
+
+<!-- submit button for UX reasons
+allows user to make and change their selection if there are multiple recipients
+allows user to see the credentials before they proceed with decryption  -->
+<div id="block">
+    <button class="button" disabled={!enableSubmit} on:click={doDecrypt}>
+        Decrypt
+    </button>
+</div>
+
+<!-- show email -->
+{#if enableDownload}
+    <div id="client">
+        <div id="header">
+            <div id="title">Email preview</div>
+
+            <div id="buttons">
+                <button
+                    on:click={() =>
+                        email.downloadAttachment(
+                            outFile,
+                            'text/plain',
+                            'postguard.eml'
+                        )}
+                    ><DownloadBoxOutline />
+                </button>
+            </div>
+        </div>
+
+        <EmailView {decryptedMail} />
+    </div>
+{/if}
+
+<style>
+    select {
+        padding: 5px;
+        border: 1px solid #d6d6d6;
+        border-radius: 5px;
+    }
+
+    #client {
+        border: 1px dashed;
+        border-radius: 10px;
+        padding: 10px;
+        overflow: scroll;
+        width: 600px;
+        height: 650px;
+    }
+
+    #header {
+        display: flex;
+    }
+
+    #title {
+        width: 100%;
+        font-size: 20px;
+    }
+</style>
