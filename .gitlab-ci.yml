@@ -60,7 +60,6 @@ build-image:
     tags: [docker]
     dependencies:
         - build-root
-        - build-fallback
         - build-cryptify
         - build-downloads
     image: docker:stable
