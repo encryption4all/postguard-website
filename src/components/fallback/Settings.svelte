@@ -1,6 +1,14 @@
 <script>
     // stores
-    import { emails, krCache, boolCacheIRMA, boolCacheEmail } from './stores.js'
+    import {
+        currSelected,
+        emails,
+        krCache,
+        boolCacheYivi,
+        boolCacheEmail,
+    } from './stores.js'
+
+    export let currMode
 
     function deleteAllMails() {
         if (
@@ -8,14 +16,15 @@
                 'Are you sure you want to delete all emails? This action is permanent!'
             )
         ) {
+            currSelected.set(-1)
             $emails = []
         }
     }
 
-    function deleteAllIRMA() {
+    function deleteAllYivi() {
         if (
             confirm(
-                'Are you sure you want to delete all IRMA credentials? This action is permanent!'
+                'Are you sure you want to delete all Yivi credentials? This action is permanent!'
             )
         ) {
             $krCache = []
@@ -50,74 +59,77 @@
     }
 </script>
 
-<link
-    href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    rel="stylesheet"
-/>
+<div id="settings-container">
+    <h2>Settings</h2>
+    <p>
+        All Yivi credentials and decrypted e-mails are cached locally in the
+        user's browser, no information is sent to a server.
+    </p>
 
-<h1>Settings</h1>
+    <div id="block2">
+        <h3>Caching</h3>
 
-<p>
-    All IRMA credentials and decrypted e-mails are cached locally in the user's
-    browser, no information is sent to a server.
-</p>
+        <input id="emailCache" type="checkbox" bind:checked={$boolCacheEmail} />
+        <label for="emailCache">Cache my emails</label> <br />
 
-<div id="block2">
-    <h3>Caching</h3>
+        <input id="irmaCache" type="checkbox" bind:checked={$boolCacheYivi} />
+        <label for="irmaCache">Cache my Yivi credentials</label>
+    </div>
 
-    <input id="emailCache" type="checkbox" bind:checked={$boolCacheEmail} />
-    <label for="emailCache">Cache my emails</label> <br />
+    <div id="block2">
+        <h3>Yivi Credentials</h3>
 
-    <input id="irmaCache" type="checkbox" bind:checked={$boolCacheIRMA} />
-    <label for="irmaCache">Cache my IRMA credentials</label>
-</div>
-
-<div id="block2">
-    <h3>IRMA Credentials</h3>
-
-    <table id="creds">
-        <tr>
-            <th>Credentials</th>
-            <th>Expiry date</th>
-            <th />
-        </tr>
-
-        {#each $krCache as kr}
+        <table id="creds">
             <tr>
-                <td
-                    >{kr.key}<br />
-                    {#each parseKr(kr.krCon) as cred}
-                        {cred}<br />
-                    {/each}
-                </td>
-                <td>{timeConverter(kr.jwtValid)}</td>
-                <td
-                    ><span
-                        id="deletebutton"
-                        class="material-icons"
-                        on:click|preventDefault={() => deleteJwt(kr)}
-                        on:keypress>delete</span
-                    ></td
-                >
+                <th>Credentials</th>
+                <th>Expiry date</th>
+                <th />
             </tr>
-        {/each}
-    </table>
 
-    <button class="button" on:click={deleteAllIRMA}>
-        Delete all IRMA credentials
-    </button>
+            {#each $krCache as kr}
+                <tr>
+                    <td
+                        >{kr.key}<br />
+                        {#each parseKr(kr.krCon) as cred}
+                            {cred}<br />
+                        {/each}
+                    </td>
+                    <td>{new Date(kr.jwtValid).toUTCString()}</td>
+                    <td
+                        ><span
+                            id="deletebutton"
+                            class="material-icons"
+                            on:click|preventDefault={() => deleteJwt(kr)}
+                            on:keypress>delete</span
+                        ></td
+                    >
+                </tr>
+            {/each}
+        </table>
+
+        <button class="button" on:click={deleteAllYivi}>
+            Delete all Yivi credentials
+        </button>
+    </div>
+
+    <div id="block2">
+        <h3>Email History</h3>
+        <button class="button" on:click={deleteAllMails}>
+            Delete all cached emails
+        </button>
+    </div>
+    <button on:click|preventDefault={() => (currMode = "List")} style="float:right; margin-right: 1em"
+        >Back</button
+    >
 </div>
 
-<div id="block2">
-    <h3>Email History</h3>
-    <button class="button" on:click={deleteAllMails}>
-        Delete all cached emails
-    </button>
-</div>
+<style lang="scss">
+    #settings-container {
+        padding-left: 1em;
+    }
 
-<style>
     #block2 {
-        margin-bottom: 40px;
+        margin-bottom: 20px;
     }
 
     h3 {

@@ -1,4 +1,6 @@
 <script>
+    import { onMount } from 'svelte'
+
     import decryptImg from '$lib/assets/images/decrypt.svg'
     import decryptImgLq from '$lib/assets/images/lqip/decrypt.svg'
     import Decrypt from '../fallback/Decrypt.svelte'
@@ -6,47 +8,88 @@
 
     import Cog from 'svelte-material-icons/Cog.svelte'
     import UploadLock from 'svelte-material-icons/UploadLock.svelte'
+    import Magnify from 'svelte-material-icons/Magnify.svelte'
 
-    import { emails } from './../fallback/stores.js'
+    import { emails, currSelected } from './../fallback/stores.js'
 
-    import { fade, fly } from 'svelte/transition'
+    import { fly } from 'svelte/transition'
+    import EmailView from '../fallback/EmailView.svelte'
+    import ListView from '../fallback/ListView.svelte'
 
-    const MODES = { MailView: 0, Settings: 1 }
+    // mode of the left window (List/Settings)
+    const LEFTMODES = { ListView: 'List', Settings: 'Settings' }
+    let currLeft = $emails.length > 0 ? LEFTMODES.ListView : LEFTMODES.Settings
 
-    let currMode = $emails.length > 0 ? MODES.MailView : MODES.Settings
+    // mode of the right window (Nothing/MailView/Decrypting)
+    const RIGHTMODES = {
+        Nothing: 'Nothing',
+        MailView: 'MailView',
+        Decrypt: 'Decrypt',
+    }
 
-    $: console.log('current mode: ', currMode)
+    $: currRight =
+    $currSelected >= 0 ? RIGHTMODES.MailView : RIGHTMODES.Nothing
+
+    let mod, readable
+
+    const onFile = async (event) => {
+        const [inFile] = event.srcElement.files
+        readable = inFile.stream()
+        currRight = RIGHTMODES.Decrypt
+    }
+
+    onMount(async () => {
+        mod = await import('@e4a/irmaseal-wasm-bindings')
+    })
+
+    $: console.log(`current modes, left: ${currLeft}, right: ${currRight}`)
+    $: console.log('mails changed: ', $emails)
+    $: console.log('current selected mail: ', $currSelected)
 </script>
 
 <div class="grid-container">
     <div class="left">
         <div class="item upload">
-            <p>TODO instruction</p>
-            <UploadLock size="30" />
-            <input type="file" />
+            <label class="file-upload">
+                <p>Click or drag a "postguard.encrypted" file here</p>
+                <UploadLock class="test" size="30" />
+                <input type="file" on:change={onFile} /></label
+            >
         </div>
         <div class="item search">
-            <button on:click={() => (currMode = 1 - currMode)}>
-                <Cog size="30" />
+            <label class="custom-field">
+                <div
+                    style="position:relative; float: right; right: 2em; top: 50%; transform: translateY(50%);; z-index:1;"
+                >
+                    <Magnify />
+                </div>
+                <input type="search" placeholder="Search..." />
+            </label>
+            <button
+                on:click={() => (currLeft = LEFTMODES.Settings)}
+                style="all:unset; cursor:pointer;"
+            >
+                <Cog class="button-image" size="30px" />
             </button>
-            <input type="text" placeholder="Search..." />
         </div>
-        <div class="item list">list</div>
+        <div class="item list">
+            {#if currLeft === LEFTMODES.ListView}
+                <ListView bind:rightMode={currRight} />
+            {:else}
+                <Settings bind:currMode={currLeft} />
+            {/if}
+        </div>
     </div>
     <div class="right">
-        {#if currMode === MODES.MailView}
+        {#if currRight === RIGHTMODES.MailView}
             <div
                 id="mail-container"
                 in:fly={{ y: 1000, delay: 500, duration: 500 }}
                 out:fly={{ y: 1000, duration: 500 }}
             >
-                <div class="item to"><p><b>To: </b></p></div>
-                <div class="item from"><p><b>From: </b></p></div>
-                <div class="item subject"><p><b>Subject: </b></p></div>
-                <div class="item date"><p><b>Date: </b></p></div>
-                <div class="item body">body</div>
+                <EmailView />
             </div>
-        {:else}
+        {:else if currRight === RIGHTMODES.Nothing}
             <div
                 id="image-container"
                 in:fly={{ y: 1000, delay: 500, duration: 500 }}
@@ -61,6 +104,8 @@
                     height="450"
                 />
             </div>
+        {:else}
+            <Decrypt {mod} {readable} bind:rightMode={currRight} />
         {/if}
     </div>
 </div>
@@ -101,22 +146,43 @@
             display: grid;
             grid-template-rows: repeat(16, 1fr);
 
+            .file-upload {
+                input[type='file'] {
+                    display: none;
+                }
+
+                width: 100%;
+                height: 100%;
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                .highlight {
+                    border-color: purple;
+                }
+            }
+
             .upload {
                 grid-row: 1 / 4;
+                display: flex;
             }
 
             .search {
+                display: flex;
+                gap: 2em;
                 grid-row: 4 / 6;
 
                 input {
                     color: black;
                     border-radius: 1em;
-                    background-color: grey;
                 }
             }
 
             .list {
-                grid-row: 7 / 17;
+                padding-left: 0;
+                grid-row: 6 / 17;
             }
         }
 
@@ -125,32 +191,6 @@
             grid-column: 2 / 2;
             background-color: white;
             height: 100%;
-
-            div#mail-container {
-                height: 100%;
-                display: grid;
-                grid-template-rows: repeat(16, 1fr);
-
-                .to {
-                    grid-row: 1 / 1;
-                }
-
-                .from {
-                    grid-row: 2 / 2;
-                }
-
-                .subject {
-                    grid-row: 3 / 3;
-                }
-
-                .date {
-                    grid-row: 4 / 4;
-                }
-
-                .body {
-                    grid-row: 5 / 17;
-                }
-            }
         }
     }
 </style>

@@ -1,27 +1,8 @@
 import { writable } from 'svelte/store'
 import { browser } from '$app/environment'
 
-const storeEmails = [
-    // {
-    //   id: 0,
-    //   from: '',
-    //   to: '',
-    //   date: '',
-    //   subject: '',
-    //   raw: ''
-    // }
-]
+export const currSelected = writable(-1)
 
-export const emails = writable(
-    browser &&
-        JSON.parse(
-            localStorage.getItem('emails') || JSON.stringify(storeEmails)
-        )
-)
-
-emails.subscribe(
-    (val) => browser && (localStorage.emails = JSON.stringify(val))
-)
 
 const storeKrCache = []
 
@@ -44,10 +25,35 @@ boolCacheEmail.subscribe(
     (val) => browser && (localStorage.boolCacheEmail = JSON.stringify(val))
 )
 
-export const boolCacheIRMA = writable(
-    browser && JSON.parse(localStorage.getItem('boolCacheIRMA') || 'false')
+export const boolCacheYivi = writable(
+    browser && JSON.parse(localStorage.getItem('boolCacheYivi') || 'false')
 )
 
-boolCacheIRMA.subscribe(
-    (val) => browser && (localStorage.boolCacheIRMA = JSON.stringify(val))
+boolCacheYivi.subscribe(
+    (val) => browser && (localStorage.boolCacheYivi = JSON.stringify(val))
 )
+
+
+const storeEmails = [
+    // {
+    //   id: 0,
+    //   from: '',
+    //   to: '',
+    //   date: '',
+    //   subject: '',
+    //   raw: ''
+    // }
+]
+
+export const emails = writable(
+    browser && boolCacheEmail &&
+        JSON.parse(
+            localStorage.getItem('emails') || JSON.stringify(storeEmails)
+        )
+)
+
+emails.subscribe(
+    (val) => browser && (localStorage.emails = JSON.stringify(val))
+)
+
+

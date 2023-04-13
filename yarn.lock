@@ -309,6 +309,14 @@
     deepmerge "^4.2.2"
     qrcode "^1.4.2"
 
+"@privacybydesign/yivi-web@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@privacybydesign/yivi-web/-/yivi-web-0.1.2.tgz#c633cf88ac15bea45e0599623225ba7e309bec75"
+  integrity sha512-A+7MnqppJmx6t+2CLJer1vJTdpOyrgGsC9pwuO5mjvEFnhNm0+UyAZGwVo+d4heSehDfO8r3P6XIYNqJeKd1cg==
+  dependencies:
+    deepmerge "^4.2.2"
+    qrcode "^1.4.2"
+
 "@rollup/plugin-virtual@^3.0.1":
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-virtual/-/plugin-virtual-3.0.1.tgz#cea7e489481cc0ca91516c047f8c53c1cfb1adf6"
