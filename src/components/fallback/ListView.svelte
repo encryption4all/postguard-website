@@ -1,6 +1,8 @@
 <script>
     import { emails, currSelected } from './../fallback/stores.js'
 
+    import TrashCanOutline from 'svelte-material-icons/TrashCanOutline.svelte'
+
     export let rightMode
 
     $: sorted = $emails.sort((a, b) => new Date(a.date) > new Date(b.date))
@@ -25,12 +27,14 @@
                 {/if} <br />
 
                 {email.date}
+
+                <!--                <TrashCanOutline /> -->
             </li>
         {/each}
     </ol>
 {:else}
     <p style="margin: auto; text-align: center;">
-        Oops! looks like there is nothing here.
+        Oops! Looks like there is nothing here.
     </p>
 {/if}
 

@@ -27,8 +27,7 @@
         Decrypt: 'Decrypt',
     }
 
-    $: currRight =
-    $currSelected >= 0 ? RIGHTMODES.MailView : RIGHTMODES.Nothing
+    $: currRight = $currSelected >= 0 ? RIGHTMODES.MailView : RIGHTMODES.Nothing
 
     let mod, readable
 
@@ -84,16 +83,16 @@
         {#if currRight === RIGHTMODES.MailView}
             <div
                 id="mail-container"
-                in:fly={{ y: 1000, delay: 500, duration: 500 }}
-                out:fly={{ y: 1000, duration: 500 }}
+                in:fly={{ y: 1000, delay: 350, duration: 350 }}
+                out:fly={{ y: 1000, duration: 350 }}
             >
                 <EmailView />
             </div>
         {:else if currRight === RIGHTMODES.Nothing}
             <div
                 id="image-container"
-                in:fly={{ y: 1000, delay: 500, duration: 500 }}
-                out:fly={{ y: 1000, duration: 500 }}
+                in:fly={{ y: 1000, delay: 350, duration: 350 }}
+                out:fly={{ y: 1000, duration: 350 }}
             >
                 <img
                     src={decryptImgLq}
@@ -191,6 +190,13 @@
             grid-column: 2 / 2;
             background-color: white;
             height: 100%;
+
+            #image-container {
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
         }
     }
 </style>

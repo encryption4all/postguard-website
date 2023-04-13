@@ -8,6 +8,8 @@
         boolCacheEmail,
     } from './stores.js'
 
+    import TrashCanOutline from 'svelte-material-icons/TrashCanOutline.svelte'
+
     export let currMode
 
     function deleteAllMails() {
@@ -100,7 +102,7 @@
                             id="deletebutton"
                             class="material-icons"
                             on:click|preventDefault={() => deleteJwt(kr)}
-                            on:keypress>delete</span
+                            on:keypress><TrashCanOutline size="26px" /></span
                         ></td
                     >
                 </tr>

@@ -14,7 +14,7 @@ export const krCache = writable(
 )
 
 krCache.subscribe(
-    (val) => browser && (localStorage.jwtcache = JSON.stringify(val))
+    (val) => browser && (localStorage.krCache = JSON.stringify(val))
 )
 
 export const boolCacheEmail = writable(
