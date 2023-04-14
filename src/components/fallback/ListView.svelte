@@ -53,7 +53,6 @@
         width: 100%;
         height: 100%;
         padding-left: 0;
-        overflow-y: scroll;
 
         scrollbar-width: 10px;
         ::-webkit-scrollbar {
