@@ -1,8 +1,7 @@
-import { writable } from 'svelte/store'
+import { derived, writable } from 'svelte/store'
 import { browser } from '$app/environment'
 
 export const currSelected = writable(-1)
-
 
 const storeKrCache = []
 
@@ -33,7 +32,6 @@ boolCacheYivi.subscribe(
     (val) => browser && (localStorage.boolCacheYivi = JSON.stringify(val))
 )
 
-
 const storeEmails = [
     // {
     //   id: 0,
@@ -46,7 +44,8 @@ const storeEmails = [
 ]
 
 export const emails = writable(
-    browser && boolCacheEmail &&
+    browser &&
+        boolCacheEmail &&
         JSON.parse(
             localStorage.getItem('emails') || JSON.stringify(storeEmails)
         )
@@ -56,4 +55,8 @@ emails.subscribe(
     (val) => browser && (localStorage.emails = JSON.stringify(val))
 )
 
+export const currentId = derived(emails, ($emails) =>
+    $emails.reduce((prev, next) => (next.id > prev ? next.id : prev), -1)
+)
 
+export const nextId = derived(currentId, ($currentId) => $currentId + 1)

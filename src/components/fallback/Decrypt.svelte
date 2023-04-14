@@ -17,6 +17,8 @@
     // stores
     import {
         currSelected,
+        currentId,
+        nextId,
         boolCacheEmail,
         boolCacheYivi,
         emails,
@@ -207,7 +209,6 @@
     // cache the current credentials if user has chosen to
     function cacheCredentials() {
         let jwtdecoded = jwt_decode(krCacheTemp.jwt)
-        console.log('caching: ', krCacheTemp)
         krCacheTemp.jwtValid = jwtdecoded.exp
         $krCache = [...$krCache, krCacheTemp]
     }
@@ -235,13 +236,7 @@
             headers: {
                 Authorization: `Bearer ${jwtCached}`,
             },
-        })
-            .then((r) => r.json().then((o) => o.key))
-            .catch((e) => {
-                console.log(e)
-                return e
-            })
-
+        }).then((r) => r.json().then((o) => o.key))
         return usk
     }
 
@@ -317,13 +312,6 @@
     }
 
     async function storeMail(unparsed) {
-        let currentID
-        if ($emails[0]) {
-            currentID = $emails[0].id + 1
-        } else {
-            currentID = 0
-        }
-
         // Only store the email if it is not already
         const hash = await decrypt.digestMessage(unparsed)
         const found = $emails.find((e) => e.hash === hash)
@@ -336,7 +324,7 @@
 
         $emails = [
             {
-                id: currentID,
+                id: $nextId,
                 from: decryptedMail.from,
                 to: decryptedMail.to,
                 date: decryptedMail.headers[0]['value'],
@@ -347,7 +335,7 @@
             ...$emails,
         ]
 
-        currSelected.set(currentID)
+        currSelected.set($currentId)
         await tick()
         rightMode = 'MailView'
     }
@@ -369,11 +357,11 @@
     </div>
 {:else if state === STATES.Qr}
     {#if showHints}
-        show dem hints {hints}
+        <p>Hints: {hints}</p>
     {/if}
     <div id="yivi-web">QR</div>
 {:else if state === STATES.Decryping}
-    Decrypting...
+    <p>Decrypting...</p>
 {:else if state === STATES.Fail}
     <p>Failure: {err}</p>
 {/if}

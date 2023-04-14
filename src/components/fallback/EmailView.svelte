@@ -40,7 +40,7 @@
                 id="myIframe"
                 srcdoc={parsed.html}
                 title="Mail message"
-                sandbox="true"
+                sandbox
             />
         </div>
 

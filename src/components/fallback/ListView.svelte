@@ -1,23 +1,26 @@
 <script>
     import { emails, currSelected } from './../fallback/stores.js'
 
-    import TrashCanOutline from 'svelte-material-icons/TrashCanOutline.svelte'
+    // import TrashCanOutline from 'svelte-material-icons/TrashCanOutline.svelte'
 
     export let rightMode
     export let searchTerm
 
-    $: sorted = $emails.sort((a, b) => new Date(a.date) < new Date(b.date))
+    $: sorted = $emails.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    )
     $: sortedFiltered = searchTerm
         ? sorted.filter(
               (email) =>
                   email.raw.toLowerCase().indexOf(searchTerm.toLowerCase()) > 0
           )
         : sorted
+
 </script>
 
 {#if sortedFiltered.length > 0}
     <ol>
-        {#each sortedFiltered as email, i}
+        {#each sortedFiltered as email}
             <li
                 on:click|preventDefault={() => {
                     currSelected.set(email.id)
@@ -36,7 +39,7 @@
                     {email.date}
                 </div>
 
-                <!--                <TrashCanOutline /> -->
+                <!-- <TrashCanOutline /> -->
             </li>
         {/each}
     </ol>

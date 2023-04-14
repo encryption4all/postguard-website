@@ -10,7 +10,7 @@
     import UploadLock from 'svelte-material-icons/UploadLock.svelte'
     import Magnify from 'svelte-material-icons/Magnify.svelte'
 
-    import { emails, currSelected } from './../fallback/stores.js'
+    import { emails, currSelected, nextId } from './../fallback/stores.js'
 
     import { fly } from 'svelte/transition'
     import EmailView from '../fallback/EmailView.svelte'
@@ -32,9 +32,11 @@
     let searchTerm
     let mod, readable
 
+    let unique = {}
     const onFile = async (event) => {
         const [inFile] = event.srcElement.files
         readable = inFile.stream()
+        unique = {}
         currRight = RIGHTMODES.Decrypt
     }
 
@@ -42,9 +44,10 @@
         mod = await import('@e4a/irmaseal-wasm-bindings')
     })
 
-    $: console.log(`current modes, left: ${currLeft}, right: ${currRight}`)
-    $: console.log('mails changed: ', $emails)
-    $: console.log('current selected mail: ', $currSelected)
+    $: console.log(`left: ${currLeft}, right: ${currRight}`)
+    $: console.log('mails: ', $emails)
+    $: console.log('currently selected: ', $currSelected)
+    $: console.log("nextId: ", $nextId)
 </script>
 
 <div class="grid-container">
@@ -92,16 +95,16 @@
         {#if currRight === RIGHTMODES.MailView}
             <div
                 id="mail-container"
-                in:fly={{ y: 1000, delay: 350, duration: 350 }}
-                out:fly={{ y: 1000, duration: 350 }}
+                in:fly={{ y: 1000, delay: 250, duration: 250 }}
+                out:fly={{ y: 1000, duration: 250 }}
             >
                 <EmailView />
             </div>
         {:else if currRight === RIGHTMODES.Nothing}
             <div
                 id="image-container"
-                in:fly={{ y: 1000, delay: 350, duration: 350 }}
-                out:fly={{ y: 1000, duration: 350 }}
+                in:fly={{ y: 1000, delay: 250, duration: 250 }}
+                out:fly={{ y: 1000, duration: 250 }}
             >
                 <img
                     src={decryptImgLq}
@@ -112,8 +115,9 @@
                     height="450"
                 />
             </div>
-        {:else}
-            <Decrypt {mod} {readable} bind:rightMode={currRight} />
+        {:else}{#key unique}
+                <Decrypt {mod} {readable} bind:rightMode={currRight} />
+            {/key}
         {/if}
     </div>
 </div>
