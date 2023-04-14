@@ -11,6 +11,7 @@
             })
         }
     }
+
 </script>
 
 {#if parsed}
@@ -43,22 +44,24 @@
             />
         </div>
 
-        {#if parsed.attachments > 0}
+        {#if parsed.attachments.length > 0}
             <div class="item attachments">
-                {#each parsed.attachments as att}
-                    <div
-                        id="att"
-                        on:click|preventDefault={() =>
-                            email.downloadAttachment(
-                                att.content,
-                                att.mimeType,
-                                att.filename
-                            )}
-                        on:keypress
-                    >
-                        {att.filename},
-                    </div>
-                {/each}
+                <ol>
+                    {#each parsed.attachments as att}
+                        <li
+                            id="att"
+                            on:click|preventDefault={() =>
+                                email.downloadAttachment(
+                                    att.content,
+                                    att.mimeType,
+                                    att.filename
+                                )}
+                            on:keypress
+                        >
+                            {att.filename}
+                        </li>
+                    {/each}
+                </ol>
             </div>
         {/if}
     </div>
@@ -109,6 +112,24 @@
 
         .attachments {
             grid-row: 16 / 16;
+            padding-left: 0;
+
+            ol {
+                height: 100%;
+                list-style-type: none;
+                display: flex;
+                padding: 0;
+                margin: 0;
+                align-items: center;
+
+                li {
+                    padding: 0.5em;
+                    text-align: start;
+                    cursor: pointer;
+                    font-size: 14px;
+                    border-right: 1px solid black;
+                }
+            }
         }
     }
 </style>

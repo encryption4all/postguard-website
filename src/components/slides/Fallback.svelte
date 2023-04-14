@@ -210,6 +210,10 @@
             background-color: white;
             height: 100%;
 
+            #mail-container {
+                height: 100%;
+            }
+
             #image-container {
                 height: 100%;
                 display: flex;
