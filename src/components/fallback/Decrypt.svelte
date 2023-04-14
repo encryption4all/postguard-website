@@ -81,6 +81,7 @@
     }
 
     let decryptedMail
+    let err
 
     $: console.log('decrypt state updated: ', state)
 
@@ -91,7 +92,7 @@
     let unsealer
 
     $: {
-        if (state === STATES.Uninit && readable) {
+        if (state === STATES.Uninit) {
             mod.Unsealer.new(readable)
                 .then((u) => {
                     state = STATES.Init
@@ -99,7 +100,10 @@
                     policies = unsealer.get_hidden_policies()
                     checkRecipients()
                 })
-                .catch(() => (state = STATES.Fail))
+                .catch((e) => {
+                    err = e
+                    state = STATES.Fail
+                })
         }
     }
 
@@ -120,19 +124,28 @@
             processPolicy()
             processCredentials()
 
-            if (boolRecipientCached) console.log('the JWT is cached')
-
             if (boolRecipientCached) {
+                console.log('cache hit')
                 // we retrieve key via jwt
-                getUskCachedJWT().then((retrieved) => (usk = retrieved))
+                getUskCachedJWT()
+                    .then((retrieved) => (usk = retrieved))
+                    .catch((e) => {
+                        err = e
+                        state = STATES.Fail
+                    })
             } else {
                 // we have to do a session
                 stripCredentials()
                 createKr()
                 state = STATES.Qr
-                tick().then(() => {
-                    getUsk().then((retrieved) => (usk = retrieved))
-                })
+                tick()
+                    .then(() => {
+                        getUsk().then((retrieved) => (usk = retrieved))
+                    })
+                    .catch((e) => {
+                        err = e
+                        state = STATES.Fail
+                    })
             }
         }
     }
@@ -143,7 +156,10 @@
 
             decryptFile()
                 .then(() => (state = STATES.Show))
-                .catch(() => (state = STATES.Fail))
+                .catch((e) => {
+                    err = e
+                    state = STATES.Fail
+                })
         }
     }
 
@@ -347,7 +363,7 @@
 {:else if state === STATES.Decryping}
     Decrypting...
 {:else if state === STATES.Fail}
-    Failure
+    <p>Failure: {err}</p>
 {/if}
 
 <style lang="scss">

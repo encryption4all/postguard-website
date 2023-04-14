@@ -120,8 +120,11 @@
             Delete all cached emails
         </button>
     </div>
-    <button on:click|preventDefault={() => (currMode = "List")} style="float:right; margin-right: 1em"
-        >Back</button
+    <button
+        on:click|preventDefault={() => {
+            currMode = currMode === 'List' ? 'Settings' : 'List'
+        }}
+        style="float:right; margin-right: 1em">Back</button
     >
 </div>
 
@@ -130,17 +133,8 @@
         padding-left: 1em;
     }
 
-    #block2 {
-        margin-bottom: 20px;
-    }
-
-    h3 {
-        margin-bottom: 5px;
-    }
-
     #creds {
         border-collapse: collapse;
-        margin-bottom: 20px;
     }
 
     #creds td,

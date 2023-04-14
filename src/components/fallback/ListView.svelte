@@ -12,21 +12,22 @@
     <ol>
         {#each sorted as email, i}
             <li
-                class:selected={$currSelected === i}
                 on:click|preventDefault={() => {
                     currSelected.set(i)
                     rightMode = 'MailView'
                 }}
                 on:keypress
             >
-                <b>{email.subject}</b> <br />
-                {#if email.from.name}
-                    {email.from.name}
-                {:else}
-                    {email.from.address}
-                {/if} <br />
+                <div class:selected={$currSelected === i}>
+                    <b>{email.subject}</b> <br />
+                    {#if email.from.name}
+                        {email.from.name}
+                    {:else}
+                        {email.from.address}
+                    {/if} <br />
 
-                {email.date}
+                    {email.date}
+                </div>
 
                 <!--                <TrashCanOutline /> -->
             </li>
@@ -46,9 +47,9 @@
         padding-left: 0;
         overflow-y: scroll;
 
-        scrollbar-width: 25px;
+        scrollbar-width: 10px;
         ::-webkit-scrollbar {
-            width: 25px;
+            width: 10px;
         }
     }
 
@@ -58,19 +59,19 @@
         justify-content: center;
         cursor: pointer;
         height: 4.5em;
-        padding-left: 1em;
         border-bottom: 1px solid black;
+        padding-left: 0.5em;
 
-        &.selected {
-            background: #a3ccf780;
-        }
+        div {
+            border-radius: 10px;
+            margin: 1em 0.5em 1em 0em;
+            padding-left: 0.25em;
 
-        &:hover {
-            background: #a3ccf780;
-        }
-
-        &:focus {
-            background: #a3ccf780;
+            &.selected,
+            &:hover,
+            &:focus {
+                background: #a3ccf780;
+            }
         }
     }
 </style>

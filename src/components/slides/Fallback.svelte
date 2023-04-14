@@ -66,7 +66,7 @@
             </label>
             <button
                 on:click={() => (currLeft = LEFTMODES.Settings)}
-                style="all:unset; cursor:pointer;"
+                style="cursor:pointer;"
             >
                 <Cog class="button-image" size="30px" />
             </button>
@@ -145,27 +145,30 @@
             display: grid;
             grid-template-rows: repeat(16, 1fr);
 
-            .file-upload {
-                input[type='file'] {
-                    display: none;
-                }
-
-                width: 100%;
-                height: 100%;
-                cursor: pointer;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-
-                .highlight {
-                    border-color: purple;
-                }
-            }
-
             .upload {
                 grid-row: 1 / 4;
                 display: flex;
+                padding: 0.5em;
+
+                .file-upload {
+                    input[type='file'] {
+                        display: none;
+                    }
+
+                    width: 100%;
+                    height: 100%;
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    border: 1px dashed black;
+                    border-radius: 40px 10px 10px 10px;
+
+                    .highlight {
+                        border-color: purple;
+                    }
+                }
             }
 
             .search {
@@ -177,9 +180,15 @@
                     color: black;
                     border-radius: 1em;
                 }
+
+                button {
+                    all: unset;
+                    margin: auto 2em auto auto;
+                }
             }
 
             .list {
+                overflow-y: scroll;
                 padding-left: 0;
                 grid-row: 6 / 17;
             }
