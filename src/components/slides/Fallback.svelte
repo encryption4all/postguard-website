@@ -29,6 +29,7 @@
 
     $: currRight = $currSelected >= 0 ? RIGHTMODES.MailView : RIGHTMODES.Nothing
 
+    let searchTerm
     let mod, readable
 
     const onFile = async (event) => {
@@ -62,7 +63,11 @@
                 >
                     <Magnify />
                 </div>
-                <input type="search" placeholder="Search..." />
+                <input
+                    type="search"
+                    placeholder="Search..."
+                    bind:value={searchTerm}
+                />
             </label>
             <button
                 on:click={() => (currLeft = LEFTMODES.Settings)}
@@ -73,7 +78,7 @@
         </div>
         <div class="item list">
             {#if currLeft === LEFTMODES.ListView}
-                <ListView bind:rightMode={currRight} />
+                <ListView bind:rightMode={currRight} bind:searchTerm />
             {:else}
                 <Settings bind:currMode={currLeft} />
             {/if}

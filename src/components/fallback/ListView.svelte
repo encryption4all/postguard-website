@@ -4,21 +4,28 @@
     import TrashCanOutline from 'svelte-material-icons/TrashCanOutline.svelte'
 
     export let rightMode
+    export let searchTerm
 
-    $: sorted = $emails.sort((a, b) => new Date(a.date) > new Date(b.date))
+    $: sorted = $emails.sort((a, b) => new Date(a.date) < new Date(b.date))
+    $: sortedFiltered = searchTerm
+        ? sorted.filter(
+              (email) =>
+                  email.raw.toLowerCase().indexOf(searchTerm.toLowerCase()) > 0
+          )
+        : sorted
 </script>
 
-{#if sorted.length > 0}
+{#if sortedFiltered.length > 0}
     <ol>
-        {#each sorted as email, i}
+        {#each sortedFiltered as email, i}
             <li
                 on:click|preventDefault={() => {
-                    currSelected.set(i)
+                    currSelected.set(email.id)
                     rightMode = 'MailView'
                 }}
                 on:keypress
             >
-                <div class:selected={$currSelected === i}>
+                <div class:selected={$currSelected === email.id}>
                     <b>{email.subject}</b> <br />
                     {#if email.from.name}
                         {email.from.name}

@@ -174,6 +174,7 @@
     function checkKrCached() {
         for (const kr of $krCache) {
             if (
+                kr.key === key &&
                 JSON.stringify(kr.krCon) === JSON.stringify(recipientAndCreds)
             ) {
                 if (Date.now() / 1000 < kr.jwtValid) {
@@ -323,6 +324,16 @@
             currentID = 0
         }
 
+        // Only store the email if it is not already
+        const hash = await decrypt.digestMessage(unparsed)
+        const found = $emails.find((e) => e.hash === hash)
+        if (found) {
+            currSelected.set(found.id)
+            await tick()
+            rightMode = 'MailView'
+            return
+        }
+
         $emails = [
             {
                 id: currentID,
@@ -331,6 +342,7 @@
                 date: decryptedMail.headers[0]['value'],
                 subject: decryptedMail.subject,
                 raw: unparsed,
+                hash,
             },
             ...$emails,
         ]
