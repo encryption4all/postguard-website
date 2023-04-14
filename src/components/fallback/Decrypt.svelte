@@ -1,0 +1,381 @@
+<script>
+    // imports
+
+    import { tick } from 'svelte'
+    // icons
+    import DownloadBoxOutline from 'svelte-material-icons/DownloadBoxOutline.svelte'
+
+    // Yivi
+    import * as YiviCore from '@privacybydesign/yivi-core'
+    import * as YiviClient from '@privacybydesign/yivi-client'
+    import * as YiviWeb from '@privacybydesign/yivi-web'
+    import '@privacybydesign/yivi-css'
+
+    // extra
+    import jwt_decode from 'jwt-decode'
+
+    // stores
+    import {
+        currSelected,
+        currentId,
+        nextId,
+        boolCacheEmail,
+        boolCacheYivi,
+        emails,
+        krCache,
+    } from './stores'
+
+    // logic
+    import * as decrypt from './decrypt.js'
+    import * as email from './email'
+
+    export let rightMode
+
+    // constants
+    // server URL for private key generator
+    const pkg = 'https://main.irmaseal-pkg.ihub.ru.nl'
+
+    // states
+    const STATES = {
+        Uninit: 'Uninit',
+        Init: 'Init',
+        Recipients: 'Recipients',
+        Qr: 'Qr',
+        Decrypting: 'Decrypting',
+        Show: 'Show',
+        Fail: 'Fail',
+    }
+
+    let state = STATES.Uninit
+
+    let outStream = ''
+    let decoder = new TextDecoder()
+    const unsealerWritable = new WritableStream({
+        write: (chunk) => {
+            outStream += decoder.decode(chunk, { stream: true })
+        },
+        close: () => {
+            outStream += decoder.decode()
+        },
+    })
+
+    let policies // hidden policies
+    let usk // user secret key
+    let keylist // list of keys (if there are multiple recipients)
+    let key // key (email of recipient)
+    let keyRequest // key request: sent to server
+    let recipientAndCreds // chosen recipient and their credentials
+    let recipientStripped // chosen recipient stripepd from credentials: sent to server
+    let timestamp
+
+    let showHints = false
+    let hints = []
+
+    let boolRecipientCached
+    let jwtCached // cached jwt, if it exists
+
+    // JWT cache
+    let krCacheTemp = {
+        jwt: '',
+        jwtValid: '',
+        key: '',
+        krCon: {},
+    }
+
+    let decryptedMail
+    let err
+
+    $: console.log('decrypt state updated: ', state)
+
+    // vars
+    export let mod // WASM module
+    export let readable
+
+    let unsealer
+
+    $: {
+        if (state === STATES.Uninit) {
+            mod.Unsealer.new(readable)
+                .then((u) => {
+                    state = STATES.Init
+                    unsealer = u
+                    policies = unsealer.get_hidden_policies()
+                    checkRecipients()
+                })
+                .catch((e) => {
+                    err = e
+                    state = STATES.Fail
+                })
+        }
+    }
+
+    // checks whether there is one recipient or multiple
+    function checkRecipients() {
+        if (Object.keys(policies).length == 1) {
+            // Only one recipient
+            key = Object.keys(policies)[0]
+            krCacheTemp.key = key
+        } else {
+            keylist = Object.keys(policies)
+            state = STATES.Recipients
+        }
+    }
+
+    $: {
+        if ((state == STATES.Init || state == STATES.Recipients) && key) {
+            processPolicy()
+            processCredentials()
+
+            if (boolRecipientCached) {
+                console.log('cache hit')
+                // we retrieve key via jwt
+                getUskCachedJWT()
+                    .then((retrieved) => (usk = retrieved))
+                    .catch((e) => {
+                        err = e
+                        state = STATES.Fail
+                    })
+            } else {
+                // we have to do a session
+                stripCredentials()
+                createKr()
+                state = STATES.Qr
+                tick()
+                    .then(() => {
+                        getUsk().then((retrieved) => (usk = retrieved))
+                    })
+                    .catch((e) => {
+                        err = e
+                        state = STATES.Fail
+                    })
+            }
+        }
+    }
+
+    $: {
+        if (usk) {
+            state = STATES.Decrypting
+
+            decryptFile()
+                .then(() => (state = STATES.Show))
+                .catch((e) => {
+                    err = e
+                    state = STATES.Fail
+                })
+        }
+    }
+
+    // check checked if the policy is in the cache
+    function processPolicy() {
+        timestamp = policies[key].ts
+        recipientAndCreds = decrypt.sortPolicies(policies[key]['con']) // sort the recipient credentials on alphabetical order
+        boolRecipientCached = checkKrCached()
+    }
+
+    // check if the recipient with the credentials is already in the store
+    function checkKrCached() {
+        for (const kr of $krCache) {
+            if (
+                kr.key === key &&
+                JSON.stringify(kr.krCon) === JSON.stringify(recipientAndCreds)
+            ) {
+                if (Date.now() / 1000 < kr.jwtValid) {
+                    jwtCached = kr.jwt
+                    return true
+                } else {
+                    // jwt expired, so delete it
+                    $krCache = $krCache.filter((x) => x.exp != kr.exp)
+                    break
+                }
+            }
+        }
+        return false
+    }
+
+    // check if there are credentials with hints
+    function processCredentials() {
+        let pol = policies[key]['con']
+        for (var i = 0; i < pol.length; i++) {
+            if (pol[i]['t'] == 'pbdf.sidn-pbdf.mobilenumber.mobilenumber') {
+                showHints = true
+                hints.push('Mobile number: ' + pol[i]['v'])
+            } else if (pol[i]['t'] == 'pbdf.pbdf.surfnet-2.id') {
+                showHints = true
+                hints.push('Student ID: ' + pol[i]['v'])
+            }
+        }
+    }
+
+    // cache the current credentials if user has chosen to
+    function cacheCredentials() {
+        let jwtdecoded = jwt_decode(krCacheTemp.jwt)
+        krCacheTemp.jwtValid = jwtdecoded.exp
+        $krCache = [...$krCache, krCacheTemp]
+    }
+
+    // strip the recipient of credentials, to prepare for key request
+    function stripCredentials() {
+        krCacheTemp.krCon = recipientAndCreds
+        recipientStripped = JSON.parse(JSON.stringify(recipientAndCreds)) // deep copy of recipient
+        for (const c of recipientStripped) {
+            delete c.v
+        }
+    }
+
+    // create the key request
+    function createKr() {
+        keyRequest = {
+            con: recipientStripped,
+            validity: decrypt.secondsTill4AM(),
+        }
+    }
+
+    // get the usk using a cached jwt value
+    async function getUskCachedJWT() {
+        usk = await fetch(`${pkg}/v2/request/key/${timestamp.toString()}`, {
+            headers: {
+                Authorization: `Bearer ${jwtCached}`,
+            },
+        }).then((r) => r.json().then((o) => o.key))
+        return usk
+    }
+
+    async function getUsk() {
+        const session = {
+            url: pkg,
+            start: {
+                url: (o) => `${o.url}/v2/request/start`,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(keyRequest),
+            },
+            mapping: {
+                sessionPtr: (r) => {
+                    const ptr = r.sessionPtr
+                    ptr.u = `https://ihub.ru.nl/irma/1/${ptr.u}`
+                    return ptr
+                },
+            },
+            result: {
+                url: (o, { sessionToken }) =>
+                    `${o.url}/v2/request/jwt/${sessionToken}`,
+                parseResponse: (r) => {
+                    return r
+                        .text()
+                        .then((jwt) => {
+                            krCacheTemp.jwt = jwt
+                            return fetch(
+                                `${pkg}/v2/request/key/${timestamp.toString()}`,
+                                {
+                                    headers: {
+                                        Authorization: `Bearer ${jwt}`,
+                                    },
+                                }
+                            )
+                        })
+                        .then((r) => r.json())
+                        .then((json) => {
+                            if (
+                                json.status !== 'DONE' ||
+                                json.proofStatus !== 'VALID'
+                            )
+                                throw new Error('not done and valid')
+                            return json.key
+                        })
+                        .catch((e) => console.log('error: ', e))
+                },
+            },
+        }
+
+        const yivi = new YiviCore({
+            debugging: false,
+            session,
+            element: '#yivi-web',
+        })
+
+        yivi.use(YiviClient)
+        yivi.use(YiviWeb)
+        usk = await yivi.start()
+
+        // If caching is enabled, cache the jwt
+        if ($boolCacheYivi) cacheCredentials()
+
+        return usk
+    }
+
+    async function decryptFile() {
+        await unsealer.unseal(key, usk, unsealerWritable)
+        decryptedMail = await email.parseMail(outStream)
+        if ($boolCacheEmail) await storeMail(outStream)
+    }
+
+    async function storeMail(unparsed) {
+        // Only store the email if it is not already
+        const hash = await decrypt.digestMessage(unparsed)
+        const found = $emails.find((e) => e.hash === hash)
+        if (found) {
+            currSelected.set(found.id)
+            await tick()
+            rightMode = 'MailView'
+            return
+        }
+
+        $emails = [
+            {
+                id: $nextId,
+                from: decryptedMail.from,
+                to: decryptedMail.to,
+                date: decryptedMail.headers[0]['value'],
+                subject: decryptedMail.subject,
+                raw: unparsed,
+                hash,
+            },
+            ...$emails,
+        ]
+
+        currSelected.set($currentId)
+        await tick()
+        rightMode = 'MailView'
+    }
+</script>
+
+{#if state === STATES.Init}
+    <h2>Decrypt E-mail</h2>
+{:else if state === STATES.Recipients}
+    <div id="block">
+        <p><b>Please select which email belongs to you:</b></p>
+        <select bind:value={key}
+            ><option value="" />
+            {#each keylist as key}
+                <option value={key}>
+                    {key}
+                </option>
+            {/each}
+        </select>
+    </div>
+{:else if state === STATES.Qr}
+    {#if showHints}
+        <p>Hints: {hints}</p>
+    {/if}
+    <div id="yivi-web">QR</div>
+{:else if state === STATES.Decryping}
+    <p>Decrypting...</p>
+{:else if state === STATES.Fail}
+    <p>Failure: {err}</p>
+{/if}
+
+<style lang="scss">
+    #yivi-web {
+        height: 100%;
+        width: 100%;
+        background-color: #eae5e2;
+        max-width: unset;
+    }
+    select {
+        padding: 5px;
+        border: 1px solid #d6d6d6;
+        border-radius: 5px;
+    }
+</style>

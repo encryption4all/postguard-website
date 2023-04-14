@@ -13,26 +13,29 @@
         "format": "prettier --write src/**/"
     },
     "devDependencies": {
-        "@playwright/test": "^1.29.2",
-        "@sveltejs/adapter-static": "^1.0.4",
-        "@sveltejs/kit": "1.1.3",
-        "@typescript-eslint/eslint-plugin": "^5.48.2",
-        "@typescript-eslint/parser": "^5.48.2",
-        "eslint": "^8.32.0",
-        "eslint-config-prettier": "^8.6.0",
+        "@playwright/test": "^1.32.2",
+        "@privacybydesign/yivi-web": "^0.1.2",
+        "@sveltejs/adapter-static": "^2.0.1",
+        "@sveltejs/kit": "1.15.1",
+        "@typescript-eslint/eslint-plugin": "^5.57.1",
+        "@typescript-eslint/parser": "^5.57.1",
+        "eslint": "^8.37.0",
+        "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-svelte3": "^4.0.0",
         "lazysizes": "^5.3.2",
-        "prettier": "^2.8.3",
-        "prettier-plugin-svelte": "^2.9.0",
-        "sass": "^1.57.1",
-        "svelte": "^3.55.1",
-        "svelte-check": "^3.0.2",
+        "prettier": "^2.8.7",
+        "prettier-plugin-svelte": "^2.10.0",
+        "sass": "^1.60.0",
+        "svelte": "^3.58.0",
+        "svelte-check": "^3.2.0",
         "svelte-i18n": "^3.6.0",
-        "svelte-preprocess": "^5.0.0",
+        "svelte-preprocess": "^5.0.3",
         "swiper": "^8.4.6",
-        "tslib": "^2.4.1",
-        "typescript": "^4.9.4",
-        "vite": "^4.0.4"
+        "tslib": "^2.5.0",
+        "typescript": "^5.0.3",
+        "vite": "^4.2.1",
+        "vite-plugin-top-level-await": "^1.3.0",
+        "vite-plugin-wasm": "^3.2.2"
     },
     "type": "module",
     "prettier": {
@@ -40,5 +43,17 @@
         "tabWidth": 4,
         "semi": false,
         "singleQuote": true
+    },
+    "dependencies": {
+        "@e4a/irmaseal-wasm-bindings": "^0.2.3",
+        "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+        "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
+        "@privacybydesign/yivi-client": "^0.1.1",
+        "@privacybydesign/yivi-core": "^0.1.1",
+        "@privacybydesign/yivi-css": "^0.1.1",
+        "@privacybydesign/yivi-popup": "^0.1.1",
+        "jwt-decode": "^3.1.2",
+        "postal-mime": "^1.0.16",
+        "svelte-material-icons": "^3.0.4"
     }
 }

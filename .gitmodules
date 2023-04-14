@@ -2,10 +2,6 @@
 	path = cryptify
 	url = https://github.com/encryption4all/cryptify.git
 	branch = postguard-embed
-[submodule "postguard-fallback"]
-	path = postguard-fallback
-	url = https://github.com/encryption4all/postguard-fallback.git
-	branch = postguard
 [submodule "postguard-tb-addon"]
 	path = postguard-tb-addon
 	url = https://github.com/encryption4all/postguard-tb-addon.git
