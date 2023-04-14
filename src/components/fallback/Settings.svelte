@@ -121,16 +121,14 @@
         </button>
     </div>
     <button
-        on:click|preventDefault={() => {
-            currMode = currMode === 'List' ? 'Settings' : 'List'
-        }}
+        on:click|preventDefault={() => (currMode = 'List')}
         style="float:right; margin-right: 1em">Back</button
     >
 </div>
 
 <style lang="scss">
     #settings-container {
-        padding-left: 1em;
+        padding: 0 1em 1em 1em;
     }
 
     #creds {

@@ -48,6 +48,7 @@
 
 <style lang="scss">
     ol {
+        margin-top: 0;
         list-style-type: none;
         width: 100%;
         height: 100%;

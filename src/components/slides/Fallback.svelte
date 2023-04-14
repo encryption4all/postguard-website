@@ -70,7 +70,11 @@
                 />
             </label>
             <button
-                on:click={() => (currLeft = LEFTMODES.Settings)}
+                on:click={() =>
+                    (currLeft =
+                        currLeft === LEFTMODES.Settings
+                            ? LEFTMODES.ListView
+                            : LEFTMODES.Settings)}
                 style="cursor:pointer;"
             >
                 <Cog class="button-image" size="30px" />
@@ -194,6 +198,7 @@
 
             .list {
                 overflow-y: scroll;
+                align-items: start;
                 padding-left: 0;
                 grid-row: 6 / 17;
             }
