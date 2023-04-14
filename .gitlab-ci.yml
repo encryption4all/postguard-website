@@ -5,8 +5,8 @@ stages:
     - deploy
 
 workflow:
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    rules:
+        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == "stable"
 
 variables:
     GIT_DEPTH: '16'
@@ -49,7 +49,7 @@ build-downloads:
         - yarn
         - NODE_ENV=production yarn build
         - cd dist
-        - ln -s postguard-tb-addon-*.xpi postguard-tb-addon.xpi 
+        - ln -s postguard-tb-addon-*.xpi postguard-tb-addon.xpi
     artifacts:
         paths:
             - postguard-tb-addon/dist
@@ -70,6 +70,8 @@ build-image:
 
 deploy-main:
     stage: deploy
+    only:
+        - main
     dependencies:
         - build-image
     environment: $CI_COMMIT_REF_NAME
@@ -83,6 +85,8 @@ deploy-main:
 
 deploy-main:
     stage: deploy
+    only:
+        - main
     dependencies:
         - build-image
     environment: $CI_COMMIT_REF_NAME
@@ -93,3 +97,18 @@ deploy-main:
         - apt install -y openssh-client
         - chmod 600 $ILAB_VM_TRIGGER_UPDATE_KEY
         - ssh -o UserKnownHostsFile=$ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS $ILAB_VM_TRIGGER_UPDATE_USER@$ILAB_VM_TRIGGER_UPDATE_HOST_MAIN -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-main
+
+deploy-stable:
+    stage: deploy
+    only:
+        - stable
+    dependencies:
+        - build-image
+    environment: $CI_COMMIT_REF_NAME
+    tags: [docker]
+    image: ubuntu:rolling
+    script:
+        - apt update
+        - apt install -y openssh-client
+        - chmod 600 $ILAB_VM_TRIGGER_UPDATE_KEY
+        - ssh -o UserKnownHostsFile=$ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS $ILAB_VM_TRIGGER_UPDATE_USER@$ILAB_VM_TRIGGER_UPDATE_HOST_STABLE -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-stable
