@@ -45,7 +45,6 @@ const storeEmails = [
 
 export const emails = writable(
     browser &&
-        boolCacheEmail &&
         JSON.parse(
             localStorage.getItem('emails') || JSON.stringify(storeEmails)
         )
@@ -56,7 +55,7 @@ emails.subscribe(
 )
 
 export const currentId = derived(emails, ($emails) =>
-    $emails.reduce((prev, next) => (next.id > prev ? next.id : prev), -1)
+    $emails? $emails.reduce((prev, next) => (next.id > prev ? next.id : prev), -1) : -1
 )
 
 export const nextId = derived(currentId, ($currentId) => $currentId + 1)
