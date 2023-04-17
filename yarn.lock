@@ -293,14 +293,6 @@
   resolved "https://registry.yarnpkg.com/@privacybydesign/yivi-css/-/yivi-css-0.1.2.tgz#5ecadbde8ecbba1358a3c2378c96151892e11e3b"
   integrity sha512-OGR9vB1Jw1DDqQ77bMewsDKWv92wlUT6uZVb3eY1AzCEfYUQ6XYsZMJGBwJxfEaUa+aqQjsGQ70b2KKgHqmZDg==
 
-"@privacybydesign/yivi-popup@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@privacybydesign/yivi-popup/-/yivi-popup-0.1.2.tgz#5c1d3b0b806289335d59abd83dda46197cf6078f"
-  integrity sha512-cQxvGocPYGP9S7uvK22fB4NTOWIn2Bs2qg0QNCEad6gd+RVMVMX7kRBeVaoWQFbqsXt1KyTRc5LfR86ajwNy/g==
-  dependencies:
-    "@privacybydesign/yivi-web" "^0.1.2"
-    deepmerge "^4.2.2"
-
 "@privacybydesign/yivi-web@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@privacybydesign/yivi-web/-/yivi-web-0.1.2.tgz#c633cf88ac15bea45e0599623225ba7e309bec75"
