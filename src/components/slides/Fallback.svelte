@@ -47,7 +47,7 @@
     $: console.log(`left: ${currLeft}, right: ${currRight}`)
     $: console.log('mails: ', $emails)
     $: console.log('currently selected: ', $currSelected)
-    $: console.log("nextId: ", $nextId)
+    $: console.log('nextId: ', $nextId)
 </script>
 
 <div class="grid-container">
@@ -78,7 +78,6 @@
                         currLeft === LEFTMODES.Settings
                             ? LEFTMODES.ListView
                             : LEFTMODES.Settings)}
-                style="cursor:pointer;"
             >
                 <Cog class="button-image" size="30px" />
             </button>
@@ -197,6 +196,8 @@
                 button {
                     all: unset;
                     margin: auto 2em auto auto;
+                    cursor: pointer;
+                    display: flex;
                 }
             }
 
