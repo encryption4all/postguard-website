@@ -290,13 +290,13 @@
         }
 
         const yivi = new YiviCore({
-            debugging: false,
+            debugging: true,
             session,
             element: '#yivi-web',
         })
 
-        yivi.use(YiviClient)
         yivi.use(YiviWeb)
+        yivi.use(YiviClient)
         usk = await yivi.start()
 
         // If caching is enabled, cache the jwt

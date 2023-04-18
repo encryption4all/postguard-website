@@ -6,12 +6,13 @@
 
     $: {
         if ($currSelected >= 0) {
-            email.parseMail($emails[$currSelected].raw).then((x) => {
-                parsed = x
-            })
+            const mail = $emails.find((e) => e.id === $currSelected)
+            if (mail)
+                email.parseMail(mail.raw).then((x) => {
+                    parsed = x
+                })
         }
     }
-
 </script>
 
 {#if parsed}

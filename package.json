@@ -16,7 +16,6 @@
         "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
         "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
         "@playwright/test": "^1.32.3",
-        "@privacybydesign/yivi-web": "^0.1.2",
         "@sveltejs/adapter-static": "^2.0.2",
         "@sveltejs/kit": "1.15.5",
         "@typescript-eslint/eslint-plugin": "^5.58.0",
