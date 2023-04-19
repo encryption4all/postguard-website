@@ -6,9 +6,9 @@
     import DownloadBoxOutline from 'svelte-material-icons/DownloadBoxOutline.svelte'
 
     // Yivi
-    import * as YiviCore from '@privacybydesign/yivi-core'
-    import * as YiviClient from '@privacybydesign/yivi-client'
-    import * as YiviWeb from '@privacybydesign/yivi-web'
+    import YiviCore from '@privacybydesign/yivi-core'
+    import YiviClient from '@privacybydesign/yivi-client'
+    import YiviWeb from '@privacybydesign/yivi-web'
     import '@privacybydesign/yivi-css'
 
     // extra
