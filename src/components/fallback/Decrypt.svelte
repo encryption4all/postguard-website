@@ -6,10 +6,10 @@
     import DownloadBoxOutline from 'svelte-material-icons/DownloadBoxOutline.svelte'
 
     // Yivi
-    // import * as YiviCore from '@privacybydesign/yivi-core'
-    // import * as YiviClient from '@privacybydesign/yivi-client'
-    // import * as YiviWeb from '@privacybydesign/yivi-web'
-    // import '@privacybydesign/yivi-css'
+    import * as YiviCore from '@privacybydesign/yivi-core'
+    import * as YiviClient from '@privacybydesign/yivi-client'
+    import * as YiviWeb from '@privacybydesign/yivi-web'
+    import '@privacybydesign/yivi-css'
 
     // extra
     import jwt_decode from 'jwt-decode'
@@ -289,14 +289,15 @@
             },
         }
 
-        // @ts-ignore
-        const sesh = yivi.newWeb({
+        const yivi = new YiviCore({
             debugging: true,
             session,
             element: '#yivi-web',
         })
 
-        usk = await sesh.start()
+        yivi.use(YiviWeb)
+        yivi.use(YiviClient)
+        usk = await yivi.start()
 
         // If caching is enabled, cache the jwt
         if ($boolCacheYivi) cacheCredentials()
