@@ -2,15 +2,22 @@
     import * as email from './email'
     import { emails, currSelected } from './../fallback/stores.js'
 
-    let parsed
+    import Download from 'svelte-material-icons/Download.svelte'
+
+    let raw, parsed
+    let date, formattedDate
 
     $: {
         if ($currSelected >= 0) {
             const mail = $emails.find((e) => e.id === $currSelected)
-            if (mail)
+            if (mail) {
+                date = new Date(mail.date)
+                formattedDate = `${date.getFullYear()}${date.getMonth()}${date.getDay()}${date.getHours()}${date.getSeconds()}`
                 email.parseMail(mail.raw).then((x) => {
                     parsed = x
+                    raw = mail.raw
                 })
+            }
         }
     }
 </script>
@@ -34,7 +41,22 @@
             <p><b>Subject: </b>{parsed.subject}</p>
         </div>
         <div class="item date">
-            <p><b>Date: </b>{parsed.headers[0]['value']}</p>
+            <p>
+                <b>Date: </b>{date.toDateString()},
+                {date.getHours()}:{date.getMinutes()}
+            </p>
+        </div>
+        <div class="item toolbar">
+            <button
+                on:click={() =>
+                    email.downloadAttachment(
+                        raw,
+                        'text/plain',
+                        `pg${formattedDate}.eml`
+                    )}
+            >
+                <Download size="30px" /></button
+            >
         </div>
         <div class="item body">
             <iframe
@@ -86,7 +108,7 @@
             text-align: left;
             padding-left: 1em;
 
-            &:not(:last-child) {
+            &:not(:last-child, .toolbar) {
                 border-bottom: 2px solid black;
             }
         }
@@ -107,8 +129,21 @@
             grid-row: 4 / 4;
         }
 
+        .toolbar {
+            grid-row: 5 / 5;
+            display: flex;
+
+            button {
+                all: unset;
+                cursor: pointer;
+                margin-left: auto;
+                margin-right: 0.5em;
+                margin-top: 0.5em;
+            }
+        }
+
         .body {
-            grid-row: 5 / 16;
+            grid-row: 6 / 16;
         }
 
         .attachments {

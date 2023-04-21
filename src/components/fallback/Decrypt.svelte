@@ -2,8 +2,6 @@
     // imports
 
     import { tick } from 'svelte'
-    // icons
-    import DownloadBoxOutline from 'svelte-material-icons/DownloadBoxOutline.svelte'
 
     // Yivi
     import YiviCore from '@privacybydesign/yivi-core'

@@ -55,7 +55,7 @@
         <div class="item upload">
             <label class="file-upload">
                 <p>Click or drag a "postguard.encrypted" file here</p>
-                <UploadLock class="test" size="30" />
+                <UploadLock class="test" size="30px" />
                 <input type="file" on:change={onFile} /></label
             >
         </div>
