@@ -41,7 +41,29 @@
         "instruction.header": "Install instructions",
         "instruction.download": "Download for:"
     },
-    "fallback": {},
+    "fallback": {
+        "drop": "Drop the \"postguard.encrypted\" attachment here",
+        "search": "Search decrypted mails...",
+        "settings": {
+            "h4": "Local storage",
+            "delete": {
+                "emailBtn": "Remove all emails",
+                "credsBtn": "Remove all personal data",
+                "emails": "Are you sure you want to delete all emails? This action is permanent!",
+                "creds": "Are you sure you want to delete all personal data? This action is permanent!"
+            },
+            "storeEmails": "Store my emails locally",
+            "storeCreds": "Store my personal data locally",
+            "creds": "Personal data",
+            "exp": "Expiry date"
+        },
+        "email": {
+            "from": "From",
+            "to": "To",
+            "subject": "Subject",
+            "date": "Date"
+        }
+    },
     "filesharing": {
         "title": "Filesharing",
         "subtitle1": "How does filesharing work?",

@@ -1,5 +1,6 @@
 <script>
     import { emails, currSelected } from './../fallback/stores.js'
+    import { locale } from 'svelte-i18n';
 
     // import TrashCanOutline from 'svelte-material-icons/TrashCanOutline.svelte'
 
@@ -36,7 +37,7 @@
                         {email.from.address}
                     {/if} <br />
 
-                    {email.date}
+                    {(new Date(email.date)).toLocaleString($locale)}
                 </div>
 
                 <!-- <TrashCanOutline /> -->

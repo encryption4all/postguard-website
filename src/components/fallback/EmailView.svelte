@@ -1,6 +1,7 @@
 <script>
     import * as email from './email'
     import { emails, currSelected } from './../fallback/stores.js'
+    import { _, locale } from 'svelte-i18n';
 
     import Download from 'svelte-material-icons/Download.svelte'
 
@@ -26,24 +27,23 @@
     <div id="mail">
         <div class="item from">
             <p>
-                <b>From: </b>
+                <b>{$_('fallback.email.from')}: </b>
                 {parsed.from.name} &lt;{parsed.from.address}&gt;
             </p>
         </div>
         <div class="item to">
             <p>
-                <b>To: </b>{#each parsed.to as { name, address }}
+                <b>{$_('fallback.email.to')}: </b>{#each parsed.to as { name, address }}
                     {name} &lt;{address}&gt;
                 {/each}
             </p>
         </div>
         <div class="item subject">
-            <p><b>Subject: </b>{parsed.subject}</p>
+            <p><b>{$_('fallback.email.subject')}: </b>{parsed.subject}</p>
         </div>
         <div class="item date">
             <p>
-                <b>Date: </b>{date.toDateString()},
-                {date.getHours()}:{date.getMinutes()}
+                <b>{$_('fallback.email.date')}: </b>{date.toLocaleString($locale)}
             </p>
         </div>
         <div class="item toolbar">
@@ -57,7 +57,7 @@
             >
                 <Download size="30px" /></button
             >
-        </div>
+       </div>
         <div class="item body">
             <iframe
                 id="myIframe"

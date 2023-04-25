@@ -40,7 +40,30 @@
         "instruction.header": "Installatie instructies",
         "instruction.download": "Downloaden voor:"
     },
-    "fallback": {},
+    "fallback": {
+        "drop": "Selecteer \"postguard.encrypted\" attachment hier",
+        "search": "Zoek in ontsleutelde mails...",
+        "settings": {
+            "h4": "Lokale opslag",
+            "delete": {
+                "emailBtn": "Verwijder alle emails",
+                "credsBtn": "Verwijder alle persoonlijke data",
+                "emails": "Weet je zeker dat je alle emails wil weggooien? Deze actie is permanent!",
+                "creds": "Weet je zeker dat je alle persoonlijke data wil weggooien? Deze actie is permanent!"
+            },
+            "storeEmails":"Sla mijn emails lokaal op",
+            "storeCreds": "Sla mijn data lokaal op",
+            "creds": "Persoonlijke data",
+            "exp": "Verloopt op"
+ 
+        },
+        "email": {
+            "from": "Van",
+            "to": "Naar",
+            "subject": "Onderwerp",
+            "date": "Datum"
+        }
+    },
     "filesharing": {
         "title": "Bestanden delen",
         "subtitle1": "Hoe werkt het delen van bestanden?",
