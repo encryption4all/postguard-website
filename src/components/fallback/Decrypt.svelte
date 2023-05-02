@@ -287,6 +287,7 @@
         }
 
         const yivi = new YiviCore({
+            language: $locale === 'nl-NL' ? 'nl' : 'en',
             debugging: true,
             session,
             element: '#yivi-web',
