@@ -41,7 +41,36 @@
         "instruction.header": "Install instructions",
         "instruction.download": "Download for:"
     },
-    "fallback": {},
+    "fallback": {
+        "drop": "Drop the \"postguard.encrypted\" attachment here",
+        "search": "Search decrypted mails...",
+        "decrypt": {
+            "helper": "Decrypt this mail by showing who you are with <i class=\"yivi-web-logo\">Yivi</i>"
+        },
+        "settings": {
+            "h4": "Local storage",
+            "delete": {
+                "emailBtn": "Remove all emails",
+                "credsBtn": "Remove all personal data",
+                "emails": "Are you sure you want to delete all emails? This action is permanent!",
+                "creds": "Are you sure you want to delete all personal data? This action is permanent!"
+            },
+            "storeEmails": "Store my emails locally",
+            "storeCreds": "Store my personal data locally",
+            "creds": "Personal data",
+            "exp": "Expiry date"
+        },
+        "email": {
+            "from": "From",
+            "to": "To",
+            "subject": "Subject",
+            "date": "Date"
+        },
+        "list": {
+            "nothing": "Oops! Looks like there is nothing here.",
+            "nothing2": "Decrypt an email by selecting a \"postguard.encrypted\" file you received as email attachment above."
+        }
+    },
     "filesharing": {
         "title": "Filesharing",
         "subtitle1": "How does filesharing work?",

@@ -1,16 +1,24 @@
 <script>
     import * as email from './email'
     import { emails, currSelected } from './../fallback/stores.js'
+    import { _, locale } from 'svelte-i18n';
 
-    let parsed
+    import Download from 'svelte-material-icons/Download.svelte'
+
+    let raw, parsed
+    let date, formattedDate
 
     $: {
         if ($currSelected >= 0) {
             const mail = $emails.find((e) => e.id === $currSelected)
-            if (mail)
+            if (mail) {
+                date = new Date(mail.date)
+                formattedDate = `${date.getFullYear()}${date.getMonth()}${date.getDay()}${date.getHours()}${date.getSeconds()}`
                 email.parseMail(mail.raw).then((x) => {
                     parsed = x
+                    raw = mail.raw
                 })
+            }
         }
     }
 </script>
@@ -19,23 +27,37 @@
     <div id="mail">
         <div class="item from">
             <p>
-                <b>From: </b>
+                <b>{$_('fallback.email.from')}: </b>
                 {parsed.from.name} &lt;{parsed.from.address}&gt;
             </p>
         </div>
         <div class="item to">
             <p>
-                <b>To: </b>{#each parsed.to as { name, address }}
+                <b>{$_('fallback.email.to')}: </b>{#each parsed.to as { name, address }}
                     {name} &lt;{address}&gt;
                 {/each}
             </p>
         </div>
         <div class="item subject">
-            <p><b>Subject: </b>{parsed.subject}</p>
+            <p><b>{$_('fallback.email.subject')}: </b>{parsed.subject}</p>
         </div>
         <div class="item date">
-            <p><b>Date: </b>{parsed.headers[0]['value']}</p>
+            <p>
+                <b>{$_('fallback.email.date')}: </b>{date.toLocaleString($locale)}
+            </p>
         </div>
+        <div class="item toolbar">
+            <button
+                on:click={() =>
+                    email.downloadAttachment(
+                        raw,
+                        'text/plain',
+                        `pg${formattedDate}.eml`
+                    )}
+            >
+                <Download size="30px" /></button
+            >
+       </div>
         <div class="item body">
             <iframe
                 id="myIframe"
@@ -86,7 +108,7 @@
             text-align: left;
             padding-left: 1em;
 
-            &:not(:last-child) {
+            &:not(:last-child, .toolbar) {
                 border-bottom: 2px solid black;
             }
         }
@@ -107,8 +129,21 @@
             grid-row: 4 / 4;
         }
 
+        .toolbar {
+            grid-row: 5 / 5;
+            display: flex;
+
+            button {
+                all: unset;
+                cursor: pointer;
+                margin-left: auto;
+                margin-right: 0.5em;
+                margin-top: 0.5em;
+            }
+        }
+
         .body {
-            grid-row: 5 / 16;
+            grid-row: 6 / 16;
         }
 
         .attachments {

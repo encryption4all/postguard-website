@@ -8,27 +8,21 @@
         boolCacheEmail,
     } from './stores.js'
 
+    import { _, locale } from 'svelte-i18n'
+
     import TrashCanOutline from 'svelte-material-icons/TrashCanOutline.svelte'
 
     export let currMode
 
     function deleteAllMails() {
-        if (
-            confirm(
-                'Are you sure you want to delete all emails? This action is permanent!'
-            )
-        ) {
+        if (confirm($_('fallback.settings.delete.emails'))) {
             currSelected.set(-1)
             $emails = []
         }
     }
 
     function deleteAllYivi() {
-        if (
-            confirm(
-                'Are you sure you want to delete all Yivi credentials? This action is permanent!'
-            )
-        ) {
+        if (confirm($_('fallback.settings.delete.creds'))) {
             $krCache = []
         }
     }
@@ -62,64 +56,66 @@
 </script>
 
 <div id="settings-container">
-    <h2>Settings</h2>
-    <p>
-        All Yivi credentials and decrypted e-mails are cached locally in the
-        user's browser, no information is sent to a server.
-    </p>
-
+    <h3>{$_('fallback.settings.h3', { default: 'Settings' })}</h3>
     <div id="block2">
-        <h3>Caching</h3>
-
+        <h4>{$_('fallback.settings.h4')}</h4>
         <input id="emailCache" type="checkbox" bind:checked={$boolCacheEmail} />
-        <label for="emailCache">Cache my emails</label> <br />
-
+        <label for="emailCache">{$_('fallback.settings.storeEmails')}</label>
+        <br />
         <input id="irmaCache" type="checkbox" bind:checked={$boolCacheYivi} />
-        <label for="irmaCache">Cache my Yivi credentials</label>
+        <label for="irmaCache">{$_('fallback.settings.storeCreds')}</label>
     </div>
 
-    <div id="block2">
-        <h3>Yivi Credentials</h3>
-
-        <table id="creds">
-            <tr>
-                <th>Credentials</th>
-                <th>Expiry date</th>
-                <th />
-            </tr>
-
-            {#each $krCache as kr}
+    {#if $krCache.length > 0}
+        <div id="block2">
+            <h4>{$_('fallback.settings.creds')}</h4>
+            <table id="creds">
                 <tr>
-                    <td
-                        >{kr.key}<br />
-                        {#each parseKr(kr.krCon) as cred}
-                            {cred}<br />
-                        {/each}
-                    </td>
-                    <td>{new Date(kr.jwtValid).toUTCString()}</td>
-                    <td
-                        ><span
-                            id="deletebutton"
-                            class="material-icons"
-                            on:click|preventDefault={() => deleteJwt(kr)}
-                            on:keypress><TrashCanOutline size="26px" /></span
-                        ></td
-                    >
+                    <th>{$_('fallback.settings.creds')}</th>
+                    <th>{$_('fallback.settings.exp')}</th>
+                    <th />
                 </tr>
-            {/each}
-        </table>
 
-        <button class="button" on:click={deleteAllYivi}>
-            Delete all Yivi credentials
-        </button>
-    </div>
+                {#each $krCache as kr}
+                    <tr>
+                        <td
+                            >{kr.key}<br />
+                            {#each parseKr(kr.krCon) as cred}
+                                {cred}<br />
+                            {/each}
+                        </td>
+                        <td
+                            >{new Date(kr.jwtValid).toLocaleDateString(
+                                $locale
+                            )}</td
+                        >
+                        <td
+                            ><span
+                                id="deletebutton"
+                                class="material-icons"
+                                on:click|preventDefault={() => deleteJwt(kr)}
+                                on:keypress
+                                ><TrashCanOutline size="26px" /></span
+                            ></td
+                        >
+                    </tr>
+                {/each}
+            </table>
 
-    <div id="block2">
-        <h3>Email History</h3>
-        <button class="button" on:click={deleteAllMails}>
-            Delete all cached emails
-        </button>
-    </div>
+            <button class="button" on:click={deleteAllYivi}>
+                {$_('fallback.settings.delete.credsBtn')}
+            </button>
+        </div>
+    {/if}
+
+    {#if $emails.length > 0}
+        <div id="block2">
+            <h4>Email History</h4>
+            <button class="button" on:click={deleteAllMails}>
+                {$_('fallback.settings.delete.emailBtn')}
+            </button>
+        </div>
+    {/if}
     <button
         on:click|preventDefault={() => (currMode = 'List')}
         style="float:right; margin-right: 1em">Back</button
@@ -129,6 +125,7 @@
 <style lang="scss">
     #settings-container {
         padding: 0 1em 1em 1em;
+        width: 100%;
     }
 
     #creds {

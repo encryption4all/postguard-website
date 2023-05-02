@@ -10,7 +10,9 @@
     import UploadLock from 'svelte-material-icons/UploadLock.svelte'
     import Magnify from 'svelte-material-icons/Magnify.svelte'
 
-    import { emails, currSelected, nextId } from './../fallback/stores.js'
+    import { emails, krCache, currSelected, nextId } from './../fallback/stores.js'
+
+    import { _ } from 'svelte-i18n'
 
     import { fly } from 'svelte/transition'
     import EmailView from '../fallback/EmailView.svelte'
@@ -18,7 +20,7 @@
 
     // mode of the left window (List/Settings)
     const LEFTMODES = { ListView: 'List', Settings: 'Settings' }
-    let currLeft = $emails.length > 0 ? LEFTMODES.ListView : LEFTMODES.Settings
+    let currLeft = LEFTMODES.ListView
 
     // mode of the right window (Nothing/MailView/Decrypting)
     const RIGHTMODES = {
@@ -45,30 +47,25 @@
     })
 
     $: console.log(`left: ${currLeft}, right: ${currRight}`)
-    $: console.log('mails: ', $emails)
-    $: console.log('currently selected: ', $currSelected)
-    $: console.log('nextId: ', $nextId)
 </script>
 
 <div class="grid-container">
     <div class="left">
         <div class="item upload">
             <label class="file-upload">
-                <p>Click or drag a "postguard.encrypted" file here</p>
-                <UploadLock class="test" size="30" />
+                <p>{$_('fallback.drop')}</p>
+                <UploadLock size="30px" />
                 <input type="file" on:change={onFile} /></label
             >
         </div>
         <div class="item search">
             <label class="custom-field">
-                <div
-                    style="position:relative; float: right; right: 2em; top: 50%; transform: translateY(50%);; z-index:1;"
-                >
+                <div class="magnify">
                     <Magnify />
                 </div>
                 <input
                     type="search"
-                    placeholder="Search..."
+                    placeholder={$_('fallback.search')}
                     bind:value={searchTerm}
                 />
             </label>
@@ -176,10 +173,6 @@
                     align-items: center;
                     border: 1px dashed black;
                     border-radius: 40px 10px 10px 10px;
-
-                    .highlight {
-                        border-color: purple;
-                    }
                 }
             }
 
@@ -187,10 +180,24 @@
                 display: flex;
                 gap: 2em;
                 grid-row: 4 / 6;
+                width: 100%;
 
-                input {
-                    color: black;
-                    border-radius: 1em;
+                label {
+                    width: 100%;
+
+                    .magnify {
+                        position: relative;
+                        float: right;
+                        right: 30%;
+                        transform: translateY(50%);
+                        z-index: 1;
+                    }
+
+                    input {
+                        width: 75%;
+                        color: black;
+                        border-radius: 1em;
+                    }
                 }
 
                 button {

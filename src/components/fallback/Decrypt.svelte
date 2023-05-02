@@ -2,8 +2,6 @@
     // imports
 
     import { tick } from 'svelte'
-    // icons
-    import DownloadBoxOutline from 'svelte-material-icons/DownloadBoxOutline.svelte'
 
     // Yivi
     import YiviCore from '@privacybydesign/yivi-core'
@@ -19,7 +17,6 @@
         currSelected,
         currentId,
         nextId,
-        boolCacheEmail,
         boolCacheYivi,
         emails,
         krCache,
@@ -28,6 +25,8 @@
     // logic
     import * as decrypt from './decrypt.js'
     import * as email from './email'
+
+    import { locale, _ } from 'svelte-i18n'
 
     export let rightMode
 
@@ -290,9 +289,13 @@
         }
 
         const yivi = new YiviCore({
+            language: $locale === 'nl-NL' ? 'nl' : 'en',
             debugging: true,
             session,
             element: '#yivi-web',
+            translations: {
+                header: $_('fallback.decrypt.helper')
+            }
         })
 
         yivi.use(YiviWeb)
@@ -308,7 +311,7 @@
     async function decryptFile() {
         await unsealer.unseal(key, usk, unsealerWritable)
         decryptedMail = await email.parseMail(outStream)
-        if ($boolCacheEmail) await storeMail(outStream)
+        await storeMail(outStream)
     }
 
     async function storeMail(unparsed) {

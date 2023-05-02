@@ -1,21 +1,24 @@
 <script>
     import { emails, currSelected } from './../fallback/stores.js'
+    import { _, locale } from 'svelte-i18n'
 
     // import TrashCanOutline from 'svelte-material-icons/TrashCanOutline.svelte'
 
     export let rightMode
     export let searchTerm
 
-    $: sorted = $emails.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    )
+    $: sorted =
+        $emails &&
+        $emails.length > 0 &&
+        $emails.sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        )
     $: sortedFiltered = searchTerm
         ? sorted.filter(
               (email) =>
                   email.raw.toLowerCase().indexOf(searchTerm.toLowerCase()) > 0
           )
         : sorted
-
 </script>
 
 {#if sortedFiltered.length > 0}
@@ -36,7 +39,7 @@
                         {email.from.address}
                     {/if} <br />
 
-                    {email.date}
+                    {new Date(email.date).toLocaleString($locale)}
                 </div>
 
                 <!-- <TrashCanOutline /> -->
@@ -44,9 +47,14 @@
         {/each}
     </ol>
 {:else}
-    <p style="margin: auto; text-align: center;">
-        Oops! Looks like there is nothing here.
-    </p>
+    <div style="margin: auto 3em; text-align: center;">
+        <h4>
+            {$_('fallback.list.nothing')}
+        </h4>
+        <p>
+            {$_('fallback.list.nothing2')}
+        </p>
+    </div>
 {/if}
 
 <style lang="scss">

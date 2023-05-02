@@ -40,7 +40,37 @@
         "instruction.header": "Installatie instructies",
         "instruction.download": "Downloaden voor:"
     },
-    "fallback": {},
+    "fallback": {
+        "drop": "Selecteer \"postguard.encrypted\" attachment hier",
+        "search": "Zoek in ontsleutelde mails...",
+        "decrypt": {
+            "helper": "Ontsleutel deze email door te laten zien wie je bent met <i class=\"yivi-web-logo\">Yivi</i>"
+        },
+         "settings": {
+            "h4": "Lokale opslag",
+            "delete": {
+                "emailBtn": "Verwijder alle emails",
+                "credsBtn": "Verwijder alle persoonlijke data",
+                "emails": "Weet je zeker dat je alle emails wil weggooien? Deze actie is permanent!",
+                "creds": "Weet je zeker dat je alle persoonlijke data wil weggooien? Deze actie is permanent!"
+            },
+            "storeEmails":"Sla mijn emails lokaal op",
+            "storeCreds": "Sla mijn data lokaal op",
+            "creds": "Persoonlijke data",
+            "exp": "Verloopt op"
+ 
+        },
+        "email": {
+            "from": "Van",
+            "to": "Naar",
+            "subject": "Onderwerp",
+            "date": "Datum"
+        },
+        "list": {
+            "nothing": "Oeps! Er lijkt hier niks te zijn.",
+            "nothing2": "Ontsleutel een email door een \"postguard.encrypted\" bestand te selecteren in het bovenste venster."
+        }
+    },
     "filesharing": {
         "title": "Bestanden delen",
         "subtitle1": "Hoe werkt het delen van bestanden?",
