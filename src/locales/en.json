@@ -68,7 +68,7 @@
         },
         "list": {
             "nothing": "Oops! Looks like there is nothing here.",
-            "nothing2": "Decrypt an email by uploading a \"postguard.encrypted\" file you received as email attachment above."
+            "nothing2": "Decrypt an email by selecting a \"postguard.encrypted\" file you received as email attachment above."
         }
     },
     "filesharing": {
