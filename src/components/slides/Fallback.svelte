@@ -10,7 +10,7 @@
     import UploadLock from 'svelte-material-icons/UploadLock.svelte'
     import Magnify from 'svelte-material-icons/Magnify.svelte'
 
-    import { emails, currSelected, nextId } from './../fallback/stores.js'
+    import { emails, krCache, currSelected, nextId } from './../fallback/stores.js'
 
     import { _ } from 'svelte-i18n'
 
@@ -47,9 +47,6 @@
     })
 
     $: console.log(`left: ${currLeft}, right: ${currRight}`)
-    $: console.log('mails: ', $emails)
-    $: console.log('currently selected: ', $currSelected)
-    $: console.log('nextId: ', $nextId)
 </script>
 
 <div class="grid-container">

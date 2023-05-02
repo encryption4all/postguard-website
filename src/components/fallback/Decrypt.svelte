@@ -17,7 +17,6 @@
         currSelected,
         currentId,
         nextId,
-        boolCacheEmail,
         boolCacheYivi,
         emails,
         krCache,
@@ -306,7 +305,7 @@
     async function decryptFile() {
         await unsealer.unseal(key, usk, unsealerWritable)
         decryptedMail = await email.parseMail(outStream)
-        if ($boolCacheEmail) await storeMail(outStream)
+        await storeMail(outStream)
     }
 
     async function storeMail(unparsed) {
