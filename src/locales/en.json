@@ -44,6 +44,9 @@
     "fallback": {
         "drop": "Drop the \"postguard.encrypted\" attachment here",
         "search": "Search decrypted mails...",
+        "decrypt": {
+            "helper": "Decrypt this mail by showing who you are with <i class=\"yivi-web-logo\">Yivi</i>"
+        },
         "settings": {
             "h4": "Local storage",
             "delete": {
@@ -62,6 +65,10 @@
             "to": "To",
             "subject": "Subject",
             "date": "Date"
+        },
+        "list": {
+            "nothing": "Oops! Looks like there is nothing here.",
+            "nothing2": "Decrypt an email by uploading a \"postguard.encrypted\" file you received as email attachment above."
         }
     },
     "filesharing": {
