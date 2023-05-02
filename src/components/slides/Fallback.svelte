@@ -20,7 +20,7 @@
 
     // mode of the left window (List/Settings)
     const LEFTMODES = { ListView: 'List', Settings: 'Settings' }
-    let currLeft = $emails.length > 0 ? LEFTMODES.ListView : LEFTMODES.Settings
+    let currLeft = LEFTMODES.ListView
 
     // mode of the right window (Nothing/MailView/Decrypting)
     const RIGHTMODES = {
