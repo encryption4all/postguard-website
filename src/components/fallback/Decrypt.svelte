@@ -32,7 +32,7 @@
 
     // constants
     // server URL for private key generator
-    const pkg = 'https://main.irmaseal-pkg.ihub.ru.nl'
+    const pkg = 'https://main.postguard.ihub.ru.nl/pkg'
 
     // states
     const STATES = {
@@ -250,13 +250,6 @@
                 },
                 body: JSON.stringify(keyRequest),
             },
-            mapping: {
-                sessionPtr: (r) => {
-                    const ptr = r.sessionPtr
-                    ptr.u = `https://ihub.ru.nl/irma/1/${ptr.u}`
-                    return ptr
-                },
-            },
             result: {
                 url: (o, { sessionToken }) =>
                     `${o.url}/v2/request/jwt/${sessionToken}`,
@@ -294,8 +287,8 @@
             session,
             element: '#yivi-web',
             translations: {
-                header: $_('fallback.decrypt.helper')
-            }
+                header: $_('fallback.decrypt.helper'),
+            },
         })
 
         yivi.use(YiviWeb)
