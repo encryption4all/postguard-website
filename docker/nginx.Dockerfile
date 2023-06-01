@@ -79,8 +79,8 @@ RUN set -ex \
     && rm -rf /tmp/packages \
     && rm -rf /var/lib/apt/lists/
 
-COPY docker/nginx.conf /etc/nginx/nginx.conf
+COPY docker/nginx.conf /etc/nginx/templates/nginx.conf.template
 COPY cryptify/cryptify-front-end/build /usr/share/nginx/html/filesharing
 COPY postguard-tb-addon/dist /usr/share/nginx/html/downloads
 COPY build /usr/share/nginx/html/postguard
-RUN envsubst < /etc/nginx/nginx.conf > /etc/nginx/nginx.conf
+
