@@ -85,7 +85,7 @@
                             {/each}
                         </td>
                         <td
-                            >{new Date(kr.jwtValid).toLocaleDateString(
+                            >{new Date(kr.jwtValid * 1000).toLocaleDateString(
                                 $locale
                             )}</td
                         >
