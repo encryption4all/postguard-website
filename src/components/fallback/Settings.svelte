@@ -130,6 +130,7 @@
 
     #creds {
         border-collapse: collapse;
+        margin-bottom: 0.5em;
     }
 
     #creds td,
