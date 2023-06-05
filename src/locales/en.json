@@ -58,7 +58,8 @@
             "storeEmails": "Store my emails locally",
             "storeCreds": "Store my personal data locally",
             "creds": "Personal data",
-            "exp": "Expiry date"
+            "exp": "Expiry date",
+            "back": "Back"
         },
         "email": {
             "from": "From",

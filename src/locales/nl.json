@@ -57,7 +57,8 @@
             "storeEmails":"Sla mijn emails lokaal op",
             "storeCreds": "Sla mijn data lokaal op",
             "creds": "Persoonlijke data",
-            "exp": "Verloopt op"
+            "exp": "Verloopt op",
+            "back": "Terug"
  
         },
         "email": {

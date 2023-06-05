@@ -118,7 +118,7 @@
     {/if}
     <button
         on:click|preventDefault={() => (currMode = 'List')}
-        style="float:right; margin-right: 1em">Back</button
+    style="float:right; margin-right: 1em">{$_('fallback.settings.back')}</button
     >
 </div>
 
