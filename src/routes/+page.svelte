@@ -56,9 +56,11 @@
         // Remove downloadUuid when sliding away, resetting the filesharing slide.
         if (!initial && $selected !== 0 && uuid) {
             params.delete('download')
+            params.delete('recipient')
             const url = (params ? '?' + params : '') + window.location.hash
             window.history.pushState(null, '', url)
             uuid = null
+            recipient = null
         }
 
         if (initial) initial = false
