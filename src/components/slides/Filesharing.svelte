@@ -22,21 +22,21 @@
         width="509"
         height="278"
     />
-    <div class="overlay" />
     <iframe
         bind:this={el}
         title="filesharing"
         class="grid-item"
         src=""
         type="text/html"
-        style="min-height: 700px; max-height: 750px;"
     />
 </div>
 
 <style lang="scss">
     .grid-container {
+        display: grid;
+        grid-auto-columns: 1fr;
         grid-auto-flow: column;
-        max-width: 1000px;
+        max-width: 1200px;
         max-height: 650px;
         grid-gap: 2rem;
     }
@@ -44,7 +44,6 @@
     img.grid-item {
         align-self: end;
         object-fit: contain;
-        max-width: 350px;
     }
 
     iframe {
@@ -52,17 +51,24 @@
         border: 1px dashed #1e1e1e;
         border-radius: 16px;
         overflow: scroll;
-        width: 375px;
         overflow-y: scroll;
         overflow-x: hidden;
+        height: 100%;
+        min-height: 333px;
+        max-height: 1000px;
+        width: 100%;
+        min-width: 333px;
+        max-width: 600px;
     }
 
     .grid-item {
+        width: 100%;
         display: flex;
         justify-content: center;
         text-align: left;
 
         &.header {
+            min-width: 225px;
             justify-content: end;
             padding-bottom: 5rem;
         }
@@ -73,9 +79,11 @@
             display: grid;
             grid-auto-flow: unset;
             max-height: unset;
+            margin: 0 5%;
         }
 
         .grid-item {
+            width: 90%;
             &.header {
                 justify-content: start;
                 padding-bottom: 0;
