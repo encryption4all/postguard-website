@@ -31,7 +31,7 @@
     onMount(() => {
         params = new URLSearchParams(window.location.search)
         uuid = params.get('download')
-        recipient = params.get('download')
+        recipient = params.get('recipient')
     })
 
     $: if (swiper && $cryptifyIframe)
