@@ -26,15 +26,16 @@
     let initial = true
     let swiper
 
-    let params, uuid
+    let params, uuid, recipient
 
     onMount(() => {
         params = new URLSearchParams(window.location.search)
         uuid = params.get('download')
+        recipient = params.get('download')
     })
 
     $: if (swiper && $cryptifyIframe)
-        $cryptifyIframe.src = `/filesharing/${uuid ? `?download=${uuid}` : ''}`
+        $cryptifyIframe.src = `/filesharing/${uuid && recipient ? `?download=${uuid}&recipient=${recipient}` : ''}`
     $: if (swiper && swiper.activeIndex !== $selected) swiper.slideTo($selected)
 </script>
 
