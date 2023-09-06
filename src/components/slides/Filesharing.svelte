@@ -14,30 +14,23 @@
         <h2><span>{$_('filesharing.title')}</span></h2>
         <p>{@html $_('filesharing.subpar1')}</p>
     </div>
-    <img
-        src={basketImgLq}
-        data-src={basketImg}
-        class="grid-item lazyload"
-        alt="basket"
-        width="509"
-        height="278"
-    />
     <iframe
         bind:this={el}
         title="filesharing"
         class="grid-item"
         src=""
         type="text/html"
+        scrolling="no"
     />
 </div>
 
 <style lang="scss">
     .grid-container {
         display: grid;
-        grid-auto-columns: 1fr;
+        grid-auto-columns: 1fr 1fr 1fr;
         grid-auto-flow: column;
         max-width: 1200px;
-        max-height: 650px;
+        max-height: 800px;
         grid-gap: 2rem;
     }
 
@@ -47,18 +40,14 @@
     }
 
     iframe {
-        padding: 10px;
-        border: 1px dashed #1e1e1e;
-        border-radius: 16px;
-        overflow: scroll;
-        overflow-y: scroll;
-        overflow-x: hidden;
+        grid-column: span 2;
+        border: none;
+        overflow: hidden;
         height: 100%;
         min-height: 333px;
         max-height: 1000px;
         width: 100%;
         min-width: 333px;
-        max-width: 600px;
     }
 
     .grid-item {
@@ -69,8 +58,8 @@
 
         &.header {
             min-width: 225px;
-            justify-content: end;
-            padding-bottom: 5rem;
+            justify-content: start;
+            padding-top: 5em;
         }
     }
 
