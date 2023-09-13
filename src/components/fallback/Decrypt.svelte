@@ -1,7 +1,7 @@
 <script>
     // imports
 
-    import { tick } from 'svelte'
+    import { tick, onMount } from 'svelte'
 
     // Yivi
     import YiviCore from '@privacybydesign/yivi-core'
@@ -84,21 +84,28 @@
     let decryptedMail
     let err
 
-    $: console.log('decrypt state updated: ', state)
-
     // vars
     export let mod // WASM module
     export let readable
 
     let unsealer
+    let vk
 
+    onMount(async () => {
+        vk = await fetch(`${pkg}/v2/sign/parameters`)
+            .then((r) => r.json())
+            .then((j) => j.publicKey)
+    })
+
+    $: console.log('state changed: ', state)
     $: {
-        if (state === STATES.Uninit) {
-            mod.Unsealer.new(readable)
+        if (state === STATES.Uninit && vk) {
+            mod.StreamUnsealer.new(readable, vk)
                 .then((u) => {
                     state = STATES.Init
                     unsealer = u
-                    policies = unsealer.get_hidden_policies()
+                    policies = unsealer.inspect_header()
+                    console.log(policies)
                     checkRecipients()
                 })
                 .catch((e) => {
@@ -110,12 +117,15 @@
 
     // checks whether there is one recipient or multiple
     function checkRecipients() {
-        if (Object.keys(policies).length == 1) {
+        if (policies.size == 1) {
             // Only one recipient
-            key = Object.keys(policies)[0]
+            key = policies.keys().next().value
+            console.log(key)
             krCacheTemp.key = key
         } else {
-            keylist = Object.keys(policies)
+            console.log(policies.keys())
+            keylist = policies.keys()
+            console.log(keylist)
             state = STATES.Recipients
         }
     }
@@ -166,8 +176,8 @@
 
     // check checked if the policy is in the cache
     function processPolicy() {
-        timestamp = policies[key].ts
-        recipientAndCreds = decrypt.sortPolicies(policies[key]['con']) // sort the recipient credentials on alphabetical order
+        timestamp = policies.get(key).ts
+        recipientAndCreds = decrypt.sortPolicies(policies.get(key)['con']) // sort the recipient credentials on alphabetical order
         boolRecipientCached = checkKrCached()
     }
 
@@ -193,7 +203,7 @@
 
     // check if there are credentials with hints
     function processCredentials() {
-        let pol = policies[key]['con']
+        let pol = policies.get(key)['con']
         for (var i = 0; i < pol.length; i++) {
             if (pol[i]['t'] == 'pbdf.sidn-pbdf.mobilenumber.mobilenumber') {
                 showHints = true
@@ -302,7 +312,8 @@
     }
 
     async function decryptFile() {
-        await unsealer.unseal(key, usk, unsealerWritable)
+        const ret = await unsealer.unseal(key, usk, unsealerWritable)
+        console.log("signed using: ", ret)
         decryptedMail = await email.parseMail(outStream)
         await storeMail(outStream)
     }
