@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@e4a/irmaseal-wasm-bindings@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@e4a/irmaseal-wasm-bindings/-/irmaseal-wasm-bindings-0.2.3.tgz#391d5fa21f5fa9cc256774a1ef25ee4a78aafd5e"
-  integrity sha512-hsW9kBcHlVps8W526PYURRWZutRYlD1vX/8cGo9+HP0N93zRzEQLg9KkRPK3GieUZVFV1Qz3V2Flwnml7yha5Q==
+"@e4a/pg-wasm@^0.3.0-rc.4":
+  version "0.3.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@e4a/pg-wasm/-/pg-wasm-0.3.0-rc.4.tgz#ffcaa9e9a59cb1aafcf93320fbaa1b0dceef304b"
+  integrity sha512-cm150n7PAPYJlM+I2kNAxohnc6levYWLuMALdnJ9HGmzTpY9yYMci4q7Q+MWw6as7bg8Ey2WjXasxeJ459qoQg==
 
 "@esbuild-plugins/node-globals-polyfill@^0.2.3":
   version "0.2.3"

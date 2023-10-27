@@ -43,7 +43,7 @@
     }
 
     onMount(async () => {
-        mod = await import('@e4a/irmaseal-wasm-bindings')
+        mod = await import('@e4a/pg-wasm')
     })
 
     $: console.log(`left: ${currLeft}, right: ${currRight}`)
