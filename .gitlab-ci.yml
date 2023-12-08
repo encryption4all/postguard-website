@@ -82,21 +82,6 @@ deploy-main:
         - chmod 600 $ILAB_VM_TRIGGER_UPDATE_KEY
         - ssh -o UserKnownHostsFile=$ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS $ILAB_VM_TRIGGER_UPDATE_USER@$ILAB_VM_TRIGGER_UPDATE_HOST_MAIN -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-main
 
-deploy-main:
-    stage: deploy
-    only:
-        - main
-    dependencies:
-        - build-image
-    environment: $CI_COMMIT_REF_NAME
-    tags: [docker]
-    image: ubuntu:rolling
-    script:
-        - apt update
-        - apt install -y openssh-client
-        - chmod 600 $ILAB_VM_TRIGGER_UPDATE_KEY
-        - ssh -o UserKnownHostsFile=$ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS $ILAB_VM_TRIGGER_UPDATE_USER@$ILAB_VM_TRIGGER_UPDATE_HOST_MAIN -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-main
-
 deploy-stable:
     stage: deploy
     only:
