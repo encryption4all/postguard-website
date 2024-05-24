@@ -21,6 +21,7 @@ build-root-main:
     image: node:18-alpine3.15
     script:
         - apk add git
+        - git fetch
         - git checkout env_vars
         - yarn
         - yarn build-main
