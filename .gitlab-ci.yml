@@ -32,7 +32,7 @@ build-cryptify:
     script:
         - cd cryptify/cryptify-front-end
         - npm install --legacy-peer-deps
-        - CI=false npm run build
+        - CI=false npm run build-${CI_COMMIT_REF_NAME}
     artifacts:
         paths:
             - cryptify/cryptify-front-end/build
