@@ -1,5 +1,4 @@
 stages:
-    - build-build-image
     - build
     - build-image
     - deploy
@@ -14,13 +13,30 @@ variables:
     GIT_SUBMODULE_STRATEGY: recursive
     CONTAINER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}/postguard-website:${CI_COMMIT_REF_NAME}
 
-build-root:
+build-root-main:
     stage: build
     tags: [docker]
+    only: 
+        - main
+    image: node:18-alpine3.15
+    script:
+        - git checkout env_vars
+        - yarn
+        - yarn build-main
+    artifacts:
+        paths:
+            - build
+        expire_in: 1 day
+
+build-root-stable:
+    stage: build
+    tags: [docker]
+    only:
+        - stable
     image: node:18-alpine3.15
     script:
         - yarn
-        - yarn build
+        - yarn build-stable
     artifacts:
         paths:
             - build
@@ -54,11 +70,28 @@ build-downloads:
             - postguard-tb-addon/dist
         expire_in: 1 day
 
-build-image:
+build-image-stable:
     stage: build-image
     tags: [docker]
+    only:
+        - stable
     dependencies:
-        - build-root
+        - build-root-stable
+        - build-cryptify
+        - build-downloads
+    image: docker:stable
+    script:
+        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+        - docker build -f docker/nginx.Dockerfile -t ${CONTAINER_IMAGE} .
+        - docker push ${CONTAINER_IMAGE}
+
+build-image-main:
+    stage: build-image
+    tags: [docker]
+    only:
+        - main
+    dependencies:
+        - build-root-main
         - build-cryptify
         - build-downloads
     image: docker:stable
@@ -72,7 +105,7 @@ deploy-main:
     only:
         - main
     dependencies:
-        - build-image
+        - build-image-main
     environment: $CI_COMMIT_REF_NAME
     tags: [docker]
     image: ubuntu:rolling
@@ -80,14 +113,14 @@ deploy-main:
         - apt update
         - apt install -y openssh-client
         - chmod 600 $ILAB_VM_TRIGGER_UPDATE_KEY
-        - ssh -o UserKnownHostsFile=$ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS $ILAB_VM_TRIGGER_UPDATE_USER@$ILAB_VM_TRIGGER_UPDATE_HOST_MAIN -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-main
+        - ssh -o UserKnownHostsFile=$ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS $ILAB_VM_TRIGGER_UPDATE_USER@$PG_VM_TRIGGER_UPDATE_HOST_MAIN -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-main
 
 deploy-stable:
     stage: deploy
     only:
         - stable
     dependencies:
-        - build-image
+        - build-image-stable
     environment: $CI_COMMIT_REF_NAME
     tags: [docker]
     image: ubuntu:rolling
@@ -95,4 +128,4 @@ deploy-stable:
         - apt update
         - apt install -y openssh-client
         - chmod 600 $ILAB_VM_TRIGGER_UPDATE_KEY
-        - ssh -o UserKnownHostsFile=$ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS $ILAB_VM_TRIGGER_UPDATE_USER@$ILAB_VM_TRIGGER_UPDATE_HOST_STABLE -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-stable
+        - ssh -o UserKnownHostsFile=$ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS $ILAB_VM_TRIGGER_UPDATE_USER@$PG_VM_TRIGGER_UPDATE_HOST_STABLE -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-stable
