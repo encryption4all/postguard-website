@@ -30,10 +30,6 @@
 
     export let rightMode
 
-    // constants
-    // server URL for private key generator
-    const pkg = 'https://main.postguard.ihub.ru.nl/pkg'
-
     // states
     const STATES = {
         Uninit: 'Uninit',
@@ -92,7 +88,7 @@
     let vk
 
     onMount(async () => {
-        vk = await fetch(`${pkg}/v2/sign/parameters`)
+        vk = await fetch(`${__PKG__}/v2/sign/parameters`)
             .then((r) => r.json())
             .then((j) => j.publicKey)
     })
@@ -241,7 +237,7 @@
 
     // get the usk using a cached jwt value
     async function getUskCachedJWT() {
-        usk = await fetch(`${pkg}/v2/request/key/${timestamp.toString()}`, {
+        usk = await fetch(`${__PKG__}/v2/request/key/${timestamp.toString()}`, {
             headers: {
                 Authorization: `Bearer ${jwtCached}`,
             },
@@ -251,7 +247,7 @@
 
     async function getUsk() {
         const session = {
-            url: pkg,
+            url: __PKG__,
             start: {
                 url: (o) => `${o.url}/v2/request/start`,
                 method: 'POST',
@@ -269,7 +265,7 @@
                         .then((jwt) => {
                             krCacheTemp.jwt = jwt
                             return fetch(
-                                `${pkg}/v2/request/key/${timestamp.toString()}`,
+                                `${__PKG__}/v2/request/key/${timestamp.toString()}`,
                                 {
                                     headers: {
                                         Authorization: `Bearer ${jwt}`,
@@ -313,7 +309,7 @@
 
     async function decryptFile() {
         const ret = await unsealer.unseal(key, usk, unsealerWritable)
-        console.log("signed using: ", ret)
+        console.log('signed using: ', ret)
         decryptedMail = await email.parseMail(outStream)
         await storeMail(outStream)
     }

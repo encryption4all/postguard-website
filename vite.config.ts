@@ -2,11 +2,14 @@ import { sveltekit } from '@sveltejs/kit/vite'
 import type { UserConfig } from 'vite'
 import wasm from 'vite-plugin-wasm'
 import topLevelAwait from 'vite-plugin-top-level-await'
+import dotenv from 'dotenv'
 
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 
 import nodePolyfills from 'rollup-plugin-node-polyfills'
+
+dotenv.config() // load env vars from .env
 
 const config: UserConfig = {
     resolve: {
@@ -47,6 +50,10 @@ const config: UserConfig = {
             buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
             process: 'rollup-plugin-node-polyfills/polyfills/process-es6',
         },
+    },
+
+    define: {
+        __PKG__: `"${process.env.PKG}"`,
     },
 
     optimizeDeps: {
