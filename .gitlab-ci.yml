@@ -13,33 +13,13 @@ variables:
     GIT_SUBMODULE_STRATEGY: recursive
     CONTAINER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}/postguard-website:${CI_COMMIT_REF_NAME}
 
-build-root-main:
+build-root:
     stage: build
     tags: [docker]
-    only: 
-        - main
-    image: node:18-alpine3.15
-    script:
-        - apk add git
-        - git fetch
-        - git checkout env_vars
-        - cat .env*
-        - yarn
-        - yarn build-main
-    artifacts:
-        paths:
-            - build
-        expire_in: 1 day
-
-build-root-stable:
-    stage: build
-    tags: [docker]
-    only:
-        - stable
     image: node:18-alpine3.15
     script:
         - yarn
-        - yarn build-stable
+        - yarn build-${CI_COMMIT_REF_NAME}
     artifacts:
         paths:
             - build
@@ -73,28 +53,11 @@ build-downloads:
             - postguard-tb-addon/dist
         expire_in: 1 day
 
-build-image-stable:
+build-image:
     stage: build-image
     tags: [docker]
-    only:
-        - stable
     dependencies:
-        - build-root-stable
-        - build-cryptify
-        - build-downloads
-    image: docker:stable
-    script:
-        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-        - docker build -f docker/nginx.Dockerfile -t ${CONTAINER_IMAGE} .
-        - docker push ${CONTAINER_IMAGE}
-
-build-image-main:
-    stage: build-image
-    tags: [docker]
-    only:
-        - main
-    dependencies:
-        - build-root-main
+        - build-root
         - build-cryptify
         - build-downloads
     image: docker:stable
@@ -108,7 +71,7 @@ deploy-main:
     only:
         - main
     dependencies:
-        - build-image-main
+        - build-image
     environment: $CI_COMMIT_REF_NAME
     tags: [docker]
     image: ubuntu:rolling
@@ -125,7 +88,7 @@ deploy-stable:
     only:
         - stable
     dependencies:
-        - build-image-stable
+        - build-image
     environment: $CI_COMMIT_REF_NAME
     tags: [docker]
     image: ubuntu:rolling
