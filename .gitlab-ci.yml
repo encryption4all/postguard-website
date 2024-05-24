@@ -18,6 +18,9 @@ build-root:
     tags: [docker]
     image: node:18-alpine3.15
     script:
+        - apk add git
+        - git fetch
+        - git checkout env_vars
         - yarn
         - yarn build-${CI_COMMIT_REF_NAME}
     artifacts:
@@ -56,6 +59,8 @@ build-downloads:
 build-image:
     stage: build-image
     tags: [docker]
+    only:
+        - stable
     dependencies:
         - build-root
         - build-cryptify
