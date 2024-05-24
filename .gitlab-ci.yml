@@ -131,4 +131,6 @@ deploy-stable:
         - apt update
         - apt install -y openssh-client
         - chmod 600 $ILAB_VM_TRIGGER_UPDATE_KEY
-        - ssh -v -o UserKnownHostsFile=$ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS $ILAB_VM_TRIGGER_UPDATE_USER@$PG_VM_TRIGGER_UPDATE_HOST_STABLE -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-stable
+        - mkdir ~/.ssh
+        - echo "postguard-main.cs.ru.nl ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILa82tuFJPeEoeZPx2e5nCuo6IW83R0OFqAVqKYewqZk" > ~/.ssh/known_hosts
+        - ssh -v $ILAB_VM_TRIGGER_UPDATE_USER@$PG_VM_TRIGGER_UPDATE_HOST_STABLE -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-stable
