@@ -115,9 +115,8 @@ deploy-main:
         - apt update
         - apt install -y openssh-client
         - chmod 600 $ILAB_VM_TRIGGER_UPDATE_KEY
-        - echo $ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS
-        - mkdir ~/.ssh && echo $ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS > ~/.ssh/known_hosts
-        - ssh -v $ILAB_VM_TRIGGER_UPDATE_USER@$PG_VM_TRIGGER_UPDATE_HOST_MAIN -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-main
+        - cat $ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS
+        - ssh -v -o UserKnownHostsFile=$ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS $ILAB_VM_TRIGGER_UPDATE_USER@$PG_VM_TRIGGER_UPDATE_HOST_MAIN -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-main
 
 deploy-stable:
     stage: deploy
@@ -132,5 +131,4 @@ deploy-stable:
         - apt update
         - apt install -y openssh-client
         - chmod 600 $ILAB_VM_TRIGGER_UPDATE_KEY
-        - mkdir ~/.ssh && echo $ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS > ~/.ssh/known_hosts
-        - ssh -v $ILAB_VM_TRIGGER_UPDATE_USER@$PG_VM_TRIGGER_UPDATE_HOST_STABLE -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-stable
+        - ssh -v -o UserKnownHostsFile=$ILAB_VM_TRIGGER_UPDATE_KNOWN_HOSTS $ILAB_VM_TRIGGER_UPDATE_USER@$PG_VM_TRIGGER_UPDATE_HOST_STABLE -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-stable
