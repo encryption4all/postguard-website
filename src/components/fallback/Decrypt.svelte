@@ -41,6 +41,8 @@
         Fail: 'Fail',
     }
 
+    let PKG_URL = import.meta.env.VITE_PKG_URL
+    
     let state = STATES.Uninit
 
     let outStream = ''
@@ -88,7 +90,7 @@
     let vk
 
     onMount(async () => {
-        vk = await fetch(`${__PKG__}/v2/sign/parameters`)
+        vk = await fetch(`${PKG_URL}/v2/sign/parameters`)
             .then((r) => r.json())
             .then((j) => j.publicKey)
     })
@@ -237,7 +239,7 @@
 
     // get the usk using a cached jwt value
     async function getUskCachedJWT() {
-        usk = await fetch(`${__PKG__}/v2/request/key/${timestamp.toString()}`, {
+        usk = await fetch(`${PKG_URL}/v2/request/key/${timestamp.toString()}`, {
             headers: {
                 Authorization: `Bearer ${jwtCached}`,
             },
@@ -247,7 +249,7 @@
 
     async function getUsk() {
         const session = {
-            url: __PKG__,
+            url: PKG_URL,
             start: {
                 url: (o) => `${o.url}/v2/request/start`,
                 method: 'POST',
@@ -265,7 +267,7 @@
                         .then((jwt) => {
                             krCacheTemp.jwt = jwt
                             return fetch(
-                                `${__PKG__}/v2/request/key/${timestamp.toString()}`,
+                                `${PKG_URL}/v2/request/key/${timestamp.toString()}`,
                                 {
                                     headers: {
                                         Authorization: `Bearer ${jwt}`,
