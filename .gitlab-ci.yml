@@ -59,8 +59,6 @@ build-downloads:
 build-image:
     stage: build-image
     tags: [docker]
-    only:
-        - stable
     dependencies:
         - build-root
         - build-cryptify
