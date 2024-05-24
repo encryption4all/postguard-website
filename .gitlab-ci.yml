@@ -23,6 +23,7 @@ build-root-main:
         - apk add git
         - git fetch
         - git checkout env_vars
+        - cat .env*
         - yarn
         - yarn build-main
     artifacts:
