@@ -36,8 +36,6 @@ build-cryptify:
     image: node:18-alpine3.15
     script:
         - cd cryptify/cryptify-front-end
-        - echo "\Cryptify:" >> ../git_info
-        - git show --no-patch --format=tformat:'%D %h' >> ../git_info
         - npm install --legacy-peer-deps
         - CI=false npm run build-${CI_COMMIT_REF_NAME}
     artifacts:
@@ -51,8 +49,6 @@ build-downloads:
     image: node:18-alpine3.15
     script:
         - cd postguard-tb-addon
-        - echo "\nTB-addon:" >> ../git_info
-        - git show --no-patch --format=tformat:'%D %h' > ../git_info
         - yarn
         - NODE_ENV=production yarn build
         - cd dist
