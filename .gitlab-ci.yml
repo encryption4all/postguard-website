@@ -18,13 +18,7 @@ build-root:
     tags: [docker]
     image: node:18-alpine3.15
     script:
-        - apk add git
-        - git fetch
-        - git checkout env_vars
-        - echo "\Website:" > git_info
-        - git show --no-patch --format=tformat:'%D %h' >> git_info
         - yarn
-        - echo ${CI_COMMIT_REF_NAME}
         - yarn build-${CI_COMMIT_REF_NAME}
     artifacts:
         paths:
