@@ -80,7 +80,7 @@ deploy-main:
         - apt install -y openssh-client
         - chmod 600 $ILAB_VM_TRIGGER_UPDATE_KEY
         - mkdir ~/.ssh
-        - echo "postguard-main.cs.ru.nl ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILa82tuFJPeEoeZPx2e5nCuo6IW83R0OFqAVqKYewqZk" > ~/.ssh/known_hosts
+        - echo "postguard-main.cs.ru.nl ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC9VnzZJw/jiSj2FwuuJ9rvNdCljSeQ2c/IPw38uHZQQ" > ~/.ssh/known_hosts
         - ssh -v $ILAB_VM_TRIGGER_UPDATE_USER@$PG_VM_TRIGGER_UPDATE_HOST_MAIN -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-main
         
 deploy-stable:
@@ -97,5 +97,5 @@ deploy-stable:
         - apt install -y openssh-client
         - chmod 600 $ILAB_VM_TRIGGER_UPDATE_KEY
         - mkdir ~/.ssh
-        - echo "postguard-main.cs.ru.nl ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILa82tuFJPeEoeZPx2e5nCuo6IW83R0OFqAVqKYewqZk" > ~/.ssh/known_hosts
+        - echo "postguard-stable.cs.ru.nl ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC9VnzZJw/jiSj2FwuuJ9rvNdCljSeQ2c/IPw38uHZQQ" > ~/.ssh/known_hosts
         - ssh -v $ILAB_VM_TRIGGER_UPDATE_USER@$PG_VM_TRIGGER_UPDATE_HOST_STABLE -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-stable
