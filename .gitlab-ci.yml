@@ -21,6 +21,8 @@ build-root:
         - apk add git
         - git fetch
         - git checkout env_vars
+        - echo "\Website:" > git_info
+        - git show --no-patch --format=tformat:'%D %h' >> git_info
         - yarn
         - yarn build-${CI_COMMIT_REF_NAME}
     artifacts:
@@ -34,6 +36,8 @@ build-cryptify:
     image: node:18-alpine3.15
     script:
         - cd cryptify/cryptify-front-end
+        - echo "\Cryptify:" >> ../git_info
+        - git show --no-patch --format=tformat:'%D %h' >> ../git_info
         - npm install --legacy-peer-deps
         - CI=false npm run build-${CI_COMMIT_REF_NAME}
     artifacts:
@@ -47,6 +51,8 @@ build-downloads:
     image: node:18-alpine3.15
     script:
         - cd postguard-tb-addon
+        - echo "\nTB-addon:" >> ../git_info
+        - git show --no-patch --format=tformat:'%D %h' > ../git_info
         - yarn
         - NODE_ENV=production yarn build
         - cd dist
@@ -85,6 +91,7 @@ deploy-main:
         - mkdir ~/.ssh
         - echo "postguard-main.cs.ru.nl ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILa82tuFJPeEoeZPx2e5nCuo6IW83R0OFqAVqKYewqZk" > ~/.ssh/known_hosts
         - ssh -v $ILAB_VM_TRIGGER_UPDATE_USER@$PG_VM_TRIGGER_UPDATE_HOST_MAIN -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-main
+        - cat git_info
 
 deploy-stable:
     stage: deploy
@@ -102,3 +109,4 @@ deploy-stable:
         - mkdir ~/.ssh
         - echo "postguard-main.cs.ru.nl ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILa82tuFJPeEoeZPx2e5nCuo6IW83R0OFqAVqKYewqZk" > ~/.ssh/known_hosts
         - ssh -v $ILAB_VM_TRIGGER_UPDATE_USER@$PG_VM_TRIGGER_UPDATE_HOST_STABLE -i $ILAB_VM_TRIGGER_UPDATE_KEY docker-postguard-website-stable
+        - cat git_info
