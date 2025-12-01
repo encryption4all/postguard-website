@@ -91,16 +91,16 @@
         {#if currRight === RIGHTMODES.MailView}
             <div
                 id="mail-container"
-                in:fly={{ y: 1000, delay: 250, duration: 250 }}
-                out:fly={{ y: 1000, duration: 250 }}
+                in:fly|global={{ y: 1000, delay: 250, duration: 250 }}
+                out:fly|global={{ y: 1000, duration: 250 }}
             >
                 <EmailView />
             </div>
         {:else if currRight === RIGHTMODES.Nothing}
             <div
                 id="image-container"
-                in:fly={{ y: 1000, delay: 250, duration: 250 }}
-                out:fly={{ y: 1000, duration: 250 }}
+                in:fly|global={{ y: 1000, delay: 250, duration: 250 }}
+                out:fly|global={{ y: 1000, duration: 250 }}
             >
                 <img
                     src={decryptImgLq}

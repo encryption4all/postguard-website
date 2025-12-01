@@ -17,7 +17,7 @@
 <div class="pg-footer">
     <div class={'swiper-button-prev'}>
         {#if items[$selected - 1]}
-            <a in:fly={{ x: -300 }} out:fly={{ x: -300 }} href={'#'}>
+            <a in:fly|global={{ x: -300 }} out:fly|global={{ x: -300 }} href={'#'}>
                 <div on:click={() => selected.update((i) => i - 1)}>
                     <img
                         class="arrow"
@@ -40,7 +40,7 @@
 
     <div class={'swiper-button-next'}>
         {#if items[$selected + 1]}
-            <a in:fly={{ x: 300 }} out:fly={{ x: 300 }} href={'#'}>
+            <a in:fly|global={{ x: 300 }} out:fly|global={{ x: 300 }} href={'#'}>
                 <div on:click={() => selected.update((i) => i + 1)}>
                     <img
                         src={nextIcon}

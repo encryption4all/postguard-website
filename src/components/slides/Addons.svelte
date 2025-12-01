@@ -54,8 +54,8 @@
             {#key activeItem}
                 <div
                     id="client-instruction"
-                    in:fade={{ delay: 250, duration: 250 }}
-                    out:fade={{ duration: 250 }}
+                    in:fade|global={{ delay: 250, duration: 250 }}
+                    out:fade|global={{ duration: 250 }}
                 >
                     {@html $_(`addons.${activeItem}`)}
                 </div>
