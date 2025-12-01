@@ -32,7 +32,7 @@
             />
         </map>
     </div>
-    <div class="grid-item" />
+    <div class="grid-item"></div>
 </div>
 
 <style lang="scss">

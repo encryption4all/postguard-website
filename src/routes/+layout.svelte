@@ -3,6 +3,8 @@
     import Footer from '$lib/components/Footer.svelte'
     import { isLoading } from 'svelte-i18n'
     import '$lib/i18n'
+    /** @type {{children?: import('svelte').Snippet}} */
+    let { children } = $props();
 </script>
 
 <svelte:head>
@@ -19,6 +21,6 @@
 
 {#if !$isLoading}
     <Header />
-    <slot />
+    {@render children?.()}
     <Footer />
 {/if}

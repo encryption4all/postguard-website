@@ -9,16 +9,16 @@
 
     import { selected } from '$lib/stores'
 
-    $: items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map((s) =>
+    let items = $derived(['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map((s) =>
         $_(`footer.${s}`)
-    )
+    ))
 </script>
 
 <div class="pg-footer">
     <div class={'swiper-button-prev'}>
         {#if items[$selected - 1]}
             <a in:fly|global={{ x: -300 }} out:fly|global={{ x: -300 }} href={'#'}>
-                <div on:click={() => selected.update((i) => i - 1)}>
+                <div onclick={() => selected.update((i) => i - 1)}>
                     <img
                         class="arrow"
                         src={leftArrow}
@@ -36,12 +36,12 @@
         {/if}
     </div>
 
-    <div class="swiper-pagination" />
+    <div class="swiper-pagination"></div>
 
     <div class={'swiper-button-next'}>
         {#if items[$selected + 1]}
             <a in:fly|global={{ x: 300 }} out:fly|global={{ x: 300 }} href={'#'}>
-                <div on:click={() => selected.update((i) => i + 1)}>
+                <div onclick={() => selected.update((i) => i + 1)}>
                     <img
                         src={nextIcon}
                         alt="go forward icon"

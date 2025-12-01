@@ -3,8 +3,8 @@
 
     const dispatch = createEventDispatcher()
 
-    export let tabItems
-    export let activeItem
+    /** @type {{tabItems: any, activeItem: any}} */
+    let { tabItems, activeItem } = $props();
 </script>
 
 <div class="tabs">
@@ -12,7 +12,7 @@
         {#each tabItems as { item, logo }}
             <li
                 class:active={item === activeItem}
-                on:click={() => dispatch('tabChange', item)}
+                onclick={() => dispatch('tabChange', item)}
             >
                 <img src={logo} alt="" width={16} height={16} />
                 <b>{item}</b>

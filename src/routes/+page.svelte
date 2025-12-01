@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { onMount } from 'svelte'
     import {
         Pagination,
@@ -23,10 +25,10 @@
     import { selected, cryptifyIframe } from '$lib/stores'
     import lazySizes from 'lazysizes'
 
-    let initial = true
-    let swiper
+    let initial = $state(true)
+    let swiper = $state()
 
-    let params, uuid, recipient
+    let params = $state(), uuid = $state(), recipient = $state()
 
     onMount(() => {
         params = new URLSearchParams(window.location.search)
@@ -34,9 +36,13 @@
         recipient = params.get('recipient')
     })
 
-    $: if (swiper && $cryptifyIframe)
-        $cryptifyIframe.src = `/filesharing/${uuid && recipient ? `?download=${uuid}&recipient=${recipient}` : ''}`
-    $: if (swiper && swiper.activeIndex !== $selected) swiper.slideTo($selected)
+    run(() => {
+        if (swiper && $cryptifyIframe)
+            $cryptifyIframe.src = `/filesharing/${uuid && recipient ? `?download=${uuid}&recipient=${recipient}` : ''}`
+    });
+    run(() => {
+        if (swiper && swiper.activeIndex !== $selected) swiper.slideTo($selected)
+    });
 </script>
 
 <Swiper

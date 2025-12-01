@@ -1,12 +1,16 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from 'svelte-i18n'
     import basketImg from '$lib/assets/images/basket.svg'
     import basketImgLq from '$lib/assets/images/lqip/basket.svg'
     import { cryptifyIframe } from './../../stores.js'
 
-    let el
+    let el = $state()
 
-    $: el && cryptifyIframe.set(el)
+    run(() => {
+        el && cryptifyIframe.set(el)
+    });
 </script>
 
 <div class="grid-container">
@@ -21,7 +25,7 @@
         src=""
         type="text/html"
         scrolling="no"
-    />
+></iframe>
 </div>
 
 <style lang="scss">

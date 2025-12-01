@@ -1,12 +1,14 @@
 <script>
+    import { preventDefault } from 'svelte/legacy';
+
     import { _, locale, init } from 'svelte-i18n'
     import logo from '$lib/assets/images/logo.svg'
     import LocaleSwitcher from './LocaleSwitcher.svelte'
     import { selected } from '$lib/stores'
 
-    $: items = ['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map((s) =>
+    let items = $derived(['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map((s) =>
         $_(`header.${s}`)
-    )
+    ))
 </script>
 
 <div class="pg-topbar">
@@ -14,7 +16,7 @@
     <ul class="pg-menu">
         {#each items as item, i}
             <li class:selected={$selected === i}>
-                <a href="/" on:click|preventDefault={() => selected.set(i)}
+                <a href="/" onclick={preventDefault(() => selected.set(i))}
                     >{item}</a
                 >
             </li>

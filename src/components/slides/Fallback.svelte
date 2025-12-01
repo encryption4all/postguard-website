@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { onMount } from 'svelte'
 
     import decryptImg from '$lib/assets/images/decrypt.svg'
@@ -20,7 +22,7 @@
 
     // mode of the left window (List/Settings)
     const LEFTMODES = { ListView: 'List', Settings: 'Settings' }
-    let currLeft = LEFTMODES.ListView
+    let currLeft = $state(LEFTMODES.ListView)
 
     // mode of the right window (Nothing/MailView/Decrypting)
     const RIGHTMODES = {
@@ -29,12 +31,15 @@
         Decrypt: 'Decrypt',
     }
 
-    $: currRight = $currSelected >= 0 ? RIGHTMODES.MailView : RIGHTMODES.Nothing
+    let currRight;
+    run(() => {
+        currRight = $currSelected >= 0 ? RIGHTMODES.MailView : RIGHTMODES.Nothing
+    });
 
-    let searchTerm
-    let mod, readable
+    let searchTerm = $state()
+    let mod = $state(), readable = $state()
 
-    let unique = {}
+    let unique = $state({})
     const onFile = async (event) => {
         const [inFile] = event.srcElement.files
         readable = inFile.stream()
@@ -46,7 +51,9 @@
         mod = await import('@e4a/pg-wasm')
     })
 
-    $: console.log(`left: ${currLeft}, right: ${currRight}`)
+    run(() => {
+        console.log(`left: ${currLeft}, right: ${currRight}`)
+    });
 </script>
 
 <div class="grid-container">
@@ -55,7 +62,7 @@
             <label class="file-upload">
                 <p>{$_('fallback.drop')}</p>
                 <UploadLock size="30px" />
-                <input type="file" on:change={onFile} /></label
+                <input type="file" onchange={onFile} /></label
             >
         </div>
         <div class="item search">
@@ -70,7 +77,7 @@
                 />
             </label>
             <button
-                on:click={() =>
+                onclick={() =>
                     (currLeft =
                         currLeft === LEFTMODES.Settings
                             ? LEFTMODES.ListView

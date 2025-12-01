@@ -1,4 +1,7 @@
 <script>
+    import { preventDefault, createBubbler } from 'svelte/legacy';
+
+    const bubble = createBubbler();
     // stores
     import { emails } from './stores'
 
@@ -8,8 +11,8 @@
     // logic
     import * as email from './email.js'
 
-    let showBody = false
-    let currentID, currentParsed, currentRaw
+    let showBody = $state(false)
+    let currentID, currentParsed = $state(), currentRaw = $state()
 
     async function showMail(id, unparsed) {
         currentRaw = unparsed
@@ -37,8 +40,8 @@
             <div
                 id="sb-th"
                 tabindex="-1"
-                on:click|preventDefault={() => showMail(email.id, email.raw)}
-                on:keypress
+                onclick={preventDefault(() => showMail(email.id, email.raw))}
+                onkeypress={bubble('keypress')}
             >
                 <b>{email.subject}</b> <br />
                 {#if email.from.name}
@@ -69,7 +72,7 @@
 
                 <div id="buttons">
                     <button
-                        on:click={() =>
+                        onclick={() =>
                             email.downloadAttachment(
                                 currentRaw,
                                 'text/plain',
@@ -78,7 +81,7 @@
                     >
                         <span class="material-icons">download</span>
                     </button>
-                    <button on:click={deleteMail}>
+                    <button onclick={deleteMail}>
                         <span class="material-icons">delete</span>
                     </button>
                 </div>

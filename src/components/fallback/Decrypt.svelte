@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     // imports
 
     import { tick, onMount } from 'svelte'
@@ -28,7 +30,6 @@
 
     import { locale, _ } from 'svelte-i18n'
 
-    export let rightMode
 
     // states
     const STATES = {
@@ -43,7 +44,7 @@
 
     let PKG_URL = import.meta.env.VITE_PKG_URL
     
-    let state = STATES.Uninit
+    let state = $state(STATES.Uninit)
 
     let outStream = ''
     let decoder = new TextDecoder()
@@ -56,19 +57,19 @@
         },
     })
 
-    let policies // hidden policies
-    let usk // user secret key
-    let keylist // list of keys (if there are multiple recipients)
-    let key // key (email of recipient)
+    let policies = $state() // hidden policies
+    let usk = $state() // user secret key
+    let keylist = $state() // list of keys (if there are multiple recipients)
+    let key = $state() // key (email of recipient)
     let keyRequest // key request: sent to server
     let recipientAndCreds // chosen recipient and their credentials
     let recipientStripped // chosen recipient stripepd from credentials: sent to server
     let timestamp
 
-    let showHints = false
+    let showHints = $state(false)
     let hints = []
 
-    let boolRecipientCached
+    let boolRecipientCached = $state()
     let jwtCached // cached jwt, if it exists
 
     // JWT cache
@@ -80,14 +81,14 @@
     }
 
     let decryptedMail
-    let err
+    let err = $state()
 
     // vars
-    export let mod // WASM module
-    export let readable
+    /** @type {{rightMode: any, mod: any, readable: any}} */
+    let { rightMode = $bindable(), mod, readable } = $props();
 
-    let unsealer
-    let vk
+    let unsealer = $state()
+    let vk = $state()
 
     onMount(async () => {
         vk = await fetch(`${PKG_URL}/v2/sign/parameters`)
@@ -95,23 +96,6 @@
             .then((j) => j.publicKey)
     })
 
-    $: console.log('state changed: ', state)
-    $: {
-        if (state === STATES.Uninit && vk) {
-            mod.StreamUnsealer.new(readable, vk)
-                .then((u) => {
-                    state = STATES.Init
-                    unsealer = u
-                    policies = unsealer.inspect_header()
-                    console.log(policies)
-                    checkRecipients()
-                })
-                .catch((e) => {
-                    err = e
-                    state = STATES.Fail
-                })
-        }
-    }
 
     // checks whether there is one recipient or multiple
     function checkRecipients() {
@@ -128,49 +112,7 @@
         }
     }
 
-    $: {
-        if ((state == STATES.Init || state == STATES.Recipients) && key) {
-            processPolicy()
-            processCredentials()
 
-            if (boolRecipientCached) {
-                console.log('cache hit')
-                // we retrieve key via jwt
-                getUskCachedJWT()
-                    .then((retrieved) => (usk = retrieved))
-                    .catch((e) => {
-                        err = e
-                        state = STATES.Fail
-                    })
-            } else {
-                // we have to do a session
-                stripCredentials()
-                createKr()
-                state = STATES.Qr
-                tick()
-                    .then(() => {
-                        getUsk().then((retrieved) => (usk = retrieved))
-                    })
-                    .catch((e) => {
-                        err = e
-                        state = STATES.Fail
-                    })
-            }
-        }
-    }
-
-    $: {
-        if (usk) {
-            state = STATES.Decrypting
-
-            decryptFile()
-                .then(() => (state = STATES.Show))
-                .catch((e) => {
-                    err = e
-                    state = STATES.Fail
-                })
-        }
-    }
 
     // check checked if the policy is in the cache
     function processPolicy() {
@@ -344,6 +286,67 @@
         await tick()
         rightMode = 'MailView'
     }
+    run(() => {
+        if (state === STATES.Uninit && vk) {
+            mod.StreamUnsealer.new(readable, vk)
+                .then((u) => {
+                    state = STATES.Init
+                    unsealer = u
+                    policies = unsealer.inspect_header()
+                    console.log(policies)
+                    checkRecipients()
+                })
+                .catch((e) => {
+                    err = e
+                    state = STATES.Fail
+                })
+        }
+    });
+    run(() => {
+        if ((state == STATES.Init || state == STATES.Recipients) && key) {
+            processPolicy()
+            processCredentials()
+
+            if (boolRecipientCached) {
+                console.log('cache hit')
+                // we retrieve key via jwt
+                getUskCachedJWT()
+                    .then((retrieved) => (usk = retrieved))
+                    .catch((e) => {
+                        err = e
+                        state = STATES.Fail
+                    })
+            } else {
+                // we have to do a session
+                stripCredentials()
+                createKr()
+                state = STATES.Qr
+                tick()
+                    .then(() => {
+                        getUsk().then((retrieved) => (usk = retrieved))
+                    })
+                    .catch((e) => {
+                        err = e
+                        state = STATES.Fail
+                    })
+            }
+        }
+    });
+    run(() => {
+        if (usk) {
+            state = STATES.Decrypting
+
+            decryptFile()
+                .then(() => (state = STATES.Show))
+                .catch((e) => {
+                    err = e
+                    state = STATES.Fail
+                })
+        }
+    });
+    run(() => {
+        console.log('state changed: ', state)
+    });
 </script>
 
 {#if state === STATES.Init}
@@ -352,7 +355,7 @@
     <div id="block">
         <p><b>Please select which email belongs to you:</b></p>
         <select bind:value={key}
-            ><option value="" />
+            ><option value=""></option>
             {#each keylist as key}
                 <option value={key}>
                     {key}

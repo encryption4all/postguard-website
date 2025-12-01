@@ -1,35 +1,38 @@
 <script>
+    import { preventDefault, createBubbler } from 'svelte/legacy';
+
+    const bubble = createBubbler();
     import { emails, currSelected } from './../fallback/stores.js'
     import { _, locale } from 'svelte-i18n'
 
     // import TrashCanOutline from 'svelte-material-icons/TrashCanOutline.svelte'
 
-    export let rightMode
-    export let searchTerm
+    /** @type {{rightMode: any, searchTerm: any}} */
+    let { rightMode = $bindable(), searchTerm } = $props();
 
-    $: sorted =
-        $emails &&
+    let sorted =
+        $derived($emails &&
         $emails.length > 0 &&
         $emails.sort(
             (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-        )
-    $: sortedFiltered = searchTerm
+        ))
+    let sortedFiltered = $derived(searchTerm
         ? sorted.filter(
               (email) =>
                   email.raw.toLowerCase().indexOf(searchTerm.toLowerCase()) > 0
           )
-        : sorted
+        : sorted)
 </script>
 
 {#if sortedFiltered.length > 0}
     <ol>
         {#each sortedFiltered as email}
             <li
-                on:click|preventDefault={() => {
+                onclick={preventDefault(() => {
                     currSelected.set(email.id)
                     rightMode = 'MailView'
-                }}
-                on:keypress
+                })}
+                onkeypress={bubble('keypress')}
             >
                 <div class:selected={$currSelected === email.id}>
                     <b>{email.subject}</b> <br />

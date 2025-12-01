@@ -15,22 +15,21 @@
         { item: 'Outlook', logo: olLogo },
     ]
 
-    let activeItem = 'Thunderbird'
-    $: sign = activeItem === 'Thunderbird' ? -1 : 1
+    let activeItem = $state('Thunderbird')
+    let containerWidth = $state()
 
     const tween = tweened(0, { delay: 150, duration: 500, easing: cubicOut })
 
-    let height
-    $: height =
-        (containerWidth > 800 ? 400 : 500) +
-        $tween * (containerWidth > 800 ? 150 : 200)
+    let height = $derived((containerWidth > 800 ? 400 : 500) +
+        $tween * (containerWidth > 800 ? 150 : 200))
 
     const triggerTabChange = (event) => {
         activeItem = event.detail
         tween.set(activeItem === 'Thunderbird' ? 0 : 1)
     }
 
-    let containerWidth
+    let sign = $derived(activeItem === 'Thunderbird' ? -1 : 1)
+    
 </script>
 
 <div class="grid-container" bind:clientWidth={containerWidth}>

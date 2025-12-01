@@ -1,11 +1,11 @@
+<svelte:options runes />
+
 <script>
     import { createEventDispatcher } from 'svelte'
     import { browser } from '$app/environment'
     import { cryptifyIframe } from './../stores.js'
 
-    export let lang
-
-    let style = $$props.style
+    let { lang, style } = $props()
 
     const dispatch = createEventDispatcher()
 
@@ -15,7 +15,9 @@
         $cryptifyIframe?.contentWindow.postMessage({ lang: lang })
     }
 
-    $: handleLocaleChange(lang)
+    $effect(() => {
+        handleLocaleChange(lang)
+    })
 </script>
 
 <div
@@ -56,85 +58,85 @@
 </div>
 
 <style lang="scss">
-    $language-width: 50px;
-    $language-height: 20px;
-    $language-focus: #85bffd;
-    $language-border: #ccc;
-    $language-hover: #eee;
-    $language-checked: #ddd;
-    $white: #ffffff;
+  $language-width: 50px;
+  $language-height: 20px;
+  $language-focus: #85bffd;
+  $language-border: #ccc;
+  $language-hover: #eee;
+  $language-checked: #ddd;
+  $white: #ffffff;
 
-    .hidden {
-        display: none;
-    }
+  .hidden {
+    display: none;
+  }
 
-    .language {
-        display: flex;
-        width: $language-width * 2 + 20px;
-        height: $language-height;
-        font-size: 14px;
-        line-height: 1;
-        margin: 1em 0;
-        align-content: center;
-        align-items: center;
-    }
+  .language {
+    display: flex;
+    width: $language-width * 2 + 20px;
+    height: $language-height;
+    font-size: 14px;
+    line-height: 1;
+    margin: 1em 0;
+    align-content: center;
+    align-items: center;
+  }
 
-    .language-container-left,
-    .language-container-right {
-        position: relative;
-        float: left;
-        width: $language-width;
-        height: $language-height;
-        padding: 5px;
-    }
+  .language-container-left,
+  .language-container-right {
+    position: relative;
+    float: left;
+    width: $language-width;
+    height: $language-height;
+    padding: 5px;
+  }
 
-    .language-label {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: $language-width;
-        height: $language-height;
-        border: 1px solid $language-border;
-        padding: 9px 8px 2px 0;
-        background-color: $white;
-        background-repeat: no-repeat;
-        background-position: 7px 7px;
-        background-size: 14px;
-        text-align: right;
-        text-transform: uppercase;
-    }
+  .language-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: $language-width;
+    height: $language-height;
+    border: 1px solid $language-border;
+    padding: 9px 8px 2px 0;
+    background-color: $white;
+    background-repeat: no-repeat;
+    background-position: 7px 7px;
+    background-size: 14px;
+    text-align: right;
+    text-transform: uppercase;
+  }
 
-    .language-container-left .language-label {
-        border-radius: 4px 0 0 4px;
-    }
+  .language-container-left .language-label {
+    border-radius: 4px 0 0 4px;
+  }
 
-    .language-container-right .language-label {
-        border-left: 0;
-        border-radius: 0 4px 4px 0;
-    }
+  .language-container-right .language-label {
+    border-left: 0;
+    border-radius: 0 4px 4px 0;
+  }
 
-    .language-control:hover + .language-label,
-    .language-control:focus + .language-label {
-        background-color: $language-hover;
-    }
+  .language-control:hover + .language-label,
+  .language-control:focus + .language-label {
+    background-color: $language-hover;
+  }
 
-    .language-control:checked + .language-label {
-        text-decoration: underline 2px;
-        text-decoration-color: var(--pg-accent-color);
-    }
+  .language-control:checked + .language-label {
+    text-decoration: underline 2px;
+    text-decoration-color: var(--pg-accent-color);
+  }
 
-    .language-control:focus + .language-label,
-    .language-control:checked:focus + .language-label {
-        z-index: 2;
-        outline: 2px solid $language-focus;
-        box-shadow: 0 0 8px $language-focus;
-    }
+  .language-control:focus + .language-label,
+  .language-control:checked:focus + .language-label {
+    z-index: 2;
+    outline: 2px solid $language-focus;
+    box-shadow: 0 0 8px $language-focus;
+  }
 
-    .language-container-nl .language-label {
-        background-image: url('../assets/images/nl.svg');
-    }
+  .language-container-nl .language-label {
+    background-image: url('../assets/images/nl.svg');
+  }
 
-    .language-container-en .language-label {
-        background-image: url('../assets/images/gb.svg');
-    }
+  .language-container-en .language-label {
+    background-image: url('../assets/images/gb.svg');
+  }
 </style>

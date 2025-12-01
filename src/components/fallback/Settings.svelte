@@ -70,33 +70,36 @@
         <div id="block2">
             <h4>{$_('fallback.settings.creds')}</h4>
             <table id="creds">
+                <tbody>
                 <tr>
                     <th>{$_('fallback.settings.creds')}</th>
-                    <th>{$_('fallback.settings.exp')}</th>
-                    <th />
                 </tr>
+                <tr>
+                    <th>{$_('fallback.settings.exp')} </th>
+                </tr>
+                </tbody>
 
                 {#each $krCache as kr}
                     <tr>
                         <td
-                            >{kr.key}<br />
+                        >{kr.key}<br />
                             {#each parseKr(kr.krCon) as cred}
                                 {cred}<br />
                             {/each}
                         </td>
                         <td
-                            >{new Date(kr.jwtValid * 1000).toLocaleDateString(
-                                $locale
-                            )}</td
+                        >{new Date(kr.jwtValid * 1000).toLocaleDateString(
+                            $locale
+                        )}</td
                         >
                         <td
-                            ><span
-                                id="deletebutton"
-                                class="material-icons"
-                                on:click|preventDefault={() => deleteJwt(kr)}
-                                on:keypress
-                                ><TrashCanOutline size="26px" /></span
-                            ></td
+                        ><span
+                            id="deletebutton"
+                            class="material-icons"
+                            on:click|preventDefault={() => deleteJwt(kr)}
+                            on:keypress
+                        ><TrashCanOutline size="26px" /></span
+                        ></td
                         >
                     </tr>
                 {/each}
@@ -119,38 +122,38 @@
     <button
         on:click|preventDefault={() => (currMode = 'List')}
         style="float:right; margin-right: 1em"
-        >{$_('fallback.settings.back')}</button
+    >{$_('fallback.settings.back')}</button
     >
 </div>
 
 <style lang="scss">
-    #settings-container {
-        padding: 0 1em 1em 1em;
-        width: 100%;
-    }
+  #settings-container {
+    padding: 0 1em 1em 1em;
+    width: 100%;
+  }
 
-    #creds {
-        border-collapse: collapse;
-        margin-bottom: 0.5em;
-    }
+  #creds {
+    border-collapse: collapse;
+    margin-bottom: 0.5em;
+  }
 
-    #creds td,
-    #creds th {
-        border: 1px solid #d6d6d6;
-        padding: 7px;
-    }
+  #creds td,
+  #creds th {
+    border: 1px solid #d6d6d6;
+    padding: 7px;
+  }
 
-    #creds tr:hover {
-        background-color: #ddd;
-    }
+  #creds tr:hover {
+    background-color: #ddd;
+  }
 
-    #creds th {
-        padding: 7px;
-        text-align: left;
-        background-color: #d6d6d6;
-    }
+  #creds th {
+    padding: 7px;
+    text-align: left;
+    background-color: #d6d6d6;
+  }
 
-    #deletebutton {
-        cursor: pointer;
-    }
+  #deletebutton {
+    cursor: pointer;
+  }
 </style>

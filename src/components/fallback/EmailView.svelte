@@ -1,14 +1,17 @@
 <script>
+    import { run, preventDefault, createBubbler } from 'svelte/legacy';
+
+    const bubble = createBubbler();
     import * as email from './email'
     import { emails, currSelected } from './../fallback/stores.js'
     import { _, locale } from 'svelte-i18n';
 
     import Download from 'svelte-material-icons/Download.svelte'
 
-    let raw, parsed
-    let date, formattedDate
+    let raw = $state(), parsed = $state()
+    let date = $state(), formattedDate = $state()
 
-    $: {
+    run(() => {
         if ($currSelected >= 0) {
             const mail = $emails.find((e) => e.id === $currSelected)
             if (mail) {
@@ -20,7 +23,7 @@
                 })
             }
         }
-    }
+    });
 </script>
 
 {#if parsed}
@@ -48,7 +51,7 @@
         </div>
         <div class="item toolbar">
             <button
-                on:click={() =>
+                onclick={() =>
                     email.downloadAttachment(
                         raw,
                         'text/plain',
@@ -64,7 +67,7 @@
                 srcdoc={parsed.html}
                 title="Mail message"
                 sandbox
-            />
+></iframe>
         </div>
 
         {#if parsed.attachments.length > 0}
@@ -73,13 +76,13 @@
                     {#each parsed.attachments as att}
                         <li
                             id="att"
-                            on:click|preventDefault={() =>
+                            onclick={preventDefault(() =>
                                 email.downloadAttachment(
                                     att.content,
                                     att.mimeType,
                                     att.filename
-                                )}
-                            on:keypress
+                                ))}
+                            onkeypress={bubble('keypress')}
                         >
                             {att.filename}
                         </li>
