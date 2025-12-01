@@ -59,14 +59,10 @@
         <p>{@html $_('filesharing.subpar1')}</p>
     </div>
     <div class="crypt-progress-container">
-        <!--TODO: instruction and h3-->
         <h3>
             {isMobile() ? $_('filesharing.encryptPanel.irmaInstructionHeaderMobile') : $_('filesharing.encryptPanel.irmaInstructionHeaderQr')}
         </h3>
-        <h4>
-            { $_('filesharing.encryptPanel.RecipientsSubHeading')}
-        </h4>
-        <p>{$_('filesharing.encryptPanel.RecipientsText')}</p>
+        <p>{isMobile() ? $_('filesharing.encryptPanel.irmaInstructionMobile') : $_('filesharing.encryptPanel.irmaInstructionQr')}</p>
         <div class="crypt-irma-qr"></div>
         <div class="get-irma-here-anchor">
             <img class="irma-logo" src={yiviLogo} alt="yivi-logo" />
