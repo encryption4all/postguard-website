@@ -1,9 +1,8 @@
 <svelte:options runes />
 
-<script>
+<script lang="ts">
     import { createEventDispatcher } from 'svelte'
     import { browser } from '$app/environment'
-    import { cryptifyIframe } from './../stores.js'
 
     let { lang, style } = $props()
 
@@ -12,7 +11,6 @@
     const handleLocaleChange = (lang) => {
         dispatch('locale-changed', lang)
         if (browser) localStorage.setItem('preferredLanguage', lang)
-        $cryptifyIframe?.contentWindow.postMessage({ lang: lang })
     }
 
     $effect(() => {

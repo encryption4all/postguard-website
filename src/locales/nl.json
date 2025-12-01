@@ -59,7 +59,7 @@
             "creds": "Persoonlijke data",
             "exp": "Verloopt op",
             "back": "Terug"
- 
+
         },
         "email": {
             "from": "Van",
@@ -75,7 +75,55 @@
     "filesharing": {
         "title": "Bestanden delen",
         "subtitle1": "Hoe werkt het delen van bestanden?",
-        "subpar1": "Met PostGuard kunt je op een privacyvriendelijke manier veilig bestanden versturen. Elk bestand wordt speciaal voor de ontvanger versleuteld. Alleen die persoon kan dat bestand ontsleutelen. Daarvoor moet het e-mailadres getoond worden. Hiervoor wordt de identificatie-app Yivi gebruikt. <a href=\"https://yivi.app/\">Leer meer over de Yivi-app.</a>"
+        "subpar1": "Met PostGuard kunt je op een privacyvriendelijke manier veilig bestanden versturen. Elk bestand wordt speciaal voor de ontvanger versleuteld. Alleen die persoon kan dat bestand ontsleutelen. Daarvoor moet het e-mailadres getoond worden. Hiervoor wordt de identificatie-app Yivi gebruikt. <a href=\"https://yivi.app/\">Leer meer over de Yivi-app.</a>",
+        "decryptpanel": {
+            "header": "DOWNLOAD & ONTSLEUTEL",
+            "downloadDecrypt": "Downloading & ontsleutelen...",
+            "irmaInstructionHeaderQr": "Scan QR-code met Yivi",
+            "irmaInstructionHeaderMobile": "Bewijs identiteit met Yivi",
+            "irmaInstructionQr": "Ontsleutel het bestand door je e-mailadres te tonen. Scan daarvoor de onderstaande QR-code met de identificatie app Yivi.",
+            "irmaInstructionMobile": "Ontsleutel het bestand door je e-mailadres te tonen. Click daarvoor op de onderstaande knop om naar de identificatie app Yivi te gaan.",
+            "noIrma": "Nog geen Yivi-app?",
+            "decrypting": "Jouw bestand wordt gedownload en vervolgens ontsleuteld.",
+            "succes": "Succesvol gedownload en ontsleuteld",
+            "askDownload": "Download",
+            "askDownloadText": "Druk op onderstaande knop om de bestanden te ontsleutelen en downloaden.",
+            "verifiedEmail": "De bestanden zijn afkomstig van",
+            "verifiedExtra": "De bestanden zijn ondertekend met"
+        },
+        "encryptPanel": {
+            "header": "VERSLEUTEL & VERZEND",
+            "emailRecipient": "E-mailadres ontvanger",
+            "RecipientsHeading": "Naar",
+            "RecipientsSubHeading": "Wie mogen de bestanden ontvangen en ontsleutelen?",
+            "RecipientsText": "De ontvanger(s) moeten zowel hun email adres als aanvullende gegevens die jij hier specificeert aantonen. Deze data zijn niet zichtbaar aan anderen.",
+            "emailSender": "Jouw emailadres",
+            "emailSenderHeading": "Van",
+            "emailSenderSubHeading": "Laat de ontvanger(s) weten dat deze bestanden van jou afkomstig zijn.",
+            "emailSenderText": "Voordat je de bestanden kan sturen moet je aantonen dat je deze gegevens bezit.",
+            "emailSenderAttributePrefix": "Jouw",
+            "emailRecipientAttributePrefix": "Ontvanger's",
+            "messageHeading": "Bericht",
+            "messageText": "Dit (optionele) bericht wordt niet versleuteld. Het bericht staat in de email waar ook de link naar de bestanden zit.",
+            "messagePlaceholder": "Optioneel bericht",
+            "messageAnonymous": "Let op! Dit bericht is anoniem verzonden dus kijk goed uit bij het downloaden en openen van de bestanden.",
+            "encryptSend": "Onderteken & verzend",
+            "encrypting": "Ondertekenen & verzenden...",
+            "encryptingInfo": "Jouw bestanden worden versleuteld en daarna verzonden naar: ",
+            "succes": "Succesvol versleuteld en verzonden",
+            "succesInfo": "Jouw bestanden zijn versleuteld en verzonden. Een e-mail met een download link is verstuurd naar: ",
+            "another": "Nog iets versturen",
+            "irmaInstructionHeaderQr": "Laat zien wie je bent door de QR-code te scannen met Yivi",
+            "irmaInstructionHeaderMobile": "Bewijs identiteit met Yivi",
+            "irmaInstructionQr": "Versleutel de bestanden door je e-mailadres te verifieren. Scan daarvoor de onderstaande QR-code met de identificatie app Yivi.",
+            "irmaInstructionMobile": "Versleutel de bestanden door je e-mailadres te verifieren. Click daarvoor op de onderstaande knop om naar de identificatie app Yivi te gaan.",
+            "addRecipient": "ontvanger",
+            "emailSenderConfirm": "Stuur mij een bevestiging"
+        }
+    },
+    "yivi":{
+        "iosHref": "https://apps.apple.com/nl/app/yivi/id1294092994",
+        "androidHref": "https://play.google.com/store/apps/details?id=org.irmacard.cardemu&hl=nl"
     },
     "privacypolicy": {
         "title": "Privacybeleid",

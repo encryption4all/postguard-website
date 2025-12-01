@@ -22,7 +22,7 @@
         PrivacyPolicy,
     } from '$lib/components/slides'
 
-    import { selected, cryptifyIframe } from '$lib/stores'
+    import { selected } from '$lib/stores'
     import lazySizes from 'lazysizes'
 
     let initial = $state(true)
@@ -36,10 +36,6 @@
         recipient = params.get('recipient')
     })
 
-    run(() => {
-        if (swiper && $cryptifyIframe)
-            $cryptifyIframe.src = `/filesharing/${uuid && recipient ? `?download=${uuid}&recipient=${recipient}` : ''}`
-    });
     run(() => {
         if (swiper && swiper.activeIndex !== $selected) swiper.slideTo($selected)
     });
