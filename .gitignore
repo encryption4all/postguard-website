@@ -2,3 +2,5 @@
 .svelte-kit
 build
 package
+.idea
+.vscode
