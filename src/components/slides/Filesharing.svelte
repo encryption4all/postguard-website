@@ -11,6 +11,7 @@
     import { isMobile, GetBrowserInfo } from '$lib/lib/browser-detect'
     import MessageInput from '$lib/components/filesharing/MessageInput.svelte'
     import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
+    import SendButton from '$lib/components/filesharing/SendButton.svelte'
 
     // janky way to conditionally import pg-wasm to avoid issues with SSR
     let modPromise: Promise<any>
@@ -85,6 +86,7 @@
             <MessageInput bind:message={EncryptState.message} />
             <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
                           bind:senderConfirm={EncryptState.senderConfirm} attributes={ATTRIBUTES} />
+            <SendButton files={EncryptState.files} recipients={EncryptState.recipients}/>
         {:else if EncryptState.encryptionState === EncryptionState.Sign}
             <Sign isMobile={isMobileDevice} />
         {/if}
