@@ -119,6 +119,11 @@
             "irmaInstructionMobile": "Encrypt the files by verifying your e-mail address. Please click the button below to open the Yivi-app.",
             "addRecipient": "recipient",
             "emailSenderConfirm": "Send me a confirmation"
+        },
+        "attributes":{
+            "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobile number",
+            "pbdf.gemeente.personalData.fullname": "Full name",
+            "pbdf.gemeente.personalData.dateofbirth": "Date of birth"
         }
     },
     "yivi":{

@@ -119,6 +119,11 @@
             "irmaInstructionMobile": "Versleutel de bestanden door je e-mailadres te verifieren. Click daarvoor op de onderstaande knop om naar de identificatie app Yivi te gaan.",
             "addRecipient": "ontvanger",
             "emailSenderConfirm": "Stuur mij een bevestiging"
+        },
+        "attributes":{
+            "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobiel",
+            "pbdf.gemeente.personalData.fullname": "Volledige naam",
+            "pbdf.gemeente.personalData.dateofbirth": "Geboortedatum"
         }
     },
     "yivi":{

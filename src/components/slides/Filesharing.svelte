@@ -1,76 +1,63 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
     import Sign from '$lib/components/filesharing/Sign.svelte'
-    import type { AttributeCon, ISigningKey } from '@e4a/pg-wasm'
+    import {
+        type AttType,
+        EncryptionState,
+        type EncryptState,
+    } from '$lib/lib/types/filesharing/attributes'
     import { browser } from '$app/environment'
-    import FileSelection from '$lib/components/filesharing/FileSelection.svelte'
-    import { isMobile, GetBrowserInfo } from '$lib/lib/browser-detect';
+    import RecipientSelection from '$lib/components/filesharing/RecipientSelection.svelte'
+    import { isMobile, GetBrowserInfo } from '$lib/lib/browser-detect'
+    import MessageInput from '$lib/components/filesharing/MessageInput.svelte'
+    import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
 
     // janky way to conditionally import pg-wasm to avoid issues with SSR
-    let modPromise: Promise<any>;
+    let modPromise: Promise<any>
     if (browser) {
-        modPromise = import("@e4a/pg-wasm");
+        modPromise = import('@e4a/pg-wasm')
     } else {
-        modPromise = Promise.resolve(null);
+        modPromise = Promise.resolve(null)
     }
 
-    let PKG_URL = import.meta.env.VITE_PKG_URL
-    let APP_NAME = import.meta.env.VITE_APP_NAME
-    let APP_VERSION = import.meta.env.VITE_APP_VERSION
+    let isMobileDevice = isMobile()
 
-    let { name: browsername, version: browserversion } = GetBrowserInfo();
-    let isMobileDevice = isMobile();
-
-    export const METRICS_HEADER = {
-        "X-PostGuard-Client-Version": `${browsername}${
-            isMobileDevice ? "(mobile)" : ""
-        },${browserversion},${APP_NAME},${
-            APP_VERSION
-        }`,
-    };
     async function getParameters(): Promise<String> {
+        let { name: browsername, version: browserversion } = GetBrowserInfo()
+
+        let PKG_URL = import.meta.env.VITE_PKG_URL
+        let APP_NAME = import.meta.env.VITE_APP_NAME
+        let APP_VERSION = import.meta.env.VITE_APP_VERSION
+
+        const METRICS_HEADER = {
+            'X-PostGuard-Client-Version': `${browsername}${
+                isMobileDevice ? '(mobile)' : ''
+            },${browserversion},${APP_NAME},${
+                APP_VERSION
+            }`,
+        }
+
         if (browser) {
             let resp = await fetch(`${PKG_URL}/v2/parameters`, {
                 headers: METRICS_HEADER,
-            });
-            let params = await resp.json();
-            return params.publicKey;
+            })
+            let params = await resp.json()
+            return params.publicKey
         }
-        return "";
+        return ''
     }
 
-    enum EncryptionState {
-        FileSelection = 1,
-        Encrypting,
-        Done,
-        Error,
-        Sign,
-    }
-
-    type EncryptState = {
-        recipients: { email: string; extra: AttributeCon }[];
-        sender: string;
-        message: string;
-        files: File[];
-        percentages: number[];
-        done: boolean[];
-        encryptionState: EncryptionState;
-        abort: AbortController;
-        selfAborted: boolean;
-        encryptStartTime: number;
-        modPromise: Promise<any>;
-        pkPromise: Promise<any>;
-        pubSignKey?: ISigningKey;
-        privSignKey?: ISigningKey;
-        senderAttributes: AttributeCon;
-        senderConfirm: boolean;
-    };
+    const ATTRIBUTES: Array<AttType> = [
+        'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
+        'pbdf.gemeente.personalData.fullname',
+        'pbdf.gemeente.personalData.dateofbirth',
+    ]
 
     const defaultEncryptState: EncryptState = {
-        recipients: [{ email: "", extra: [] }],
-        sender: "",
+        recipients: [{ email: '', extra: [] }],
+        sender: '',
         senderAttributes: [],
-        message: "",
+        message: '',
         files: [],
         percentages: [],
         done: [],
@@ -81,10 +68,10 @@
         modPromise: modPromise,
         pkPromise: getParameters(),
         senderConfirm: true,
-    };
+    }
 
 
-    let EncryptState: EncryptState = defaultEncryptState;
+    let EncryptState: EncryptState = $state(defaultEncryptState)
 </script>
 
 <div class="grid-container">
@@ -93,11 +80,14 @@
         <p>{@html $_('filesharing.subpar1')}</p>
     </div>
     <div class="crypt-progress-container">
-    {#if EncryptState.encryptionState === EncryptionState.FileSelection}
-        <FileSelection />
-    {:else if EncryptState.encryptionState === EncryptionState.Sign}
-        <Sign isMobile={isMobileDevice} />
-    {/if}
+        {#if EncryptState.encryptionState === EncryptionState.FileSelection}
+            <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} />
+            <MessageInput bind:message={EncryptState.message} />
+            <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
+                          bind:senderConfirm={EncryptState.senderConfirm} attributes={ATTRIBUTES} />
+        {:else if EncryptState.encryptionState === EncryptionState.Sign}
+            <Sign isMobile={isMobileDevice} />
+        {/if}
     </div>
 </div>
 
