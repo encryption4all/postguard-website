@@ -4,3 +4,4 @@ build
 package
 .idea
 .vscode
+.env

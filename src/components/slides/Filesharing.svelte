@@ -1,56 +1,90 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
-    import yiviLogo from '$lib/assets/images/non-free/yivi-logo.svg'
-    import iosBtnEn from '$lib/assets/images/non-free/appstores/en/apple-appstore-en.svg'
-    import iosBtnNl from '$lib/assets/images/non-free/appstores/nl/apple-appstore-nl.svg'
-    import androidBtnEn from '$lib/assets/images/non-free/appstores/en/google-playstore-en.svg'
-    import androidBtnNl from '$lib/assets/images/non-free/appstores/nl/google-playstore-nl.svg'
+    import Sign from '$lib/components/filesharing/Sign.svelte'
+    import type { AttributeCon, ISigningKey } from '@e4a/pg-wasm'
     import { browser } from '$app/environment'
+    import FileSelection from '$lib/components/filesharing/FileSelection.svelte'
+    import { isMobile, GetBrowserInfo } from '$lib/lib/browser-detect';
 
-    function isMobile(): boolean {
-        if (browser || typeof window === "undefined") {
-            return false
-        }
-        // IE11 doesn't have window.navigator, test differently
-        // https://stackoverflow.com/questions/21825157/internet-explorer-11-detection
-        // @ts-ignore
-        if (!!window.MSInputMethodContext && !!document.documentMode) {
-            return false
-        }
-
-        if (/Android/i.test(window.navigator.userAgent)) {
-            return true
-        }
-
-        // https://stackoverflow.com/questions/9038625/detect-if-device-is-ios
-        // @ts-ignore so MSStream is not flagged as error
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-            return true
-        }
-
-        // https://stackoverflow.com/questions/57776001/how-to-detect-ipad-pro-as-ipad-using-javascript
-        if (
-            /Macintosh/.test(navigator.userAgent) &&
-            navigator.maxTouchPoints &&
-            navigator.maxTouchPoints > 2
-        ) {
-            return true
-        }
-
-        // Neither Android nor iOS, assuming desktop
-        return false
+    // janky way to conditionally import pg-wasm to avoid issues with SSR
+    let modPromise: Promise<any>;
+    if (browser) {
+        modPromise = import("@e4a/pg-wasm");
+    } else {
+        modPromise = Promise.resolve(null);
     }
 
-    function getAppButton(store: string) {
+    let PKG_URL = import.meta.env.VITE_PKG_URL
+    let APP_NAME = import.meta.env.VITE_APP_NAME
+    let APP_VERSION = import.meta.env.VITE_APP_VERSION
+
+    let { name: browsername, version: browserversion } = GetBrowserInfo();
+    let isMobileDevice = isMobile();
+
+    export const METRICS_HEADER = {
+        "X-PostGuard-Client-Version": `${browsername}${
+            isMobileDevice ? "(mobile)" : ""
+        },${browserversion},${APP_NAME},${
+            APP_VERSION
+        }`,
+    };
+    async function getParameters(): Promise<String> {
         if (browser) {
-            let selectedLang: String | null = localStorage.getItem('preferredLanguage')
-            if (selectedLang === 'nl-NL') {
-                return store === 'ios' ? iosBtnNl : androidBtnNl
-            } else {
-                return store === 'ios' ? iosBtnEn : androidBtnEn
-            }
+            let resp = await fetch(`${PKG_URL}/v2/parameters`, {
+                headers: METRICS_HEADER,
+            });
+            let params = await resp.json();
+            return params.publicKey;
         }
+        return "";
     }
+
+    enum EncryptionState {
+        FileSelection = 1,
+        Encrypting,
+        Done,
+        Error,
+        Sign,
+    }
+
+    type EncryptState = {
+        recipients: { email: string; extra: AttributeCon }[];
+        sender: string;
+        message: string;
+        files: File[];
+        percentages: number[];
+        done: boolean[];
+        encryptionState: EncryptionState;
+        abort: AbortController;
+        selfAborted: boolean;
+        encryptStartTime: number;
+        modPromise: Promise<any>;
+        pkPromise: Promise<any>;
+        pubSignKey?: ISigningKey;
+        privSignKey?: ISigningKey;
+        senderAttributes: AttributeCon;
+        senderConfirm: boolean;
+    };
+
+    const defaultEncryptState: EncryptState = {
+        recipients: [{ email: "", extra: [] }],
+        sender: "",
+        senderAttributes: [],
+        message: "",
+        files: [],
+        percentages: [],
+        done: [],
+        encryptionState: EncryptionState.FileSelection,
+        abort: new AbortController(),
+        selfAborted: false,
+        encryptStartTime: 0,
+        modPromise: modPromise,
+        pkPromise: getParameters(),
+        senderConfirm: true,
+    };
+
+
+    let EncryptState: EncryptState = defaultEncryptState;
 </script>
 
 <div class="grid-container">
@@ -59,54 +93,11 @@
         <p>{@html $_('filesharing.subpar1')}</p>
     </div>
     <div class="crypt-progress-container">
-        <h3>
-            {isMobile() ? $_('filesharing.encryptPanel.irmaInstructionHeaderMobile') : $_('filesharing.encryptPanel.irmaInstructionHeaderQr')}
-        </h3>
-        <p>{isMobile() ? $_('filesharing.encryptPanel.irmaInstructionMobile') : $_('filesharing.encryptPanel.irmaInstructionQr')}</p>
-        <div class="crypt-irma-qr"></div>
-        <div class="get-irma-here-anchor">
-            <img class="irma-logo" src={yiviLogo} alt="yivi-logo" />
-            <span
-                class="get-irma-text"
-                style="
-              display: inline-block;
-              verticalAlign: middle;
-              height: 45pt;
-              marginLeft: 5pt;
-              marginBottom: 0.5em;
-            "
-            >
-                {$_('filesharing.decryptpanel.noIrma')}
-            </span>
-            <div class="get-irma-buttons">
-                <a
-                    href={$_('yivi.iosHref')}
-                    style="
-                display: inline-block;
-                height: 38pt;
-                marginRight: 15pt;
-              "
-                >
-                    <img
-                        style="height: 100%"
-                        class="irma-appstore-button"
-                        src={getAppButton('ios')}
-                        alt="apple-appstore"
-                    />
-                </a>
-                <a
-                    href={$_('yivi.androidHref')}
-                    style="display: inline-block; height: 38pt"
-                >
-                    <img
-                        style="height: 100%"
-                        class="irma-appstore-button"
-                        src={getAppButton('android')}
-                        alt="google-playstore"
-                    />
-                </a>
-            </div>
-        </div>
+    {#if EncryptState.encryptionState === EncryptionState.FileSelection}
+        <FileSelection />
+    {:else if EncryptState.encryptionState === EncryptionState.Sign}
+        <Sign isMobile={isMobileDevice} />
+    {/if}
     </div>
 </div>
 
