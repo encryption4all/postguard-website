@@ -22,6 +22,7 @@
         "@sveltejs/vite-plugin-svelte": "^4.0.0",
         "@typescript-eslint/eslint-plugin": "^5.58.0",
         "@typescript-eslint/parser": "^5.58.0",
+        "dotenv": "^16.4.5",
         "eslint": "^8.38.0",
         "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-svelte3": "^4.0.0",
@@ -39,8 +40,7 @@
         "typescript": "^5.5.0",
         "vite": "^5.4.4",
         "vite-plugin-top-level-await": "^1.3.0",
-        "vite-plugin-wasm": "^3.2.2",
-        "dotenv": "^16.4.5"
+        "vite-plugin-wasm": "^3.2.2"
     },
     "type": "module",
     "prettier": {
@@ -55,8 +55,10 @@
         "@privacybydesign/yivi-core": "^0.1.2",
         "@privacybydesign/yivi-css": "^0.1.2",
         "@privacybydesign/yivi-web": "^0.1.2",
+        "@transcend-io/conflux": "^6.1.1",
         "jwt-decode": "^3.1.2",
         "postal-mime": "^1.0.16",
-        "svelte-material-icons": "^3.0.4"
+        "svelte-material-icons": "^3.0.4",
+        "web-streams-polyfill": "^4.2.0"
     }
 }

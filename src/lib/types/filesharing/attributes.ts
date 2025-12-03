@@ -31,3 +31,8 @@ export type AttType =
     | "pbdf.sidn-pbdf.mobilenumber.mobilenumber"
     | "pbdf.gemeente.personalData.fullname"
     | "pbdf.gemeente.personalData.dateofbirth";
+
+export enum Lang {
+    EN = "EN",
+    NL = "NL",
+}

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { _ } from 'svelte-i18n'
+    import { _, locale } from 'svelte-i18n'
     import yiviLogo from '$lib/assets/images/non-free/yivi-logo.svg'
     import { browser } from '$app/environment'
     import iosBtnNl from '$lib/assets/images/non-free/appstores/nl/apple-appstore-nl.svg'
@@ -12,7 +12,7 @@
 
     function getAppButton(store: string) {
         if (browser) {
-            let selectedLang: String | null = localStorage.getItem('preferredLanguage')
+            let selectedLang = $locale
             if (selectedLang === 'nl-NL') {
                 return store === 'ios' ? iosBtnNl : androidBtnNl
             } else {

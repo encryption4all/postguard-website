@@ -69,6 +69,8 @@
         modPromise: modPromise,
         pkPromise: getParameters(),
         senderConfirm: true,
+        privSignKey: undefined,
+        pubSignKey: undefined,
     }
 
 
@@ -85,8 +87,10 @@
             <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} />
             <MessageInput bind:message={EncryptState.message} />
             <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
-                          bind:senderConfirm={EncryptState.senderConfirm} attributes={ATTRIBUTES} />
-            <SendButton files={EncryptState.files} recipients={EncryptState.recipients}/>
+                          bind:senderConfirm={EncryptState.senderConfirm}
+                          attributes={ATTRIBUTES} />
+            <SendButton bind:encryptState={EncryptState}
+            />
         {:else if EncryptState.encryptionState === EncryptionState.Sign}
             <Sign isMobile={isMobileDevice} />
         {/if}
