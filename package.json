@@ -56,6 +56,7 @@
         "@privacybydesign/yivi-css": "^0.1.2",
         "@privacybydesign/yivi-web": "^0.1.2",
         "@transcend-io/conflux": "^6.1.1",
+        "dropzone": "^6.0.0-beta.2",
         "jwt-decode": "^3.1.2",
         "postal-mime": "^1.0.16",
         "svelte-material-icons": "^3.0.4",

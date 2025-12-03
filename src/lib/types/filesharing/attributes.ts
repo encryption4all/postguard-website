@@ -8,6 +8,11 @@ export enum EncryptionState {
     Sign,
 }
 
+export enum Lang {
+    EN = "EN",
+    NL = "NL",
+}
+
 export type EncryptState = {
     recipients: { email: string; extra: AttributeCon }[];
     sender: string;
@@ -32,7 +37,9 @@ export type AttType =
     | "pbdf.gemeente.personalData.fullname"
     | "pbdf.gemeente.personalData.dateofbirth";
 
-export enum Lang {
-    EN = "EN",
-    NL = "NL",
-}
+export type CryptFileInputProps = {
+    lang: Lang;
+    onFile: (f: FileList) => void;
+    multiple: boolean;
+    required: boolean;
+};

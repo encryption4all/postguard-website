@@ -12,6 +12,7 @@
     import MessageInput from '$lib/components/filesharing/MessageInput.svelte'
     import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
     import SendButton from '$lib/components/filesharing/SendButton.svelte'
+    import FileInput from '$lib/components/filesharing/FileInput.svelte'
 
     // janky way to conditionally import pg-wasm to avoid issues with SSR
     let modPromise: Promise<any>
@@ -83,6 +84,7 @@
         <p>{@html $_('filesharing.subpar1')}</p>
     </div>
     <div class="crypt-progress-container">
+        <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages} bind:done={EncryptState.done} />
         {#if EncryptState.encryptionState === EncryptionState.FileSelection}
             <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} />
             <MessageInput bind:message={EncryptState.message} />
@@ -105,6 +107,7 @@
     max-width: 1200px;
     max-height: 800px;
     grid-gap: 2rem;
+    overflow: scroll;
   }
 
   img.grid-item {
