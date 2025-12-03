@@ -22,53 +22,85 @@
     }
 </script>
 
-<h3>
-    {isMobile ? $_('filesharing.encryptPanel.irmaInstructionHeaderMobile') : $_('filesharing.encryptPanel.irmaInstructionHeaderQr')}
-</h3>
-<p>{isMobile ? $_('filesharing.encryptPanel.irmaInstructionMobile') : $_('filesharing.encryptPanel.irmaInstructionQr')}</p>
+<div class="crypt-progress-container">
+    <h3>
+        {isMobile ? $_('filesharing.encryptPanel.irmaInstructionHeaderMobile') : $_('filesharing.encryptPanel.irmaInstructionHeaderQr')}
+    </h3>
+    <p>{isMobile ? $_('filesharing.encryptPanel.irmaInstructionMobile') : $_('filesharing.encryptPanel.irmaInstructionQr')}</p>
 
-<div class="crypt-irma-qr"></div>
+    <div id="crypt-irma-qr"></div>
 
-<div class="get-irma-here-anchor">
-    <img class="irma-logo" src={yiviLogo} alt="yivi-logo" />
-    <span
-        class="get-irma-text"
-        style="
+    <div class="get-irma-here-anchor">
+        <img class="irma-logo" src={yiviLogo} alt="yivi-logo" />
+        <span
+            class="get-irma-text"
+            style="
               display: inline-block;
               verticalAlign: middle;
               height: 45pt;
               marginLeft: 5pt;
               marginBottom: 0.5em;
             "
-    >
+        >
                 {$_('filesharing.decryptpanel.noIrma')}
             </span>
-    <div class="get-irma-buttons">
-        <a
-            href={$_('yivi.iosHref')}
-            style="
+        <div class="get-irma-buttons">
+            <a
+                href={$_('yivi.iosHref')}
+                style="
                 display: inline-block;
                 height: 38pt;
                 marginRight: 15pt;
               "
-        >
-            <img
-                style="height: 100%"
-                class="irma-appstore-button"
-                src={getAppButton('ios')}
-                alt="apple-appstore"
-            />
-        </a>
-        <a
-            href={$_('yivi.androidHref')}
-            style="display: inline-block; height: 38pt"
-        >
-            <img
-                style="height: 100%"
-                class="irma-appstore-button"
-                src={getAppButton('android')}
-                alt="google-playstore"
-            />
-        </a>
+            >
+                <img
+                    style="height: 100%"
+                    class="irma-appstore-button"
+                    src={getAppButton('ios')}
+                    alt="apple-appstore"
+                />
+            </a>
+            <a
+                href={$_('yivi.androidHref')}
+                style="display: inline-block; height: 38pt"
+            >
+                <img
+                    style="height: 100%"
+                    class="irma-appstore-button"
+                    src={getAppButton('android')}
+                    alt="google-playstore"
+                />
+            </a>
+        </div>
     </div>
 </div>
+
+<style lang="scss">
+  @use 'shared-styles';
+
+  .get-irma-here-anchor .irma-logo {
+    height: 3.75em;
+    display: inline-block;
+  }
+
+  ;
+
+  .get-irma-here-anchor {
+    padding-top: 0.83em;
+    font-weight: bold;
+  }
+
+  .get-irma-here-anchor .get-irma-text {
+    display: inline-block;
+    height: 3.75em;
+    vertical-align: middle;
+    margin-left: 0.41em;
+    margin-bottom: calc(1em / 2);
+  }
+
+  .get-irma-buttons {
+    top: -0.83em;
+    position: relative;
+    cursor: pointer !important;
+  }
+</style>

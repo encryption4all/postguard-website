@@ -5,14 +5,14 @@ import YiviClient from '@privacybydesign/yivi-client'
 import { browser } from '$app/environment'
 
 async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise<any> {
-    if (!browser) return;
+    if (!browser) return
     let PKG_URL = import.meta.env.VITE_MAX_UPLOAD_SIZE
 
     const session = {
         start: {
             url: `${PKG_URL}/v2/request/start`,
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ con: [...pub, ...(priv ? priv : [])] }),
         },
         result: {
@@ -22,55 +22,58 @@ async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise
                     .text()
                     .then((jwt) =>
                         fetch(`${PKG_URL}/v2/irma/sign/key`, {
-                            method: "POST",
+                            method: 'POST',
                             headers: {
                                 Authorization: `Bearer ${jwt}`,
-                                "Content-Type": "application/json",
+                                'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
                                 pubSignId: pub,
                                 ...(priv && { privSignId: priv }),
                             }),
-                        })
+                        }),
                     )
                     .then((r) => r.json())
                     .then((json) => {
-                        if (json.status !== "DONE" || json.proofStatus !== "VALID")
-                            throw new Error("not done and valid");
+                        if (json.status !== 'DONE' || json.proofStatus !== 'VALID')
+                            throw new Error('not done and valid')
                         return {
                             pubSignKey: json.pubSignKey,
                             ...(priv && {
                                 privSignKey: json.privSignKey,
                             }),
-                        };
+                        }
                     })
-                    .catch((e:Error) => console.log("error: ", e));
+                    .catch((e: Error) => console.log('error: ', e))
             },
         },
-    };
-    let selectedLang: String = localStorage.getItem('preferredLanguage') ?? 'en-US';
+    }
+    let selectedLang: String = localStorage.getItem('preferredLanguage') ?? 'en-US'
 
     const yivi = new YiviCore({
-        debugging: false,
-        element: ".crypt-irma-qr",
+        debugging: true,
+        element: '#crypt-irma-qr',
         session,
         state: {
             serverSentEvents: false,
             polling: {
-                endpoint: "status",
+                endpoint: 'status',
                 interval: 500,
-                startState: "INITIALIZED",
+                startState: 'INITIALIZED',
             },
         },
         language: selectedLang.toLowerCase(),
-    });
+    })
 
-    yivi.use(YiviWeb);
-    yivi.use(YiviClient);
+    // sleep for half a second to allow the DOM to update
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
+    yivi.use(YiviWeb)
+    yivi.use(YiviClient)
 
     return await yivi
         .start()
-        .catch((e:Error) => console.error("failed IRMA session: ", e));
+        .catch((e: Error) => console.error('failed IRMA session: ', e))
 }
 
-export { RetrieveSignKeys };
+export { RetrieveSignKeys }

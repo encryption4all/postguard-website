@@ -83,8 +83,9 @@
         <h2><span>{$_('filesharing.title')}</span></h2>
         <p>{@html $_('filesharing.subpar1')}</p>
     </div>
+    <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
+               bind:done={EncryptState.done} />
     <div class="crypt-progress-container">
-        <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages} bind:done={EncryptState.done} />
         {#if EncryptState.encryptionState === EncryptionState.FileSelection}
             <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} />
             <MessageInput bind:message={EncryptState.message} />
