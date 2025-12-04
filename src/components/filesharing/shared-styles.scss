@@ -51,3 +51,53 @@ textarea:focus {
   font-family: Overpass;
   cursor: pointer;
 }
+
+.crypt-btn-main {
+  width: 14em;
+}
+
+@media only screen and (max-width: 400px) {
+  .crypt-btn-main {
+    width: 13em;
+  }
+
+  .crypt-btn-cancel {
+    width: 13em !important;
+  }
+}
+
+.crypt-btn {
+  border: none;
+  border-radius: 2.6em;
+  background: #000000;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  font-size: 1.15em;
+  line-height: 1.6em;
+  padding: 0.25em 0;
+  text-align: center;
+}
+
+.crypt-btn:disabled,
+.crypt-btn[disabled],
+.crypt-btn-disabled {
+  background: #e8e8e8;
+  color: #424242;
+  cursor: not-allowed;
+}
+
+.yivi-btn-logo {
+  display: flex;
+  padding-right: 1em;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.crypt-btn-main {
+  display: block;
+  padding-left: 0.25em;
+  width: 15em;
+  margin: 1em auto;
+}

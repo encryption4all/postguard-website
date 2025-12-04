@@ -14,6 +14,10 @@
         done: boolean[];
     }
 
+    let MAX_UPLOAD_SIZE = import.meta.env.VITE_MAX_UPLOAD_SIZE
+
+    let maxFileSizeMB = MAX_UPLOAD_SIZE / (1024 * 1024)
+
     let {files = $bindable(), percentages = $bindable(), done = $bindable()}: props = $props()
 
     function onFile(file: File) {
@@ -28,7 +32,8 @@
             url: "#", // Dummy URL, can't be empty
             autoProcessQueue: false, // Prevent automatic upload
             addRemoveLinks: true,
-            dictDefaultMessage: "Drop files here or click to upload."
+            dictDefaultMessage: "Drop files here or click to upload.",
+            maxFilesize: maxFileSizeMB,
         })
 
         myDropzone.on("addedfile", file => {

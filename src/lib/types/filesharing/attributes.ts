@@ -2,10 +2,10 @@ import type { AttributeCon, ISigningKey } from '@e4a/pg-wasm'
 
 export enum EncryptionState {
     FileSelection = 1,
-    Encrypting,
-    Done,
-    Error,
     Sign,
+    Encrypting,
+    Error,
+    Done,
 }
 
 export enum Lang {

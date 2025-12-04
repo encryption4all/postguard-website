@@ -13,6 +13,8 @@
     import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
     import SendButton from '$lib/components/filesharing/SendButton.svelte'
     import FileInput from '$lib/components/filesharing/FileInput.svelte'
+    import EncryptionProgress from '$lib/components/filesharing/EncryptionProgress.svelte'
+   import Error from '$lib/components/filesharing/Error.svelte'
 
     // janky way to conditionally import pg-wasm to avoid issues with SSR
     let modPromise: Promise<any>
@@ -92,10 +94,19 @@
             <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
                           bind:senderConfirm={EncryptState.senderConfirm}
                           attributes={ATTRIBUTES} />
-            <SendButton bind:encryptState={EncryptState}
+            <SendButton bind:EncryptState={EncryptState}
             />
         {:else if EncryptState.encryptionState === EncryptionState.Sign}
             <Sign isMobile={isMobileDevice} />
+        {:else if EncryptState.encryptionState === EncryptionState.Encrypting}
+            <EncryptionProgress encryptStartTime={EncryptState.encryptionState}
+                                files={EncryptState.files}
+                                recipients={EncryptState.recipients}
+                                percentages={EncryptState.percentages} />
+        {:else if EncryptState.encryptionState === EncryptionState.Error}
+            <Error bind:encryptionState={EncryptState.encryptionState}/>
+        {:else if EncryptState.encryptionState === EncryptionState.Done}
+
         {/if}
     </div>
 </div>
@@ -103,12 +114,12 @@
 <style lang="scss">
   .grid-container {
     display: grid;
+    width: 100%;
+    height: 100%;
     grid-auto-columns: 1fr 1fr 1fr;
     grid-auto-flow: column;
-    max-width: 1200px;
-    max-height: 800px;
     grid-gap: 2rem;
-    overflow: scroll;
+    overflow-y: scroll;
   }
 
   img.grid-item {

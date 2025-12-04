@@ -10,13 +10,13 @@ async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise
 
     const session = {
         start: {
-            url: `${PKG_URL}/v2/request/start`,
+            url:() => `${PKG_URL}/v2/request/start`,
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ con: [...pub, ...(priv ? priv : [])] }),
         },
         result: {
-            url: ({ sessionToken }) => `${PKG_URL}/v2/request/jwt/${sessionToken}`,            parseResponse: (r) => {
+            url: (o,{ sessionToken }) => `${PKG_URL}/v2/request/jwt/${sessionToken}`,            parseResponse: (r) => {
                 return r
                     .text()
                     .then((jwt) =>
