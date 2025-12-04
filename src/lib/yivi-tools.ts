@@ -54,7 +54,7 @@ async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise
     }
 
     const yivi = new YiviCore({
-        debugging: true,
+        debugging: false,
         element: '#crypt-irma-qr',
         session,
         state: {
