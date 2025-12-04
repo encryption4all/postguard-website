@@ -100,7 +100,7 @@
 
         // make sure these are fulfilled
         const pk = await EncryptState.pkPromise
-        const { sealStream } = await EncryptState.pkPromise
+        const { sealStream } = await EncryptState.modPromise
 
         const ts = Math.round(Date.now() / 1000)
         const enc_policy = {}
