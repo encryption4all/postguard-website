@@ -1,6 +1,6 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
-    import type {ISealOptions } from '@e4a/pg-wasm'
+    import type { ISealOptions } from '@e4a/pg-wasm'
 
     import yiviLogo from '$lib/assets/images/non-free/yivi-logo.svg'
     import { EncryptionState, type EncryptState, Lang } from '$lib/lib/types/filesharing/attributes'
@@ -11,7 +11,7 @@
 
     let Writer: Promise<any>
     if (browser) {
-        Writer = import("@transcend-io/conflux");
+        Writer = import('@transcend-io/conflux')
     } else {
         Writer = Promise.resolve(null)
     }
@@ -20,7 +20,7 @@
         EncryptState: EncryptState;
     }
 
-    let {EncryptState = $bindable()}: props = $props()
+    let { EncryptState = $bindable() }: props = $props()
 
     let canEncrypt: boolean = $state(false)
     let MAX_UPLOAD_SIZE = import.meta.env.VITE_MAX_UPLOAD_SIZE
@@ -78,11 +78,11 @@
         EncryptState.encryptStartTime = Date.now()
 
         try {
-            await applyEncryption();
+            await applyEncryption()
             EncryptState.encryptionState = EncryptionState.Done
             EncryptState.selfAborted = false
         } catch (e) {
-            console.error("Error occured during encryption: ", e);
+            console.error('Error occured during encryption: ', e)
             if (EncryptState.selfAborted === false) {
                 EncryptState.encryptionState = EncryptionState.Error
             } else {
@@ -96,71 +96,74 @@
     }
 
     async function applyEncryption() {
-        if (!canEncrypt) return;
+        if (!canEncrypt) return
 
         // make sure these are fulfilled
-        const pk = await EncryptState.pkPromise;
-        const { sealStream } = await EncryptState.pkPromise;
+        const pk = await EncryptState.pkPromise
+        const { sealStream } = await EncryptState.pkPromise
 
-        const ts = Math.round(Date.now() / 1000);
-        const enc_policy = {};
+        const ts = Math.round(Date.now() / 1000)
+        const enc_policy = {}
 
         EncryptState.recipients.forEach(({ email, extra }) => {
             enc_policy[email] = {
                 ts,
-                con: [{ t: "pbdf.sidn-pbdf.email.email", v: email }, ...extra],
-            };
-        });
+                con: [{ t: 'pbdf.sidn-pbdf.email.email', v: email }, ...extra],
+            }
+        })
 
         // also encrypt for the sender
         if (EncryptState.senderConfirm)
             enc_policy[EncryptState.sender] = {
                 ts,
                 con: [
-                    { t: "pbdf.sidn-pbdf.email.email", v: EncryptState.sender },
+                    { t: 'pbdf.sidn-pbdf.email.email', v: EncryptState.sender },
                     ...EncryptState.senderAttributes,
                 ],
-            };
+            }
 
         if (!EncryptState.pubSignKey) {
-            EncryptState.encryptionState = EncryptionState.Error;
-            return;
+            EncryptState.encryptionState = EncryptionState.Error
+            return
         }
 
         const options: ISealOptions = {
             policy: enc_policy,
             pubSignKey: EncryptState.pubSignKey,
             ...(EncryptState.privSignKey && { privSignKey: EncryptState.privSignKey }),
-        };
+        }
 
-        const uploadChunker = new Chunker(UPLOAD_CHUNK_SIZE) as TransformStream;
+        const uploadChunker = new Chunker(UPLOAD_CHUNK_SIZE) as TransformStream
 
 
+        // extremely jank way import the Conflux module and instantiate its Writer export because SSR is sometimes annoying
+        const ConfluxModule = await Writer
+        const { Writer: ConfluxWriter } = ConfluxModule ?? {}
+        if (!ConfluxWriter) {
+            throw new Error('Conflux Writer is not available')
+        }
         // Create streams that takes all input files and zips them into an output stream.
 
-        const zipTf = new (await Writer)();
+        const zipTf = new ConfluxWriter()
+        const readable = zipTf.readable as ReadableStream
+        const writeable = zipTf.writable
 
-
-
-        const readable = zipTf.readable as ReadableStream;
-        const writeable = zipTf.writable;
-
-        const writer = writeable.getWriter();
+        const writer = writeable.getWriter()
 
         EncryptState.files.forEach((f, i) => {
-            const s = createFileReadable(f);
+            const s = createFileReadable(f)
 
             writer.write({
                 name: f.name,
                 lastModified: f.lastModified,
                 stream: () => s,
-            });
-        });
+            })
+        })
 
-        writer.close();
+        writer.close()
 
-        let selectedLang: String = localStorage.getItem('preferredLanguage') ?? 'en-US';
-        const lang:Lang = (selectedLang === 'nl-NL') ? Lang.NL : Lang.EN;
+        let selectedLang: String = localStorage.getItem('preferredLanguage') ?? 'en-US'
+        const lang: Lang = (selectedLang === 'nl-NL') ? Lang.NL : Lang.EN
 
         // This is not 100% accurate due to zip and irmaseal
         // header but it's close enough for the UI.
@@ -169,60 +172,60 @@
                 EncryptState.abort,
                 EncryptState.sender,
                 EncryptState.senderConfirm,
-                EncryptState.recipients.map(({ email }) => email).join(", "),
+                EncryptState.recipients.map(({ email }) => email).join(', '),
                 EncryptState.message,
                 lang,
-                (n, last) => reportProgress(resolve, n, last)
-            ) as [WritableStream, string];
+                (n, last) => reportProgress(resolve, n, last),
+            ) as [WritableStream, string]
 
-            EncryptState.sender = sender;
+            EncryptState.sender = sender
 
             sealStream(
                 pk,
                 options,
                 readable,
-                withTransform(fileStream, uploadChunker, EncryptState.abort.signal)
-            );
-        });
+                withTransform(fileStream, uploadChunker, EncryptState.abort.signal),
+            )
+        })
 
-        await finished;
+        await finished
     }
 
     function reportProgress(resolve: () => void, uploaded: number, done: boolean) {
-        let offset = 0;
-        let percentages = EncryptState.percentages.map((p) => p);
+        let offset = 0
+        let percentages = EncryptState.percentages.map((p) => p)
         let timeouts: number[] | undefined[] = EncryptState.percentages.map(
-            (_) => undefined
-        );
+            (_) => undefined,
+        )
 
         EncryptState.files.forEach((f, i) => {
-            const startFile = offset;
-            const endFile = offset + f.size;
+            const startFile = offset
+            const endFile = offset + f.size
             if (uploaded < startFile) {
-                percentages[i] = 0;
+                percentages[i] = 0
             } else if (uploaded >= endFile) {
                 // We update to done after some time
                 // To allow smoothing of progress.
                 if (timeouts[i] === undefined) {
                     timeouts[i] = window.setTimeout(() => {
-                        const dones = EncryptState.done.map((d) => d);
-                        dones[i] = true;
-                        EncryptState.done = dones;
-                    }, 1000 * SMOOTH_TIME);
+                        const dones = EncryptState.done.map((d) => d)
+                        dones[i] = true
+                        EncryptState.done = dones
+                    }, 1000 * SMOOTH_TIME)
                 }
-                percentages[i] = 100;
+                percentages[i] = 100
             } else {
-                const uploadedOfFile = (uploaded - startFile) / f.size;
-                percentages[i] = Math.round(100 * uploadedOfFile);
+                const uploadedOfFile = (uploaded - startFile) / f.size
+                percentages[i] = Math.round(100 * uploadedOfFile)
             }
 
-            offset = endFile;
-        });
+            offset = endFile
+        })
 
-        EncryptState.percentages = percentages;
+        EncryptState.percentages = percentages
 
         if (done) {
-            window.setTimeout(() => resolve(), 1000 * SMOOTH_TIME);
+            window.setTimeout(() => resolve(), 1000 * SMOOTH_TIME)
         }
     }
 </script>
@@ -236,5 +239,5 @@
 </button>
 
 <style lang="scss">
-    @use "shared-styles";
+  @use "shared-styles";
 </style>
