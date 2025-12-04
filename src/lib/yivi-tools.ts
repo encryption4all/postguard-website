@@ -6,7 +6,7 @@ import { browser } from '$app/environment'
 
 async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise<any> {
     if (!browser) return
-    let PKG_URL = import.meta.env.VITE_MAX_UPLOAD_SIZE
+    let PKG_URL = import.meta.env.VITE_PKG_URL
 
     const session = {
         start: {
@@ -16,8 +16,7 @@ async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise
             body: JSON.stringify({ con: [...pub, ...(priv ? priv : [])] }),
         },
         result: {
-            url: ({ sessionToken }) => `${PKG_URL}/v2/request/jwt/${sessionToken}`,
-            parseResponse: (r) => {
+            url: ({ sessionToken }) => `${PKG_URL}/v2/request/jwt/${sessionToken}`,            parseResponse: (r) => {
                 return r
                     .text()
                     .then((jwt) =>
@@ -48,7 +47,11 @@ async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise
             },
         },
     }
-    let selectedLang: String = localStorage.getItem('preferredLanguage') ?? 'en-US'
+    let selectedLang: String = localStorage.getItem('preferredLanguage') ?? 'en'
+    // strip the bit after the dash to get 'en' from 'en-US'
+    if (selectedLang.includes('-')) {
+        selectedLang = selectedLang.split('-')[0]
+    }
 
     const yivi = new YiviCore({
         debugging: true,
