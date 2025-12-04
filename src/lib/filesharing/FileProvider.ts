@@ -1,5 +1,4 @@
 import { Lang } from '$lib/lib/types/filesharing/attributes'
-import { ReadableStream, WritableStream } from "web-streams-polyfill";
 
 interface FileState {
     token: string;

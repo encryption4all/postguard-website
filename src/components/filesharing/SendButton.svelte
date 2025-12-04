@@ -133,7 +133,7 @@
             ...(EncryptState.privSignKey && { privSignKey: EncryptState.privSignKey }),
         }
 
-        const uploadChunker = new Chunker(UPLOAD_CHUNK_SIZE) as TransformStream
+        const uploadChunker = new Chunker(UPLOAD_CHUNK_SIZE)
 
 
         // extremely jank way import the Conflux module and instantiate its Writer export because SSR is sometimes annoying
@@ -168,24 +168,28 @@
         // This is not 100% accurate due to zip and irmaseal
         // header but it's close enough for the UI.
         const finished = new Promise<void>(async (resolve, reject) => {
-            const [fileStream, sender] = getFileStoreStream(
-                EncryptState.abort,
-                EncryptState.sender,
-                EncryptState.senderConfirm,
-                EncryptState.recipients.map(({ email }) => email).join(', '),
-                EncryptState.message,
-                lang,
-                (n, last) => reportProgress(resolve, n, last),
-            ) as [WritableStream, string]
+            try {
+                const [fileStream, sender] = getFileStoreStream(
+                    EncryptState.abort,
+                    EncryptState.sender,
+                    EncryptState.senderConfirm,
+                    EncryptState.recipients.map(({ email }) => email).join(', '),
+                    EncryptState.message,
+                    lang,
+                    (n, last) => reportProgress(resolve, n, last),
+                )
 
-            EncryptState.sender = sender
+                EncryptState.sender = sender
 
-            sealStream(
-                pk,
-                options,
-                readable,
-                withTransform(fileStream, uploadChunker, EncryptState.abort.signal),
-            )
+                await sealStream(
+                    pk,
+                    options,
+                    readable,
+                    withTransform(fileStream, uploadChunker, EncryptState.abort.signal),
+                )
+            } catch (err) {
+                reject(err)
+            }
         })
 
         await finished
