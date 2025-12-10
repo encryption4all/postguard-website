@@ -45,11 +45,11 @@ textarea:focus {
 .add-attribute-btn {
   color: black;
   border: 1px solid black;
-  border-radius: 15px;
+  border-radius: 5px;
   background-color: white;
-  margin-right: 0.5em;
   font-family: Overpass;
   cursor: pointer;
+  padding: 2px 4px;
 }
 
 .crypt-btn-main {
@@ -100,4 +100,9 @@ textarea:focus {
   padding-left: 0.25em;
   width: 15em;
   margin: 1em auto;
+}
+
+
+h3 {
+  text-align: start;
 }

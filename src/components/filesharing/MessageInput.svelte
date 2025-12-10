@@ -10,17 +10,17 @@
 
 <div class="crypt-select-protection-input-box">
     <h3>{$_('filesharing.encryptPanel.messageHeading')}</h3>
-    <p>{$_('filesharing.encryptPanel.messageText')}</p>
     {message}
     <textarea
         placeholder={
             $_('filesharing.encryptPanel.messagePlaceholder')
         }
         required={false}
-        rows={4}
+        rows={8}
     >{message}</textarea>
 </div>
 
-<style lang="scss">
-  @use 'shared-styles';
+<style>
+    @import "shared-styles.css";
+
 </style>

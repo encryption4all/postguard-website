@@ -14,7 +14,7 @@
     import SendButton from '$lib/components/filesharing/SendButton.svelte'
     import FileInput from '$lib/components/filesharing/FileInput.svelte'
     import EncryptionProgress from '$lib/components/filesharing/EncryptionProgress.svelte'
-   import Error from '$lib/components/filesharing/Error.svelte'
+    import Error from '$lib/components/filesharing/Error.svelte'
 
     // janky way to conditionally import pg-wasm to avoid issues with SSR
     let modPromise: Promise<any>
@@ -58,7 +58,7 @@
     ]
 
     const defaultEncryptState: EncryptState = {
-        recipients: [{ email: '', extra: [] }],
+        recipients: [{ email: 'test@example.com', extra: [] }],
         sender: '',
         senderAttributes: [],
         message: '',
@@ -80,13 +80,7 @@
     let EncryptState: EncryptState = $state(defaultEncryptState)
 </script>
 
-<div class="grid-container">
-    <div class="grid-item header">
-        <h2><span>{$_('filesharing.title')}</span></h2>
-        <p>{@html $_('filesharing.subpar1')}</p>
-    </div>
-    <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
-               bind:done={EncryptState.done} />
+<div class="container">
     <div class="crypt-progress-container">
         {#if EncryptState.encryptionState === EncryptionState.FileSelection}
             <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} />
@@ -104,19 +98,21 @@
                                 recipients={EncryptState.recipients}
                                 percentages={EncryptState.percentages} />
         {:else if EncryptState.encryptionState === EncryptionState.Error}
-            <Error bind:encryptionState={EncryptState.encryptionState}/>
+            <Error bind:encryptionState={EncryptState.encryptionState} />
         {:else if EncryptState.encryptionState === EncryptionState.Done}
 
         {/if}
     </div>
+    <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
+               bind:done={EncryptState.done} />
 </div>
 
 <style lang="scss">
-  .grid-container {
+  .container {
     display: grid;
     width: 100%;
     height: 100%;
-    grid-auto-columns: 1fr 1fr 1fr;
+    grid-auto-columns: 2fr 6fr;
     grid-auto-flow: column;
     grid-gap: 2rem;
     overflow-y: scroll;
@@ -132,12 +128,6 @@
     display: flex;
     justify-content: center;
     text-align: left;
-
-    &.header {
-      min-width: 225px;
-      justify-content: start;
-      padding-top: 5em;
-    }
   }
 
   @media only screen and (max-width: 800px) {
@@ -160,6 +150,8 @@
 
   .crypt-progress-container {
     font-size: 1.15em;
+    margin-left: 12px;
+    min-width: 0;
   }
 
   @media only screen and (max-width: 500px) {

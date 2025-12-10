@@ -99,7 +99,7 @@
             "RecipientsHeading": "To",
             "RecipientsSubHeading": "Who may receive and decrypt the files?",
             "RecipientsText": "The recipient(s) will need to prove their email address with the Yivi app, as well as any other data you specify. Data about a recipient is only visible to the recipient themselves.",
-            "emailSender": "Your email address",
+            "emailSender": "Email address",
             "emailSenderHeading": "From",
             "emailSenderSubHeading": "Let the recipient(s) know these files are yours.",
             "emailSenderText": "Before sending, you must sign the files by proving your email address and any other personal data with the Yivi app.",

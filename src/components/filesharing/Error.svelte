@@ -21,10 +21,10 @@
     {$_('filesharing.tryAgain')}
 </button>
 
-<style lang="scss">
-  @use "shared-styles";
+<style>
+    @import "shared-styles.css";
 
-  .crypt-progress-error {
-    color: #ff0033;
-  }
+    .crypt-progress-error {
+        color: #ff0033;
+    }
 </style>

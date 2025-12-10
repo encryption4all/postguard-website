@@ -75,32 +75,30 @@
     </div>
 </div>
 
-<style lang="scss">
-  @use 'shared-styles';
+<style>
+    @import "shared-styles.css";
 
-  .get-irma-here-anchor .irma-logo {
-    height: 3.75em;
-    display: inline-block;
-  }
+    .get-irma-here-anchor .irma-logo {
+        height: 3.75em;
+        display: inline-block;
+    }
 
-  ;
+    .get-irma-here-anchor {
+        padding-top: 0.83em;
+        font-weight: bold;
+    }
 
-  .get-irma-here-anchor {
-    padding-top: 0.83em;
-    font-weight: bold;
-  }
+    .get-irma-here-anchor .get-irma-text {
+        display: inline-block;
+        height: 3.75em;
+        vertical-align: middle;
+        margin-left: 0.41em;
+        margin-bottom: calc(1em / 2);
+    }
 
-  .get-irma-here-anchor .get-irma-text {
-    display: inline-block;
-    height: 3.75em;
-    vertical-align: middle;
-    margin-left: 0.41em;
-    margin-bottom: calc(1em / 2);
-  }
-
-  .get-irma-buttons {
-    top: -0.83em;
-    position: relative;
-    cursor: pointer !important;
-  }
+    .get-irma-buttons {
+        top: -0.83em;
+        position: relative;
+        cursor: pointer !important;
+    }
 </style>

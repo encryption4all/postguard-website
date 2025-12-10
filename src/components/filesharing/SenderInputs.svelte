@@ -30,31 +30,32 @@
     <h3>
         {$_('filesharing.encryptPanel.emailSenderHeading')}
     </h3>
-    <h4>
-        {$_('filesharing.encryptPanel.emailSenderSubHeading')}
-    </h4>
-    <p>{$_('filesharing.encryptPanel.emailSenderText')}</p>
-    {#each addableButtons as attribute, index}
-        <div class="attribute-field">
-            <button
-                class="add-attribute-btn"
-                onclick={() => addAttribute(attribute)}>
-                + { $_('filesharing.encryptPanel.emailSenderAttributePrefix') + " " + $_('filesharing.attributes.' + attribute)}
-            </button>
-        </div>
-    {/each}
 
-    {#each senderAttributes as attribute, index}
-        <p style="display:inline; margin-left: 2em;">
-            { $_('filesharing.encryptPanel.emailSenderAttributePrefix') + " " + $_('filesharing.attributes.' + attribute.t)}
+    <div class="attributes-list">
+        <p class="added-attribute">
+            {$_('filesharing.encryptPanel.emailSender')}
         </p>
-        <button
-            class="btn-delete"
-            onclick={() =>removeAttribute(index)}
-        >
-            x
-        </button>
-    {/each}
+        {#each senderAttributes as attribute, index}
+            <p class="added-attribute">{$_('filesharing.attributes.' + attribute.t)}</p>
+            <button
+                class="remove-button"
+                onclick={() =>removeAttribute(index)}
+            > x
+            </button>
+        {/each}
+    </div>
+
+    <div class="attributes-list">
+        {#each addableButtons as attribute, index}
+            <div class="attribute-field">
+                <button
+                    class="add-attribute-btn"
+                    onclick={() => addAttribute(attribute)}>
+                    {$_('filesharing.attributes.' + attribute)} +
+                </button>
+            </div>
+        {/each}
+    </div>
     <div class="crypt-sender-receipt">
         <input
             type="checkbox"
@@ -68,15 +69,40 @@
 </div>
 
 <style lang="scss">
-  @use 'shared-styles';
+  @import "shared-styles.css";
 
   .crypt-sender-receipt > input {
     margin: 0.75em 0.5em 0 0;
     width: unset;
   }
 
-  .btn-delete {
+  .added-attribute {
+    color: black;
+    background-color: #d9d9d9;
+    font-family: Overpass;
+    text-align: start;
+    width: fit-content;
+    padding: 2px 4px;
+    border-radius: 5px;
+    font-size: 16px;
+    height: min-content;
+    margin: 0;
+  }
+
+  .attributes-list {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
+    text-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .remove-button {
     all: unset;
     cursor: pointer;
+    font-family: Overpass;
+    display: inline;
   }
+
 </style>

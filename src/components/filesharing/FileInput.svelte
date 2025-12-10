@@ -1,7 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import Dropzone from "dropzone"
-    import "dropzone/dist/dropzone.css"
+    import Dropzone from 'dropzone'
+    import 'dropzone/dist/dropzone.css'
+    import plusIcon from '$lib/assets/images/plusicon.svg'
+    import yiviLogo from '$lib/assets/images/non-free/yivi-logo.svg'
 
     // Disable auto-discover to prevent Dropzone from automatically attaching to all .dropzone elements
     Dropzone.autoDiscover = false
@@ -18,32 +20,32 @@
 
     let maxFileSizeMB = MAX_UPLOAD_SIZE / (1024 * 1024)
 
-    let {files = $bindable(), percentages = $bindable(), done = $bindable()}: props = $props()
+    let { files = $bindable(), percentages = $bindable(), done = $bindable() }: props = $props()
 
     function onFile(file: File) {
-        files = files.concat([file]);
-        percentages = percentages.concat([0]);
-        done = done.concat([false]);
+        files = files.concat([file])
+        percentages = percentages.concat([0])
+        done = done.concat([false])
     }
 
     // handle all the Dropzone setup in onMount to ensure it only runs in the browser
     onMount(() => {
-        myDropzone = new Dropzone("#my-form", {
-            url: "#", // Dummy URL, can't be empty
+        myDropzone = new Dropzone('#my-form', {
+            url: '#', // Dummy URL, can't be empty
             autoProcessQueue: false, // Prevent automatic upload
             addRemoveLinks: true,
-            dictDefaultMessage: "Drop files here or click to upload.",
+            dictDefaultMessage: 'Drop files here or click to upload.',
             maxFilesize: maxFileSizeMB,
         })
 
-        myDropzone.on("addedfile", file => {
+        myDropzone.on('addedfile', file => {
             console.log(`File added: ${file.name}`)
 
             // Add the file to our state
-            onFile(file);
+            onFile(file)
 
             // set the files as processed to avoid upload errors
-            myDropzone!.emit("complete", file)
+            myDropzone!.emit('complete', file)
         })
 
         return () => {
@@ -53,16 +55,38 @@
         }
     })
 </script>
+<form id="my-form" class="dropzone">
+    <h1 style="margin-bottom: 8px">Securely send your files with:</h1>
+    <img src={yiviLogo} alt="Yivi Logo" style="width: 120px; margin-bottom: 1rem;" />
+    <div class="dz-message" data-dz-message>
+        <img src={plusIcon} alt="Add files" />
+        <h3>Drop files here or click to upload.</h3>
+    </div>
+</form>
+<style>
+    @import "shared-styles.css";
 
-<div class="crypt-file-box" id="dropzone">
+    .dz-message {
+        padding: 10% 30%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-weight: 600;
+        background-color: #e0eaff;
+        border-radius: 10px;
+    }
 
-    <form id="my-form" class="dropzone">
-        <div class="dz-message" data-dz-message>
-            <span>Drop files here or click to upload.</span>
-        </div>
-    </form>
-</div>
+    .dz-message img {
+        margin-bottom: 1rem;
+        width: 50%;
+        height: 50%;
+    }
 
-<style lang="scss">
-  @use 'shared-styles';
+    .dropzone {
+        border: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 </style>

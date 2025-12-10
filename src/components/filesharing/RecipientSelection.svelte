@@ -28,13 +28,9 @@
     <div class="crypt-select-protection-input-box">
         <h3>
             {$_('filesharing.encryptPanel.RecipientsHeading')}
-        </h3>{" "}
-        <h4>
-            {$_('filesharing.encryptPanel.RecipientsSubHeading')}
-        </h4>
-        <p>{$_('filesharing.encryptPanel.RecipientsText')}</p>
+        </h3>
 
-        <ul class="crypt-recipient-list">
+        <div class="crypt-recipient-list">
             {#each recipients as recipient, index}
                 <RecipientSelectionFields
                     bind:recipient = {recipients[index]}
@@ -43,7 +39,7 @@
                     {attributes}
                 />
             {/each}
-        </ul>
+        </div>
 
         <button
             class="add-recipient-btn"
@@ -54,7 +50,6 @@
 
 <style lang="scss">
   @use 'shared-styles';
-
     .add-recipient-btn {
         border: 1px solid black;
         border-radius: 15px;

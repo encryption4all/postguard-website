@@ -99,7 +99,7 @@
             "RecipientsHeading": "Naar",
             "RecipientsSubHeading": "Wie mogen de bestanden ontvangen en ontsleutelen?",
             "RecipientsText": "De ontvanger(s) moeten zowel hun email adres als aanvullende gegevens die jij hier specificeert aantonen. Deze data zijn niet zichtbaar aan anderen.",
-            "emailSender": "Jouw emailadres",
+            "emailSender": "Emailadres",
             "emailSenderHeading": "Van",
             "emailSenderSubHeading": "Laat de ontvanger(s) weten dat deze bestanden van jou afkomstig zijn.",
             "emailSenderText": "Voordat je de bestanden kan sturen moet je aantonen dat je deze gegevens bezit.",
