@@ -10,13 +10,11 @@
 
 <div class="crypt-select-protection-input-box">
     <h3>{$_('filesharing.encryptPanel.messageHeading')}</h3>
+    <p>{$_('filesharing.encryptPanel.messageText')}</p>
     {message}
     <textarea
-        placeholder={
-            $_('filesharing.encryptPanel.messagePlaceholder')
-        }
         required={false}
-        rows={8}
+        rows={5}
     >{message}</textarea>
 </div>
 

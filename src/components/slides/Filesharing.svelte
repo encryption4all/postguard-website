@@ -81,6 +81,8 @@
 </script>
 
 <div class="container">
+    <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
+               bind:done={EncryptState.done} />
     <div class="crypt-progress-container">
         {#if EncryptState.encryptionState === EncryptionState.FileSelection}
             <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} />
@@ -103,8 +105,7 @@
 
         {/if}
     </div>
-    <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
-               bind:done={EncryptState.done} />
+
 </div>
 
 <style lang="scss">
@@ -112,10 +113,10 @@
     display: grid;
     width: 100%;
     height: 100%;
-    grid-auto-columns: 2fr 6fr;
+    grid-auto-columns: 6fr 2fr;
     grid-auto-flow: column;
     grid-gap: 2rem;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   img.grid-item {
@@ -149,9 +150,12 @@
   }
 
   .crypt-progress-container {
+    display: flex;
+    flex-direction: column;
     font-size: 1.15em;
-    margin-left: 12px;
     min-width: 0;
+    gap: 1em;
+    margin: 1em 1em 0 0;
   }
 
   @media only screen and (max-width: 500px) {

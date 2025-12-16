@@ -58,7 +58,7 @@ h5,
 a,
 p,
 li,
-label, td, tr {
+label, td, tr, summary {
     font-family: 'Overpass';
     font-style: normal;
     color: #022e3d;
@@ -77,6 +77,10 @@ h2 {
     font-weight: 800;
     line-height: 30px;
     letter-spacing: 0em;
+}
+
+summary {
+    cursor: pointer;
 }
 
 html,
@@ -106,7 +110,6 @@ body {
 
 .swiper-slide {
     display: flex;
-    text-align: center;
     align-items: center;
     justify-content: center;
     overflow: hidden;

@@ -1,18 +1,10 @@
 .crypt-select-protection-input-box {
   background-color: white;
   padding-left: 1em;
-  margin-bottom: 2.4em;
   border-left: 2px solid black;
-}
+  display: flex;
+  flex-direction: column;
 
-@media only screen and (max-width: 500px) {
-  .crypt-select-protection-input-box {
-    margin-bottom: 1.25em;
-  }
-}
-
-.crypt-select-protection-input-box:last-child {
-  margin-bottom: 1em;
 }
 
 .crypt-select-protection-input-box h4 {
@@ -27,8 +19,7 @@
 .crypt-select-protection-input-box input,
 textarea {
   font-size: 1.1em;
-  border: 0;
-  box-shadow: 0pt 1pt 0pt 0pt #ebebeb, 0px 1pt 0pt 0pt #ebebeb;
+  border: 1px solid black;
   width: 90%;
   resize: none;
 }
@@ -39,7 +30,7 @@ textarea:focus {
 }
 
 .attribute-field {
-  margin-top: 1em;
+  margin-top: 0.3em;
 }
 
 .add-attribute-btn {
@@ -103,6 +94,14 @@ textarea:focus {
 }
 
 
-h3 {
+h3, p {
   text-align: start;
+  margin: 0;
+}
+
+button {
+  all: unset;
+  cursor: pointer;
+  font-family: 'Overpass';
+  font-style: normal;
 }

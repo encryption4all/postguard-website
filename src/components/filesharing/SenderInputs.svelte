@@ -2,6 +2,7 @@
     import type { AttType } from '$lib/lib/types/filesharing/attributes'
     import type { AttributeCon } from '@e4a/pg-wasm'
     import { _ } from 'svelte-i18n'
+    import closebutton from '$lib/assets/images/google-icons/close.svg'
 
     interface props {
         senderAttributes: AttributeCon;
@@ -30,18 +31,24 @@
     <h3>
         {$_('filesharing.encryptPanel.emailSenderHeading')}
     </h3>
+    <!--browser native more info dropdown, no JS needed-->
+    <details>
+        <summary>
+            {$_('filesharing.encryptPanel.emailSenderSubHeadingToggle')}
+        </summary>
+        <p>
+            {$_('filesharing.encryptPanel.emailSenderSubHeading')}
+        </p>
+    </details>
 
     <div class="attributes-list">
         <p class="added-attribute">
             {$_('filesharing.encryptPanel.emailSender')}
         </p>
         {#each senderAttributes as attribute, index}
-            <p class="added-attribute">{$_('filesharing.attributes.' + attribute.t)}</p>
-            <button
-                class="remove-button"
-                onclick={() =>removeAttribute(index)}
-            > x
-            </button>
+            <button class="added-attribute" onclick={() =>removeAttribute(index)}>
+                {$_('filesharing.attributes.' + attribute.t)}
+                <img style="width: 20px" src={closebutton} alt="close button" /></button>
         {/each}
     </div>
 
@@ -72,22 +79,30 @@
   @import "shared-styles.css";
 
   .crypt-sender-receipt > input {
-    margin: 0.75em 0.5em 0 0;
+    margin: 0.5em 0 0 0;
     width: unset;
   }
 
   .added-attribute {
+    display: flex;
+    align-items: center;
     color: black;
     background-color: #d9d9d9;
     font-family: Overpass;
     text-align: start;
     width: fit-content;
-    padding: 2px 4px;
+    padding: 4px 6px;
     border-radius: 5px;
     font-size: 16px;
     height: min-content;
     margin: 0;
   }
+
+  /* if the added attributed contains an image remove 2px padding to account for the extra space created by the svg */
+    .added-attribute img {
+        margin-right: -4px;
+        padding: 0;
+    }
 
   .attributes-list {
     display: flex;
@@ -98,11 +113,7 @@
     overflow-x: auto;
   }
 
-  .remove-button {
-    all: unset;
-    cursor: pointer;
-    font-family: Overpass;
-    display: inline;
+  summary {
+    font-size: 0.8em;
   }
-
 </style>
