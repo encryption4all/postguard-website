@@ -6,7 +6,7 @@
     import LocaleSwitcher from './LocaleSwitcher.svelte'
     import { selected } from '$lib/stores'
 
-    let items = $derived(['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map((s) =>
+    let items = $derived(['fs', 'addons', 'fallback', 'about', 'pol'].map((s) =>
         $_(`header.${s}`)
     ))
 </script>

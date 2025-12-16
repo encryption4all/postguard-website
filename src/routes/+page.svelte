@@ -15,7 +15,6 @@
     import '$lib/global.scss'
     import {
         Filesharing,
-        Home,
         About,
         Addons,
         Fallback,
@@ -55,16 +54,6 @@
     on:slideChange={(e) => {
         selected.set(e.detail[0].activeIndex)
 
-        // Remove downloadUuid when sliding away, resetting the filesharing slide.
-        if (!initial && $selected !== 0 && uuid) {
-            params.delete('download')
-            params.delete('recipient')
-            const url = (params ? '?' + params : '') + window.location.hash
-            window.history.pushState(null, '', url)
-            uuid = null
-            recipient = null
-        }
-
         if (initial) initial = false
     }}
     on:swiper={(e) => {
@@ -76,7 +65,6 @@
     noSwipingSelector={'p, li'}
 >
     <SwiperSlide data-hash="filesharing"><Filesharing /></SwiperSlide>
-    <SwiperSlide><Home /></SwiperSlide>
     <SwiperSlide data-hash="addons"><Addons /></SwiperSlide>
     <SwiperSlide data-hash="fallback"><Fallback /></SwiperSlide>
     <SwiperSlide data-hash="about"><About /></SwiperSlide>

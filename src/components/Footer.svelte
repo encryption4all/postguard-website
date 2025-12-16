@@ -9,7 +9,7 @@
 
     import { selected } from '$lib/stores'
 
-    let items = $derived(['fs', 'home', 'addons', 'fallback', 'about', 'pol'].map((s) =>
+    let items = $derived(['fs', 'addons', 'fallback', 'about', 'pol'].map((s) =>
         $_(`footer.${s}`)
     ))
 </script>
@@ -100,7 +100,7 @@
     .swiper-button-next {
         display: flex;
         min-width: 100px;
-        min-height: 50px;
+        min-height: 30px;
         grid-column-start: 1;
 
         div {
