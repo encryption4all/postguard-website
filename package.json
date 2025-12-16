@@ -57,8 +57,10 @@
         "@privacybydesign/yivi-web": "^0.1.2",
         "@transcend-io/conflux": "^6.1.1",
         "@types/dropzone": "^5.7.9",
+        "country-flag-icons": "^1.6.4",
         "dropzone": "^6.0.0-beta.2",
         "jwt-decode": "^3.1.2",
+        "libphonenumber-js": "^1.12.31",
         "postal-mime": "^1.0.16",
         "svelte-material-icons": "^3.0.4",
         "web-streams-polyfill": "^4.2.0"

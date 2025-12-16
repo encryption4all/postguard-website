@@ -1,11 +1,18 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
+    import { getCountryCallingCode, type CountryCode } from 'libphonenumber-js/mobile'
+    import * as flags from 'country-flag-icons/string/3x2'
     import removeIcon from '$lib/assets/images/google-icons/remove.svg'
 
     interface props {
         translation_key: string;
         value?: string;
         deleteAction?: () => void;
+    }
+
+    function getCountryPrefix(countryCode: string): string {
+        const country = countryCode.toUpperCase() as CountryCode
+        return '+' + getCountryCallingCode(country)
     }
 
     // So we have a unique id for the label-input pair so we can handle multiple inputs correctly in a list even with multiple recipients
@@ -18,9 +25,14 @@
 
     let selectedCountryPrefix = $state('+31')
 
+    const allowedCountries = ['at', 'be', 'bg', 'cy', 'dk', 'de', 'ee', 'fi', 'fr', 'gr', 'hu', 'ie',
+        'is', 'it', 'hr', 'lv', 'lt', 'li', 'lu', 'mt', 'mc', 'nl', 'no', 'at',
+        'pl', 'pt', 'ro', 'si', 'sk', 'es', 'cz', 'gb', 'se', 'ch']
+
     function handleInput() {
         value = selectedCountryPrefix + showingValue
     }
+
 </script>
 
 <label style="margin-top: 0;" for={randomId}>
@@ -28,6 +40,14 @@
 </label>
 <div class="optional-value">
     {#if translation_key === 'filesharing.attributes.pbdf.sidn-pbdf.mobilenumber.mobilenumber'}
+        {@html flags.NL}
+        <select bind:value={selectedCountryPrefix}>
+            {#each allowedCountries as country}
+                <option value={getCountryPrefix(country)}>
+                    {country.toUpperCase()} ({getCountryPrefix(country)})
+                </option>
+            {/each}
+        </select>
         <input
             id={randomId}
             class="removable-text-input field-height"

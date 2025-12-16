@@ -623,6 +623,11 @@ cookie@^0.6.0:
   resolved "https://registry.npmjs.org/cookie/-/cookie-0.6.0.tgz"
   integrity sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==
 
+country-flag-icons@^1.6.4:
+  version "1.6.4"
+  resolved "https://registry.npmjs.org/country-flag-icons/-/country-flag-icons-1.6.4.tgz"
+  integrity sha512-Z3Zi419FI889tlElMsVhCIS5eRkiLDWixr576J5DPiTe5RGxpbRi+enMpHdYVp5iK5WFjr8P/RgyIFAGhFsiFg==
+
 cross-spawn@^7.0.2:
   version "7.0.3"
   resolved "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz"
@@ -1265,6 +1270,11 @@ levn@^0.4.1:
   dependencies:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
+
+libphonenumber-js@^1.12.31:
+  version "1.12.31"
+  resolved "https://registry.npmjs.org/libphonenumber-js/-/libphonenumber-js-1.12.31.tgz"
+  integrity sha512-Z3IhgVgrqO1S5xPYM3K5XwbkDasU67/Vys4heW+lfSBALcUZjeIIzI8zCLifY+OCzSq+fpDdywMDa7z+4srJPQ==
 
 locate-character@^3.0.0:
   version "3.0.0"
