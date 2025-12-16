@@ -2,7 +2,7 @@
     import type { AttType } from '$lib/lib/types/filesharing/attributes'
     import type { AttributeCon } from '@e4a/pg-wasm'
     import { _ } from 'svelte-i18n'
-    import closebutton from '$lib/assets/images/google-icons/close.svg'
+    import AttributeButton from '$lib/components/filesharing/attributes/AttributeButton.svelte'
 
     interface props {
         senderAttributes: AttributeCon;
@@ -42,25 +42,23 @@
     </details>
 
     <div class="attributes-list">
-        <p class="added-attribute">
-            {$_('filesharing.encryptPanel.emailSender')}
-        </p>
+        <AttributeButton type="added"
+                         translation_key={'filesharing.encryptPanel.emailSender'}
+        />
         {#each senderAttributes as attribute, index}
-            <button class="added-attribute" onclick={() =>removeAttribute(index)}>
-                {$_('filesharing.attributes.' + attribute.t)}
-                <img style="width: 20px" src={closebutton} alt="close button" /></button>
+            <AttributeButton type="added"
+                 translation_key={'filesharing.attributes.' + attribute.t}
+                 clickAction={() => removeAttribute(index)}
+            />
         {/each}
     </div>
 
-    <div class="attributes-list">
-        {#each addableButtons as attribute, index}
-            <div class="attribute-field">
-                <button
-                    class="add-attribute-btn"
-                    onclick={() => addAttribute(attribute)}>
-                    {$_('filesharing.attributes.' + attribute)} +
-                </button>
-            </div>
+    <div class="attributes-list add-list">
+        {#each addableButtons as attribute}
+            <AttributeButton type="add"
+                 translation_key={'filesharing.attributes.' + attribute}
+                 clickAction={() => addAttribute(attribute)}
+            />
         {/each}
     </div>
     <div class="crypt-sender-receipt">
@@ -83,37 +81,20 @@
     width: unset;
   }
 
-  .added-attribute {
-    display: flex;
-    align-items: center;
-    color: black;
-    background-color: #d9d9d9;
-    font-family: Overpass;
-    text-align: start;
-    width: fit-content;
-    padding: 4px 6px;
-    border-radius: 5px;
-    font-size: 16px;
-    height: min-content;
-    margin: 0;
-  }
-
-  /* if the added attributed contains an image remove 2px padding to account for the extra space created by the svg */
-    .added-attribute img {
-        margin-right: -4px;
-        padding: 0;
-    }
-
-  .attributes-list {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    width: 100%;
-    text-wrap: nowrap;
-    overflow-x: auto;
+  .add-list {
+    margin-top: 0.3em;
   }
 
   summary {
     font-size: 0.8em;
+  }
+
+  details {
+    margin-bottom: 0.3em;
+  }
+
+  details p {
+    border-left: 2px solid black;
+    padding-left: 4px;
   }
 </style>

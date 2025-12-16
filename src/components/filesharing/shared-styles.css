@@ -29,20 +29,6 @@ textarea:focus {
   outline: none;
 }
 
-.attribute-field {
-  margin-top: 0.3em;
-}
-
-.add-attribute-btn {
-  color: black;
-  border: 1px solid black;
-  border-radius: 5px;
-  background-color: white;
-  font-family: Overpass;
-  cursor: pointer;
-  padding: 2px 4px;
-}
-
 .crypt-btn-main {
   width: 14em;
 }
@@ -91,6 +77,15 @@ textarea:focus {
   padding-left: 0.25em;
   width: 15em;
   margin: 1em auto;
+}
+
+.attributes-list {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  width: 100%;
+  text-wrap: nowrap;
+  overflow-x: auto;
 }
 
 

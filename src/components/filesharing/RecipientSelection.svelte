@@ -1,6 +1,7 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
     import RecipientSelectionFields from '$lib/components/filesharing/RecipientSelectionFields.svelte'
+    import addIcon from '$lib/assets/images/google-icons/add.svg'
     import type { AttributeCon } from '@e4a/pg-wasm'
     import type { AttType } from '$lib/lib/types/filesharing/attributes'
 
@@ -26,9 +27,23 @@
 </script>
 <div>
     <div class="crypt-select-protection-input-box">
-        <h3>
-            {$_('filesharing.encryptPanel.RecipientsHeading')}
-        </h3>
+        <div class="recipient-heading">
+            <h3>
+                {$_('filesharing.encryptPanel.RecipientsHeading')}
+            </h3>
+
+            <button
+                onclick={addRecipient}>
+                <img
+                    style="width: 24px; vertical-align: middle; margin-right: 0.2em;"
+                    src={addIcon}
+                    alt="add recipient"
+                />
+            </button>
+        </div>
+        <p>
+            {$_('filesharing.encryptPanel.RecipientsText')}
+        </p>
 
         <div class="crypt-recipient-list">
             {#each recipients as recipient, index}
@@ -40,11 +55,6 @@
                 />
             {/each}
         </div>
-
-        <button
-            class="add-recipient-btn"
-            onclick={addRecipient}>+ {$_('filesharing.encryptPanel.addRecipient')}
-        </button>
     </div>
 </div>
 
@@ -60,4 +70,14 @@
         margin-bottom: 1em;
         margin-top: 1em;
     }
+
+  p {
+    font-size: 0.8em;
+  }
+
+  .recipient-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 </style>

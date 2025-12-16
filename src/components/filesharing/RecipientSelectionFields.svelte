@@ -2,6 +2,9 @@
     import { _ } from 'svelte-i18n'
     import type { AttributeCon } from '@e4a/pg-wasm'
     import type { AttType } from '$lib/lib/types/filesharing/attributes'
+    import closebutton from '$lib/assets/images/google-icons/close.svg'
+    import AttributeButton from '$lib/components/filesharing/attributes/AttributeButton.svelte'
+    import MultiInput from '$lib/components/filesharing/attributes/MultiInput.svelte'
 
     interface props {
         recipient: { email: string; extra: AttributeCon };
@@ -21,50 +24,60 @@
 </script>
 
 <li class="crypt-recipient">
+    <div class="recipient-heading">
+        <h3>
+            {$_('filesharing.encryptPanel.emailRecipient')}
+        </h3>
+        <button
+            class="btn-delete"
+            onclick={remove}
+        >
+            <img style="width: 24px" src={closebutton} alt="close button" />
+        </button>
+    </div>
     <input
         placeholder={
                 $_('filesharing.encryptPanel.emailRecipient')
             }
         type="email"
         required
+        class="email-input"
         bind:value={recipient.email}
     />
-    <button
-        class="btn-delete"
-        onclick={remove}
-    >
-        x
-    </button>
 
-    {#each recipient.extra as attribute, index}
-        <div class="attribute-field">
-            <input
-                placeholder={`${recipient.email}${recipient.email !== "" ? "'s" : ""} ${$_('filesharing.attributes.' + attribute.t)}`}
-                required
-                value={attribute.v}
-            />
-            <button
-                class="btn-delete"
-                onclick={(e) => {
+
+    <h3 style="margin-top: 1em;">
+        {$_('filesharing.encryptPanel.RecipientsOptionalHeading')}
+    </h3>
+    <div class="optionals-container">
+        {#each recipient.extra as attribute, index}
+            <MultiInput
+                translation_key={'filesharing.attributes.' + attribute.t}
+                bind:value={attribute.v}
+                deleteAction={() => {
                     recipient.extra.splice(index, 1)
                 }}
-            >
-                x
-            </button>
+            />
+        {/each}
+        <div class="attributes-list">
+            {#each addableButtons as attribute}
+                <AttributeButton type="add"
+                                 translation_key={'filesharing.attributes.' + attribute}
+                                 clickAction={() => addAttribute(attribute)}
+                />
+            {/each}
         </div>
-    {/each}
-
-    {#each addableButtons as attribute}
-        <button
-            class="add-attribute-btn"
-            onclick={() => addAttribute(attribute)}>
-            + {$_('filesharing.attributes.' + attribute)}
-        </button>
-    {/each}
+    </div>
 </li>
 
 <style lang="scss">
   @use 'shared-styles';
+
+  .crypt-recipient {
+    background-color: #E9E9E9;
+    padding: 0.4em;
+    border-radius: 5px;
+  }
 
   .crypt-recipient:not(:last-child) {
     margin-bottom: 1.5em;
@@ -73,5 +86,22 @@
   .btn-delete {
     all: unset;
     cursor: pointer;
+  }
+
+  .recipient-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .email-input {
+    background-color: #E9E9E9;
+    border: none;
+    border-bottom: solid 2px black;
+  }
+
+  .optionals-container {
+    border-left: 2px solid black;
+    padding-left: 4px;
   }
 </style>

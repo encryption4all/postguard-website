@@ -95,10 +95,10 @@
         },
         "encryptPanel": {
             "header": "ENCRYPT & UPLOAD",
-            "emailRecipient": "Recipient's email",
             "RecipientsHeading": "Recipient(s)",
-            "RecipientsSubHeading": "Who may receive and decrypt the files?",
-            "RecipientsText": "The recipient(s) will need to prove their email address with the Yivi app, as well as any other data you specify. Data about a recipient is only visible to the recipient themselves.",
+            "emailRecipient": "Email",
+            "RecipientsText": "What do people have to prove with their wallet?\nThis data will only be visible to them.",
+            "RecipientsOptionalHeading": "Optional attributes",
             "emailSender": "Email address",
             "emailSenderHeading": "Your data",
             "emailSenderSubHeadingToggle": "Why do you need this data?",
