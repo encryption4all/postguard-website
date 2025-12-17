@@ -232,16 +232,43 @@
             window.setTimeout(() => resolve(), 1000 * SMOOTH_TIME)
         }
     }
+    let lang = $state('nl')
+    if (browser) {
+        lang = (localStorage.getItem('preferredLanguage') ?? 'nl-NL').substring(0, 2)
+    }
 </script>
 
 <button
     class="crypt-btn-main crypt-btn yivi-btn-logo {canEncrypt ? '' : ' crypt-btn-disabled'}"
     onclick={onSign}
 >
-    <img src={yiviLogo} alt="yivi-logo" width={36} height={20} />
+    <img src={yiviLogo} alt="yivi-logo" width={50} height={27} />
     {$_('filesharing.encryptPanel.encryptSend')}
 </button>
 
+<a href={"https://yivi.app/" + lang} target="_blank" class="link-decoration">
+    {$_('filesharing.encryptPanel.yiviInfo')}
+</a>
 <style lang="scss">
   @use "shared-styles";
+
+  .crypt-btn-main {
+    display: flex;
+    align-items: center;
+    padding: 0.25em 0.5em;
+    width: 90%;
+    text-wrap: nowrap;
+    margin: 1em auto;
+  }
+
+  @media only screen and (max-width: 400px) {
+    .crypt-btn-main {
+      width: 13em;
+    }
+  }
+
+  .link-decoration {
+    text-align: center;
+    color: #549FF0 !important;
+  }
 </style>

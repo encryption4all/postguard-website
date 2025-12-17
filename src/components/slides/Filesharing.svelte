@@ -12,7 +12,7 @@
     import MessageInput from '$lib/components/filesharing/MessageInput.svelte'
     import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
     import SendButton from '$lib/components/filesharing/SendButton.svelte'
-    import FileInput from '$lib/components/filesharing/FileInput.svelte'
+    import FileInput from '$lib/components/filesharing/inputs/FileInput.svelte'
     import EncryptionProgress from '$lib/components/filesharing/EncryptionProgress.svelte'
     import Error from '$lib/components/filesharing/Error.svelte'
 

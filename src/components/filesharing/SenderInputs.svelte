@@ -2,7 +2,7 @@
     import type { AttType } from '$lib/lib/types/filesharing/attributes'
     import type { AttributeCon } from '@e4a/pg-wasm'
     import { _ } from 'svelte-i18n'
-    import AttributeButton from '$lib/components/filesharing/attributes/AttributeButton.svelte'
+    import AttributeButton from '$lib/components/filesharing/inputs/AttributeButton.svelte'
 
     interface props {
         senderAttributes: AttributeCon;

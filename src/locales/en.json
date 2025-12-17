@@ -94,7 +94,12 @@
             "verifiedExtra": "The files were signed using"
         },
         "encryptPanel": {
-            "header": "ENCRYPT & UPLOAD",
+            "fileBox": {
+                "tagline": "Securely send your files",
+                "upperTextDropZone": "Drag & drop files <br/> or",
+                "lowerTextDropZone": "click to upload <br/> (max. 2GB)"
+            },
+
             "RecipientsHeading": "Recipient(s)",
             "emailRecipient": "Email",
             "RecipientsText": "What do people have to prove with their wallet?\nThis data will only be visible to them.",
@@ -103,13 +108,10 @@
             "emailSenderHeading": "Your data",
             "emailSenderSubHeadingToggle": "Why do you need this data?",
             "emailSenderSubHeading": "Let the recipient(s) know these files are yours.\nBefore sending, you sign the files by proving your\nemail address and any other personal data with the Yivi app.",
-            "emailSenderText": "Before sending, you must sign the files by proving your email address and any other personal data with the Yivi app.",
-            "emailSenderAttributePrefix": "Your",
-            "emailRecipientAttributePrefix": "Recipient's",
             "messageHeading": "Message (optional)",
             "messageText": "This message will not be encrypted.",
-            "messageAnonymous": "Attention! This message is sent anonymously so please be careful when downloading and opening the files.",
             "encryptSend": "Sign & send",
+            "yiviInfo": "What is Yivi?",
             "encrypting": "Encrypting & uploading...",
             "encryptingInfo": "Your files are being encrypted first and afterwards are sent to: ",
             "succes": "Successfully encrypted and uploaded",

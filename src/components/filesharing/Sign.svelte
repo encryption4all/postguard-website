@@ -78,7 +78,7 @@
 <style>
     @import "shared-styles.css";
 
-    .get-irma-here-anchor .irma-logo {
+    .irma-logo {
         height: 3.75em;
         display: inline-block;
     }

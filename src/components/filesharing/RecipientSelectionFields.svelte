@@ -3,8 +3,8 @@
     import type { AttributeCon } from '@e4a/pg-wasm'
     import type { AttType } from '$lib/lib/types/filesharing/attributes'
     import closebutton from '$lib/assets/images/google-icons/close.svg'
-    import AttributeButton from '$lib/components/filesharing/attributes/AttributeButton.svelte'
-    import MultiInput from '$lib/components/filesharing/attributes/MultiInput.svelte'
+    import AttributeButton from '$lib/components/filesharing/inputs/AttributeButton.svelte'
+    import MultiInput from '$lib/components/filesharing/inputs/MultiInput.svelte'
 
     interface props {
         recipient: { email: string; extra: AttributeCon };
@@ -61,9 +61,10 @@
         {/each}
         <div class="attributes-list">
             {#each addableButtons as attribute}
-                <AttributeButton type="add"
-                                 translation_key={'filesharing.attributes.' + attribute}
-                                 clickAction={() => addAttribute(attribute)}
+                <AttributeButton
+                    type="add"
+                    translation_key={'filesharing.attributes.' + attribute}
+                    clickAction={() => addAttribute(attribute)}
                 />
             {/each}
         </div>
@@ -101,6 +102,9 @@
   }
 
   .optionals-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
     border-left: 2px solid black;
     padding-left: 4px;
   }
