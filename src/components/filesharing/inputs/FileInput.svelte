@@ -5,6 +5,7 @@
     import 'dropzone/dist/dropzone.css'
     import plusIcon from '$lib/assets/images/plusicon.svg'
     import UploadedFileTemplate from '$lib/components/filesharing/inputs/UploadedFileTemplate.svelte'
+    import { EncryptionState } from '$lib/lib/types/filesharing/attributes'
 
     // Disable auto-discover to prevent Dropzone from automatically attaching to all .dropzone elements
     Dropzone.autoDiscover = false
@@ -15,13 +16,14 @@
         files: File[];
         percentages: number[];
         done: boolean[];
+        stage: EncryptionState;
     }
 
     let MAX_UPLOAD_SIZE = import.meta.env.VITE_MAX_UPLOAD_SIZE
 
     let maxFileSizeMB = MAX_UPLOAD_SIZE / (1024 * 1024)
 
-    let { files = $bindable(), percentages = $bindable(), done = $bindable() }: props = $props()
+    let { files = $bindable(), percentages = $bindable(), done = $bindable(), stage = $bindable() }: props = $props()
 
     function onFile(file: File) {
         files = files.concat([file])
@@ -72,12 +74,12 @@
 <form id="my-form" class="dropzone">
     <!-- so dropzone can get the template but its invisible -->
     <div style="display: none">
-        <UploadedFileTemplate />
+        <UploadedFileTemplate bind:stage={stage} />
     </div>
     <h1 style="margin-bottom: 8px">{$_('filesharing.encryptPanel.fileBox.tagline')}</h1>
 
-    {#if files.length === 0}
-        <div class="dz-message" data-dz-message>
+    {#if files.length <= 0}
+        <div class="dz-message middle-block-size" data-dz-message>
             <h2>
                 {@html $_('filesharing.encryptPanel.fileBox.upperTextDropZone')}
             </h2>
@@ -85,7 +87,8 @@
             <h2>{@html $_('filesharing.encryptPanel.fileBox.lowerTextDropZone')}</h2>
         </div>
     {/if}
-    <div id="previews" class="dz-previews"></div>
+    <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be drug -->
+    <div id="previews" class="dz-previews middle-block-size" class:hidden={files.length <= 0}></div>
 </form>
 
 
@@ -96,21 +99,8 @@
         margin: 0;
     }
 
-    .dz-message {
-        padding: 10% 30%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        font-weight: 600;
-        background-color: #e0eaff;
-        border-radius: 10px;
-        margin: 0;
-    }
-
-    .dz-message img {
-        margin-bottom: 1rem;
-        width: 50%;
-        height: 50%;
+    .hidden {
+        display: none !important;
     }
 
     .dropzone {
@@ -121,9 +111,29 @@
         align-items: center;
     }
 
-    /* layout for the separate previews container */
+    .middle-block-size {
+        height: 50vh;
+    }
+
+    .dz-message {
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        background-color: #e0eaff;
+        border-radius: 10px;
+        margin: 0;
+    }
+
+    .dz-message img {
+        margin-bottom: 1rem;
+        width: 8em
+    }
+
     .dz-previews {
-        margin-top: 1rem;
+        width: 90%;
         display: flex;
         flex-direction: column;
         gap: 0.5rem;

@@ -1,12 +1,20 @@
-<script>
+<script lang="ts">
 import remove from '$lib/assets/images/google-icons/remove.svg';
 import file from '$lib/assets/images/google-icons/file.svg';
+import { EncryptionState } from '$lib/lib/types/filesharing/attributes.js'
+
+interface props {
+    stage: EncryptionState;
+}
+
+let { stage= $bindable() }: props = $props()
+
 </script>
 
 <div class="files" id="template">
     <div>
         <img class="preview-img"
-             src={file} data-dz-thumbnail alt="file image preview" />
+             src={file} data-dz-thumbnail alt="file preview (icon)" />
         <div><p data-dz-name></p></div>
     </div>
 

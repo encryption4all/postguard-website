@@ -82,7 +82,7 @@
 
 <div class="container">
     <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
-               bind:done={EncryptState.done} />
+               bind:done={EncryptState.done} bind:stage={EncryptState.encryptionState} />
     <div class="crypt-progress-container">
         {#if EncryptState.encryptionState === EncryptionState.FileSelection}
             <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} />
