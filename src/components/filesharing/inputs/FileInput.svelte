@@ -4,6 +4,8 @@
     import Dropzone from 'dropzone'
     import 'dropzone/dist/dropzone.css'
     import plusIcon from '$lib/assets/images/plusicon.svg'
+    import rawAdd from '$lib/assets/images/google-icons/add.svg?raw'
+    import BasketDrawing from '$lib/assets/images/basket.svg'
     import UploadedFileTemplate from '$lib/components/filesharing/inputs/UploadedFileTemplate.svelte'
     import { EncryptionState } from '$lib/lib/types/filesharing/attributes'
 
@@ -39,7 +41,6 @@
         myDropzone = new Dropzone('#my-form', {
             url: '#', // Dummy URL, can't be empty
             autoProcessQueue: false, // Prevent automatic upload
-            dictDefaultMessage: 'Drop files here or click to upload.',
             maxFilesize: maxFileSizeMB,
             previewsContainer: '#previews',
             previewTemplate: previewTemplate,
@@ -71,29 +72,40 @@
         }
     })
 </script>
-<form id="my-form" class="dropzone">
+<form id="my-form" class="dropzone" class:dropzone-with-files={files.length > 0}>
     <!-- so dropzone can get the template but its invisible -->
-    <div style="display: none">
+    <div class="hidden">
         <UploadedFileTemplate bind:stage={stage} />
     </div>
-    <h1 style="margin-bottom: 8px">{$_('filesharing.encryptPanel.fileBox.tagline')}</h1>
+    <div class="dz-message">
+        <h1 style="margin-bottom: 8px; text-align: center"
+            class:mobile-hide={files.length > 0}>
+            {$_('filesharing.encryptPanel.fileBox.tagline')}
+        </h1>
 
-    {#if files.length <= 0}
-        <div class="dz-message middle-block-size" data-dz-message>
-            <h2>
-                {@html $_('filesharing.encryptPanel.fileBox.upperTextDropZone')}
-            </h2>
-            <img src={plusIcon} alt="Add files" />
-            <h2>{@html $_('filesharing.encryptPanel.fileBox.lowerTextDropZone')}</h2>
-        </div>
-    {/if}
-    <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
-    <div id="previews" class="dz-previews middle-block-size" class:hidden={files.length <= 0}></div>
+        {#if files.length <= 0}
+            <div class="upload-butt middle-block-size">
+                <h2 class="top-upload-text">
+                    {@html $_('filesharing.encryptPanel.fileBox.upperTextDropZone')}
+                </h2>
+                <img src={plusIcon} alt="Add files" />
+                <h2 class="bottom-upload-text">{@html $_('filesharing.encryptPanel.fileBox.lowerTextDropZone')}</h2>
+            </div>
+            <img src={BasketDrawing} alt="Basket drawing" class="drawing" />
+        {/if}
+
+        <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
+        <div id="previews" class="middle-block-size dz-previews" class:hidden={files.length <= 0}></div>
+        <button class="dz-message post-upload-button desktop-hide" class:hidden={files.length <= 0}>{@html rawAdd}
+            Upload file
+        </button>
+    </div>
 </form>
 
 
 <style>
     @import "../shared-styles.css";
+    @import "$lib/shared-styles.css";
 
     h2 {
         margin: 0;
@@ -105,6 +117,16 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        height: 100%;
+    }
+
+    .dz-message {
+        margin: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     .middle-block-size {
@@ -112,7 +134,7 @@
         width: 70%;
     }
 
-    .dz-message {
+    .upload-butt {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -123,7 +145,7 @@
         margin: 0;
     }
 
-    .dz-message img {
+    .upload-butt img {
         margin-bottom: 1rem;
         width: 8em
     }
@@ -134,5 +156,63 @@
         gap: 0.5rem;
 
         overflow: auto;
+    }
+
+    .drawing {
+        display: none
+    }
+
+    @media only screen and (max-width: 600px) {
+        .middle-block-size {
+            width: 95%;
+            height: 30vh;
+        }
+
+        .upload-butt img {
+            margin-bottom: 1rem;
+            width: 5em
+        }
+
+        .top-upload-text {
+            display: none;
+        }
+
+        .bottom-upload-text {
+            text-transform: capitalize;
+        }
+
+        .drawing {
+            display: block;
+            width: 100%;
+            margin-top: 3vh;
+            justify-self: end;
+            background-color: unset;
+            border-radius: 0;
+        }
+
+        .dropzone-with-files {
+            padding: 0;
+            justify-content: start;
+        }
+
+        .dz-previews {
+            margin-top: 1em;
+            height: fit-content;
+            width: 100%;
+            gap: 0;
+        }
+
+        .post-upload-button {
+            display: flex;
+            width: 100%;
+            flex-direction: row;
+            align-items: center;
+            justify-content: start;
+            background-color: black;
+            fill: white;
+            color: white;
+            padding: 0.5em;
+            border-radius: 5px;
+        }
     }
 </style>

@@ -109,24 +109,16 @@
 </div>
 
 <style lang="scss">
+  @import "$lib/shared-styles.css";
+
   .container {
     display: grid;
     width: 100%;
     height: 100%;
     grid-auto-columns: 5fr 2fr;
     grid-auto-flow: column;
-    grid-gap: 2rem;
+    gap: 2rem;
     overflow-y: auto;
-  }
-
-
-  @media only screen and (max-width: 800px) {
-    .grid-container {
-      display: grid;
-      grid-auto-flow: unset;
-      max-height: unset;
-      margin: 0 5%;
-    }
   }
 
   .crypt-progress-container {
@@ -138,19 +130,20 @@
     margin: 1em 1em 0 0;
   }
 
-  @media only screen and (max-width: 500px) {
-    .crypt-progress-container:not(:first-child) {
-      margin-top: 8em;
-    }
-  }
-
   .crypt-irma-qr {
     width: 100%;
   }
 
-  .mobile-hide {
-    @media only screen and (max-width: 600px) {
-      display: none;
+  @media only screen and (max-width: 600px) {
+    .container {
+      display: flex;
+      flex-direction: column;
+      margin-inline: 1em;
+      gap: 1rem;
+    }
+
+    .crypt-progress-container {
+        margin: 0;
     }
   }
 </style>

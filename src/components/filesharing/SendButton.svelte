@@ -260,9 +260,9 @@
     text-wrap: nowrap;
   }
 
-  @media only screen and (max-width: 400px) {
+  @media only screen and (max-width: 600px) {
     .crypt-btn-main {
-      width: 13em;
+      width: auto;
     }
   }
 

@@ -1,95 +1,87 @@
 .crypt-select-protection-input-box {
-  background-color: white;
-  padding-left: 1em;
-  border-left: 2px solid black;
-  display: flex;
-  flex-direction: column;
+    background-color: white;
+    padding-left: 1em;
+    border-left: 2px solid black;
+    display: flex;
+    flex-direction: column;
 
 }
 
 .crypt-select-protection-input-box h4 {
-  font-size: 11pt;
-  text-align: left;
-  color: #424242;
-  font-weight: bold;
-  margin-bottom: 0;
-  padding-bottom: 0;
+    font-size: 11pt;
+    text-align: left;
+    color: #424242;
+    font-weight: bold;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 .crypt-select-protection-input-box input,
 textarea {
-  font-size: 1.1em;
-  border: 1px solid black;
-  width: 90%;
-  resize: none;
+    font-size: 1.1em;
+    border: 1px solid black;
+    width: 90%;
+    resize: none;
 }
 
 .crypt-select-protection-input-box input:focus,
 textarea:focus {
-  outline: none;
+    outline: none;
 }
 
 @media only screen and (max-width: 400px) {
-  .crypt-btn-main {
-    width: 13em;
-  }
-
-  .crypt-btn-cancel {
-    width: 13em !important;
-  }
+    .crypt-btn-cancel {
+        width: 13em !important;
+    }
 }
 
 .crypt-btn {
-  border: none;
-  border-radius: 2.6em;
-  background: #000000;
-  cursor: pointer;
-  color: white;
-  font-weight: bold;
-  font-size: 1.15em;
-  line-height: 1.6em;
-  padding: 0.25em 0;
-  text-align: center;
+    border: none;
+    border-radius: 2.6em;
+    background: #000000;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    font-size: 1.15em;
+    line-height: 1.6em;
+    padding: 0.25em 0;
+    text-align: center;
 }
 
 .crypt-btn:disabled,
 .crypt-btn[disabled],
 .crypt-btn-disabled {
-  background: #e8e8e8;
-  color: #424242;
-  cursor: not-allowed;
+    background: #e8e8e8;
+    color: #424242;
+    cursor: not-allowed;
 }
 
 .yivi-btn-logo {
-  display: flex;
-  padding-right: 1em;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5em;
+    display: flex;
+    padding-right: 1em;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
 }
 
 .attributes-list {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  width: 100%;
-  text-wrap: nowrap;
-  overflow-x: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
+    text-wrap: nowrap;
+    overflow-x: auto;
 }
 
 
 h3, p {
-  text-align: start;
-  margin: 0;
+    text-align: start;
+    margin: 0;
 }
 
 button {
-  all: unset;
-  cursor: pointer;
-  font-family: 'Overpass';
-  font-style: normal;
-}
-
-.hidden {
-  display: none !important;
+    all: unset;
+    cursor: pointer;
+    font-family: 'Overpass';
+    font-style: normal;
 }

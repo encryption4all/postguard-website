@@ -1,10 +1,26 @@
 /* Hide element from sighted users but make readable and translatable by screenreaders unlike Aria labels */
 /* https://webaim.org/techniques/css/invisiblecontent/ */
 .sr-only {
-    position:absolute;
-    left:-10000px;
-    top:auto;
-    width:1px;
-    height:1px;
-    overflow:hidden;
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.mobile-hide {
+    @media only screen and (max-width: 600px) {
+        display: none !important;
+    }
+}
+
+.desktop-hide {
+    @media only screen and (min-width: 601px) {
+        display: none !important;
+    }
 }

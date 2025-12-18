@@ -72,4 +72,20 @@ let { stage= $bindable() }: props = $props()
         cursor: pointer;
         height: 100%;
     }
+
+    @media only screen and (max-width: 600px) {
+        .preview-img {
+            width: 40px;
+            height: 30px;
+            border-radius: 5px;
+            object-fit: contain;
+        }
+
+        .file-title {
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
 </style>
