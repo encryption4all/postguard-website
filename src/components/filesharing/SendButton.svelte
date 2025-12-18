@@ -258,7 +258,6 @@
     padding: 0.25em 0.5em;
     width: 90%;
     text-wrap: nowrap;
-    margin: 1em auto;
   }
 
   @media only screen and (max-width: 400px) {

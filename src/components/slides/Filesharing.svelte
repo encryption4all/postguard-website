@@ -83,7 +83,7 @@
 <div class="container">
     <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
                bind:done={EncryptState.done} bind:stage={EncryptState.encryptionState} />
-    <div class="crypt-progress-container">
+    <div class="crypt-progress-container" class:mobile-hide={EncryptState.files.length <= 0}>
         {#if EncryptState.encryptionState === EncryptionState.FileSelection}
             <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} />
             <MessageInput bind:message={EncryptState.message} />
@@ -113,23 +113,12 @@
     display: grid;
     width: 100%;
     height: 100%;
-    grid-auto-columns: 6fr 2fr;
+    grid-auto-columns: 5fr 2fr;
     grid-auto-flow: column;
     grid-gap: 2rem;
     overflow-y: auto;
   }
 
-  img.grid-item {
-    align-self: end;
-    object-fit: contain;
-  }
-
-  .grid-item {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    text-align: left;
-  }
 
   @media only screen and (max-width: 800px) {
     .grid-container {
@@ -137,15 +126,6 @@
       grid-auto-flow: unset;
       max-height: unset;
       margin: 0 5%;
-    }
-
-    .grid-item {
-      width: 90%;
-
-      &.header {
-        justify-content: start;
-        padding-bottom: 0;
-      }
     }
   }
 
@@ -166,5 +146,11 @@
 
   .crypt-irma-qr {
     width: 100%;
+  }
+
+  .mobile-hide {
+    @media only screen and (max-width: 600px) {
+      display: none;
+    }
   }
 </style>

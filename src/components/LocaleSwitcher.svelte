@@ -4,7 +4,7 @@
     import { createEventDispatcher } from 'svelte'
     import { browser } from '$app/environment'
 
-    let { lang, style } = $props()
+    let { lang } = $props()
 
     const dispatch = createEventDispatcher()
 
@@ -22,7 +22,6 @@
     class="language"
     role="radiogroup"
     aria-labelledby="language-switcher"
-    {style}
 >
     <p class="hidden" id="language-switcher">
         Choose a language for this website

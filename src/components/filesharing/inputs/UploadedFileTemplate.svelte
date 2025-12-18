@@ -15,7 +15,7 @@ let { stage= $bindable() }: props = $props()
     <div>
         <img class="preview-img"
              src={file} data-dz-thumbnail alt="file preview (icon)" />
-        <div><p data-dz-name></p></div>
+        <div><p class="file-title" data-dz-name></p></div>
     </div>
 
     <div>
@@ -57,6 +57,15 @@ let { stage= $bindable() }: props = $props()
         height: 60px;
         border-radius: 5px;
         object-fit: contain;
+    }
+
+    .file-title {
+        font-weight: 600;
+        margin: 0;
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .remove-button, .remove-button * {

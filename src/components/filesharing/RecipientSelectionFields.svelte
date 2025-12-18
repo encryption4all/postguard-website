@@ -46,7 +46,7 @@
     />
 
 
-    <h3 style="margin-top: 1em;">
+    <h3 class="optionals-header">
         {$_('filesharing.encryptPanel.RecipientsOptionalHeading')}
     </h3>
     <div class="optionals-container">
@@ -73,6 +73,10 @@
 
 <style lang="scss">
   @use 'shared-styles';
+
+  .optionals-header {
+    margin-top: 0.5em;
+  }
 
   .crypt-recipient {
     background-color: #E9E9E9;

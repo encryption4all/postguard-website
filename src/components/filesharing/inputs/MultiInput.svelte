@@ -104,7 +104,7 @@
         border-block: solid 2px black;
         border-left: solid 2px black;
         padding: 4px 0 4px 4px;
-        height: 36px;
+        height: 35.2px;
     }
 
     .removable-text-input {
@@ -113,6 +113,7 @@
         border-block: solid 2px black;
         border-left: solid 2px black;
         padding: 4px 0 4px 4px;
+        width: 100%;
     }
 
     .btn-delete {

@@ -87,7 +87,7 @@
             <h2>{@html $_('filesharing.encryptPanel.fileBox.lowerTextDropZone')}</h2>
         </div>
     {/if}
-    <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be drug -->
+    <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
     <div id="previews" class="dz-previews middle-block-size" class:hidden={files.length <= 0}></div>
 </form>
 
@@ -97,10 +97,6 @@
 
     h2 {
         margin: 0;
-    }
-
-    .hidden {
-        display: none !important;
     }
 
     .dropzone {
@@ -113,10 +109,10 @@
 
     .middle-block-size {
         height: 50vh;
+        width: 70%;
     }
 
     .dz-message {
-        width: 90%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -133,7 +129,6 @@
     }
 
     .dz-previews {
-        width: 90%;
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
