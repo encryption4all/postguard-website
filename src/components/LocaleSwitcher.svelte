@@ -1,9 +1,17 @@
 <script lang="ts">
-    import { _, locale } from 'svelte-i18n'
+    import { locale } from 'svelte-i18n'
+    import { browser } from '$app/environment'
+    import { onMount } from 'svelte'
 
-    function changeLanguage(lang: string) {
-        locale.set(lang)
-        localStorage.setItem('preferredLanguage', lang)
+    let selectedLocale: string = 'en-US'
+
+    onMount(() => {
+        selectedLocale = $locale ?? 'en-US'
+    })
+
+    function handleChange() {
+        locale.set(selectedLocale)
+        if (browser) localStorage.setItem('preferredLanguage', selectedLocale)
     }
 </script>
 
@@ -17,9 +25,9 @@
     </p>
     <div class="language-container-left language-container-nl">
         <input
-            bind:group={$locale}
-            onclick={()=>changeLanguage('nl-NL')}
-            value={'nl-NL'}
+            bind:group={selectedLocale}
+            on:change={handleChange}
+            value="nl-NL"
             class="language-control"
             type="radio"
             id="language1-1"
@@ -31,9 +39,9 @@
     </div>
     <div class="language-container-right language-container-en">
         <input
-            bind:group={$locale}
-            onclick={()=>changeLanguage('en-US')}
-            value={'en-US'}
+            bind:group={selectedLocale}
+            on:change={handleChange}
+            value="en-US"
             class="language-control"
             type="radio"
             id="language1-2"
