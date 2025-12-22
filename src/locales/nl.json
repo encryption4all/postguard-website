@@ -101,6 +101,7 @@
             "RecipientsText": "De ontvanger(s) moeten zowel hun email adres als aanvullende gegevens die jij hier specificeert aantonen. Deze data zijn niet zichtbaar aan anderen.",
             "emailSender": "Emailadres",
             "emailSenderHeading": "Van",
+            "emailSenderSubHeadingToggle": "Waarom heb je deze data nodig?",
             "emailSenderSubHeading": "Laat de ontvanger(s) weten dat deze bestanden van jou afkomstig zijn.",
             "emailSenderText": "Voordat je de bestanden kan sturen moet je aantonen dat je deze gegevens bezit.",
             "emailSenderAttributePrefix": "Jouw",

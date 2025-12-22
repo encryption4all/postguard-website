@@ -55,7 +55,9 @@
     <ul>
         {#each items as item, i}
             <li class:selected={isSelected(item.route)}>
-                <a href={item.route}>
+                <a href={item.route} onclick={() => {
+                    hamburgerOpen = false
+                }}>
                     {$_(`header.${item.name}`)}</a>
             </li>
         {/each}

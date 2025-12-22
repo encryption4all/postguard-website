@@ -112,7 +112,6 @@
 
   .container {
     display: grid;
-    width: 100%;
     height: 100%;
     grid-auto-columns: 5fr 2fr;
     grid-auto-flow: column;
@@ -127,6 +126,7 @@
     min-width: 0;
     gap: 1em;
     margin: 1em 1em 0 0;
+    list-style-type:none;
   }
 
   .crypt-irma-qr {
@@ -137,8 +137,8 @@
     .container {
       display: flex;
       flex-direction: column;
-      margin-inline: 1em;
       gap: 1rem;
+      margin-inline: 1em;
     }
 
     .crypt-progress-container {
