@@ -1,21 +1,27 @@
 <script lang="ts">
-    import { selected } from '$lib/stores'
     import menuIcon from '$lib/assets/images/google-icons/menu.svg'
     import closeIcon from '$lib/assets/images/google-icons/close.svg'
     import LocaleSwitcher from '$lib/components/LocaleSwitcher.svelte'
     import logo from '$lib/assets/images/logo.svg'
     import { _, locale } from 'svelte-i18n'
+    import { page } from '$app/state'
 
     interface props {
-        items: string[];
+        items: { name: string; route: string; }[];
     }
 
     let hamburgerOpen = $state(false)
 
     let { items }: props = $props()
+
+    function isSelected(route: String) {
+        return page.url.pathname === route;
+    }
 </script>
 
-<button onclick={() => {
+<button
+    class="desktop-hide"
+    onclick={() => {
         hamburgerOpen = !hamburgerOpen
     }}
 >
@@ -48,17 +54,15 @@
     </div>
     <ul>
         {#each items as item, i}
-            <li class:selected={$selected === i}>
-                <a href="/" onclick={(() => {selected.set(i); hamburgerOpen = false})}
-                >{item}</a
-                >
+            <li class:selected={isSelected(item.route)}>
+                <a href={item.route}>
+                    {$_(`header.${item.name}`)}</a>
             </li>
         {/each}
     </ul>
     <div class="align-lang">
         <LocaleSwitcher
             lang={$locale}
-            on:locale-changed={(e) => locale.set(e.detail)}
         />
     </div>
 </div>

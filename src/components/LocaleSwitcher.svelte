@@ -1,20 +1,12 @@
 <svelte:options runes />
 
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte'
-    import { browser } from '$app/environment'
+    import { _, locale } from 'svelte-i18n'
 
     let { lang } = $props()
 
-    const dispatch = createEventDispatcher()
-
-    const handleLocaleChange = (lang) => {
-        dispatch('locale-changed', lang)
-        if (browser) localStorage.setItem('preferredLanguage', lang)
-    }
-
     $effect(() => {
-        handleLocaleChange(lang)
+        locale.set(lang)
     })
 </script>
 

@@ -1,10 +1,9 @@
-<script>
+<script lang="ts">
     import Header from '$lib/components/Header.svelte'
-    import Footer from '$lib/components/Footer.svelte'
-    import { isLoading } from 'svelte-i18n'
     import '$lib/i18n'
-    /** @type {{children?: import('svelte').Snippet}} */
-    let { children } = $props();
+    import { isLoading } from 'svelte-i18n'
+
+    let { children } = $props()
 </script>
 
 <svelte:head>
@@ -21,6 +20,5 @@
 
 {#if !$isLoading}
     <Header />
-    {@render children?.()}
-    <Footer />
+    {@render children()}
 {/if}

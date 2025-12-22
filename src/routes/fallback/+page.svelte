@@ -5,20 +5,20 @@
 
     import decryptImg from '$lib/assets/images/decrypt.svg'
     import decryptImgLq from '$lib/assets/images/lqip/decrypt.svg'
-    import Decrypt from '../fallback/Decrypt.svelte'
-    import Settings from '../fallback/Settings.svelte'
+    import Decrypt from '../../components/fallback/Decrypt.svelte'
+    import Settings from '../../components/fallback/Settings.svelte'
 
     import Cog from 'svelte-material-icons/Cog.svelte'
     import UploadLock from 'svelte-material-icons/UploadLock.svelte'
     import Magnify from 'svelte-material-icons/Magnify.svelte'
 
-    import { emails, krCache, currSelected, nextId } from './../fallback/stores.js'
+    import { emails, krCache, currSelected, nextId } from '../../components/fallback/stores.js'
 
     import { _ } from 'svelte-i18n'
 
     import { fly } from 'svelte/transition'
-    import EmailView from '../fallback/EmailView.svelte'
-    import ListView from '../fallback/ListView.svelte'
+    import EmailView from '../../components/fallback/EmailView.svelte'
+    import ListView from '../../components/fallback/ListView.svelte'
 
     // mode of the left window (List/Settings)
     const LEFTMODES = { ListView: 'List', Settings: 'Settings' }

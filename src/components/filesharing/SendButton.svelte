@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { _ } from 'svelte-i18n'
+    import { _, locale } from 'svelte-i18n'
     import type { ISealOptions } from '@e4a/pg-wasm'
 
     import yiviLogo from '$lib/assets/images/non-free/yivi-logo.svg'

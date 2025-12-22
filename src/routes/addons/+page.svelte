@@ -1,6 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n'
-    import Tabs from './../Tabs.svelte'
+    import Tabs from '../../components/Tabs.svelte'
     import { fade } from 'svelte/transition'
     import { tweened } from 'svelte/motion'
     import { cubicOut } from 'svelte/easing'

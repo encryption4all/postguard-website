@@ -1,15 +1,22 @@
-<script>
-    import { preventDefault } from 'svelte/legacy'
-
+<script lang="ts">
     import { _, locale, init } from 'svelte-i18n'
     import logo from '$lib/assets/images/logo.svg'
     import LocaleSwitcher from './LocaleSwitcher.svelte'
+    import '$lib/global.scss'
     import Hamburger from '$lib/components/header/Hamburger.svelte'
-    import { selected } from '$lib/stores'
+    import { page } from '$app/state';
 
-    let items = $derived(['fs', 'addons', 'fallback', 'about', 'pol'].map((s) =>
-        $_(`header.${s}`),
-    ))
+    let items = [
+        { name: 'fs', route: '/' },
+        { name: 'addons', route: '/addons' },
+        { name: 'fallback', route: '/fallback' },
+        { name: 'about', route: '/about' },
+        { name: 'pol', route: '/privacy' },
+    ]
+
+    function isSelected(route: String) {
+        return page.url.pathname === route;
+    }
 </script>
 
 <div class="pg-topbar">
@@ -17,16 +24,15 @@
     <div class="pg-desktop-menu">
         <ul>
             {#each items as item, i}
-                <li class:selected={$selected === i}>
-                    <a href="/" onclick={preventDefault(() => selected.set(i))}
-                    >{item}</a
-                    >
+                <li class:selected={isSelected(item.route)}>
+                    <a href={item.route}>
+                        {$_(`header.${item.name}`)}
+                    </a>
                 </li>
             {/each}
         </ul>
         <LocaleSwitcher
             lang={$locale}
-            on:locale-changed={(e) => locale.set(e.detail)}
         />
     </div>
     <Hamburger
@@ -37,7 +43,7 @@
 <style lang="scss">
   .pg-topbar {
     width: auto;
-    margin: 0.5rem 1rem auto 1rem;
+    margin: 0.5rem 1rem 1rem 1rem;
 
     display: flex;
     flex-direction: row;
