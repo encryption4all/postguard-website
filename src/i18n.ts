@@ -4,9 +4,11 @@ import { register, init, getLocaleFromNavigator } from 'svelte-i18n'
 register('en-US', () => import('./locales/en.json'))
 register('nl-NL', () => import('./locales/nl.json'))
 
+const defaultLanguage = 'en-US'
+
 init({
-    fallbackLocale: 'en-US',
+    fallbackLocale: defaultLanguage,
     initialLocale: browser
         ? localStorage.getItem('preferredLanguage')
-        : getLocaleFromNavigator(),
+        : defaultLanguage,
 })

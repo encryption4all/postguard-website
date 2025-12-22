@@ -27,12 +27,6 @@
 
     let { files = $bindable(), percentages = $bindable(), done = $bindable(), stage = $bindable() }: props = $props()
 
-    function onFile(file: File) {
-        files = files.concat([file])
-        percentages = percentages.concat([0])
-        done = done.concat([false])
-    }
-
     // handle all the Dropzone setup in onMount to ensure it only runs in the browser
     onMount(() => {
         // @ts-ignore, it's always set if UploadedFileTemplate is set because it's SSR'd
@@ -47,12 +41,10 @@
         })
 
         myDropzone.on('addedfile', file => {
-            console.log(`File added: ${file.name}`)
+            files = files.concat([file])
+            percentages = percentages.concat([0])
+            done = done.concat([false])
 
-            // Add the file to our state
-            onFile(file)
-
-            // set the files as processed to avoid upload errors
             myDropzone!.emit('complete', file)
         })
 
@@ -75,7 +67,7 @@
 <form id="my-form" class="dropzone" class:dropzone-with-files={files.length > 0}>
     <!-- so dropzone can get the template but its invisible -->
     <div class="hidden">
-        <UploadedFileTemplate bind:stage={stage} />
+        <UploadedFileTemplate />
     </div>
     <div class="dz-message">
         <h1 style="margin-bottom: 8px; text-align: center"
@@ -162,7 +154,7 @@
         display: none
     }
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 768px) {
         .middle-block-size {
             width: 95%;
             height: 30vh;

@@ -1,5 +1,3 @@
-<svelte:options runes />
-
 <script lang="ts">
     import { _, locale } from 'svelte-i18n'
 
@@ -110,7 +108,7 @@
     background-color: $language-hover;
   }
 
-  .language-control:checked + .language-label .selected {
+  .language-control:checked + .language-label {
     text-decoration: underline 2px;
     text-decoration-color: var(--pg-accent-color);
   }

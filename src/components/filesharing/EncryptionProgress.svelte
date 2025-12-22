@@ -13,9 +13,7 @@
     let {encryptStartTime, files, recipients, percentages}: props = $props()
 
     const to = recipients.map(({ email }) => email).join(", ");
-    let timeEstimateRepr = $state($_('filesharing.encryptPanel.timeremaining.estimate'));
-
-    $effect(() => {
+    let timeEstimateRepr = $derived(() => {
         const deltaT = Date.now() - encryptStartTime;
         const totalSize = files
             .map((f) => f.size)
@@ -28,8 +26,9 @@
         if (deltaT > 1000 && totalProgress > 1) {
             const remainingProgress = 100 - totalProgress;
             const estimatedT = remainingProgress * (deltaT / totalProgress);
-            timeEstimateRepr = getTranslationForTime(estimatedT);
+            return getTranslationForTime(estimatedT);
         }
+        return $_('filesharing.encryptPanel.timeremaining.estimate');
     });
 
     function getTranslationForTime(remaining: number): string {

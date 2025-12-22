@@ -112,16 +112,17 @@
 
   .container {
     display: grid;
-    height: 100%;
     grid-auto-columns: 5fr 2fr;
     grid-auto-flow: column;
     gap: 2rem;
     overflow-y: auto;
+    height: 100%;
   }
 
   .crypt-progress-container {
     display: flex;
     flex-direction: column;
+    height: 100%;
     font-size: 1.15em;
     min-width: 0;
     gap: 1em;
@@ -133,7 +134,7 @@
     width: 100%;
   }
 
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 768px) {
     .container {
       display: flex;
       flex-direction: column;

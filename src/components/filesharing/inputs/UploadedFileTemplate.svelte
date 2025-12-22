@@ -1,14 +1,6 @@
 <script lang="ts">
 import remove from '$lib/assets/images/google-icons/remove.svg';
 import file from '$lib/assets/images/google-icons/file.svg';
-import { EncryptionState } from '$lib/lib/types/filesharing/attributes.js'
-
-interface props {
-    stage: EncryptionState;
-}
-
-let { stage= $bindable() }: props = $props()
-
 </script>
 
 <div class="files" id="template">
@@ -73,7 +65,7 @@ let { stage= $bindable() }: props = $props()
         height: 100%;
     }
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 768px) {
         .preview-img {
             width: 40px;
             height: 30px;

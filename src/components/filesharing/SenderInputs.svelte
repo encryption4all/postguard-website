@@ -12,11 +12,7 @@
 
     let { senderAttributes = $bindable(), senderConfirm = $bindable(), attributes }: props = $props()
 
-    let addableButtons: AttType[] = $state([])
-    $effect(() => {
-        addableButtons = attributes.filter((att) => !senderAttributes.some(({ t }) => t === att))
-
-    })
+    let addableButtons: AttType[] = $derived(attributes.filter((att) => !senderAttributes.some(({ t }) => t === att)))
 
     function addAttribute(att: AttType) {
         senderAttributes.push({ t: att, v: '' })

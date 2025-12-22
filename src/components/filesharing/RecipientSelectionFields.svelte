@@ -16,11 +16,7 @@
     let { recipient = $bindable(), remove, addAttribute, attributes }: props = $props()
 
 
-    let addableButtons: AttType[] = $state([])
-    $effect(() => {
-        addableButtons = attributes.filter((att) => !recipient.extra.some(({ t }) => t === att))
-
-    })
+    let addableButtons: AttType[] = $derived(attributes.filter((att) => !recipient.extra.some(({ t }) => t === att)))
 </script>
 
 <li class="crypt-recipient">

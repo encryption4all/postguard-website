@@ -72,7 +72,7 @@
 <style>
     @import "$lib/shared-styles.css";
 
-    @media only screen and (min-width: 600px) {
+    @media only screen and (min-width: 768px) {
         .hamburger-icon {
             display: none;
         }

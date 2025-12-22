@@ -58,7 +58,7 @@
     gap: 1rem;
   }
 
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 768px) {
     .pg-desktop-menu {
       display: none;
     }

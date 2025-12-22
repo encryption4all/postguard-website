@@ -22,15 +22,13 @@
 
     let { EncryptState = $bindable() }: props = $props()
 
-    let canEncrypt: boolean = $state(false)
     let MAX_UPLOAD_SIZE = import.meta.env.VITE_MAX_UPLOAD_SIZE
     let UPLOAD_CHUNK_SIZE = import.meta.env.VITE_UPLOAD_CHUNK_SIZE
     let SMOOTH_TIME = 2
 
-    $effect(() => {
+    let canEncrypt = $derived(() => {
         if (EncryptState.files.length === 0 || EncryptState.recipients.length === 0) {
-            canEncrypt = false
-            return
+            return false
         }
 
         const totalSize = EncryptState.files
@@ -43,7 +41,7 @@
         const addressesValid =
             EncryptState.recipients.every(({ email }) => regex.test(email))
 
-        canEncrypt = totalSize < MAX_UPLOAD_SIZE &&
+        return totalSize < MAX_UPLOAD_SIZE &&
             EncryptState.recipients.length > 0 &&
             addressesValid
     })
@@ -260,7 +258,7 @@
     text-wrap: nowrap;
   }
 
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 768px) {
     .crypt-btn-main {
       width: auto;
     }
