@@ -3,11 +3,10 @@
 <script lang="ts">
     import { _, locale } from 'svelte-i18n'
 
-    let { lang } = $props()
-
-    $effect(() => {
+    function changeLanguage(lang: string) {
         locale.set(lang)
-    })
+        localStorage.setItem('preferredLanguage', lang)
+    }
 </script>
 
 <div
@@ -20,7 +19,8 @@
     </p>
     <div class="language-container-left language-container-nl">
         <input
-            bind:group={lang}
+            bind:group={$locale}
+            onclick={()=>changeLanguage('nl-NL')}
             value={'nl-NL'}
             class="language-control"
             type="radio"
@@ -33,7 +33,8 @@
     </div>
     <div class="language-container-right language-container-en">
         <input
-            bind:group={lang}
+            bind:group={$locale}
+            onclick={()=>changeLanguage('en-US')}
             value={'en-US'}
             class="language-control"
             type="radio"
@@ -109,7 +110,7 @@
     background-color: $language-hover;
   }
 
-  .language-control:checked + .language-label {
+  .language-control:checked + .language-label .selected {
     text-decoration: underline 2px;
     text-decoration-color: var(--pg-accent-color);
   }
