@@ -79,11 +79,12 @@
     let EncryptState: EncryptState = $state(defaultEncryptState)
 </script>
 
-<div class="container">
+<div class:container={EncryptState.encryptionState === EncryptionState.FileSelection}
+     class:sign-container={EncryptState.encryptionState === EncryptionState.Sign}>
     <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
                bind:done={EncryptState.done} bind:stage={EncryptState.encryptionState} />
-    <div class="crypt-progress-container" class:mobile-hide={EncryptState.files.length <= 0}>
-        {#if EncryptState.encryptionState === EncryptionState.FileSelection}
+    {#if EncryptState.encryptionState === EncryptionState.FileSelection}
+        <div class="crypt-progress-container" class:mobile-hide={EncryptState.files.length <= 0}>
             <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} />
             <MessageInput bind:message={EncryptState.message} />
             <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
@@ -91,24 +92,36 @@
                           attributes={ATTRIBUTES} />
             <SendButton bind:EncryptState={EncryptState}
             />
-        {:else if EncryptState.encryptionState === EncryptionState.Sign}
+        </div>
+    {:else if EncryptState.encryptionState === EncryptionState.Sign}
+        <div>
             <Sign isMobile={isMobileDevice} />
-        {:else if EncryptState.encryptionState === EncryptionState.Encrypting}
-            <EncryptionProgress encryptStartTime={EncryptState.encryptionState}
-                                files={EncryptState.files}
-                                recipients={EncryptState.recipients}
-                                percentages={EncryptState.percentages} />
-        {:else if EncryptState.encryptionState === EncryptionState.Error}
-            <Error bind:encryptionState={EncryptState.encryptionState} />
-        {:else if EncryptState.encryptionState === EncryptionState.Done}
+            <button onclick={() => {EncryptState.encryptionState = EncryptionState.FileSelection}}
+                    class="back-btn">
+                Back
+            </button>
+        </div>
+        <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} isConfirming={true} />
+    {:else if EncryptState.encryptionState === EncryptionState.Encrypting}
+        <EncryptionProgress encryptStartTime={EncryptState.encryptionState}
+                            files={EncryptState.files}
+                            recipients={EncryptState.recipients}
+                            percentages={EncryptState.percentages} />
+    {:else if EncryptState.encryptionState === EncryptionState.Error}
+        <Error bind:encryptionState={EncryptState.encryptionState} />
+    {:else if EncryptState.encryptionState === EncryptionState.Done}
 
-        {/if}
-    </div>
+    {/if}
+
 
 </div>
 
 <style lang="scss">
   @import "$lib/shared-styles.css";
+
+  * {
+    list-style-type: none;
+  }
 
   .container {
     display: grid;
@@ -119,6 +132,12 @@
     height: 100%;
   }
 
+  .sign-container {
+    display: grid;
+    grid-auto-columns: 2fr 3fr 2fr;
+    grid-auto-flow: column;
+  }
+
   .crypt-progress-container {
     display: flex;
     flex-direction: column;
@@ -127,11 +146,27 @@
     min-width: 0;
     gap: 1em;
     margin: 1em 1em 0 0;
-    list-style-type:none;
+  }
+
+  .crypt-progress-container:last-child {
+    margin-top: auto;
   }
 
   .crypt-irma-qr {
     width: 100%;
+  }
+
+  .back-btn {
+    margin-top: 1em;
+    padding: 0.5em 1em;
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    width: 100%;
+    text-align: center;
   }
 
   @media only screen and (max-width: 768px) {
@@ -143,7 +178,7 @@
     }
 
     .crypt-progress-container {
-        margin: 0;
+      margin: 0;
     }
   }
 </style>

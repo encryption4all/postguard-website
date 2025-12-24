@@ -71,7 +71,7 @@
     </div>
     <div class="dz-message">
         <h1 style="margin-bottom: 8px; text-align: center"
-            class:mobile-hide={files.length > 0}>
+            class:mobile-hide={files.length > 0} class:hidden={stage !== EncryptionState.FileSelection}>
             {$_('filesharing.encryptPanel.fileBox.tagline')}
         </h1>
 

@@ -5,27 +5,30 @@
     import closebutton from '$lib/assets/images/google-icons/close.svg'
     import AttributeButton from '$lib/components/filesharing/inputs/AttributeButton.svelte'
     import MultiInput from '$lib/components/filesharing/inputs/MultiInput.svelte'
+    import './shared-styles.css'
 
     interface props {
         recipient: { email: string; extra: AttributeCon };
         remove: () => void;
         addAttribute: (att: AttType) => void;
         attributes: AttType[];
+        isConfirming?: boolean;
     }
 
-    let { recipient = $bindable(), remove, addAttribute, attributes }: props = $props()
+    let { recipient = $bindable(), remove, addAttribute, attributes, isConfirming = false }: props = $props()
 
 
     let addableButtons: AttType[] = $derived(attributes.filter((att) => !recipient.extra.some(({ t }) => t === att)))
 </script>
 
-<li class="crypt-recipient">
+<li class="crypt-recipient" class:is-confirming-bg={isConfirming}>
     <div class="recipient-heading">
         <h3>
             {$_('filesharing.encryptPanel.emailRecipient')}
         </h3>
         <button
             class="btn-delete"
+            class:hidden={isConfirming}
             onclick={remove}
         >
             <img style="width: 24px" src={closebutton} alt="close button" />
@@ -38,6 +41,7 @@
         type="email"
         required
         class="email-input"
+        class:is-confirming-bg={isConfirming}
         bind:value={recipient.email}
     />
 
@@ -53,6 +57,7 @@
                 deleteAction={() => {
                     recipient.extra.splice(index, 1)
                 }}
+                isConfirming={isConfirming}
             />
         {/each}
         <div class="attributes-list">
@@ -60,52 +65,50 @@
                 <AttributeButton
                     type="add"
                     translation_key={'filesharing.attributes.' + attribute}
-                    clickAction={() => addAttribute(attribute)}
+                    clickAction={() => {isConfirming ? null : addAttribute(attribute)}}
                 />
             {/each}
         </div>
     </div>
 </li>
 
-<style lang="scss">
-  @use 'shared-styles';
+<style>
+    .optionals-header {
+        margin-top: 0.5em;
+    }
 
-  .optionals-header {
-    margin-top: 0.5em;
-  }
+    .crypt-recipient {
+        background-color: #E9E9E9;
+        padding: 0.4em;
+        border-radius: 5px;
+    }
 
-  .crypt-recipient {
-    background-color: #E9E9E9;
-    padding: 0.4em;
-    border-radius: 5px;
-  }
+    .crypt-recipient:not(:last-child) {
+        margin-bottom: 1.5em;
+    }
 
-  .crypt-recipient:not(:last-child) {
-    margin-bottom: 1.5em;
-  }
+    .btn-delete {
+        all: unset;
+        cursor: pointer;
+    }
 
-  .btn-delete {
-    all: unset;
-    cursor: pointer;
-  }
+    .recipient-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-  .recipient-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+    .email-input {
+        background-color: #E9E9E9;
+        border: none;
+        border-bottom: solid 2px black;
+    }
 
-  .email-input {
-    background-color: #E9E9E9;
-    border: none;
-    border-bottom: solid 2px black;
-  }
-
-  .optionals-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25em;
-    border-left: 2px solid black;
-    padding-left: 4px;
-  }
+    .optionals-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25em;
+        border-left: 2px solid black;
+        padding-left: 4px;
+    }
 </style>

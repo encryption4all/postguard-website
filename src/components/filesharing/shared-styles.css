@@ -35,6 +35,10 @@ textarea:focus {
     }
 }
 
+.is-confirming-bg {
+    background-color: #E0EAFF !important;
+}
+
 .crypt-btn {
     border: none;
     border-radius: 2.6em;

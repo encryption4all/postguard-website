@@ -1,7 +1,7 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
     import { getCountryCallingCode, type CountryCode } from 'libphonenumber-js/mobile'
-    import * as flags from 'country-flag-icons/string/3x2'
+    import '../shared-styles.css'
 
     import removeIcon from '$lib/assets/images/google-icons/remove.svg'
 
@@ -9,13 +9,13 @@
         translation_key: string;
         value?: string;
         deleteAction?: () => void;
+        isConfirming?: boolean;
     }
+
+    let { translation_key, value = $bindable(''), deleteAction, isConfirming = false }: props = $props()
 
     // So we have a unique id for the label-input pair so we can handle multiple inputs correctly in a list even with multiple recipients
     const randomId = Math.random().toString(36).substring(2, 15)
-
-    let { translation_key, value = $bindable(''), deleteAction }: props = $props()
-
     let showingValue = $state('')
     let selectedCountryPrefix = $state('+31')
 
@@ -44,9 +44,10 @@
     <label style="margin-top: 0;" for={randomId}>
         {$_(translation_key)}
     </label>
-    <div class="optional-value">
+    <div class="optional-value" class:removed-del-border={isConfirming}>
         {#if translation_key === 'filesharing.attributes.pbdf.sidn-pbdf.mobilenumber.mobilenumber'}
-            <select bind:value={selectedCountryPrefix} class="field-height phone-input">
+            <select bind:value={selectedCountryPrefix} class="field-height phone-input"
+                    class:is-confirming-bg={isConfirming} disabled={isConfirming}>
                 {#each allowedCountries as country}
                     <option value={getCountryPrefix(country)}>
                         {country.toUpperCase()} {getCountryPrefix(country)}
@@ -56,6 +57,8 @@
             <input
                 id={randomId}
                 class="removable-text-input field-height"
+                class:is-confirming-bg={isConfirming}
+                disabled={isConfirming}
                 style="border-left: solid 0px black;"
                 type="tel"
                 bind:value={showingValue}
@@ -64,6 +67,8 @@
             <input
                 id={randomId}
                 class="removable-text-input field-height"
+                class:is-confirming-bg={isConfirming}
+                disabled={isConfirming}
                 type="date"
                 bind:value={value}
             />
@@ -71,12 +76,15 @@
             <input
                 id={randomId}
                 class="removable-text-input field-height"
+                class:is-confirming-bg={isConfirming}
+                disabled={isConfirming}
                 type="text"
                 bind:value={value}
             />
         {/if}
         {#if deleteAction}
             <button
+                class:hidden={isConfirming}
                 class="btn-delete field-height"
                 onclick={deleteAction}
             >
@@ -122,6 +130,10 @@
         padding: 4px 4px 4px 0;
         display: flex;
         align-items: center;
+    }
+
+    .removed-del-border {
+        border-right: solid 2px black;
     }
 
     .optional-value {
