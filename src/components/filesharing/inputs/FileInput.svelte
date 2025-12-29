@@ -109,12 +109,18 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100%;
+
+    }
+    @media only screen and (min-width: 768px) {
+        .dropzone {
+            height: 100%;
+        }
     }
 
     .dz-message {
         margin: 0;
         width: 100%;
+        min-height: 0;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -147,6 +153,7 @@
         flex-direction: column;
         gap: 0.5rem;
 
+        flex: 1 1 auto;
         overflow: auto;
     }
 
@@ -185,6 +192,8 @@
         .dropzone-with-files {
             padding: 0;
             justify-content: start;
+            height: fit-content;
+            max-height: 200px; /* So it shows roughly 2 and a half files (the half so it's clear it's scrollable)*/
         }
 
         .dz-previews {
@@ -195,6 +204,7 @@
         }
 
         .post-upload-button {
+            flex: 0 0 auto;
             display: flex;
             width: 100%;
             flex-direction: row;

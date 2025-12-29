@@ -8,7 +8,7 @@
     import { browser } from '$app/environment'
     import RecipientSelection from '$lib/components/filesharing/RecipientSelection.svelte'
     import { isMobile, GetBrowserInfo } from '$lib/lib/browser-detect'
-    import MessageInput from '$lib/components/filesharing/MessageInput.svelte'
+    import MessageInput from '$lib/components/filesharing/inputs/MessageInput.svelte'
     import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
     import SendButton from '$lib/components/filesharing/SendButton.svelte'
     import FileInput from '$lib/components/filesharing/inputs/FileInput.svelte'
@@ -84,14 +84,14 @@
     <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
                bind:done={EncryptState.done} bind:stage={EncryptState.encryptionState} />
     {#if EncryptState.encryptionState === EncryptionState.FileSelection}
-        <div class="crypt-progress-container" class:mobile-hide={EncryptState.files.length <= 0}>
+        <div class="inputs-container" class:mobile-hide={EncryptState.files.length <= 0}>
             <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} />
             <MessageInput bind:message={EncryptState.message} />
             <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
                           bind:senderConfirm={EncryptState.senderConfirm}
                           attributes={ATTRIBUTES} />
-            <SendButton bind:EncryptState={EncryptState}
-            />
+            <div class="shrinking-spacer"></div>
+            <SendButton bind:EncryptState={EncryptState} />
         </div>
     {:else if EncryptState.encryptionState === EncryptionState.Sign}
         <div>
@@ -128,8 +128,8 @@
     grid-auto-columns: 5fr 2fr;
     grid-auto-flow: column;
     gap: 2rem;
-    overflow-y: auto;
-    height: 100%;
+    overflow-y: hidden;
+    height: calc(100vh - 52px - 0.5rem - 1rem); /* navbar height + margin */
   }
 
   .sign-container {
@@ -138,17 +138,23 @@
     grid-auto-flow: column;
   }
 
-  .crypt-progress-container {
+  .inputs-container {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     height: 100%;
     font-size: 1.15em;
     min-width: 0;
     gap: 1em;
     margin: 1em 1em 0 0;
+    overflow-y: auto;
   }
 
-  .crypt-progress-container:last-child {
+  .shrinking-spacer {
+    flex-shrink: 0;
+  }
+
+  .inputs-container:last-child {
     margin-top: auto;
   }
 
@@ -177,7 +183,7 @@
       margin-inline: 1em;
     }
 
-    .crypt-progress-container {
+    .inputs-container {
       margin: 0;
     }
   }

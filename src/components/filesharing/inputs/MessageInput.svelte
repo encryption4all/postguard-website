@@ -14,13 +14,30 @@
     {message}
     <textarea
         required={false}
-        rows={5}
     >{message}</textarea>
 </div>
 
 <style>
-    @import "shared-styles.css";
+    @import "../shared-styles.css";
+
     p {
         font-size: 0.8em;
+    }
+
+    textarea {
+        height: 5em;
+    }
+
+    @media only screen and (min-height: 768px) {
+        textarea {
+            height: 6em;
+        }
+    }
+
+
+    @media only screen and (min-height: 1024px) {
+        textarea {
+            height: 8em;
+        }
     }
 </style>

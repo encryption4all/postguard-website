@@ -22,7 +22,7 @@
     }
 </script>
 
-<div class="crypt-progress-container">
+<div class="inputs-container">
     <div id="crypt-irma-qr"></div>
 </div>
 
