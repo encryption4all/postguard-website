@@ -27,25 +27,27 @@
     }
 </script>
 <div>
-    <div class="crypt-select-protection-input-box" class:is-confirming-bg={isConfirming}>
-        <div class="recipient-heading">
-            <h3>
-                {$_('filesharing.encryptPanel.RecipientsHeading')}
-            </h3>
+    <div class="crypt-select-protection-input-box" class:remove-border={isConfirming}>
+        {#if !isConfirming}
+            <div class="recipient-heading">
+                <h3>
+                    {$_('filesharing.encryptPanel.RecipientsHeading')}
+                </h3>
 
-            <button
-                class:hidden={isConfirming}
-                onclick={addRecipient}>
-                <img
-                    style="width: 24px; vertical-align: middle; margin-right: 0.2em;"
-                    src={addIcon}
-                    alt="add recipient"
-                />
-            </button>
-        </div>
-        <p>
-            {$_('filesharing.encryptPanel.RecipientsText')}
-        </p>
+                <button
+                    class:hidden={isConfirming}
+                    onclick={addRecipient}>
+                    <img
+                        style="width: 24px; vertical-align: middle; margin-right: 0.2em;"
+                        src={addIcon}
+                        alt="add recipient"
+                    />
+                </button>
+            </div>
+            <p>
+                {$_('filesharing.encryptPanel.RecipientsText')}
+            </p>
+        {/if}
 
         {#each recipients as _, index}
             <RecipientSelectionFields
@@ -70,5 +72,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .remove-border {
+    border: none;
   }
 </style>

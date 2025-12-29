@@ -27,23 +27,31 @@
     let SMOOTH_TIME = 2
 
     let canEncrypt = $derived(() => {
-        if (EncryptState.files.length === 0 || EncryptState.recipients.length === 0) {
-            return false
-        }
+        if (EncryptState.files.length === 0 || EncryptState.recipients.length === 0) return false
 
         const totalSize = EncryptState.files
             .map((f) => f.size)
             .reduce((a, b) => a + b, 0)
 
+        if (totalSize >= MAX_UPLOAD_SIZE) return false
+
         const regex =
             /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
+        if (EncryptState.recipients.length <= 0) return false
+
         const addressesValid =
             EncryptState.recipients.every(({ email }) => regex.test(email))
+        if (!addressesValid) return false
 
-        return totalSize < MAX_UPLOAD_SIZE &&
-            EncryptState.recipients.length > 0 &&
-            addressesValid
+
+        const optionalsFilled =
+            EncryptState.recipients.every(({ extra }) =>
+                extra.every((att) => att.v && att.v.length > 0),
+            )
+        if (!optionalsFilled) return false
+
+        return true
     })
 
     async function onSign(): Promise<void> {
@@ -238,7 +246,7 @@
 </script>
 <div class="button-container">
     <button
-        class="crypt-btn-main crypt-btn yivi-btn-logo {canEncrypt ? '' : ' crypt-btn-disabled'}"
+        class="crypt-btn-main crypt-btn yivi-btn-logo {canEncrypt() ? '' : ' crypt-btn-disabled'}"
         onclick={onSign}
     >
         <img src={yiviLogo} alt="yivi-logo" width={50} height={27} />

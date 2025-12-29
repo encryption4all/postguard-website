@@ -1,0 +1,13 @@
+/*
+    Slight hack so I can control styling on the template from the fileinput that DOES get state updates despite it being a different component because of Scoped styles a seprate sheet is needed
+*/
+
+.signing {
+    .files {
+        div{
+            button {
+                display: none;
+            }
+        }
+    }
+}

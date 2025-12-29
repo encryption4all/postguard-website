@@ -21,6 +21,7 @@ import file from '$lib/assets/images/google-icons/file.svg';
 
 <style>
     @import "../shared-styles.css";
+    @import "files-shared-sheet.css";
 
     .files {
         display: flex;

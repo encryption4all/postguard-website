@@ -95,11 +95,7 @@
         </div>
     {:else if EncryptState.encryptionState === EncryptionState.Sign}
         <div>
-            <Sign isMobile={isMobileDevice} />
-            <button onclick={() => {EncryptState.encryptionState = EncryptionState.FileSelection}}
-                    class="back-btn">
-                Back
-            </button>
+            <Sign isMobile={isMobileDevice} bind:stage={EncryptState.encryptionState} />
         </div>
         <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} isConfirming={true} />
     {:else if EncryptState.encryptionState === EncryptionState.Encrypting}
@@ -133,9 +129,10 @@
   }
 
   .sign-container {
-    display: grid;
-    grid-auto-columns: 2fr 3fr 2fr;
-    grid-auto-flow: column;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-right: 20px;
   }
 
   .inputs-container {
@@ -160,19 +157,6 @@
 
   .crypt-irma-qr {
     width: 100%;
-  }
-
-  .back-btn {
-    margin-top: 1em;
-    padding: 0.5em 1em;
-    background-color: #000000;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    width: 100%;
-    text-align: center;
   }
 
   @media only screen and (max-width: 768px) {
