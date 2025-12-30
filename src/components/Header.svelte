@@ -20,7 +20,7 @@
 </script>
 
 <div class="pg-topbar">
-    <img src={logo} alt="postguard logo" width="84" height="46" />
+    <a href="/"><img src={logo} alt="postguard logo" width="84" height="46" /></a>
     <div class="pg-desktop-menu">
         <ul>
             {#each items as item, i}

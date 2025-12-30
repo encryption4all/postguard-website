@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Sign from '$lib/components/filesharing/Sign.svelte'
     import {
         type AttType,
         EncryptionState,
@@ -12,6 +11,7 @@
     import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
     import SendButton from '$lib/components/filesharing/SendButton.svelte'
     import FileInput from '$lib/components/filesharing/inputs/FileInput.svelte'
+    import Sign from '$lib/components/filesharing/Sign.svelte'
     import EncryptionProgress from '$lib/components/filesharing/EncryptionProgress.svelte'
     import Error from '$lib/components/filesharing/Error.svelte'
 
@@ -94,10 +94,10 @@
             <SendButton bind:EncryptState={EncryptState} />
         </div>
     {:else if EncryptState.encryptionState === EncryptionState.Sign}
-        <div>
-            <Sign isMobile={isMobileDevice} bind:stage={EncryptState.encryptionState} />
+        <Sign isMobile={isMobileDevice} bind:stage={EncryptState.encryptionState} />
+        <div class="mobile-hide">
+            <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} isConfirming={true} />
         </div>
-        <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} isConfirming={true} />
     {:else if EncryptState.encryptionState === EncryptionState.Encrypting}
         <EncryptionProgress encryptStartTime={EncryptState.encryptionState}
                             files={EncryptState.files}
@@ -132,7 +132,6 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-right: 20px;
   }
 
   .inputs-container {
@@ -157,6 +156,12 @@
 
   .crypt-irma-qr {
     width: 100%;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .sign-container {
+      margin-right: 20px;
+    }
   }
 
   @media only screen and (max-width: 768px) {

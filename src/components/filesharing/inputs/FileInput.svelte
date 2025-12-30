@@ -64,7 +64,12 @@
         }
     })
 </script>
-<form id="my-form" class="dropzone" class:dropzone-with-files={files.length > 0} class:signing-dropzone={stage === EncryptionState.Sign}>
+<form id="my-form" class="dropzone"
+      class:dropzone-with-files={files.length > 0}
+      class:signing-dropzone={stage === EncryptionState.Sign}
+      class:mobile-hide={stage === EncryptionState.Sign}
+      class:hidden={stage === EncryptionState.Encrypting || stage === EncryptionState.Done}
+>
     <!-- so dropzone can get the template but its invisible -->
     <div class="hidden">
         <UploadedFileTemplate />
@@ -87,7 +92,8 @@
         {/if}
 
         <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
-        <div id="previews" class="middle-block-size dz-previews" class:hidden={files.length <= 0} class:signing={stage === EncryptionState.Sign}></div>
+        <div id="previews" class="middle-block-size dz-previews" class:hidden={files.length <= 0}
+             class:signing={stage === EncryptionState.Sign}></div>
         <button class="dz-message post-upload-button desktop-hide" class:hidden={files.length <= 0}>{@html rawAdd}
             Upload file
         </button>
@@ -112,6 +118,7 @@
         align-items: center;
 
     }
+
     @media only screen and (min-width: 768px) {
         .dropzone {
             height: 100%;
