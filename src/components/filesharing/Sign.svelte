@@ -29,6 +29,8 @@
         justify-content: flex-start;
         width: 100%;
         margin-inline: 20px;
+        max-width: 400px;
+        justify-self: center;
     }
 
     #crypt-irma-qr {
@@ -40,7 +42,7 @@
 
     .back-btn {
         margin-top: 1em;
-        padding: 0.5em 1em;
+        padding: 0.5em 0em;
         background-color: #000000;
         color: #ffffff;
         border: none;

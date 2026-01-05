@@ -95,7 +95,7 @@
         </div>
     {:else if EncryptState.encryptionState === EncryptionState.Sign}
         <Sign isMobile={isMobileDevice} bind:stage={EncryptState.encryptionState} />
-        <div class="mobile-hide">
+        <div class="recipients-sign-container">
             <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} isConfirming={true} />
         </div>
     {:else if EncryptState.encryptionState === EncryptionState.Encrypting}
@@ -131,7 +131,7 @@
   .sign-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
   }
 
   .inputs-container {
@@ -158,9 +158,20 @@
     width: 100%;
   }
 
+  .recipients-sign-container {
+    display: none;
+  }
+
   @media only screen and (min-width: 768px) {
     .sign-container {
       margin-right: 20px;
+      justify-content: space-between;
+    }
+  }
+
+  @media only screen and (min-width: 1280px) {
+    .recipients-sign-container {
+      display: block;
     }
   }
 
