@@ -78,6 +78,7 @@
         "subpar1": "Met PostGuard kunt je op een privacyvriendelijke manier veilig bestanden versturen. Elk bestand wordt speciaal voor de ontvanger versleuteld. Alleen die persoon kan dat bestand ontsleutelen. Daarvoor moet het e-mailadres getoond worden. Hiervoor wordt de identificatie-app Yivi gebruikt. <a href=\"https://yivi.app/\">Leer meer over de Yivi-app.</a>",
         "error": "Oeps... Excuses, er is iets fout gegaan. Probeer het nog een keer of neem contact op met ons",
         "tryAgain": "Probeer opnieuw",
+        "cancel": "Annuleer",
         "decryptpanel": {
             "header": "DOWNLOAD & ONTSLEUTEL",
             "downloadDecrypt": "Downloading & ontsleutelen...",

@@ -14,6 +14,7 @@
     import Sign from '$lib/components/filesharing/Sign.svelte'
     import EncryptionProgress from '$lib/components/filesharing/EncryptionProgress.svelte'
     import Error from '$lib/components/filesharing/Error.svelte'
+    import Done from '$lib/components/filesharing/Done.svelte'
 
     // janky way to conditionally import pg-wasm to avoid issues with SSR
     let modPromise: Promise<any>
@@ -75,7 +76,6 @@
         pubSignKey: undefined,
     }
 
-
     let EncryptState: EncryptState = $state(defaultEncryptState)
 </script>
 
@@ -102,11 +102,16 @@
         <EncryptionProgress encryptStartTime={EncryptState.encryptionState}
                             files={EncryptState.files}
                             recipients={EncryptState.recipients}
-                            percentages={EncryptState.percentages} />
+                            bind:percentages={EncryptState.percentages}
+                            bind:done={EncryptState.done}
+                            bind:stage={EncryptState.encryptionState}
+                            bind:selfAborted={EncryptState.selfAborted}
+                            abort={EncryptState.abort}
+        />
     {:else if EncryptState.encryptionState === EncryptionState.Error}
         <Error bind:encryptionState={EncryptState.encryptionState} />
     {:else if EncryptState.encryptionState === EncryptionState.Done}
-
+        <Done bind:EncryptState={EncryptState} defaultEncryptState={defaultEncryptState} />
     {/if}
 
 

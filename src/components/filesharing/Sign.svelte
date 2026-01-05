@@ -1,5 +1,6 @@
 <script lang="ts">
     import { EncryptionState, type EncryptState } from '$lib/lib/types/filesharing/attributes'
+    import { _ } from 'svelte-i18n'
 
     interface props {
         isMobile: boolean;
@@ -14,7 +15,7 @@
 
     <button onclick={() => {stage = EncryptionState.FileSelection}}
             class="back-btn">
-        Back
+        {$_('filesharing.cancel')}
     </button>
 </div>
 
