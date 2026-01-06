@@ -58,7 +58,7 @@
     ]
 
     const defaultEncryptState: EncryptState = {
-        recipients: [{ email: 'test@example.com', extra: [] }],
+        recipients: [{ email: '', extra: [] }],
         sender: '',
         senderAttributes: [],
         message: '',
@@ -125,11 +125,11 @@
   }
 
   .container {
-    display: grid;
-    grid-auto-columns: 5fr 2fr;
-    grid-auto-flow: column;
-    gap: 2rem;
-    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-inline: 1em;
+    overflow-y: auto;
     height: calc(100vh - 52px - 0.5rem - 1rem); /* navbar height + margin */
   }
 
@@ -147,8 +147,7 @@
     font-size: 1.15em;
     min-width: 0;
     gap: 1em;
-    margin: 1em 1em 0 0;
-    overflow-y: auto;
+    margin: 0;
   }
 
   .shrinking-spacer {
@@ -172,24 +171,24 @@
       margin-right: 20px;
       justify-content: space-between;
     }
+
+    .container {
+      display: grid;
+      grid-auto-columns: 5fr 2fr;
+      grid-auto-flow: column;
+      gap: 2rem;
+      overflow-y: hidden;
+    }
+
+    .inputs-container {
+      margin: 1em 1em 0 0;
+      overflow-y: auto;
+    }
   }
 
   @media only screen and (min-width: 1280px) {
     .recipients-sign-container {
       display: block;
-    }
-  }
-
-  @media only screen and (max-width: 768px) {
-    .container {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-inline: 1em;
-    }
-
-    .inputs-container {
-      margin: 0;
     }
   }
 </style>

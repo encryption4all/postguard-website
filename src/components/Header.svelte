@@ -52,15 +52,15 @@
   }
 
   .pg-desktop-menu {
+    display: none;
     margin-left: auto;
-    display: flex;
     flex-direction: row;
     gap: 1rem;
   }
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (min-width: 768px) {
     .pg-desktop-menu {
-      display: none;
+      display: flex;
     }
   }
 

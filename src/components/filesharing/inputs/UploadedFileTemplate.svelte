@@ -1,6 +1,6 @@
 <script lang="ts">
-import remove from '$lib/assets/images/google-icons/remove.svg';
-import file from '$lib/assets/images/google-icons/file.svg';
+    import remove from '$lib/assets/images/google-icons/remove.svg'
+    import file from '$lib/assets/images/google-icons/file.svg'
 </script>
 
 <div class="files" id="template">
@@ -13,7 +13,7 @@ import file from '$lib/assets/images/google-icons/file.svg';
     <div>
         <p data-dz-size></p>
         <button class="remove-button" data-dz-remove>
-            <img src={remove} alt="remove button"/>
+            <img src={remove} alt="remove button" />
         </button>
         <div class="dz-error-message"><span data-dz-errormessage></span></div>
     </div>
@@ -46,19 +46,20 @@ import file from '$lib/assets/images/google-icons/file.svg';
     }
 
     .preview-img {
-        width: 90px;
-        height: 60px;
+        width: 40px;
+        height: 30px;
         border-radius: 5px;
         object-fit: contain;
     }
 
+
     .file-title {
-        font-weight: 600;
-        margin: 0;
-        max-width: 300px;
+        max-width: 100px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        font-weight: 600;
+        margin: 0;
     }
 
     .remove-button, .remove-button * {
@@ -66,19 +67,14 @@ import file from '$lib/assets/images/google-icons/file.svg';
         height: 100%;
     }
 
-    @media only screen and (max-width: 768px) {
+    @media only screen and (min-width: 768px) {
         .preview-img {
-            width: 40px;
-            height: 30px;
-            border-radius: 5px;
-            object-fit: contain;
+            width: 90px;
+            height: 60px;
         }
 
         .file-title {
-            max-width: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            max-width: 300px;
         }
     }
 </style>

@@ -136,8 +136,9 @@
     }
 
     .middle-block-size {
-        height: 50vh;
-        width: 70%;
+        width: 95%;
+        height: 30vh;
+
     }
 
     .upload-butt {
@@ -153,80 +154,91 @@
 
     .upload-butt img {
         margin-bottom: 1rem;
-        width: 8em
+        width: 5em;
     }
 
+
     .dz-previews {
+        height: fit-content;
+        width: 100%;
+        margin-top: 1em;
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
-
+        gap: 0;
         flex: 1 1 auto;
         overflow: auto;
     }
-
     .drawing {
-        display: none
+        display: block;
+        width: 100%;
+        margin-top: 3vh;
+        justify-self: end;
+        background-color: unset;
+        border-radius: 0;
+
     }
 
     .signing-dropzone .dz-previews {
         width: 100%;
     }
 
-    @media only screen and (max-width: 768px) {
+    .top-upload-text {
+        display: none;
+    }
+
+    .bottom-upload-text {
+        text-transform: capitalize;
+    }
+
+    .dropzone-with-files {
+        padding: 0;
+        justify-content: start;
+        height: fit-content;
+        max-height: 200px; /* So it shows roughly 2 and a half files (the half so it's clear it's scrollable)*/
+    }
+
+    .post-upload-button {
+        flex: 0 0 auto;
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: start;
+        background-color: black;
+        fill: white;
+        color: white;
+        padding: 0.5em;
+        border-radius: 5px;
+    }
+
+    @media only screen and (min-width: 768px) {
         .middle-block-size {
-            width: 95%;
-            height: 30vh;
+            height: 50vh;
+            width: 70%;
         }
 
         .upload-butt img {
             margin-bottom: 1rem;
-            width: 5em
+            width: 8em;
         }
 
         .top-upload-text {
-            display: none;
-        }
-
-        .bottom-upload-text {
-            text-transform: capitalize;
+            display: block;
         }
 
         .drawing {
-            display: block;
-            width: 100%;
-            margin-top: 3vh;
-            justify-self: end;
-            background-color: unset;
-            border-radius: 0;
-        }
-
-        .dropzone-with-files {
-            padding: 0;
-            justify-content: start;
-            height: fit-content;
-            max-height: 200px; /* So it shows roughly 2 and a half files (the half so it's clear it's scrollable)*/
+            display: none;
         }
 
         .dz-previews {
-            margin-top: 1em;
-            height: fit-content;
-            width: 100%;
-            gap: 0;
+            gap: 0.5rem;
         }
 
-        .post-upload-button {
-            flex: 0 0 auto;
-            display: flex;
-            width: 100%;
-            flex-direction: row;
-            align-items: center;
-            justify-content: start;
-            background-color: black;
-            fill: white;
-            color: white;
-            padding: 0.5em;
-            border-radius: 5px;
+        .dropzone-with-files {
+            height: auto;
+            max-height: none;
+            justify-content: center;
+            padding: 20px 20px;
         }
     }
 </style>
