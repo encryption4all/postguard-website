@@ -127,10 +127,11 @@
   .container {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.5rem;
     margin-inline: 1em;
     overflow-y: auto;
     height: calc(100vh - 52px - 0.5rem - 1rem); /* navbar height + margin */
+    padding: 0.5rem 0;
   }
 
   .sign-container {
@@ -146,7 +147,7 @@
     height: 100%;
     font-size: 1.15em;
     min-width: 0;
-    gap: 1em;
+    gap: 1.25em;
     margin: 0;
   }
 

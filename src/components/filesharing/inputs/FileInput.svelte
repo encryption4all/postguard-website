@@ -106,8 +106,17 @@
     @import "$lib/shared-styles.css";
     @import "files-shared-sheet.css";
 
+    h1 {
+        font-size: 1.75em;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0;
+    }
+
     h2 {
         margin: 0;
+        color: #4b5563;
+        font-weight: 600;
     }
 
     .dropzone {
@@ -147,14 +156,30 @@
         align-items: center;
         justify-content: center;
         font-weight: 600;
-        background-color: #e0eaff;
-        border-radius: 10px;
+        background: linear-gradient(135deg, #e0eaff 0%, #d0e0ff 100%);
+        border: 2px dashed #8eb4f5;
+        border-radius: 16px;
         margin: 0;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(48, 149, 222, 0.08);
+    }
+
+    .upload-butt:hover {
+        background: linear-gradient(135deg, #d0e0ff 0%, #c0d5ff 100%);
+        border-color: #6096f2;
+        box-shadow: 0 4px 16px rgba(48, 149, 222, 0.15);
+        transform: translateY(-2px);
     }
 
     .upload-butt img {
         margin-bottom: 1rem;
         width: 5em;
+        transition: transform 0.2s ease;
+    }
+
+    .upload-butt:hover img {
+        transform: scale(1.1);
     }
 
 
@@ -204,11 +229,25 @@
         flex-direction: row;
         align-items: center;
         justify-content: start;
-        background-color: black;
+        background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
         fill: white;
         color: white;
-        padding: 0.5em;
-        border-radius: 5px;
+        padding: 0.75em 1em;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        gap: 0.5em;
+    }
+
+    .post-upload-button:hover {
+        background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        transform: translateY(-1px);
+    }
+
+    .post-upload-button:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
 
     @media only screen and (min-width: 768px) {

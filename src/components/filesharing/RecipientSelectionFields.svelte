@@ -78,9 +78,17 @@
     }
 
     .crypt-recipient {
-        background-color: #E9E9E9;
-        padding: 0.4em;
-        border-radius: 5px;
+        background-color: #f8f9fa;
+        padding: 1em;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        transition: all 0.2s ease;
+    }
+
+    .crypt-recipient:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-color: #d1d5db;
     }
 
     .crypt-recipient:not(:last-child) {
@@ -90,6 +98,16 @@
     .btn-delete {
         all: unset;
         cursor: pointer;
+        padding: 4px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-delete:hover {
+        background-color: #fee2e2;
     }
 
     .recipient-heading {
@@ -99,16 +117,30 @@
     }
 
     .email-input {
-        background-color: #E9E9E9;
-        border: none;
-        border-bottom: solid 2px black;
+        background-color: white;
+        border: 1.5px solid #d1d5db;
+        border-radius: 6px;
+        padding: 0.65em 0.85em;
+        transition: all 0.2s ease;
+        font-size: 1em;
+    }
+
+    .email-input:hover {
+        border-color: #9ca3af;
+    }
+
+    .email-input:focus {
+        outline: none;
+        border-color: #3095de;
+        box-shadow: 0 0 0 3px rgba(48, 149, 222, 0.1);
     }
 
     .optionals-container {
         display: flex;
         flex-direction: column;
-        gap: 0.25em;
-        border-left: 2px solid black;
-        padding-left: 4px;
+        gap: 0.5em;
+        border-left: 3px solid #3095de;
+        padding-left: 0.75em;
+        margin-top: 0.5em;
     }
 </style>

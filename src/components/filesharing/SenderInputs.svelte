@@ -72,25 +72,53 @@
 <style lang="scss">
   @import "shared-styles.css";
 
+  .crypt-sender-receipt {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-top: 0.75em;
+  }
+
   .crypt-sender-receipt > input {
-    margin: 0.5em 0 0 0;
-    width: unset;
+    margin: 0;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #3095de;
+  }
+
+  .crypt-sender-receipt > label {
+    cursor: pointer;
+    user-select: none;
   }
 
   .add-list {
-    margin-top: 0.3em;
+    margin-top: 0.5em;
   }
 
   summary {
-    font-size: 0.8em;
+    font-size: 0.85em;
+    color: #6b7280;
+    padding: 0.5em 0;
+    transition: color 0.2s ease;
+  }
+
+  summary:hover {
+    color: #3095de;
   }
 
   details {
-    margin-bottom: 0.3em;
+    margin-bottom: 0.5em;
   }
 
   details p {
-    border-left: 2px solid black;
-    padding-left: 4px;
+    border-left: 3px solid #3095de;
+    padding-left: 0.75em;
+    margin-top: 0.5em;
+    font-size: 0.9em;
+    color: #4b5563;
+    background-color: #f9fafb;
+    padding: 0.75em;
+    border-radius: 0 6px 6px 0;
   }
 </style>

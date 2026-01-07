@@ -32,33 +32,52 @@
 
 <style>
     .add-attribute-btn {
-        color: black;
-        border: 1px solid black;
-        border-radius: 5px;
+        color: #374151;
+        border: 1.5px solid #d1d5db;
+        border-radius: 6px;
         background-color: white;
         font-family: Overpass;
         cursor: pointer;
-        padding: 2px 4px;
+        padding: 6px 10px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .add-attribute-btn:hover {
+        background-color: #f9fafb;
+        border-color: #3095de;
+        color: #3095de;
+        box-shadow: 0 2px 4px rgba(48, 149, 222, 0.1);
     }
 
     .added-attribute {
         display: flex;
         align-items: center;
-        color: black;
-        background-color: #d9d9d9;
+        gap: 4px;
+        color: #374151;
+        background-color: #e5e7eb;
+        border: 1px solid #d1d5db;
         font-family: Overpass;
         text-align: start;
         width: fit-content;
-        padding: 4px 6px;
-        border-radius: 5px;
-        font-size: 16px;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 14px;
         height: min-content;
         margin: 0;
+        transition: all 0.2s ease;
+        cursor: pointer;
     }
 
-    /* if the added attributed contains an image remove 4px padding to account for the extra space created by the svg */
+    .added-attribute:hover {
+        background-color: #fee2e2;
+        border-color: #fca5a5;
+        color: #991b1b;
+    }
+
     .added-attribute img {
-        margin-right: -4px;
-        padding: 0;
+        width: 16px;
+        height: 16px;
     }
 </style>

@@ -107,38 +107,85 @@
     }
 
     .phone-input {
-        background-color: #E9E9E9;
-        border: 0;
-        border-block: solid 2px black;
-        border-left: solid 2px black;
-        padding: 4px 0 4px 4px;
-        height: 35.2px;
+        background-color: white;
+        border: 1.5px solid #d1d5db;
+        border-right: none;
+        border-radius: 6px 0 0 6px;
+        padding: 8px 6px;
+        height: 40px;
+        transition: all 0.2s ease;
+    }
+
+    .phone-input:hover {
+        border-color: #9ca3af;
+    }
+
+    .phone-input:focus {
+        outline: none;
+        border-color: #3095de;
+        background-color: white;
     }
 
     .removable-text-input {
-        background-color: #E9E9E9;
-        border: none;
-        border-block: solid 2px black;
-        border-left: solid 2px black;
-        padding: 4px 0 4px 4px;
+        background-color: white;
+        border: 1.5px solid #d1d5db;
+        border-left: none;
+        border-right: none;
+        padding: 8px 10px;
         width: 100%;
+        transition: all 0.2s ease;
+        height: 40px;
+    }
+
+    .removable-text-input:hover {
+        border-top-color: #9ca3af;
+        border-bottom-color: #9ca3af;
+    }
+
+    .removable-text-input:focus {
+        outline: none;
+        border-color: #3095de;
+        background-color: white;
     }
 
     .btn-delete {
-        border-block: solid 2px black;
-        border-right: solid 2px black;
-        padding: 4px 4px 4px 0;
+        border: 1.5px solid #d1d5db;
+        border-left: none;
+        border-radius: 0 6px 6px 0;
+        padding: 8px 10px;
         display: flex;
         align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        background-color: white;
+        height: 40px;
+    }
+
+    .btn-delete:hover {
+        background-color: #fee2e2;
+        border-color: #fca5a5;
     }
 
     .removed-del-border {
-        border-right: solid 2px black;
+        border-right: 1.5px solid #d1d5db;
+        border-radius: 0 6px 6px 0;
     }
 
     .optional-value {
         display: flex;
-        align-items: center;
+        align-items: stretch;
+    }
+
+    .optional-value:hover .phone-input,
+    .optional-value:hover .removable-text-input,
+    .optional-value:hover .btn-delete {
+        border-color: #9ca3af;
+    }
+
+    .optional-value:focus-within .phone-input,
+    .optional-value:focus-within .removable-text-input,
+    .optional-value:focus-within .btn-delete {
+        border-color: #3095de;
     }
 
     /* for the date input */

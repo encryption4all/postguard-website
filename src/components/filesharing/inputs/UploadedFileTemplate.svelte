@@ -30,26 +30,36 @@
         justify-content: space-between;
         gap: 0.5em;
 
-        background-color: #d9d9d9;
-        padding: 10px;
-        border-radius: 5px;
+        background-color: white;
+        border: 1px solid #e5e7eb;
+        padding: 12px 14px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 
         width: 100%;
         margin-bottom: 10px;
+        transition: all 0.2s ease;
+    }
+
+    .files:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-color: #d1d5db;
     }
 
     .files div {
         display: flex;
         align-items: center;
-        gap: 0.3em;
+        gap: 0.5em;
         text-wrap: wrap;
     }
 
     .preview-img {
         width: 40px;
         height: 30px;
-        border-radius: 5px;
+        border-radius: 6px;
         object-fit: contain;
+        background-color: #f9fafb;
+        padding: 4px;
     }
 
 
@@ -60,11 +70,26 @@
         white-space: nowrap;
         font-weight: 600;
         margin: 0;
+        color: #374151;
     }
 
-    .remove-button, .remove-button * {
+    .remove-button {
         cursor: pointer;
         height: 100%;
+        padding: 4px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .remove-button:hover {
+        background-color: #fee2e2;
+    }
+
+    .remove-button * {
+        cursor: pointer;
     }
 
     @media only screen and (min-width: 768px) {
