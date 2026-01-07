@@ -240,5 +240,14 @@
             justify-content: center;
             padding: 20px 20px;
         }
+
+        .signing-dropzone {
+            justify-content: start;
+            padding: 0 20px;
+        }
+
+        .signing {
+            margin-top: 0;
+        }
     }
 </style>
