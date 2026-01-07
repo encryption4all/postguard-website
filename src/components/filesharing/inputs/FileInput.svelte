@@ -38,6 +38,7 @@
             maxFilesize: maxFileSizeMB,
             previewsContainer: '#previews',
             previewTemplate: previewTemplate,
+            clickable: '.upload-butt, .post-upload-button', // Only these elements trigger file selection
         })
 
         myDropzone.on('addedfile', file => {
@@ -85,16 +86,17 @@
                 <h2 class="top-upload-text">
                     {@html $_('filesharing.encryptPanel.fileBox.upperTextDropZone')}
                 </h2>
-                <img src={plusIcon} alt="Add files" />
+                <img src={plusIcon} alt="Add files" draggable="false" />
                 <h2 class="bottom-upload-text">{@html $_('filesharing.encryptPanel.fileBox.lowerTextDropZone')}</h2>
             </div>
-            <img src={BasketDrawing} alt="Basket drawing" class="drawing" />
+            <img src={BasketDrawing} alt="Basket drawing" class="drawing" draggable="false" />
         {/if}
 
         <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
         <div id="previews" class="middle-block-size dz-previews" class:hidden={files.length <= 0}
              class:signing={stage === EncryptionState.Sign}></div>
-        <button class="dz-message post-upload-button desktop-hide" class:hidden={files.length <= 0}>{@html rawAdd}
+        <button class="dz-message post-upload-button desktop-hide" class:hidden={files.length <= 0}>
+            <span style="display: flex; align-items: center; pointer-events: none;">{@html rawAdd}</span>
             Upload file
         </button>
     </div>
@@ -176,6 +178,8 @@
         margin-bottom: 1rem;
         width: 5em;
         transition: transform 0.2s ease;
+        user-select: none;
+        pointer-events: none;
     }
 
     .upload-butt:hover img {

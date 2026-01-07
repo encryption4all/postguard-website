@@ -281,6 +281,13 @@
     font-size: 1.05em;
     font-weight: 600;
     border-radius: 12px;
+    background: var(--pg-accent-color) !important;
+    box-shadow: 0 2px 8px rgba(var(--pg-accent-color-rgb), 0.25) !important;
+  }
+
+  .crypt-btn-main:hover:not(.crypt-btn-disabled) {
+    background: linear-gradient(135deg, #2589d4 0%, #1e7ac7 100%) !important;
+    box-shadow: 0 4px 12px rgba(var(--pg-accent-color-rgb), 0.35) !important;
   }
 
   .crypt-btn-main img {

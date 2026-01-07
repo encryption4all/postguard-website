@@ -3,7 +3,7 @@
     import { getCountryCallingCode, type CountryCode } from 'libphonenumber-js/mobile'
     import '../shared-styles.css'
 
-    import removeIcon from '$lib/assets/images/google-icons/remove.svg'
+    import closeIcon from '$lib/assets/images/google-icons/close.svg'
 
     interface props {
         translation_key: string;
@@ -40,8 +40,8 @@
     })
 
 </script>
-<div>
-    <label style="margin-top: 0;" for={randomId}>
+<div class="input-wrapper">
+    <label for={randomId}>
         {$_(translation_key)}
     </label>
     <div class="optional-value" class:removed-del-border={isConfirming}>
@@ -59,7 +59,6 @@
                 class="removable-text-input field-height"
                 class:is-confirming-bg={isConfirming}
                 disabled={isConfirming}
-                style="border-left: solid 0px black;"
                 type="tel"
                 bind:value={showingValue}
             />
@@ -89,8 +88,8 @@
                 onclick={deleteAction}
             >
                 <img
-                    style="width: 16px"
-                    src={removeIcon}
+                    style="width: 18px; height: 18px;"
+                    src={closeIcon}
                     alt="remove optional attribute"
                 />
             </button>
@@ -99,16 +98,29 @@
 </div>
 
 <style>
+    .input-wrapper {
+        margin-bottom: 0.5em;
+    }
+
+    .input-wrapper:last-child {
+        margin-bottom: 0;
+    }
+
     select {
         font-family: var(--pg-font-family);
     }
 
     label {
         font-family: var(--pg-font-family);
+        font-size: 0.9em;
+        color: var(--pg-text-secondary);
+        margin-bottom: 0.35em;
+        margin-top: 0;
+        display: block;
     }
 
     .field-height {
-        height: 24px;
+        height: 40px;
     }
 
     .phone-input {
@@ -118,9 +130,10 @@
         border: 1.5px solid var(--pg-border-color);
         border-right: none;
         border-radius: var(--pg-border-radius) 0 0 var(--pg-border-radius);
-        padding: 8px 6px;
+        padding: 0 10px;
         height: 40px;
         transition: all 0.2s ease;
+        min-width: 100px;
     }
 
     .phone-input:hover {
@@ -140,10 +153,11 @@
         border: 1.5px solid var(--pg-border-color);
         border-left: none;
         border-right: none;
-        padding: 8px 10px;
+        padding: 0 10px;
         width: 100%;
         transition: all 0.2s ease;
         height: 40px;
+        flex: 1;
     }
 
     .removable-text-input:hover {
@@ -161,13 +175,14 @@
         border: 1.5px solid var(--pg-border-color);
         border-left: none;
         border-radius: 0 var(--pg-border-radius) var(--pg-border-radius) 0;
-        padding: 8px 10px;
+        padding: 0 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: all 0.2s ease;
         background-color: white;
         height: 40px;
+        min-width: 40px;
     }
 
     .btn-delete:hover {
@@ -183,6 +198,7 @@
     .optional-value {
         display: flex;
         align-items: stretch;
+        height: 40px;
     }
 
     .optional-value:hover .phone-input,

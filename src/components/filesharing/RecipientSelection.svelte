@@ -52,7 +52,7 @@
 
         {#if !isConfirming}
             <button class="add-recipient-btn" onclick={addRecipient}>
-                <img src={addIcon} alt="add recipient" />
+                <img src={addIcon} alt="add recipient" draggable="false" />
                 Add another recipient
             </button>
         {/if}
@@ -109,5 +109,7 @@
   .add-recipient-btn img {
     width: 20px;
     height: 20px;
+    user-select: none;
+    pointer-events: none;
   }
 </style>
