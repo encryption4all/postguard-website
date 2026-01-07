@@ -13,6 +13,7 @@
     <p>{$_('filesharing.encryptPanel.messageText')}</p>
     <textarea
         required={false}
+        placeholder={$_('filesharing.encryptPanel.messagePlaceholder')}
         bind:value={message}
     ></textarea>
 </div>

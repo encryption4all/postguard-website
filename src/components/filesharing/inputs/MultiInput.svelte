@@ -60,6 +60,7 @@
                 class:is-confirming-bg={isConfirming}
                 disabled={isConfirming}
                 type="tel"
+                placeholder={$_(translation_key + '.placeholder')}
                 bind:value={showingValue}
             />
         {:else if translation_key === 'filesharing.attributes.pbdf.gemeente.personalData.dateofbirth'}
@@ -68,7 +69,9 @@
                 class="removable-text-input field-height"
                 class:is-confirming-bg={isConfirming}
                 disabled={isConfirming}
-                type="date"
+                type="text"
+                pattern="\d{2}-\d{2}-\d{4}"
+                placeholder={$_(translation_key + '.placeholder')}
                 bind:value={value}
             />
         {:else}
@@ -78,6 +81,7 @@
                 class:is-confirming-bg={isConfirming}
                 disabled={isConfirming}
                 type="text"
+                placeholder={$_(translation_key + '.placeholder')}
                 bind:value={value}
             />
         {/if}
@@ -128,8 +132,7 @@
         font-size: var(--pg-input-font-size);
         background-color: white;
         border: 1.5px solid var(--pg-border-color);
-        border-right: none;
-        border-radius: var(--pg-border-radius) 0 0 var(--pg-border-radius);
+        border-radius: var(--pg-border-radius);
         padding: 0 10px;
         height: 40px;
         transition: all 0.2s ease;
@@ -151,8 +154,7 @@
         font-size: var(--pg-input-font-size);
         background-color: white;
         border: 1.5px solid var(--pg-border-color);
-        border-left: none;
-        border-right: none;
+        border-radius: var(--pg-border-radius);
         padding: 0 10px;
         width: 100%;
         transition: all 0.2s ease;
@@ -161,8 +163,7 @@
     }
 
     .removable-text-input:hover {
-        border-top-color: var(--pg-border-color-hover);
-        border-bottom-color: var(--pg-border-color-hover);
+        border-color: var(--pg-border-color-hover);
     }
 
     .removable-text-input:focus {
@@ -172,56 +173,32 @@
     }
 
     .btn-delete {
-        border: 1.5px solid var(--pg-border-color);
-        border-left: none;
-        border-radius: 0 var(--pg-border-radius) var(--pg-border-radius) 0;
-        padding: 0 10px;
+        all: unset;
+        border-radius: var(--pg-border-radius);
+        padding: 0 8px;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: all 0.2s ease;
-        background-color: white;
+        background-color: transparent;
         height: 40px;
         min-width: 40px;
+        cursor: pointer;
     }
 
     .btn-delete:hover {
         background-color: #fee2e2;
-        border-color: #fca5a5;
     }
 
     .removed-del-border {
-        border-right: 1.5px solid var(--pg-border-color);
-        border-radius: 0 var(--pg-border-radius) var(--pg-border-radius) 0;
+        border-radius: var(--pg-border-radius);
     }
 
     .optional-value {
         display: flex;
-        align-items: stretch;
+        align-items: center;
+        gap: 0.5em;
         height: 40px;
     }
 
-    .optional-value:hover .phone-input,
-    .optional-value:hover .removable-text-input,
-    .optional-value:hover .btn-delete {
-        border-color: var(--pg-border-color-hover);
-    }
-
-    .optional-value:focus-within .phone-input,
-    .optional-value:focus-within .removable-text-input,
-    .optional-value:focus-within .btn-delete {
-        border-color: var(--pg-accent-color);
-    }
-
-    /* for the date input */
-    input[type="date"] {
-        font-family: var(--pg-font-family);
-        position: relative;
-        padding-left: 24px;
-    }
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        position: absolute;
-        left: 4px;
-        right: auto;
-    }
 </style>

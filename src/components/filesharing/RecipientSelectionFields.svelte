@@ -38,9 +38,7 @@
         {/if}
     </div>
     <input
-        placeholder={
-                $_('filesharing.encryptPanel.emailRecipient')
-            }
+        placeholder={$_('filesharing.encryptPanel.emailRecipientPlaceholder')}
         type="email"
         required
         class="email-input"

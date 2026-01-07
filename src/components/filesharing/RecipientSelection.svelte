@@ -53,7 +53,7 @@
         {#if !isConfirming}
             <button class="add-recipient-btn" onclick={addRecipient}>
                 <img src={addIcon} alt="add recipient" draggable="false" />
-                Add another recipient
+                {$_('filesharing.encryptPanel.addRecipientButton')}
             </button>
         {/if}
     </div>
