@@ -265,20 +265,37 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
     margin-bottom: 1rem;
   }
 
   .crypt-btn-main {
     display: flex;
     align-items: center;
-    padding: 0.25em 0.5em;
-    width: 90%;
+    justify-content: center;
+    gap: 0.75em;
+    padding: 0.85em 1.5em;
+    width: 100%;
+    max-width: 400px;
     text-wrap: nowrap;
+    font-size: 1.05em;
+    font-weight: 600;
+    border-radius: 12px;
+  }
+
+  .crypt-btn-main img {
+    filter: brightness(0) invert(1);
   }
 
   .link-decoration {
     text-align: center;
-    color: #549FF0 !important;
+    color: #3095de !important;
+    text-decoration: underline;
+    font-size: 0.9em;
+    transition: color 0.2s ease;
+  }
+
+  .link-decoration:hover {
+    color: #1e7ac7 !important;
   }
 </style>

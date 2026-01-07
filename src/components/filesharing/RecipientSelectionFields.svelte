@@ -13,9 +13,10 @@
         addAttribute: (att: AttType) => void;
         attributes: AttType[];
         isConfirming?: boolean;
+        isFirstRecipient?: boolean;
     }
 
-    let { recipient = $bindable(), remove, addAttribute, attributes, isConfirming = false }: props = $props()
+    let { recipient = $bindable(), remove, addAttribute, attributes, isConfirming = false, isFirstRecipient = false }: props = $props()
 
 
     let addableButtons: AttType[] = $derived(attributes.filter((att) => !recipient.extra.some(({ t }) => t === att)))
@@ -26,13 +27,15 @@
         <h3>
             {$_('filesharing.encryptPanel.emailRecipient')}
         </h3>
-        <button
-            class="btn-delete"
-            class:hidden={isConfirming}
-            onclick={remove}
-        >
-            <img style="width: 24px" src={closebutton} alt="close button" />
-        </button>
+        {#if !isFirstRecipient}
+            <button
+                class="btn-delete"
+                class:hidden={isConfirming}
+                onclick={remove}
+            >
+                <img style="width: 20px" src={closebutton} alt="close button" />
+            </button>
+        {/if}
     </div>
     <input
         placeholder={
@@ -92,7 +95,7 @@
     }
 
     .crypt-recipient:not(:last-child) {
-        margin-bottom: 1.5em;
+        margin-bottom: 1em;
     }
 
     .btn-delete {

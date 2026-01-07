@@ -24,18 +24,20 @@
 </script>
 
 <div class="crypt-select-protection-input-box">
-    <h3>
-        {$_('filesharing.encryptPanel.emailSenderHeading')}
-    </h3>
-    <!--browser native more info dropdown, no JS needed-->
-    <details>
-        <summary>
-            {$_('filesharing.encryptPanel.emailSenderSubHeadingToggle')}
-        </summary>
-        <p>
-            {$_('filesharing.encryptPanel.emailSenderSubHeading')}
-        </p>
-    </details>
+    <div class="sender-heading">
+        <h3>
+            {$_('filesharing.encryptPanel.emailSenderHeading')}
+        </h3>
+        <!--browser native more info dropdown, no JS needed-->
+        <details>
+            <summary>
+                {$_('filesharing.encryptPanel.emailSenderSubHeadingToggle')}
+            </summary>
+            <p>
+                {$_('filesharing.encryptPanel.emailSenderSubHeading')}
+            </p>
+        </details>
+    </div>
 
     <div class="attributes-list">
         <AttributeButton type="added"
@@ -72,6 +74,14 @@
 <style lang="scss">
   @import "shared-styles.css";
 
+  .sender-heading {
+    margin-bottom: 0.75em;
+  }
+
+  .sender-heading h3 {
+    margin-bottom: 0.5em;
+  }
+
   .crypt-sender-receipt {
     display: flex;
     align-items: center;
@@ -92,6 +102,10 @@
     user-select: none;
   }
 
+  .attributes-list {
+    margin-bottom: 0.5em;
+  }
+
   .add-list {
     margin-top: 0.5em;
   }
@@ -99,7 +113,7 @@
   summary {
     font-size: 0.85em;
     color: #6b7280;
-    padding: 0.5em 0;
+    padding: 0;
     transition: color 0.2s ease;
   }
 
@@ -108,14 +122,14 @@
   }
 
   details {
-    margin-bottom: 0.5em;
+    margin: 0;
   }
 
   details p {
     border-left: 3px solid #3095de;
     padding-left: 0.75em;
     margin-top: 0.5em;
-    font-size: 0.9em;
+    font-size: 0.85em;
     color: #4b5563;
     background-color: #f9fafb;
     padding: 0.75em;

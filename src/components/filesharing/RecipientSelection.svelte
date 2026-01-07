@@ -33,16 +33,6 @@
                 <h3>
                     {$_('filesharing.encryptPanel.RecipientsHeading')}
                 </h3>
-
-                <button
-                    class:hidden={isConfirming}
-                    onclick={addRecipient}>
-                    <img
-                        style="width: 24px; vertical-align: middle; margin-right: 0.2em;"
-                        src={addIcon}
-                        alt="add recipient"
-                    />
-                </button>
             </div>
             <p>
                 {$_('filesharing.encryptPanel.RecipientsText')}
@@ -56,8 +46,16 @@
                 addAttribute={(att: AttType) => addAttributeToRecipient(index, att)}
                 {attributes}
                 isConfirming={isConfirming}
+                isFirstRecipient={index === 0}
             />
         {/each}
+
+        {#if !isConfirming}
+            <button class="add-recipient-btn" onclick={addRecipient}>
+                <img src={addIcon} alt="add recipient" />
+                Add another recipient
+            </button>
+        {/if}
     </div>
 </div>
 
@@ -65,16 +63,49 @@
   @use 'shared-styles';
 
   p {
-    font-size: 0.8em;
+    font-size: 0.85em;
+    color: #6b7280;
+    margin-bottom: 1em;
   }
 
   .recipient-heading {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 0.5em;
   }
 
   .remove-border {
     border: none;
+  }
+
+  .add-recipient-btn {
+    all: unset;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.65em 1em;
+    background-color: white;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #374151;
+    transition: all 0.2s ease;
+    margin-top: 1em;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .add-recipient-btn:hover {
+    background-color: #f9fafb;
+    border-color: #3095de;
+    color: #3095de;
+    box-shadow: 0 2px 4px rgba(48, 149, 222, 0.15);
+  }
+
+  .add-recipient-btn img {
+    width: 20px;
+    height: 20px;
   }
 </style>
