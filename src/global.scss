@@ -114,6 +114,23 @@ body {
 :root {
     --pg-accent-color: #3095de;
     --pg-accent-color-rgb: 48, 149, 222;
+
+    /* Typography */
+    --pg-font-family: 'Overpass', sans-serif;
+    --pg-input-font-size: 1em;
+
+    /* Colors */
+    --pg-text-primary: #1f2937;
+    --pg-text-secondary: #6b7280;
+    --pg-text-tertiary: #9ca3af;
+    --pg-border-color: #d1d5db;
+    --pg-border-color-hover: #9ca3af;
+    --pg-bg-input: #fafafa;
+    --pg-bg-input-hover: white;
+
+    /* Spacing */
+    --pg-border-radius: 6px;
+    --pg-border-radius-lg: 8px;
 }
 
 #app {

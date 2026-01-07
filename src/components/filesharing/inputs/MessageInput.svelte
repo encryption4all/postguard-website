@@ -22,8 +22,9 @@
 
     p {
         font-size: 0.85em;
-        color: #6b7280;
+        color: var(--pg-text-secondary);
         margin-bottom: 0.5em;
+        font-family: var(--pg-font-family);
     }
 
     h3 {

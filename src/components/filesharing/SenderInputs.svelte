@@ -94,12 +94,13 @@
     width: 18px;
     height: 18px;
     cursor: pointer;
-    accent-color: #3095de;
+    accent-color: var(--pg-accent-color);
   }
 
   .crypt-sender-receipt > label {
     cursor: pointer;
     user-select: none;
+    font-family: var(--pg-font-family);
   }
 
   .attributes-list {
@@ -112,13 +113,14 @@
 
   summary {
     font-size: 0.85em;
-    color: #6b7280;
+    color: var(--pg-text-secondary);
     padding: 0;
     transition: color 0.2s ease;
+    font-family: var(--pg-font-family);
   }
 
   summary:hover {
-    color: #3095de;
+    color: var(--pg-accent-color);
   }
 
   details {
@@ -126,13 +128,14 @@
   }
 
   details p {
-    border-left: 3px solid #3095de;
+    border-left: 3px solid var(--pg-accent-color);
     padding-left: 0.75em;
     margin-top: 0.5em;
     font-size: 0.85em;
     color: #4b5563;
     background-color: #f9fafb;
     padding: 0.75em;
-    border-radius: 0 6px 6px 0;
+    border-radius: 0 var(--pg-border-radius) var(--pg-border-radius) 0;
+    font-family: var(--pg-font-family);
   }
 </style>

@@ -91,7 +91,7 @@
 
     .crypt-recipient:hover {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        border-color: #d1d5db;
+        border-color: var(--pg-border-color);
     }
 
     .crypt-recipient:not(:last-child) {
@@ -102,7 +102,7 @@
         all: unset;
         cursor: pointer;
         padding: 4px;
-        border-radius: 6px;
+        border-radius: var(--pg-border-radius);
         transition: all 0.2s ease;
         display: flex;
         align-items: center;
@@ -120,29 +120,30 @@
     }
 
     .email-input {
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-input-font-size);
         background-color: white;
-        border: 1.5px solid #d1d5db;
-        border-radius: 6px;
+        border: 1.5px solid var(--pg-border-color);
+        border-radius: var(--pg-border-radius);
         padding: 0.65em 0.85em;
         transition: all 0.2s ease;
-        font-size: 1em;
     }
 
     .email-input:hover {
-        border-color: #9ca3af;
+        border-color: var(--pg-border-color-hover);
     }
 
     .email-input:focus {
         outline: none;
-        border-color: #3095de;
-        box-shadow: 0 0 0 3px rgba(48, 149, 222, 0.1);
+        border-color: var(--pg-accent-color);
+        box-shadow: 0 0 0 3px rgba(var(--pg-accent-color-rgb), 0.1);
     }
 
     .optionals-container {
         display: flex;
         flex-direction: column;
         gap: 0.5em;
-        border-left: 3px solid #3095de;
+        border-left: 3px solid var(--pg-accent-color);
         padding-left: 0.75em;
         margin-top: 0.5em;
     }

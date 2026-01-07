@@ -64,8 +64,9 @@
 
   p {
     font-size: 0.85em;
-    color: #6b7280;
+    color: var(--pg-text-secondary);
     margin-bottom: 1em;
+    font-family: var(--pg-font-family);
   }
 
   .recipient-heading {
@@ -86,12 +87,13 @@
     gap: 0.5em;
     padding: 0.65em 1em;
     background-color: white;
-    border: 1.5px solid #d1d5db;
-    border-radius: 8px;
+    border: 1.5px solid var(--pg-border-color);
+    border-radius: var(--pg-border-radius-lg);
     cursor: pointer;
+    font-family: var(--pg-font-family);
     font-size: 0.95em;
     font-weight: 600;
-    color: #374151;
+    color: var(--pg-text-primary);
     transition: all 0.2s ease;
     margin-top: 1em;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -99,8 +101,8 @@
 
   .add-recipient-btn:hover {
     background-color: #f9fafb;
-    border-color: #3095de;
-    color: #3095de;
+    border-color: var(--pg-accent-color);
+    color: var(--pg-accent-color);
     box-shadow: 0 2px 4px rgba(48, 149, 222, 0.15);
   }
 

@@ -32,11 +32,11 @@
 
 <style>
     .add-attribute-btn {
-        color: #374151;
-        border: 1.5px solid #d1d5db;
-        border-radius: 6px;
+        color: var(--pg-text-primary);
+        border: 1.5px solid var(--pg-border-color);
+        border-radius: var(--pg-border-radius);
         background-color: white;
-        font-family: Overpass;
+        font-family: var(--pg-font-family);
         cursor: pointer;
         padding: 6px 10px;
         font-size: 14px;
@@ -46,23 +46,23 @@
 
     .add-attribute-btn:hover {
         background-color: #f9fafb;
-        border-color: #3095de;
-        color: #3095de;
-        box-shadow: 0 2px 4px rgba(48, 149, 222, 0.1);
+        border-color: var(--pg-accent-color);
+        color: var(--pg-accent-color);
+        box-shadow: 0 2px 4px rgba(var(--pg-accent-color-rgb), 0.1);
     }
 
     .added-attribute {
         display: flex;
         align-items: center;
         gap: 4px;
-        color: #374151;
+        color: var(--pg-text-primary);
         background-color: #e5e7eb;
-        border: 1px solid #d1d5db;
-        font-family: Overpass;
+        border: 1px solid var(--pg-border-color);
+        font-family: var(--pg-font-family);
         text-align: start;
         width: fit-content;
         padding: 6px 10px;
-        border-radius: 6px;
+        border-radius: var(--pg-border-radius);
         font-size: 14px;
         height: min-content;
         margin: 0;

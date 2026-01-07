@@ -100,35 +100,44 @@
 
 <style>
     select {
-        font-family: "Overpass";
+        font-family: var(--pg-font-family);
     }
+
+    label {
+        font-family: var(--pg-font-family);
+    }
+
     .field-height {
         height: 24px;
     }
 
     .phone-input {
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-input-font-size);
         background-color: white;
-        border: 1.5px solid #d1d5db;
+        border: 1.5px solid var(--pg-border-color);
         border-right: none;
-        border-radius: 6px 0 0 6px;
+        border-radius: var(--pg-border-radius) 0 0 var(--pg-border-radius);
         padding: 8px 6px;
         height: 40px;
         transition: all 0.2s ease;
     }
 
     .phone-input:hover {
-        border-color: #9ca3af;
+        border-color: var(--pg-border-color-hover);
     }
 
     .phone-input:focus {
         outline: none;
-        border-color: #3095de;
+        border-color: var(--pg-accent-color);
         background-color: white;
     }
 
     .removable-text-input {
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-input-font-size);
         background-color: white;
-        border: 1.5px solid #d1d5db;
+        border: 1.5px solid var(--pg-border-color);
         border-left: none;
         border-right: none;
         padding: 8px 10px;
@@ -138,20 +147,20 @@
     }
 
     .removable-text-input:hover {
-        border-top-color: #9ca3af;
-        border-bottom-color: #9ca3af;
+        border-top-color: var(--pg-border-color-hover);
+        border-bottom-color: var(--pg-border-color-hover);
     }
 
     .removable-text-input:focus {
         outline: none;
-        border-color: #3095de;
+        border-color: var(--pg-accent-color);
         background-color: white;
     }
 
     .btn-delete {
-        border: 1.5px solid #d1d5db;
+        border: 1.5px solid var(--pg-border-color);
         border-left: none;
-        border-radius: 0 6px 6px 0;
+        border-radius: 0 var(--pg-border-radius) var(--pg-border-radius) 0;
         padding: 8px 10px;
         display: flex;
         align-items: center;
@@ -167,8 +176,8 @@
     }
 
     .removed-del-border {
-        border-right: 1.5px solid #d1d5db;
-        border-radius: 0 6px 6px 0;
+        border-right: 1.5px solid var(--pg-border-color);
+        border-radius: 0 var(--pg-border-radius) var(--pg-border-radius) 0;
     }
 
     .optional-value {
@@ -179,18 +188,18 @@
     .optional-value:hover .phone-input,
     .optional-value:hover .removable-text-input,
     .optional-value:hover .btn-delete {
-        border-color: #9ca3af;
+        border-color: var(--pg-border-color-hover);
     }
 
     .optional-value:focus-within .phone-input,
     .optional-value:focus-within .removable-text-input,
     .optional-value:focus-within .btn-delete {
-        border-color: #3095de;
+        border-color: var(--pg-accent-color);
     }
 
     /* for the date input */
     input[type="date"] {
-        font-family: "Overpass";
+        font-family: var(--pg-font-family);
         position: relative;
         padding-left: 24px;
     }

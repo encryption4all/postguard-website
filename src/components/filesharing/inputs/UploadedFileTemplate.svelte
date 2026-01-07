@@ -33,7 +33,7 @@
         background-color: white;
         border: 1px solid #e5e7eb;
         padding: 12px 14px;
-        border-radius: 8px;
+        border-radius: var(--pg-border-radius-lg);
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 
         width: 100%;
@@ -43,7 +43,7 @@
 
     .files:hover {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        border-color: #d1d5db;
+        border-color: var(--pg-border-color);
     }
 
     .files div {
@@ -68,16 +68,17 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        font-family: var(--pg-font-family);
         font-weight: 600;
         margin: 0;
-        color: #374151;
+        color: var(--pg-text-primary);
     }
 
     .remove-button {
         cursor: pointer;
         height: 100%;
         padding: 4px;
-        border-radius: 6px;
+        border-radius: var(--pg-border-radius);
         transition: all 0.2s ease;
         display: flex;
         align-items: center;
