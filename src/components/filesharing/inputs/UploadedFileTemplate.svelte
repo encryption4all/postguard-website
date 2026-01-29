@@ -5,8 +5,6 @@
 
 <div class="files" id="template">
     <div>
-        <img class="preview-img"
-             src={file} data-dz-thumbnail alt="file preview (icon)" />
         <div><p class="file-title" data-dz-name></p></div>
     </div>
 
@@ -65,6 +63,7 @@
     .remove-button, .remove-button * {
         cursor: pointer;
         height: 100%;
+        background: none;
     }
 
     @media only screen and (min-width: 768px) {

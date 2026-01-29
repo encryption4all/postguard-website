@@ -98,7 +98,8 @@
             "fileBox": {
                 "tagline": "Securely send your files",
                 "upperTextDropZone": "Drag & drop files <br/> or",
-                "lowerTextDropZone": "click to upload <br/> (max. 2GB)"
+                "lowerTextDropZone": "click to upload",
+                "sizeLimitText": "max. 2GB"
             },
 
             "RecipientsHeading": "Recipient(s)",

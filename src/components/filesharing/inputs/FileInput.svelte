@@ -5,7 +5,7 @@
     import 'dropzone/dist/dropzone.css'
     import plusIcon from '$lib/assets/images/plusicon.svg'
     import rawAdd from '$lib/assets/images/google-icons/add.svg?raw'
-    import BasketDrawing from '$lib/assets/images/basket.svg'
+    import BasketDrawing from '$lib/assets/images/basket_no_plane.svg'
     import UploadedFileTemplate from '$lib/components/filesharing/inputs/UploadedFileTemplate.svelte'
     import { EncryptionState } from '$lib/lib/types/filesharing/attributes'
 
@@ -75,18 +75,18 @@
         <UploadedFileTemplate />
     </div>
     <div class="dz-message">
-        <h1 style="margin-bottom: 8px; text-align: center"
-            class:mobile-hide={files.length > 0} class:hidden={stage !== EncryptionState.FileSelection}>
+        <h1 style="margin-bottom: 8px; text-align: center" class:hidden={stage !== EncryptionState.FileSelection}>
             {$_('filesharing.encryptPanel.fileBox.tagline')}
         </h1>
 
         {#if files.length <= 0}
             <div class="upload-butt middle-block-size">
+                <img src={BasketDrawing} alt="Add files" />
                 <h2 class="top-upload-text">
                     {@html $_('filesharing.encryptPanel.fileBox.upperTextDropZone')}
                 </h2>
-                <img src={plusIcon} alt="Add files" />
-                <h2 class="bottom-upload-text">{@html $_('filesharing.encryptPanel.fileBox.lowerTextDropZone')}</h2>
+                <h2 class="bottom-upload-text crypt-btn">{$_('filesharing.encryptPanel.fileBox.lowerTextDropZone')}</h2>
+                <p>{$_('filesharing.encryptPanel.fileBox.sizeLimitText')}</p>
             </div>
             <img src={BasketDrawing} alt="Basket drawing" class="drawing" />
         {/if}
@@ -147,9 +147,10 @@
         align-items: center;
         justify-content: center;
         font-weight: 600;
-        background-color: #e0eaff;
-        border-radius: 10px;
+        background: var(--Postguard-Soft-Background, #F2F8FD);
+        border-radius: var(--medium-border-radius);
         margin: 0;
+        border: 1px dashed var(--Postguard-Primary-Contrast, #1673B6)
     }
 
     .upload-butt img {
@@ -219,7 +220,7 @@
 
         .upload-butt img {
             margin-bottom: 1rem;
-            width: 8em;
+            width: 55%;
         }
 
         .top-upload-text {

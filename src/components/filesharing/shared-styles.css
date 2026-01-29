@@ -1,7 +1,15 @@
+:root {
+    --Postguard-Soft-Background: #F2F8FD;
+    --Postguard-Primary-Contrast: #1673B6;
+    --Postguard-Strong-Background: #C6E2F6;
+
+    --small-border-radius: 4px;
+    --medium-border-radius: 8px;
+}
+
 .crypt-select-protection-input-box {
     background-color: white;
     padding-left: 1em;
-    border-left: 2px solid black;
     display: flex;
     flex-direction: column;
 }
@@ -40,14 +48,14 @@ textarea:focus {
 
 .crypt-btn {
     border: none;
-    border-radius: 2.6em;
+    border-radius: var(--small-border-radius);
     background: #000000;
     cursor: pointer;
     color: white;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 1.15em;
     line-height: 1.6em;
-    padding: 0.25em 0;
+    padding: 1em;
     text-align: center;
 }
 
