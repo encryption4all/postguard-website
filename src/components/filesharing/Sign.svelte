@@ -1,6 +1,8 @@
 <script lang="ts">
     import { EncryptionState, type EncryptState } from '$lib/lib/types/filesharing/attributes'
     import { _ } from 'svelte-i18n'
+    import '@privacybydesign/yivi-css'
+    import './sign.css'
 
     interface props {
         isMobile: boolean;
@@ -20,9 +22,6 @@
 </div>
 
 <style>
-    @import "@privacybydesign/yivi-css";
-    @import "sign.css";
-
     .inputs-container {
         display: flex;
         flex-direction: column;
