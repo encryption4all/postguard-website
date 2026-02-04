@@ -86,10 +86,10 @@
                 <h2 class="top-upload-text">
                     {@html $_('filesharing.encryptPanel.fileBox.upperTextDropZone')}
                 </h2>
-                <img src={plusIcon} alt="Add files" draggable="false" />
+                <!-- <img src={plusIcon} alt="Add files" draggable="false" style="width: 10px;"/> -->
                 <h2 class="bottom-upload-text">{@html $_('filesharing.encryptPanel.fileBox.lowerTextDropZone')}</h2>
             </div>
-            <img src={BasketDrawing} alt="Basket drawing" class="drawing" draggable="false" />
+            <!-- <img src={BasketDrawing} alt="Basket drawing" class="drawing" draggable="false" /> -->
         {/if}
 
         <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
@@ -148,7 +148,7 @@
 
     .middle-block-size {
         width: 95%;
-        height: 30vh;
+        min-height: fit-content;
 
     }
 
@@ -158,25 +158,28 @@
         align-items: center;
         justify-content: center;
         font-weight: 600;
-        background: linear-gradient(135deg, #e0eaff 0%, #d0e0ff 100%);
-        border: 2px dashed #8eb4f5;
+        background:  #f3f8fd 0%;
+        border: 2px dashed #b0cbe2;
         border-radius: 16px;
         margin: 0;
+        padding: 1rem;
         transition: all 0.3s ease;
         cursor: pointer;
         box-shadow: 0 2px 8px rgba(48, 149, 222, 0.08);
     }
 
     .upload-butt:hover {
-        background: linear-gradient(135deg, #d0e0ff 0%, #c0d5ff 100%);
+        background: linear-gradient(135deg, #f3f8fd 0%, #c0d5ff 100%);
         border-color: #6096f2;
         box-shadow: 0 4px 16px rgba(48, 149, 222, 0.15);
         transform: translateY(-2px);
     }
 
     .upload-butt img {
-        margin-bottom: 1rem;
-        width: 5em;
+        margin-bottom: 0.5rem;
+        width: 100%;
+        max-width: 300px;
+        height: auto;
         transition: transform 0.2s ease;
         user-select: none;
         pointer-events: none;
@@ -186,6 +189,15 @@
         transform: scale(1.1);
     }
 
+    .upload-butt h2 {
+        margin: 0.25rem 0;
+        max-width: 100%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        text-align: center;
+        font-size: clamp(0.9rem, 3vw, 1.2rem);
+        line-height: 1.3;
+    }
 
     .dz-previews {
         height: fit-content;
@@ -212,6 +224,8 @@
     }
 
     .top-upload-text {
+        font-size: 1.2em;
+        font-weight: 800;
         display: none;
     }
 
@@ -256,13 +270,18 @@
 
     @media only screen and (min-width: 768px) {
         .middle-block-size {
-            height: 50vh;
+            min-height: 50vh;
             width: 70%;
+        }
+
+        .upload-butt {
+            padding: 2rem;
         }
 
         .upload-butt img {
             margin-bottom: 1rem;
             width: 55%;
+            max-width: 400px;
         }
 
         .top-upload-text {

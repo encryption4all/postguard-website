@@ -51,14 +51,14 @@
         text-wrap: wrap;
     }
 
-    .preview-img {
+    /* .preview-img {
         width: 40px;
         height: 30px;
         border-radius: 6px;
         object-fit: contain;
         background-color: #f9fafb;
         padding: 4px;
-    }
+    } */
 
 
     .file-title {
