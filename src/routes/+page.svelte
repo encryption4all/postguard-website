@@ -84,7 +84,7 @@
     <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
                bind:done={EncryptState.done} bind:stage={EncryptState.encryptionState} />
     {#if EncryptState.encryptionState === EncryptionState.FileSelection}
-        <div class="inputs-container" class:mobile-hide={EncryptState.files.length <= 0}>
+        <div class="inputs-container">
             <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} />
             <MessageInput bind:message={EncryptState.message} />
             <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
@@ -128,8 +128,6 @@
     flex-direction: column;
     gap: 1.5rem;
     margin-inline: 1em;
-    overflow-y: auto;
-    height: calc(100vh - 52px - 0.5rem - 1rem); /* navbar height + margin */
     padding: 0.5rem 0;
   }
 
@@ -143,12 +141,10 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    height: 100%;
     font-size: 1.15em;
     min-width: 0;
     gap: 1.25em;
     margin: 0;
-    border-left: 1px solid var(--pg-strong-background, #C6E2F6)
   }
 
   .shrinking-spacer {
@@ -174,12 +170,15 @@
       grid-auto-columns: 4fr 3fr;
       grid-auto-flow: column;
       gap: 2rem;
+      height: calc(100vh - 52px - 0.5rem - 1rem); /* navbar height + margin */
       overflow-y: hidden;
     }
 
     .inputs-container {
+      height: 100%;
       margin: 1em 1em 0 0;
       overflow-y: auto;
+      border-left: 1px solid var(--pg-strong-background, #C6E2F6);
     }
   }
 
