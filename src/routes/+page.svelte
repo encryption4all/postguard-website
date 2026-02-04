@@ -172,7 +172,7 @@
 
     .container {
       display: grid;
-      grid-auto-columns: 5fr 2fr;
+      grid-auto-columns: 4fr 3fr;
       grid-auto-flow: column;
       gap: 2rem;
       overflow-y: hidden;
