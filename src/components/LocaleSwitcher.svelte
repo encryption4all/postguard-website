@@ -69,8 +69,8 @@
   .language {
     display: flex;
     width: $language-width * 2 + 20px;
-    height: $language-height;
-    font-size: 14px;
+    height: auto;
+    font-size: 16px;
     line-height: 1;
     margin: 1em 0;
     align-content: center;
@@ -82,8 +82,8 @@
     position: relative;
     float: left;
     width: $language-width;
-    height: $language-height;
-    padding: 5px;
+    height: 30px;
+    padding: 0;
   }
 
   .language-label {
@@ -93,21 +93,19 @@
     width: $language-width;
     height: $language-height;
     border: 1px solid $language-border;
-    padding: 9px 8px 2px 0;
+    padding: 6px 0 2px 0;
     background-color: $white;
-    background-repeat: no-repeat;
-    background-position: 7px 7px;
-    background-size: 14px;
-    text-align: right;
+    text-align: center;
     text-transform: uppercase;
   }
 
   .language-container-left .language-label {
     border-radius: 4px 0 0 4px;
+    border-right: 1px solid $language-border;
   }
 
   .language-container-right .language-label {
-    border-left: 0;
+    border-left: 1px solid $language-border;
     border-radius: 0 4px 4px 0;
   }
 
@@ -118,7 +116,7 @@
 
   .language-control:checked + .language-label {
     text-decoration: underline 2px;
-    text-decoration-color: var(--pg-accent-color);
+    text-decoration-color: #1f2937;
   }
 
   .language-control:focus + .language-label,
@@ -126,13 +124,5 @@
     z-index: 2;
     outline: 2px solid $language-focus;
     box-shadow: 0 0 8px $language-focus;
-  }
-
-  .language-container-nl .language-label {
-    background-image: url('../assets/images/nl.svg');
-  }
-
-  .language-container-en .language-label {
-    background-image: url('../assets/images/gb.svg');
   }
 </style>

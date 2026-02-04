@@ -55,6 +55,7 @@
     display: none;
     margin-left: auto;
     flex-direction: row;
+    align-items: center;
     gap: 1rem;
   }
 
@@ -75,8 +76,9 @@
       border-right: 1px solid black;
     }
 
-    &.selected {
+    &.selected a {
       text-decoration: 2px underline;
+      text-decoration-color: #1f2937;
       text-underline-offset: 4px;
     }
 
@@ -91,7 +93,7 @@
         height: 2px;
         bottom: 0;
         left: 0;
-        background-color: var(--pg-accent-color);
+        background-color: #1f2937;
         transform-origin: bottom right;
         transition: transform 0.25s ease-out;
       }
