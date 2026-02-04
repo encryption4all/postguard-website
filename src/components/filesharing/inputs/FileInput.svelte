@@ -68,7 +68,6 @@
 <form id="my-form" class="dropzone"
       class:dropzone-with-files={files.length > 0}
       class:signing-dropzone={stage === EncryptionState.Sign}
-      class:mobile-hide={stage === EncryptionState.Sign}
       class:hidden={stage === EncryptionState.Encrypting || stage === EncryptionState.Done}
 >
     <!-- so dropzone can get the template but its invisible -->
@@ -160,7 +159,7 @@
         justify-content: center;
         font-weight: 600;
         background: var(--pg-strong-background) 0%;
-        border: 2px dashed var(--pg-border-color);
+        border: 2px dashed var(--pg-border-color-light);
         border-radius: var(--pg-border-radius-lg);
         margin: 0;
         padding: 1.5rem 1rem;
