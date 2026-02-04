@@ -17,7 +17,7 @@
         <button
             class="add-attribute-btn"
             onclick={clickAction}>
-            {$_(translation_key)} {clickAction ? '+' : ''}
+            {clickAction ? '+' : ''} {$_(translation_key)} 
         </button>
 {:else if type === 'added'}
     <button
@@ -32,6 +32,7 @@
 
 <style>
     .add-attribute-btn {
+        all: unset;
         color: var(--pg-text-primary);
         border: 1.5px solid var(--pg-border-color);
         border-radius: var(--pg-border-radius);
@@ -42,6 +43,7 @@
         font-size: 14px;
         transition: all 0.2s ease;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        box-sizing: border-box;
     }
 
     .add-attribute-btn:hover {
@@ -52,6 +54,7 @@
     }
 
     .added-attribute {
+        all: unset;
         display: flex;
         align-items: center;
         gap: 4px;
@@ -68,6 +71,7 @@
         margin: 0;
         transition: all 0.2s ease;
         cursor: pointer;
+        box-sizing: border-box;
     }
 
     .added-attribute:hover {

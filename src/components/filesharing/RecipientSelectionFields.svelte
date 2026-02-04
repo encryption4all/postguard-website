@@ -46,10 +46,6 @@
         bind:value={recipient.email}
     />
 
-
-    <h3 class="optionals-header">
-        {$_('filesharing.encryptPanel.RecipientsOptionalHeading')}
-    </h3>
     <div class="optionals-container">
         {#each recipient.extra as attribute, index}
             <MultiInput
@@ -74,12 +70,8 @@
 </li>
 
 <style>
-    .optionals-header {
-        margin-top: 0.5em;
-    }
-
     .crypt-recipient {
-        background-color: #f8f9fa;
+        background-color: var(--Postguard-Strong-Backgroung);
         padding: 1em;
         border-radius: 10px;
         border: 1px solid #e5e7eb;
@@ -141,8 +133,8 @@
         display: flex;
         flex-direction: column;
         gap: 0.5em;
-        border-left: 3px solid var(--pg-accent-color);
-        padding-left: 0.75em;
+        /* border-left: 3px solid var(--pg-accent-color); */
+        /* padding-left: 0.75em; */
         margin-top: 0.5em;
     }
 </style>

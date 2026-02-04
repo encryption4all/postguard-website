@@ -83,6 +83,7 @@
     cursor: pointer;
     margin-bottom: 0.75em;
     user-select: none;
+    background: transparent;
   }
 
   .arrow {

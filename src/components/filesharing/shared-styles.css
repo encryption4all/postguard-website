@@ -1,22 +1,13 @@
-:root {
-    --Postguard-Soft-Background: #F2F8FD;
-    --Postguard-Primary-Contrast: #1673B6;
-    --Postguard-Strong-Background: #C6E2F6;
-
-    --small-border-radius: 4px;
-    --medium-border-radius: 8px;
-}
-
 .crypt-select-protection-input-box {
     background-color: white;
     padding: 1.25em;
     padding-left: 1.25em;
-    border-left: 3px solid #3095de;
-    border-radius: 8px;
+    /* border-left: 3px solid #3095de; */
+    /* border-radius: 8px; */
     display: flex;
     flex-direction: column;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    transition: box-shadow 0.2s ease;
+    /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); */
+    /* transition: box-shadow 0.2s ease; */
 }
 
 .crypt-select-protection-input-box:hover {
@@ -119,17 +110,4 @@ textarea:focus {
     width: 100%;
     text-wrap: nowrap;
     overflow-x: auto;
-}
-
-
-h3, p {
-    text-align: start;
-    margin: 0;
-}
-
-button {
-    all: unset;
-    cursor: pointer;
-    font-family: 'Overpass';
-    font-style: normal;
 }

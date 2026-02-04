@@ -164,7 +164,7 @@
         font-weight: 600;
         background:  #f3f8fd 0%;
         border: 2px dashed #b0cbe2;
-        border-radius: 8px;
+        border-radius: 4px;
         margin: 0;
         padding: 1.5rem 1rem;
         transition: all 0.3s ease;

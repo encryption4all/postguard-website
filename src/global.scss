@@ -128,9 +128,16 @@ body {
     --pg-bg-input: #fafafa;
     --pg-bg-input-hover: white;
 
+    /* Filesharing specific colors */
+    --pg-soft-background: #F2F8FD;
+    --pg-primary-contrast: #1673B6;
+    --pg-strong-background: #b0cbe2;
+
     /* Spacing */
     --pg-border-radius: 6px;
     --pg-border-radius-lg: 8px;
+    --small-border-radius: 4px;
+    --medium-border-radius: 8px;
 }
 
 #app {
