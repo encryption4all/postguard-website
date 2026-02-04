@@ -204,7 +204,7 @@
     .or-text {
         margin: 0.5rem 0;
         font-size: 0.95rem;
-        color: #6b7280;
+        color: #9ca3af;
         text-align: center;
     }
 
