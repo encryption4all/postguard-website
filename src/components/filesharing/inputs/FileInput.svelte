@@ -164,7 +164,7 @@
         font-weight: 600;
         background:  #f3f8fd 0%;
         border: 2px dashed #b0cbe2;
-        border-radius: 4px;
+        border-radius: var(--medium-border-radius);
         margin: 0;
         padding: 1.5rem 1rem;
         transition: all 0.3s ease;

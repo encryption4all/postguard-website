@@ -60,8 +60,7 @@
 
         {#if !isConfirming}
             <button class="add-recipient-btn" onclick={addRecipient}>
-                <img src={addIcon} alt="add recipient" draggable="false" />
-                {$_('filesharing.encryptPanel.addRecipientButton')}
+                + {$_('filesharing.encryptPanel.addRecipientButton')}
             </button>
         {/if}
     </div>
@@ -128,8 +127,8 @@
     display: flex;
     align-items: center;
     gap: 0.5em;
-    padding: 0.65em 1em;
-    background-color: white;
+    padding: 0.2em 1em;
+    background-color: transparent;
     border: 1.5px solid var(--pg-border-color);
     border-radius: var(--pg-border-radius-lg);
     cursor: pointer;
@@ -138,8 +137,9 @@
     font-weight: 600;
     color: var(--pg-text-primary);
     transition: all 0.2s ease;
-    margin-top: 1em;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    width: fit-content;
+    box-sizing: border-box;
+    // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   }
 
   .add-recipient-btn:hover {

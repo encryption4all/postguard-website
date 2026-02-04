@@ -149,7 +149,7 @@
     min-width: 0;
     gap: 1.25em;
     margin: 0;
-    border-left: 1px solid var(--Postguard-Strong-Background, #C6E2F6)
+    border-left: 1px solid var(--pg-strong-background, #C6E2F6)
   }
 
   .shrinking-spacer {

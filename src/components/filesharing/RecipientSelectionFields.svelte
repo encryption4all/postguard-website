@@ -24,9 +24,9 @@
 
 <li class="crypt-recipient" class:is-confirming-bg={isConfirming}>
     <div class="recipient-heading">
-        <h3>
+        <label class="field-label">
             {$_('filesharing.encryptPanel.emailRecipient')}
-        </h3>
+        </label>
         {#if !isFirstRecipient}
             <button
                 class="btn-delete"
@@ -71,11 +71,11 @@
 
 <style>
     .crypt-recipient {
-        background-color: var(--Postguard-Strong-Backgroung);
+        background-color: var(--pg-strong-background);
         padding: 1em;
         border-radius: 10px;
-        border: 1px solid #e5e7eb;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        border: 1px solid var(--pg-border-color);
+        /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06); */
         transition: all 0.2s ease;
     }
 
@@ -109,13 +109,21 @@
         align-items: center;
     }
 
+    .field-label {
+        font-size: 0.8em;
+        font-weight: 800;
+        color: var(--pg-text-primary);
+        font-family: var(--pg-font-family);
+        /* margin-bottom: 0.5em; */
+    }
+
     .email-input {
         font-family: var(--pg-font-family);
         font-size: var(--pg-input-font-size);
         background-color: white;
         border: 1.5px solid var(--pg-border-color);
         border-radius: var(--pg-border-radius);
-        padding: 0.65em 0.85em;
+        padding: 0.3em 0.85em;
         transition: all 0.2s ease;
     }
 

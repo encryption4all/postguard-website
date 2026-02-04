@@ -10,9 +10,6 @@
     /* transition: box-shadow 0.2s ease; */
 }
 
-.crypt-select-protection-input-box:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-}
 
 .crypt-select-protection-input-box h4 {
     font-size: 11pt;
@@ -33,20 +30,20 @@ textarea {
     width: 90%;
     resize: none;
     transition: all 0.2s ease;
-    background-color: var(--pg-bg-input);
+    background-color: transparent;
 }
 
 .crypt-select-protection-input-box input:hover,
 textarea:hover {
     border-color: var(--pg-border-color-hover);
-    background-color: var(--pg-bg-input-hover);
+    background-color: transparent;
 }
 
 .crypt-select-protection-input-box input:focus,
 textarea:focus {
     outline: none;
     border-color: var(--pg-accent-color);
-    background-color: var(--pg-bg-input-hover);
+    background-color: transparent;
     box-shadow: 0 0 0 3px rgba(var(--pg-accent-color-rgb), 0.1);
 }
 
