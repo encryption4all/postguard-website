@@ -80,15 +80,13 @@
             {$_('filesharing.encryptPanel.fileBox.tagline')}
         </h1>
 
-        {#if files.length <= 0}
-            <div class="upload-butt middle-block-size">
-                <img class="drawing" src={BasketDrawing} alt="Add files" />
-                <p class="drag-text">Sleep bestanden hierheen</p>
-                <p class="or-text">of</p>
-                <button class="choose-files-btn" type="button">Kies bestanden</button>
-                <p class="max-size-text">Maximaal 2 GB</p>
-            </div>
-        {/if}
+        <div class="upload-butt middle-block-size" class:hidden={files.length > 0}>
+            <img class="drawing" src={BasketDrawing} alt="Add files" />
+            <p class="drag-text">Sleep bestanden hierheen</p>
+            <p class="or-text">of</p>
+            <button class="choose-files-btn btn-accent" type="button">Kies bestanden</button>
+            <p class="max-size-text">Maximaal 2 GB</p>
+        </div>
 
         <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
         <div id="previews" class="middle-block-size dz-previews" class:hidden={files.length <= 0}
@@ -128,9 +126,8 @@
         border: none;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
-
     }
 
     @media only screen and (min-width: 768px) {
@@ -145,7 +142,7 @@
         min-height: 0;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
     }
 
