@@ -3,6 +3,7 @@
     import type { ISealOptions } from '@e4a/pg-wasm'
 
     import yiviLogo from '$lib/assets/images/non-free/yivi-logo.svg'
+    import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
     import { EncryptionState, type EncryptState, Lang } from '$lib/lib/types/filesharing/attributes'
     import { RetrieveSignKeys } from '$lib/lib/yivi-tools'
     import Chunker, { withTransform } from '$lib/lib/filesharing/utils'
@@ -243,6 +244,8 @@
     if (browser) {
         lang = (localStorage.getItem('preferredLanguage') ?? 'nl-NL').substring(0, 2)
     }
+
+    let yiviInfoExpanded = $state(false)
 </script>
 <div class="button-container">
     <button
@@ -250,22 +253,36 @@
         onclick={onSign}
         disabled={!canEncrypt()}
     >
-        <img src={yiviLogo} alt="yivi-logo" width={50} height={27} />
+        <img src={canEncrypt() ? yiviLogoDark : yiviLogo} alt="yivi-logo" width={50} height={27} />
         {$_('filesharing.encryptPanel.encryptSend')}
     </button>
 
-    <a href={"https://yivi.app/" + lang} target="_blank" class="link-decoration">
-        {$_('filesharing.encryptPanel.yiviInfo')}
-    </a>
+    <p class="yivi-tip">
+        {$_('filesharing.encryptPanel.yiviTip')}
+    </p>
+
+    <button class="yivi-info-toggle" type="button" onclick={() => yiviInfoExpanded = !yiviInfoExpanded}>
+        <span class="arrow" class:expanded={yiviInfoExpanded}>▶</span>
+        <span class="toggle-label">{$_('filesharing.encryptPanel.yiviInfo')}</span>
+    </button>
+    {#if yiviInfoExpanded}
+        <p class="yivi-info-content">
+            {$_('filesharing.encryptPanel.yiviInfoText')}
+            <a href={"https://yivi.app/" + lang} target="_blank" class="yivi-link">
+                {$_('filesharing.encryptPanel.yiviInfoLink')}
+            </a>
+        </p>
+    {/if}
 </div>
 <style lang="scss">
   .button-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     margin-bottom: 1rem;
+    padding-left: 1.25em;
   }
 
   .crypt-btn-main {
@@ -273,16 +290,16 @@
     align-items: center;
     justify-content: center;
     gap: 0.75em;
-    padding: 0.85em 1.5em;
-    width: 100%;
-    max-width: 400px;
+    padding: 0.5em 1.5em;
+    width: fit-content;
     text-wrap: nowrap;
     font-size: 1.05em;
     font-weight: 600;
-    border-radius: var(--pg-border-radius-lg);
+    border-radius: var(--pg-border-radius-sm);
     background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%) !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
     transition: all 0.2s ease;
+    margin-bottom: 0.75em;
   }
 
   .crypt-btn-main:hover:not(.crypt-btn-disabled):not(:disabled) {
@@ -305,19 +322,59 @@
     opacity: 0.5;
   }
 
-  .crypt-btn-main img {
-    /* Keep the colored Yivi logo, don't filter it */
+  .yivi-info-toggle {
+    all: unset;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    cursor: pointer;
+    margin-top: 0.5em;
+    margin-bottom: 0.75em;
+    user-select: none;
+    background: transparent;
   }
 
-  .link-decoration {
-    text-align: center;
+  .arrow {
+    font-size: 0.7em;
+    color: var(--pg-text-secondary);
+    transition: transform 0.2s ease;
+    display: inline-block;
+  }
+
+  .arrow.expanded {
+    transform: rotate(90deg);
+  }
+
+  .toggle-label {
+    font-size: 0.9em;
+    color: var(--pg-text-secondary);
+    font-weight: 600;
+    font-family: var(--pg-font-family);
+  }
+
+  .yivi-info-content {
+    font-size: 0.85em;
+    color: var(--pg-text-secondary);
+    font-family: var(--pg-font-family);
+    margin: 0 0 1em 1.5em;
+    line-height: 1.4;
+  }
+
+  .yivi-link {
     color: #3095de !important;
     text-decoration: underline;
-    font-size: 0.9em;
     transition: color 0.2s ease;
   }
 
-  .link-decoration:hover {
+  .yivi-link:hover {
     color: #1e7ac7 !important;
+  }
+
+  .yivi-tip {
+    font-size: 0.85em;
+    color: var(--pg-text-secondary);
+    font-family: var(--pg-font-family);
+    margin: 0;
+    line-height: 1.4;
   }
 </style>
