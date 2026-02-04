@@ -23,12 +23,11 @@
     }
 </script>
 
-<div class="crypt-select-protection-input-box">
+<!-- <div class="crypt-select-protection-input-box">
     <div class="sender-heading">
         <h3>
             {$_('filesharing.encryptPanel.emailSenderHeading')}
         </h3>
-        <!--browser native more info dropdown, no JS needed-->
         <details>
             <summary>
                 {$_('filesharing.encryptPanel.emailSenderSubHeadingToggle')}
@@ -69,7 +68,7 @@
             {$_('filesharing.encryptPanel.emailSenderConfirm')}
         </label>
     </div>
-</div>
+</div> -->
 
 <style lang="scss">
   @import "shared-styles.css";

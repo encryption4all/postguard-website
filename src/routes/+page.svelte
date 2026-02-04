@@ -90,7 +90,6 @@
             <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
                           bind:senderConfirm={EncryptState.senderConfirm}
                           attributes={ATTRIBUTES} />
-            <div class="shrinking-spacer"></div>
             <SendButton bind:EncryptState={EncryptState} />
         </div>
     {:else if EncryptState.encryptionState === EncryptionState.Sign}
@@ -143,7 +142,7 @@
   .inputs-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     height: 100%;
     font-size: 1.15em;
     min-width: 0;

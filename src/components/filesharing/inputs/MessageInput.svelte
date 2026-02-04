@@ -28,10 +28,6 @@
         font-family: var(--pg-font-family);
     }
 
-    h3 {
-        margin-bottom: 0.5em;
-    }
-
     textarea {
         height: 5em;
         margin-top: 0.25em;
