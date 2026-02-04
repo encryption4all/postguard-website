@@ -38,7 +38,7 @@
             maxFilesize: maxFileSizeMB,
             previewsContainer: '#previews',
             previewTemplate: previewTemplate,
-            clickable: '.upload-butt, .post-upload-button', // Only these elements trigger file selection
+            clickable: '.upload-butt, .choose-files-btn, .post-upload-button', // Only these elements trigger file selection
         })
 
         myDropzone.on('addedfile', file => {
@@ -76,20 +76,18 @@
         <UploadedFileTemplate />
     </div>
     <div class="dz-message">
-        <h1 style="margin-bottom: 8px; text-align: center" class:hidden={stage !== EncryptionState.FileSelection}>
+        <h1 class="file-tagline" class:hidden={stage !== EncryptionState.FileSelection}>
             {$_('filesharing.encryptPanel.fileBox.tagline')}
         </h1>
 
         {#if files.length <= 0}
             <div class="upload-butt middle-block-size">
-                <img src={BasketDrawing} alt="Add files" />
-                <h2 class="top-upload-text">
-                    {@html $_('filesharing.encryptPanel.fileBox.upperTextDropZone')}
-                </h2>
-                <!-- <img src={plusIcon} alt="Add files" draggable="false" style="width: 10px;"/> -->
-                <h2 class="bottom-upload-text">{@html $_('filesharing.encryptPanel.fileBox.lowerTextDropZone')}</h2>
+                <img class="drawing" src={BasketDrawing} alt="Add files" />
+                <p class="drag-text">Sleep bestanden hierheen</p>
+                <p class="or-text">of</p>
+                <button class="choose-files-btn" type="button">Kies bestanden</button>
+                <p class="max-size-text">Maximaal 2 GB</p>
             </div>
-            <!-- <img src={BasketDrawing} alt="Basket drawing" class="drawing" draggable="false" /> -->
         {/if}
 
         <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
@@ -121,6 +119,11 @@
         font-weight: 600;
     }
 
+    .file-tagline {
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
     .dropzone {
         border: none;
         display: flex;
@@ -148,6 +151,7 @@
 
     .middle-block-size {
         width: 95%;
+        max-width: 600px;
         min-height: fit-content;
 
     }
@@ -160,9 +164,9 @@
         font-weight: 600;
         background:  #f3f8fd 0%;
         border: 2px dashed #b0cbe2;
-        border-radius: 16px;
+        border-radius: 8px;
         margin: 0;
-        padding: 1rem;
+        padding: 1.5rem 1rem;
         transition: all 0.3s ease;
         cursor: pointer;
         box-shadow: 0 2px 8px rgba(48, 149, 222, 0.08);
@@ -189,14 +193,45 @@
         transform: scale(1.1);
     }
 
-    .upload-butt h2 {
-        margin: 0.25rem 0;
-        max-width: 100%;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
+    .drag-text {
+        margin: 1rem 0 0rem 0;
+        font-size: clamp(1.4rem, 2.5vw, 1.25rem);
+        font-weight: 800;
+        color: #1f2937;
         text-align: center;
-        font-size: clamp(0.9rem, 3vw, 1.2rem);
-        line-height: 1.3;
+    }
+
+    .or-text {
+        margin: 0.5rem 0;
+        font-size: 0.95rem;
+        color: #6b7280;
+        text-align: center;
+    }
+
+    .choose-files-btn {
+        background: #050e16;
+        box-shadow: 1px 1px 5px grey;
+        color: white;
+        padding: 0.8rem 1.3rem;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    .choose-files-btn:hover {
+        background: #1a1a1a;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .max-size-text {
+        margin: 0.75rem 0 0 0;
+        font-size: 0.875rem;
+        color: #9ca3af;
+        text-align: center;
     }
 
     .dz-previews {
@@ -209,28 +244,9 @@
         flex: 1 1 auto;
         overflow: auto;
     }
-    .drawing {
-        display: block;
-        width: 100%;
-        margin-top: 3vh;
-        justify-self: end;
-        background-color: unset;
-        border-radius: 0;
-
-    }
 
     .signing-dropzone .dz-previews {
         width: 100%;
-    }
-
-    .top-upload-text {
-        font-size: 1.2em;
-        font-weight: 800;
-        display: none;
-    }
-
-    .bottom-upload-text {
-        text-transform: capitalize;
     }
 
     .dropzone-with-files {
@@ -275,21 +291,13 @@
         }
 
         .upload-butt {
-            padding: 2rem;
+            padding: 3rem 2rem;
         }
 
         .upload-butt img {
             margin-bottom: 1rem;
-            width: 55%;
+            width: 60%;
             max-width: 400px;
-        }
-
-        .top-upload-text {
-            display: block;
-        }
-
-        .drawing {
-            display: none;
         }
 
         .dz-previews {

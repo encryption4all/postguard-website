@@ -96,7 +96,7 @@
         },
         "encryptPanel": {
             "fileBox": {
-                "tagline": "Verstuur veilig je bestanden",
+                "tagline": "Verstuur je bestanden veilig",
                 "upperTextDropZone": "Sleep bestanden hierheen <br/> of",
                 "lowerTextDropZone": "klik om te uploaden <br/> (max. 2GB)"
             },
