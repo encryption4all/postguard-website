@@ -329,7 +329,6 @@
     gap: 0.5em;
     cursor: pointer;
     margin-top: 0.5em;
-    margin-bottom: 0.75em;
     user-select: none;
     background: transparent;
   }
