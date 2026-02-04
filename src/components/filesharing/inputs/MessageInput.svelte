@@ -11,21 +11,30 @@
 <div class="crypt-select-protection-input-box">
     <h3>{$_('filesharing.encryptPanel.messageHeading')}</h3>
     <p>{$_('filesharing.encryptPanel.messageText')}</p>
-    {message}
     <textarea
         required={false}
-    >{message}</textarea>
+        placeholder={$_('filesharing.encryptPanel.messagePlaceholder')}
+        bind:value={message}
+    ></textarea>
 </div>
 
 <style>
     @import "../shared-styles.css";
 
     p {
-        font-size: 0.8em;
+        font-size: 0.85em;
+        color: var(--pg-text-secondary);
+        margin-bottom: 0.5em;
+        font-family: var(--pg-font-family);
+    }
+
+    h3 {
+        margin-bottom: 0.5em;
     }
 
     textarea {
         height: 5em;
+        margin-top: 0.25em;
     }
 
     @media only screen and (min-height: 768px) {

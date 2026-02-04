@@ -2,31 +2,53 @@
     import { _ } from 'svelte-i18n'
 </script>
 
-<div class="grid-container">
-    <div class="grid-item header">
+<div class="privacy-container">
+    <div class="privacy-content">
         <h2><span>{$_('privacypolicy.title')}</span></h2>
-    </div>
-    <div class="grid-item">
-        <p>{@html $_('privacypolicy.full')}</p>
+        <div class="privacy-text">
+            <p>{@html $_('privacypolicy.full')}</p>
+        </div>
     </div>
 </div>
 
 <style lang="scss">
-    .grid-container {
-        grid-gap: 1rem;
+    .privacy-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        width: 100%;
+        height: calc(100vh - 52px - 0.5rem - 1rem);
+        overflow-y: auto;
+        padding: 2rem 1rem;
     }
 
-    div.grid-item {
-        width: 92%;
-        height: 100%;
+    .privacy-content {
+        max-width: 900px;
+        width: 100%;
+        text-align: center;
+    }
 
-        &:not(.header) {
-            overflow-y: auto;
-        }
+    h2 {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .privacy-text {
+        text-align: left;
 
         p {
-            height: 100%;
-            text-align: left;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+    }
+
+    @media only screen and (max-width: 800px) {
+        .privacy-container {
+            padding: 1rem 0.5rem;
+        }
+
+        .privacy-content {
+            width: 96%;
         }
     }
 </style>

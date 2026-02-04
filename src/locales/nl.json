@@ -1,9 +1,9 @@
 {
     "header": {
-        "fs": "Bestanden delen",
+        "fs": "Bestanden Delen",
         "home": "Home",
         "addons": "E-mailen",
-        "fallback": "Ontsleutel e-mails",
+        "fallback": "Ontsleutel E-mails",
         "about": "Over PostGuard",
         "pol": "Privacybeleid"
     },
@@ -95,23 +95,26 @@
             "verifiedExtra": "De bestanden zijn ondertekend met"
         },
         "encryptPanel": {
-            "header": "VERSLEUTEL & VERZEND",
-            "emailRecipient": "E-mailadres ontvanger",
-            "RecipientsHeading": "Naar",
-            "RecipientsSubHeading": "Wie mogen de bestanden ontvangen en ontsleutelen?",
-            "RecipientsText": "De ontvanger(s) moeten zowel hun email adres als aanvullende gegevens die jij hier specificeert aantonen. Deze data zijn niet zichtbaar aan anderen.",
-            "emailSender": "Emailadres",
-            "emailSenderHeading": "Van",
-            "emailSenderSubHeadingToggle": "Waarom heb je deze data nodig?",
-            "emailSenderSubHeading": "Laat de ontvanger(s) weten dat deze bestanden van jou afkomstig zijn.",
-            "emailSenderText": "Voordat je de bestanden kan sturen moet je aantonen dat je deze gegevens bezit.",
-            "emailSenderAttributePrefix": "Jouw",
-            "emailRecipientAttributePrefix": "Ontvanger's",
-            "messageHeading": "Bericht",
-            "messageText": "Dit (optionele) bericht wordt niet versleuteld. Het bericht staat in de email waar ook de link naar de bestanden zit.",
-            "messagePlaceholder": "Optioneel bericht",
-            "messageAnonymous": "Let op! Dit bericht is anoniem verzonden dus kijk goed uit bij het downloaden en openen van de bestanden.",
+            "fileBox": {
+                "tagline": "Verstuur veilig je bestanden",
+                "upperTextDropZone": "Sleep bestanden hierheen <br/> of",
+                "lowerTextDropZone": "klik om te uploaden <br/> (max. 2GB)"
+            },
+
+            "RecipientsHeading": "Ontvangers",
+            "emailRecipient": "E-mailadres",
+            "emailRecipientPlaceholder": "ontvanger@voorbeeld.nl",
+            "RecipientsText": "Geef de ontvangers op en welke attributen ze moeten aantonen om de bestanden te ontsleutelen. Alleen de ontvangers kunnen deze gegevens zien.",
+            "RecipientsOptionalHeading": "Extra vereiste attributen",
+            "emailSender": "E-mailadres",
+            "emailSenderHeading": "Jouw gegevens",
+            "emailSenderSubHeadingToggle": "Waarom heb je deze gegevens nodig?",
+            "emailSenderSubHeading": "Laat de ontvanger(s) weten dat deze bestanden van jou afkomstig zijn. Voor het verzenden onderteken je de bestanden door je e-mailadres en eventuele aanvullende persoonlijke gegevens aan te tonen met de Yivi-app.",
+            "messageHeading": "Bericht (optioneel)",
+            "messageText": "Dit bericht wordt niet versleuteld en wordt opgenomen in de notificatie-e-mail.",
+            "messagePlaceholder": "Typ hier je bericht...",
             "encryptSend": "Onderteken & verzend",
+            "yiviInfo": "Wat is Yivi?",
             "encrypting": "Ondertekenen & verzenden...",
             "encryptingInfo": "Jouw bestanden worden versleuteld en daarna verzonden naar: ",
             "succes": "Succesvol versleuteld en verzonden",
@@ -122,6 +125,7 @@
             "irmaInstructionQr": "Versleutel de bestanden door je e-mailadres te verifieren. Scan daarvoor de onderstaande QR-code met de identificatie app Yivi.",
             "irmaInstructionMobile": "Versleutel de bestanden door je e-mailadres te verifieren. Click daarvoor op de onderstaande knop om naar de identificatie app Yivi te gaan.",
             "addRecipient": "ontvanger",
+            "addRecipientButton": "Nog een ontvanger toevoegen",
             "emailSenderConfirm": "Stuur mij een bevestiging",
 
             "timeremaining": {
@@ -133,9 +137,12 @@
             }
         },
         "attributes":{
-            "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobiel",
+            "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobiel telefoonnummer",
+            "pbdf.sidn-pbdf.mobilenumber.mobilenumber.placeholder": "612345678",
             "pbdf.gemeente.personalData.fullname": "Volledige naam",
-            "pbdf.gemeente.personalData.dateofbirth": "Geboortedatum"
+            "pbdf.gemeente.personalData.fullname.placeholder": "Jan Jansen",
+            "pbdf.gemeente.personalData.dateofbirth": "Geboortedatum",
+            "pbdf.gemeente.personalData.dateofbirth.placeholder": "15-01-1990"
         }
     },
     "yivi":{

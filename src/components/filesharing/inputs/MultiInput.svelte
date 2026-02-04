@@ -3,7 +3,7 @@
     import { getCountryCallingCode, type CountryCode } from 'libphonenumber-js/mobile'
     import '../shared-styles.css'
 
-    import removeIcon from '$lib/assets/images/google-icons/remove.svg'
+    import closeIcon from '$lib/assets/images/google-icons/close.svg'
 
     interface props {
         translation_key: string;
@@ -40,8 +40,8 @@
     })
 
 </script>
-<div>
-    <label style="margin-top: 0;" for={randomId}>
+<div class="input-wrapper">
+    <label for={randomId}>
         {$_(translation_key)}
     </label>
     <div class="optional-value" class:removed-del-border={isConfirming}>
@@ -59,8 +59,8 @@
                 class="removable-text-input field-height"
                 class:is-confirming-bg={isConfirming}
                 disabled={isConfirming}
-                style="border-left: solid 0px black;"
                 type="tel"
+                placeholder={$_(translation_key + '.placeholder')}
                 bind:value={showingValue}
             />
         {:else if translation_key === 'filesharing.attributes.pbdf.gemeente.personalData.dateofbirth'}
@@ -69,7 +69,9 @@
                 class="removable-text-input field-height"
                 class:is-confirming-bg={isConfirming}
                 disabled={isConfirming}
-                type="date"
+                type="text"
+                pattern="\d{2}-\d{2}-\d{4}"
+                placeholder={$_(translation_key + '.placeholder')}
                 bind:value={value}
             />
         {:else}
@@ -79,6 +81,7 @@
                 class:is-confirming-bg={isConfirming}
                 disabled={isConfirming}
                 type="text"
+                placeholder={$_(translation_key + '.placeholder')}
                 bind:value={value}
             />
         {/if}
@@ -89,8 +92,8 @@
                 onclick={deleteAction}
             >
                 <img
-                    style="width: 16px"
-                    src={removeIcon}
+                    style="width: 18px; height: 18px;"
+                    src={closeIcon}
                     alt="remove optional attribute"
                 />
             </button>
@@ -99,57 +102,103 @@
 </div>
 
 <style>
-    select {
-        font-family: "Overpass";
+    .input-wrapper {
+        margin-bottom: 0.5em;
     }
+
+    .input-wrapper:last-child {
+        margin-bottom: 0;
+    }
+
+    select {
+        font-family: var(--pg-font-family);
+    }
+
+    label {
+        font-family: var(--pg-font-family);
+        font-size: 0.9em;
+        color: var(--pg-text-secondary);
+        margin-bottom: 0.35em;
+        margin-top: 0;
+        display: block;
+    }
+
     .field-height {
-        height: 24px;
+        height: 40px;
     }
 
     .phone-input {
-        background-color: #E9E9E9;
-        border: 0;
-        border-block: solid 2px black;
-        border-left: solid 2px black;
-        padding: 4px 0 4px 4px;
-        height: 35.2px;
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-input-font-size);
+        background-color: white;
+        border: 1.5px solid var(--pg-border-color);
+        border-radius: var(--pg-border-radius);
+        padding: 0 10px;
+        height: 40px;
+        transition: all 0.2s ease;
+        min-width: 100px;
+    }
+
+    .phone-input:hover {
+        border-color: var(--pg-border-color-hover);
+    }
+
+    .phone-input:focus {
+        outline: none;
+        border-color: var(--pg-accent-color);
+        background-color: white;
     }
 
     .removable-text-input {
-        background-color: #E9E9E9;
-        border: none;
-        border-block: solid 2px black;
-        border-left: solid 2px black;
-        padding: 4px 0 4px 4px;
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-input-font-size);
+        background-color: white;
+        border: 1.5px solid var(--pg-border-color);
+        border-radius: var(--pg-border-radius);
+        padding: 0 10px;
         width: 100%;
+        transition: all 0.2s ease;
+        height: 40px;
+        flex: 1;
+    }
+
+    .removable-text-input:hover {
+        border-color: var(--pg-border-color-hover);
+    }
+
+    .removable-text-input:focus {
+        outline: none;
+        border-color: var(--pg-accent-color);
+        background-color: white;
     }
 
     .btn-delete {
-        border-block: solid 2px black;
-        border-right: solid 2px black;
-        padding: 4px 4px 4px 0;
+        all: unset;
+        border-radius: var(--pg-border-radius);
+        padding: 0 8px;
         display: flex;
         align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        background-color: transparent;
+        height: 40px;
+        min-width: 40px;
+        cursor: pointer;
+    }
+
+    .btn-delete:hover {
+        background-color: #fee2e2;
     }
 
     .removed-del-border {
-        border-right: solid 2px black;
+        border-radius: var(--pg-border-radius);
     }
 
     .optional-value {
         display: flex;
         align-items: center;
+        gap: 0.5em;
+        height: 40px;
     }
 
-    /* for the date input */
-    input[type="date"] {
-        font-family: "Overpass";
-        position: relative;
-        padding-left: 24px;
-    }
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        position: absolute;
-        left: 4px;
-        right: auto;
-    }
 </style>

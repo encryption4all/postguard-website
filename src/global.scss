@@ -30,12 +30,24 @@ button {
     cursor: pointer;
     font-size: 14px;
     border-radius: 100px;
-    background-color: black;
+    background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
     color: white;
-    padding: 5px 12px;
+    padding: 6px 14px;
     font-family: 'Overpass';
     font-style: normal;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    transition: all 0.2s ease;
  }
+
+button:hover {
+    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
 
 //*, *::before, *::after {
 //  box-sizing: border-box;
@@ -79,6 +91,13 @@ h2 {
     letter-spacing: 0em;
 }
 
+h3 {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
 summary {
     cursor: pointer;
 }
@@ -89,11 +108,29 @@ body {
     height: 100%;
     margin: 0;
     overflow-x: hidden;
+    background: linear-gradient(to bottom, #ffffff 0%, #f9fafb 100%);
 }
 
 :root {
     --pg-accent-color: #3095de;
     --pg-accent-color-rgb: 48, 149, 222;
+
+    /* Typography */
+    --pg-font-family: 'Overpass', sans-serif;
+    --pg-input-font-size: 1em;
+
+    /* Colors */
+    --pg-text-primary: #1f2937;
+    --pg-text-secondary: #6b7280;
+    --pg-text-tertiary: #9ca3af;
+    --pg-border-color: #d1d5db;
+    --pg-border-color-hover: #9ca3af;
+    --pg-bg-input: #fafafa;
+    --pg-bg-input-hover: white;
+
+    /* Spacing */
+    --pg-border-radius: 6px;
+    --pg-border-radius-lg: 8px;
 }
 
 #app {
@@ -101,6 +138,27 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
 }
 
 .swiper {

@@ -248,6 +248,7 @@
     <button
         class="crypt-btn-main crypt-btn yivi-btn-logo {canEncrypt() ? '' : ' crypt-btn-disabled'}"
         onclick={onSign}
+        disabled={!canEncrypt()}
     >
         <img src={yiviLogo} alt="yivi-logo" width={50} height={27} />
         {$_('filesharing.encryptPanel.encryptSend')}
@@ -263,20 +264,60 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
     margin-bottom: 1rem;
   }
 
   .crypt-btn-main {
     display: flex;
     align-items: center;
-    padding: 0.25em 0.5em;
-    width: 90%;
+    justify-content: center;
+    gap: 0.75em;
+    padding: 0.85em 1.5em;
+    width: 100%;
+    max-width: 400px;
     text-wrap: nowrap;
+    font-size: 1.05em;
+    font-weight: 600;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    transition: all 0.2s ease;
+  }
+
+  .crypt-btn-main:hover:not(.crypt-btn-disabled):not(:disabled) {
+    background: linear-gradient(135deg, #5a6578 0%, #3d4758 100%) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+    transform: translateY(-1px);
+  }
+
+  .crypt-btn-main:disabled,
+  .crypt-btn-main.crypt-btn-disabled {
+    background: #e8e8e8 !important;
+    color: #9ca3af !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    opacity: 0.6;
+  }
+
+  .crypt-btn-main:disabled img,
+  .crypt-btn-main.crypt-btn-disabled img {
+    opacity: 0.5;
+  }
+
+  .crypt-btn-main img {
+    /* Keep the colored Yivi logo, don't filter it */
   }
 
   .link-decoration {
     text-align: center;
-    color: #549FF0 !important;
+    color: #3095de !important;
+    text-decoration: underline;
+    font-size: 0.9em;
+    transition: color 0.2s ease;
+  }
+
+  .link-decoration:hover {
+    color: #1e7ac7 !important;
   }
 </style>

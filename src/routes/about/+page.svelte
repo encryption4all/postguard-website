@@ -4,122 +4,145 @@
     import aboutImgLq from '$lib/assets/images/lqip/about.svg'
 </script>
 
-<div class="grid-container">
-    <div class="grid-item header">
-        <h2><span>{$_('about.title')}</span></h2>
-        <h3>{$_('about.subtitle1')}</h3>
-        <p>
-            {$_('about.subpar1')}
-        </p>
-        <h3>{$_('about.subtitle2')}</h3>
-        <p>
-            {$_('about.subpar2')}
-        </p>
-        <h3>{$_('about.subtitle3')}</h3>
-        <p>
-            {$_('about.subpar3')}
-        </p>
-    </div>
-    <div class="grid-item">
-        <img
-            src={aboutImgLq}
-            data-src={aboutImg}
-            class="lazyload"
-            alt="about"
-            width="567"
-            height="128"
-        />
-        <div id="team">
-            <h3>{$_('about.team.header')}</h3>
-            <p>
-                {@html $_('about.team.par')}
-            </p>
+<div class="about-container">
+    <div class="about-content">
+        <h2 class="page-title"><span>{$_('about.title')}</span></h2>
+
+        <div class="content-grid">
+            <div class="text-content">
+                <h3>{$_('about.subtitle1')}</h3>
+                <p>
+                    {$_('about.subpar1')}
+                </p>
+                <h3>{$_('about.subtitle2')}</h3>
+                <p>
+                    {$_('about.subpar2')}
+                </p>
+                <h3>{$_('about.subtitle3')}</h3>
+                <p>
+                    {$_('about.subpar3')}
+                </p>
+            </div>
+
+            <div class="image-content">
+                <img
+                    src={aboutImgLq}
+                    data-src={aboutImg}
+                    class="lazyload"
+                    alt="about"
+                    width="567"
+                    height="128"
+                />
+                <div id="team">
+                    <h3>{$_('about.team.header')}</h3>
+                    <p>
+                        {@html $_('about.team.par')}
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <style lang="scss">
-    .grid-container {
-        grid-template-columns: 1fr 1fr;
-        width: 100%;
-        align-items: center;
+    .about-container {
+        display: flex;
         justify-content: center;
-        align-content: center;
-        grid-gap: 4rem;
-        max-width: 1000px;
+        align-items: flex-start;
+        width: 100%;
+        height: calc(100vh - 52px - 0.5rem - 1rem);
+        overflow-y: auto;
+        padding: 2rem 1rem;
     }
 
-    .grid-item {
+    .about-content {
+        max-width: 1100px;
+        width: 100%;
+    }
+
+    .page-title {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: start;
+    }
+
+    .text-content {
         text-align: left;
 
-        &.header {
-            min-width: 500px;
-            overflow-y: auto;
-
-            h2 {
-                margin-bottom: 1rem;
-            }
-
-            h3,
-            p {
-                padding-left: 1.5rem;
-            }
+        h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--pg-text-primary);
         }
 
+        h3:first-child {
+            margin-top: 0;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    .image-content {
+        text-align: left;
+
         img {
-            max-width: 450px;
+            max-width: 100%;
+            height: auto;
         }
     }
 
     #team {
-        max-width: 500px;
         border: 1px dashed #1e1e1e;
         border-radius: 16px;
-        margin-top: 80px;
-        padding: 1em 2em;
-    }
+        margin-top: 3rem;
+        padding: 1.5em 2em;
 
-    p {
-        font-size: 15px;
-    }
+        h3 {
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
 
-    p,
-    h2,
-    h3 {
-        margin-top: 0.25em;
-        margin-bottom: 0.25em;
+        p {
+            font-size: 15px;
+            line-height: 1.6;
+            margin: 0;
+        }
     }
 
     @media only screen and (max-width: 800px) {
-        .grid-container {
-            grid-auto-flow: row;
-            grid-template-columns: unset;
-            overflow-y: scroll;
-            justify-items: center;
-            align-items: center;
-            align-content: unset;
+        .about-container {
+            padding: 1rem 0.5rem;
         }
 
-        .grid-item {
+        .about-content {
             width: 96%;
-            &.header {
-                min-width: unset;
-                overflow-y: unset;
-                h3,
-                p {
-                    padding-left: 0;
-                }
-            }
+        }
 
-            #team {
-                margin-top: 4rem;
-            }
+        .content-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
 
+        .image-content {
             img {
-                object-fit: contain;
-                position: relative;
                 width: 100%;
             }
+        }
+
+        #team {
+            margin-top: 2rem;
         }
     }
 </style>

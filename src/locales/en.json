@@ -1,10 +1,10 @@
 {
     "header": {
-        "fs": "File sharing",
+        "fs": "File Sharing",
         "home": "Home",
         "addons": "Emailing",
-        "fallback": "Decrypt emails",
-        "about": "About",
+        "fallback": "Decrypt Emails",
+        "about": "About PostGuard",
         "pol": "Privacy Policy"
     },
     "footer": {
@@ -73,7 +73,7 @@
         }
     },
     "filesharing": {
-        "title": "Filesharing",
+        "title": "File Sharing",
         "subtitle1": "How does filesharing work?",
         "subpar1": "With PostGuard you can securely send files in a privacy-friendly manner. Every file is encrypted specifically for the receiver. Only that person can decrypt that file. To do that, the email address must be shown. For this, the identification app Yivi is used. <a href=\"https://yivi.app/\">Learn more about the Yivi-app.</a>",
         "error": "Oops... We are really sorry but something went wrong. Please try again or contact us",
@@ -102,16 +102,18 @@
                 "sizeLimitText": "max. 2GB"
             },
 
-            "RecipientsHeading": "Recipient(s)",
-            "emailRecipient": "Email",
-            "RecipientsText": "What do people have to prove with their wallet?\nThis data will only be visible to them.",
-            "RecipientsOptionalHeading": "Optional attributes",
+            "RecipientsHeading": "Recipients",
+            "emailRecipient": "Email address",
+            "emailRecipientPlaceholder": "recipient@example.com",
+            "RecipientsText": "Specify the recipients and what attributes they must prove to decrypt the files. Only the recipients will see this data.",
+            "RecipientsOptionalHeading": "Additional required attributes",
             "emailSender": "Email address",
-            "emailSenderHeading": "Your data",
-            "emailSenderSubHeadingToggle": "Why do you need this data?",
-            "emailSenderSubHeading": "Let the recipient(s) know these files are yours.\nBefore sending, you sign the files by proving your\nemail address and any other personal data with the Yivi app.",
+            "emailSenderHeading": "Your information",
+            "emailSenderSubHeadingToggle": "Why do you need this information?",
+            "emailSenderSubHeading": "Let the recipient(s) know these files are from you. Before sending, you sign the files by proving your email address and any additional personal data with the Yivi app.",
             "messageHeading": "Message (optional)",
-            "messageText": "This message will not be encrypted.",
+            "messageText": "This message will not be encrypted and will be included in the notification email.",
+            "messagePlaceholder": "Type your message here...",
             "encryptSend": "Sign & send",
             "yiviInfo": "What is Yivi?",
             "encrypting": "Encrypting & uploading...",
@@ -124,6 +126,7 @@
             "irmaInstructionQr": "Encrypt the files by verifying your e-mail address. Please scan the QR-code below with the identification app Yivi.",
             "irmaInstructionMobile": "Encrypt the files by verifying your e-mail address. Please click the button below to open the Yivi-app.",
             "addRecipient": "recipient",
+            "addRecipientButton": "Add another recipient",
             "emailSenderConfirm": "Send me a confirmation",
 
             "timeremaining": {
@@ -135,9 +138,12 @@
             }
         },
         "attributes":{
-            "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobile number",
+            "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobile phone number",
+            "pbdf.sidn-pbdf.mobilenumber.mobilenumber.placeholder": "612345678",
             "pbdf.gemeente.personalData.fullname": "Full name",
-            "pbdf.gemeente.personalData.dateofbirth": "Date of birth"
+            "pbdf.gemeente.personalData.fullname.placeholder": "John Doe",
+            "pbdf.gemeente.personalData.dateofbirth": "Date of birth",
+            "pbdf.gemeente.personalData.dateofbirth.placeholder": "15-01-1990"
         }
     },
     "yivi":{
