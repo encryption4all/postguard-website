@@ -5,3 +5,6 @@ package
 .idea
 .vscode
 .env
+
+# macOS
+.DS_Store
