@@ -44,11 +44,19 @@
         border-color: var(--pg-border-color);
     }
 
-    .files div {
+    .files > div:first-child {
         display: flex;
         align-items: center;
         gap: 0.5em;
-        text-wrap: wrap;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .files > div:last-child {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        flex-shrink: 0;
     }
 
     /* .preview-img {
@@ -62,7 +70,6 @@
 
 
     .file-title {
-        max-width: 100px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -70,6 +77,7 @@
         font-weight: 600;
         margin: 0;
         color: var(--pg-text-primary);
+        min-width: 0;
     }
 
     .remove-button {
@@ -89,11 +97,5 @@
 
     .remove-button * {
         cursor: pointer;
-    }
-
-    @media only screen and (min-width: 768px) {
-        .file-title {
-            max-width: 300px;
-        }
     }
 </style>
