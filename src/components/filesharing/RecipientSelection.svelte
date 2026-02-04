@@ -14,6 +14,8 @@
 
     let { recipients = $bindable([]), attributes, isConfirming = false }: props = $props()
 
+    let helpTextExpanded = $state(false)
+
     function removeRecipient(index: number) {
         recipients.splice(index, 1)
     }
@@ -34,9 +36,15 @@
                     {$_('filesharing.encryptPanel.RecipientsHeading')}
                 </h3>
             </div>
-            <p>
-                {$_('filesharing.encryptPanel.RecipientsText')}
-            </p>
+            <button class="help-text-toggle" type="button" onclick={() => helpTextExpanded = !helpTextExpanded}>
+                <span class="arrow" class:expanded={helpTextExpanded}>▶</span>
+                <span class="toggle-label">Wat vul ik hier in?</span>
+            </button>
+            {#if helpTextExpanded}
+                <p class="help-text-content">
+                    {$_('filesharing.encryptPanel.RecipientsText')}
+                </p>
+            {/if}
         {/if}
 
         {#each recipients as _, index}
@@ -65,6 +73,42 @@
     color: var(--pg-text-secondary);
     margin-bottom: 1em;
     font-family: var(--pg-font-family);
+  }
+
+  .help-text-toggle {
+    all: unset;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    cursor: pointer;
+    margin-bottom: 0.75em;
+    user-select: none;
+  }
+
+  .arrow {
+    font-size: 0.7em;
+    color: var(--pg-text-secondary);
+    transition: transform 0.2s ease;
+    display: inline-block;
+  }
+
+  .arrow.expanded {
+    transform: rotate(90deg);
+  }
+
+  .toggle-label {
+    font-size: 0.9em;
+    color: var(--pg-text-secondary);
+    font-weight: 600;
+    font-family: var(--pg-font-family);
+  }
+
+  .help-text-content {
+    font-size: 0.85em;
+    color: var(--pg-text-secondary);
+    margin-bottom: 1em;
+    font-family: var(--pg-font-family);
+    padding-left: 1.5em;
   }
 
   .recipient-heading {
