@@ -129,12 +129,6 @@
     padding: 0.5rem 0;
   }
 
-  .sign-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-  }
-
   .inputs-container {
     display: flex;
     flex-direction: column;

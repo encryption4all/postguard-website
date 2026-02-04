@@ -24,7 +24,7 @@
 
 <li class="crypt-recipient" class:is-confirming-bg={isConfirming}>
     <div class="recipient-heading">
-        <label class="field-label">
+        <label class="field-label" for="recipient-email-{recipient.email}">
             {$_('filesharing.encryptPanel.emailRecipient')}
         </label>
         {#if !isFirstRecipient}
@@ -38,6 +38,7 @@
         {/if}
     </div>
     <input
+        id="recipient-email-{recipient.email}"
         placeholder={$_('filesharing.encryptPanel.emailRecipientPlaceholder')}
         type="email"
         required

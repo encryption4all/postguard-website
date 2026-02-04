@@ -110,12 +110,6 @@
         margin: 0;
     }
 
-    h2 {
-        margin: 0;
-        color: #4b5563;
-        font-weight: 600;
-    }
-
     .file-tagline {
         margin-bottom: 1rem;
         text-align: center;

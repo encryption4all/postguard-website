@@ -148,11 +148,4 @@
     color: var(--pg-accent-color);
     box-shadow: 0 2px 4px rgba(48, 149, 222, 0.15);
   }
-
-  .add-recipient-btn img {
-    width: 20px;
-    height: 20px;
-    user-select: none;
-    pointer-events: none;
-  }
 </style>
