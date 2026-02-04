@@ -159,10 +159,6 @@
     margin-top: auto;
   }
 
-  .crypt-irma-qr {
-    width: 100%;
-  }
-
   .recipients-sign-container {
     display: none;
   }

@@ -258,8 +258,6 @@
     </a>
 </div>
 <style lang="scss">
-  @use "shared-styles";
-
   .button-container {
     display: flex;
     flex-direction: column;

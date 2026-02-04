@@ -62,8 +62,6 @@
 </div>
 
 <style lang="scss">
-  @use 'shared-styles';
-
   p {
     font-size: 0.8em;
   }

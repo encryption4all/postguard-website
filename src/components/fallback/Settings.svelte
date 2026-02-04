@@ -70,15 +70,14 @@
         <div id="block2">
             <h4>{$_('fallback.settings.creds')}</h4>
             <table id="creds">
-                <tbody>
+                <thead>
                 <tr>
                     <th>{$_('fallback.settings.creds')}</th>
-                </tr>
-                <tr>
                     <th>{$_('fallback.settings.exp')} </th>
+                    <th></th>
                 </tr>
-                </tbody>
-
+                </thead>
+                <tbody>
                 {#each $krCache as kr}
                     <tr>
                         <td
@@ -93,16 +92,17 @@
                         )}</td
                         >
                         <td
-                        ><span
+                        ><button
                             id="deletebutton"
                             class="material-icons"
                             on:click|preventDefault={() => deleteJwt(kr)}
-                            on:keypress
-                        ><Icon icon="mdi:trash-can-outline" width="26px" /></span
+                            type="button"
+                        ><Icon icon="mdi:trash-can-outline" width="26px" /></button
                         ></td
                         >
                     </tr>
                 {/each}
+                </tbody>
             </table>
 
             <button class="button" on:click={deleteAllYivi}>
@@ -154,6 +154,7 @@
   }
 
   #deletebutton {
+    all: unset;
     cursor: pointer;
   }
 </style>

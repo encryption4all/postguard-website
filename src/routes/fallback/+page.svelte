@@ -29,7 +29,7 @@
         Decrypt: 'Decrypt',
     }
 
-    let currRight;
+    let currRight = $state();
     run(() => {
         currRight = $currSelected >= 0 ? RIGHTMODES.MailView : RIGHTMODES.Nothing
     });

@@ -10,12 +10,14 @@
 <div class="tabs">
     <ul>
         {#each tabItems as { item, logo }}
-            <li
-                class:active={item === activeItem}
-                onclick={() => dispatch('tabChange', item)}
-            >
-                <img src={logo} alt="" width={16} height={16} />
-                <b>{item}</b>
+            <li class:active={item === activeItem}>
+                <button
+                    onclick={() => dispatch('tabChange', item)}
+                    type="button"
+                >
+                    <img src={logo} alt="" width={16} height={16} />
+                    <b>{item}</b>
+                </button>
             </li>
         {/each}
     </ul>
@@ -32,12 +34,19 @@
     li {
         white-space: nowrap;
         font-size: 14px;
-        cursor: pointer;
         position: relative;
         display: inline-block;
         z-index: 0;
         display: flex;
         gap: 5px;
+
+        button {
+            all: unset;
+            cursor: pointer;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
 
         &.active {
             &:before {

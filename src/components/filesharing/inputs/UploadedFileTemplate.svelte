@@ -43,14 +43,6 @@
         text-wrap: wrap;
     }
 
-    .preview-img {
-        width: 40px;
-        height: 30px;
-        border-radius: 5px;
-        object-fit: contain;
-    }
-
-
     .file-title {
         max-width: 100px;
         overflow: hidden;
@@ -67,11 +59,6 @@
     }
 
     @media only screen and (min-width: 768px) {
-        .preview-img {
-            width: 90px;
-            height: 60px;
-        }
-
         .file-title {
             max-width: 300px;
         }

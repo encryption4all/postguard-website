@@ -74,17 +74,18 @@
             <div class="item attachments">
                 <ol>
                     {#each parsed.attachments as att}
-                        <li
-                            id="att"
-                            onclick={preventDefault(() =>
-                                email.downloadAttachment(
-                                    att.content,
-                                    att.mimeType,
-                                    att.filename
-                                ))}
-                            onkeypress={bubble('keypress')}
-                        >
-                            {att.filename}
+                        <li id="att">
+                            <button
+                                onclick={preventDefault(() =>
+                                    email.downloadAttachment(
+                                        att.content,
+                                        att.mimeType,
+                                        att.filename
+                                    ))}
+                                type="button"
+                            >
+                                {att.filename}
+                            </button>
                         </li>
                     {/each}
                 </ol>
@@ -162,11 +163,18 @@
                 align-items: center;
 
                 li {
-                    padding: 0.5em;
+                    padding: 0;
                     text-align: start;
-                    cursor: pointer;
-                    font-size: 14px;
                     border-right: 1px solid black;
+
+                    button {
+                        all: unset;
+                        cursor: pointer;
+                        font-size: 14px;
+                        padding: 0.5em;
+                        width: 100%;
+                        height: 100%;
+                    }
                 }
             }
         }

@@ -26,24 +26,25 @@
 {#if sortedFiltered.length > 0}
     <ol>
         {#each sortedFiltered as email}
-            <li
-                onclick={preventDefault(() => {
-                    currSelected.set(email.id)
-                    rightMode = 'MailView'
-                })}
-                onkeypress={bubble('keypress')}
-            >
-                <div class:selected={$currSelected === email.id}>
-                    <b>{email.subject}</b> <br />
-                    {#if email.from.name}
-                        {email.from.name}
-                    {:else}
-                        {email.from.address}
-                    {/if} <br />
+            <li>
+                <button
+                    onclick={preventDefault(() => {
+                        currSelected.set(email.id)
+                        rightMode = 'MailView'
+                    })}
+                    type="button"
+                >
+                    <div class:selected={$currSelected === email.id}>
+                        <b>{email.subject}</b> <br />
+                        {#if email.from.name}
+                            {email.from.name}
+                        {:else}
+                            {email.from.address}
+                        {/if} <br />
 
-                    {new Date(email.date).toLocaleString($locale)}
-                </div>
-
+                        {new Date(email.date).toLocaleString($locale)}
+                    </div>
+                </button>
                 <!-- <TrashCanOutline /> -->
             </li>
         {/each}
@@ -77,20 +78,26 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        cursor: pointer;
         height: 4.5em;
         border-bottom: 1px solid black;
         padding-left: 0.5em;
 
-        div {
-            border-radius: 10px;
-            margin: 1em 0.5em 1em 0em;
-            padding-left: 0.25em;
+        button {
+            all: unset;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
 
-            &.selected,
-            &:hover,
-            &:focus {
-                background: #a3ccf780;
+            div {
+                border-radius: 10px;
+                margin: 1em 0.5em 1em 0em;
+                padding-left: 0.25em;
+
+                &.selected,
+                &:hover,
+                &:focus {
+                    background: #a3ccf780;
+                }
             }
         }
     }
