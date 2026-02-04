@@ -10,7 +10,7 @@
 
     import { _, locale } from 'svelte-i18n'
 
-    import TrashCanOutline from 'svelte-material-icons/TrashCanOutline.svelte'
+    import Icon from '@iconify/svelte'
 
     export let currMode
 
@@ -98,7 +98,7 @@
                             class="material-icons"
                             on:click|preventDefault={() => deleteJwt(kr)}
                             on:keypress
-                        ><TrashCanOutline size="26px" /></span
+                        ><Icon icon="mdi:trash-can-outline" width="26px" /></span
                         ></td
                         >
                     </tr>

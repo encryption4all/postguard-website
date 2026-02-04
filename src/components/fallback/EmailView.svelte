@@ -6,7 +6,7 @@
     import { emails, currSelected } from './../fallback/stores.js'
     import { _, locale } from 'svelte-i18n';
 
-    import Download from 'svelte-material-icons/Download.svelte'
+    import Icon from '@iconify/svelte'
 
     let raw = $state(), parsed = $state()
     let date = $state(), formattedDate = $state()
@@ -58,7 +58,7 @@
                         `pg${formattedDate}.eml`
                     )}
             >
-                <Download size="30px" /></button
+                <Icon icon="mdi:download" width="30px" /></button
             >
        </div>
         <div class="item body">

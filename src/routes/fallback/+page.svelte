@@ -8,9 +8,7 @@
     import Decrypt from '../../components/fallback/Decrypt.svelte'
     import Settings from '../../components/fallback/Settings.svelte'
 
-    import Cog from 'svelte-material-icons/Cog.svelte'
-    import UploadLock from 'svelte-material-icons/UploadLock.svelte'
-    import Magnify from 'svelte-material-icons/Magnify.svelte'
+    import Icon from '@iconify/svelte'
 
     import { emails, krCache, currSelected, nextId } from '../../components/fallback/stores.js'
 
@@ -61,14 +59,14 @@
         <div class="item upload">
             <label class="file-upload">
                 <p>{$_('fallback.drop')}</p>
-                <UploadLock size="30px" />
+                <Icon icon="mdi:upload-lock" width="30px" />
                 <input type="file" onchange={onFile} /></label
             >
         </div>
         <div class="item search">
             <label class="custom-field">
                 <div class="magnify">
-                    <Magnify />
+                    <Icon icon="mdi:magnify" />
                 </div>
                 <input
                     type="search"
@@ -83,7 +81,7 @@
                             ? LEFTMODES.ListView
                             : LEFTMODES.Settings)}
             >
-                <Cog class="button-image" size="30px" />
+                <Icon icon="mdi:cog" class="button-image" width="30px" />
             </button>
         </div>
         <div class="item list">

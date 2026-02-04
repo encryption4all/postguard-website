@@ -5,7 +5,6 @@
     import { emails, currSelected } from './../fallback/stores.js'
     import { _, locale } from 'svelte-i18n'
 
-    // import TrashCanOutline from 'svelte-material-icons/TrashCanOutline.svelte'
 
     /** @type {{rightMode: any, searchTerm: any}} */
     let { rightMode = $bindable(), searchTerm } = $props();

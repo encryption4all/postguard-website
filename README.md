@@ -16,7 +16,7 @@ npm create svelte@latest my-app
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install --legacy-peer-deps` (or `pnpm install` or `yarn`)
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`)
 then make sure to create a `.env` file based on the provided `.env.example` file, make sure to match the chunk size with the one in your actual backend.
 
 To start a development server simply run:
