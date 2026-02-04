@@ -46,7 +46,7 @@
         background-color: #000000;
         color: #ffffff;
         border: none;
-        border-radius: 4px;
+        border-radius: var(--pg-border-radius-sm);
         cursor: pointer;
         font-size: 1em;
         width: 100%;

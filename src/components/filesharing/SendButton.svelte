@@ -279,7 +279,7 @@
     text-wrap: nowrap;
     font-size: 1.05em;
     font-weight: 600;
-    border-radius: 12px;
+    border-radius: var(--pg-border-radius-lg);
     background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%) !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
     transition: all 0.2s ease;

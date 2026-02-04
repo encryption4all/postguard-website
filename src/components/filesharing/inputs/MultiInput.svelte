@@ -132,7 +132,7 @@
         font-size: var(--pg-input-font-size);
         background-color: white;
         border: 1.5px solid var(--pg-border-color);
-        border-radius: var(--pg-border-radius);
+        border-radius: var(--pg-border-radius-md);
         padding: 0 10px;
         height: 40px;
         transition: all 0.2s ease;
@@ -154,7 +154,7 @@
         font-size: var(--pg-input-font-size);
         background-color: white;
         border: 1.5px solid var(--pg-border-color);
-        border-radius: var(--pg-border-radius);
+        border-radius: var(--pg-border-radius-md);
         padding: 0 10px;
         width: 100%;
         transition: all 0.2s ease;
@@ -174,7 +174,7 @@
 
     .btn-delete {
         all: unset;
-        border-radius: var(--pg-border-radius);
+        border-radius: var(--pg-border-radius-md);
         padding: 0 8px;
         display: flex;
         align-items: center;
@@ -191,7 +191,7 @@
     }
 
     .removed-del-border {
-        border-radius: var(--pg-border-radius);
+        border-radius: var(--pg-border-radius-md);
     }
 
     .optional-value {

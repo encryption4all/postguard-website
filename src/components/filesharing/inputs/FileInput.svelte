@@ -162,9 +162,9 @@
         align-items: center;
         justify-content: center;
         font-weight: 600;
-        background:  #f3f8fd 0%;
-        border: 2px dashed #b0cbe2;
-        border-radius: var(--medium-border-radius);
+        background: var(--pg-strong-background) 0%;
+        border: 2px dashed var(--pg-border-color);
+        border-radius: var(--pg-border-radius-lg);
         margin: 0;
         padding: 1.5rem 1rem;
         transition: all 0.3s ease;
@@ -213,7 +213,7 @@
         box-shadow: 1px 1px 5px grey;
         color: white;
         padding: 0.8rem 1.3rem;
-        border-radius: 8px;
+        border-radius: var(--pg-border-radius-sm);
         font-size: 1.2rem;
         font-weight: 600;
         cursor: pointer;
@@ -267,7 +267,7 @@
         fill: white;
         color: white;
         padding: 0.75em 1em;
-        border-radius: 8px;
+        border-radius: var(--pg-border-radius-lg);
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         transition: all 0.2s ease;
         gap: 0.5em;

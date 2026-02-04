@@ -136,10 +136,9 @@ body {
     
 
     /* Spacing */
-    --pg-border-radius: 6px;
+    --pg-border-radius-sm: 4px;
+    --pg-border-radius-md: 6px;
     --pg-border-radius-lg: 8px;
-    --small-border-radius: 4px;
-    --medium-border-radius: 8px;
 }
 
 #app {

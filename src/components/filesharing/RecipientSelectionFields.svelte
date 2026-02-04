@@ -73,7 +73,7 @@
     .crypt-recipient {
         background-color: var(--pg-strong-background);
         padding: 1em;
-        border-radius: 10px;
+        border-radius: var(--pg-border-radius-lg);
         border: 1px solid var(--pg-border-color);
         /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06); */
         transition: all 0.2s ease;
@@ -92,7 +92,7 @@
         all: unset;
         cursor: pointer;
         padding: 4px;
-        border-radius: var(--pg-border-radius);
+        border-radius: var(--pg-border-radius-md);
         transition: all 0.2s ease;
         display: flex;
         align-items: center;
@@ -122,7 +122,7 @@
         font-size: var(--pg-input-font-size);
         background-color: white;
         border: 1.5px solid var(--pg-border-color);
-        border-radius: var(--pg-border-radius);
+        border-radius: var(--pg-border-radius-md);
         padding: 0.3em 0.85em;
         transition: all 0.2s ease;
     }

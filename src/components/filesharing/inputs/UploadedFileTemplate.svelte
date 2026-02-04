@@ -54,7 +54,7 @@
     /* .preview-img {
         width: 40px;
         height: 30px;
-        border-radius: 6px;
+        border-radius: var(--pg-border-radius-md);
         object-fit: contain;
         background-color: #f9fafb;
         padding: 4px;
@@ -76,7 +76,7 @@
         cursor: pointer;
         height: 100%;
         padding: 4px;
-        border-radius: var(--pg-border-radius);
+        border-radius: var(--pg-border-radius-md);
         transition: all 0.2s ease;
         display: flex;
         align-items: center;

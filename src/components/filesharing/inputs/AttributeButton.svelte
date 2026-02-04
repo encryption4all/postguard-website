@@ -35,7 +35,7 @@
         all: unset;
         color: var(--pg-text-primary);
         border: 1.5px solid var(--pg-border-color);
-        border-radius: var(--pg-border-radius);
+        border-radius: var(--pg-border-radius-md);
         background-color: white;
         font-family: var(--pg-font-family);
         cursor: pointer;
@@ -65,7 +65,7 @@
         text-align: start;
         width: fit-content;
         padding: 6px 10px;
-        border-radius: var(--pg-border-radius);
+        border-radius: var(--pg-border-radius-md);
         font-size: 14px;
         height: min-content;
         margin: 0;

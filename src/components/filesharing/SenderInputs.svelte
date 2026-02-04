@@ -135,7 +135,7 @@
     color: #4b5563;
     background-color: #f9fafb;
     padding: 0.75em;
-    border-radius: 0 var(--pg-border-radius) var(--pg-border-radius) 0;
+    border-radius: 0 var(--pg-border-radius-md) var(--pg-border-radius-md) 0;
     font-family: var(--pg-font-family);
   }
 </style>
