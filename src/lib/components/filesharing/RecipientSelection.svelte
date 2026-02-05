@@ -80,8 +80,7 @@
     align-items: center;
     gap: 0.5em;
     cursor: pointer;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    margin: 0 0 0.5em;
     user-select: none;
     background: transparent;
   }
@@ -116,7 +115,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5em;
   }
 
   .remove-border {

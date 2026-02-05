@@ -25,7 +25,7 @@
     p {
         font-size: 0.85em;
         color: var(--pg-text-secondary);
-        margin-bottom: 0.5em;
+        margin: 0 0 0.5em;
         font-family: var(--pg-font-family);
     }
 

@@ -86,7 +86,7 @@
     }
 
     .crypt-recipient:not(:last-child) {
-        margin-bottom: 1em;
+        margin-bottom: 0.5em;
     }
 
     .btn-delete {
