@@ -3,7 +3,6 @@
     import { onMount } from 'svelte'
     import Dropzone from 'dropzone'
     import 'dropzone/dist/dropzone.css'
-    import plusIcon from '$lib/assets/images/plusicon.svg'
     import rawAdd from '$lib/assets/images/google-icons/add.svg?raw'
     import BasketDrawing from '$lib/assets/images/basket_no_plane.svg'
     import UploadedFileTemplate from '$lib/components/filesharing/inputs/UploadedFileTemplate.svelte'
@@ -67,7 +66,6 @@
 </script>
 <form id="my-form" class="dropzone"
       class:dropzone-with-files={files.length > 0}
-      class:signing-dropzone={stage === EncryptionState.Sign}
       class:hidden={stage === EncryptionState.Encrypting || stage === EncryptionState.Done}
 >
     <!-- so dropzone can get the template but its invisible -->
@@ -75,7 +73,7 @@
         <UploadedFileTemplate />
     </div>
     <div class="dz-message">
-        <h1 class="file-tagline" class:hidden={stage !== EncryptionState.FileSelection}>
+        <h1 class="file-tagline">
             {$_('filesharing.encryptPanel.fileBox.tagline')}
         </h1>
 
@@ -119,7 +117,7 @@
         border: none;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
     }
 
@@ -235,10 +233,6 @@
         overflow: auto;
     }
 
-    .signing-dropzone .dz-previews {
-        width: 100%;
-    }
-
     .dropzone-with-files {
         padding: 0;
         justify-content: start;
@@ -299,11 +293,6 @@
             max-height: none;
             justify-content: center;
             padding: 20px 20px;
-        }
-
-        .signing-dropzone {
-            justify-content: start;
-            padding: 0 20px;
         }
 
         .signing {
