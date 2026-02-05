@@ -53,7 +53,6 @@
 
     const ATTRIBUTES: Array<AttType> = [
         'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
-        'pbdf.gemeente.personalData.fullname',
         'pbdf.gemeente.personalData.dateofbirth',
     ]
 
