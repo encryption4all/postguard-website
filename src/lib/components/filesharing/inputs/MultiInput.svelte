@@ -116,10 +116,9 @@
 
     label {
         font-family: var(--pg-font-family);
-        font-size: 0.9em;
-        color: var(--pg-text-secondary);
-        margin-bottom: 0.35em;
-        margin-top: 0;
+        font-size: 0.8em;
+        font-weight: 800;
+        color: var(--pg-text-primary);
         display: block;
     }
 
