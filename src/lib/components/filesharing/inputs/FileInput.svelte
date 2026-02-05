@@ -66,7 +66,7 @@
 </script>
 <form id="my-form" class="dropzone"
       class:dropzone-with-files={files.length > 0}
-      class:hidden={stage === EncryptionState.Encrypting || stage === EncryptionState.Done}
+      class:hidden={stage === EncryptionState.Encrypting || stage === EncryptionState.Done || stage === EncryptionState.Error}
 >
     <!-- so dropzone can get the template but its invisible -->
     <div class="hidden">

@@ -78,7 +78,7 @@
     let EncryptState: EncryptState = $state(defaultEncryptState)
 </script>
 
-<div class:container={EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign}>
+<div class:container={EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Error}>
     <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
                bind:done={EncryptState.done} bind:stage={EncryptState.encryptionState} />
     {#if EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign}
@@ -105,7 +105,9 @@
                             abort={EncryptState.abort}
         />
     {:else if EncryptState.encryptionState === EncryptionState.Error}
-        <Error bind:encryptionState={EncryptState.encryptionState} />
+        <div class="inputs-container">
+            <Error bind:encryptionState={EncryptState.encryptionState} />
+        </div>
     {:else if EncryptState.encryptionState === EncryptionState.Done}
         <Done bind:EncryptState={EncryptState} defaultEncryptState={defaultEncryptState} />
     {/if}
@@ -153,6 +155,8 @@
       margin: 1em 1em 0 0;
       overflow-y: auto;
       border-left: 1px solid var(--pg-strong-background, #C6E2F6);
+      display: flex;
+      justify-content: center;
     }
   }
 </style>

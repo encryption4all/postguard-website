@@ -59,20 +59,31 @@
         if (!canEncrypt) return
         EncryptState.encryptionState = EncryptionState.Sign
 
-        const pubSignId = [
-            { t: 'pbdf.sidn-pbdf.email.email' },
-        ]
+        try {
+            const pubSignId = [
+                { t: 'pbdf.sidn-pbdf.email.email' },
+            ]
 
-        const keys = await RetrieveSignKeys(
-            pubSignId,
-            EncryptState.senderAttributes,
-        )
+            const keys = await RetrieveSignKeys(
+                pubSignId,
+                EncryptState.senderAttributes,
+            )
 
-        if (keys.privSignKey) EncryptState.privSignKey = keys.privSignKey
+            if (!keys || !keys.pubSignKey) {
+                console.error('Failed to retrieve sign keys')
+                EncryptState.encryptionState = EncryptionState.Error
+                return
+            }
 
-        EncryptState.pubSignKey = keys.pubSignKey
+            if (keys.privSignKey) EncryptState.privSignKey = keys.privSignKey
 
-        await onEncrypt()
+            EncryptState.pubSignKey = keys.pubSignKey
+
+            await onEncrypt()
+        } catch (e) {
+            console.error('Error occurred during signing: ', e)
+            EncryptState.encryptionState = EncryptionState.Error
+        }
     }
 
     async function onEncrypt() {
@@ -157,7 +168,7 @@
 
         const writer = writeable.getWriter()
 
-        EncryptState.files.forEach((f, i) => {
+        EncryptState.files.forEach((f) => {
             const s = createFileReadable(f)
 
             writer.write({
@@ -205,7 +216,7 @@
     function reportProgress(resolve: () => void, uploaded: number, done: boolean) {
         let offset = 0
         let percentages = EncryptState.percentages.map((p) => p)
-        let timeouts: number[] | undefined[] = EncryptState.percentages.map(
+        let timeouts: (number | undefined)[] = EncryptState.percentages.map(
             (_) => undefined,
         )
 

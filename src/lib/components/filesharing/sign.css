@@ -12,3 +12,26 @@
 .yivi-web-form {
     width: 100%;
 }
+
+/* Style Yivi error messages */
+.yivi-web-message {
+    font-family: var(--pg-font-family);
+    font-size: 1em;
+    padding: 1em;
+    border-radius: var(--pg-border-radius-md);
+    margin: 1em 0;
+}
+
+.yivi-web-message.yivi-web-error,
+.yivi-web-message.error {
+    background-color: #fee;
+    border: 1px solid #dc2626;
+    color: #991b1b;
+}
+
+.yivi-web-message.yivi-web-warning,
+.yivi-web-message.warning {
+    background-color: #fef3c7;
+    border: 1px solid #f59e0b;
+    color: #92400e;
+}
