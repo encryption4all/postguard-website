@@ -80,7 +80,8 @@
     align-items: center;
     gap: 0.5em;
     cursor: pointer;
-    margin-bottom: 0.75em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
     user-select: none;
     background: transparent;
   }
@@ -106,9 +107,9 @@
   .help-text-content {
     font-size: 0.85em;
     color: var(--pg-text-secondary);
-    margin-bottom: 1em;
     font-family: var(--pg-font-family);
-    padding-left: 1.5em;
+    margin: 0 0 1em 1.5em;
+    line-height: 1.4;
   }
 
   .recipient-heading {
