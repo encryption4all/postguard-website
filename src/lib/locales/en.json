@@ -103,6 +103,7 @@
             },
 
             "RecipientsHeading": "Recipients",
+            "RecipientsHelpToggle": "What should I fill in here?",
             "emailRecipient": "Email address",
             "emailRecipientPlaceholder": "recipient@example.com",
             "RecipientsText": "Specify the recipients and what attributes they must prove to decrypt the files. Only the recipients will see this data.",

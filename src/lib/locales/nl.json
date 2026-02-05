@@ -102,6 +102,7 @@
             },
 
             "RecipientsHeading": "Ontvangers",
+            "RecipientsHelpToggle": "Wat vul ik hier in?",
             "emailRecipient": "E-mailadres",
             "emailRecipientPlaceholder": "ontvanger@voorbeeld.nl",
             "RecipientsText": "Geef de ontvangers op en welke attributen ze moeten aantonen om de bestanden te ontsleutelen. Alleen de ontvangers kunnen deze gegevens zien.",

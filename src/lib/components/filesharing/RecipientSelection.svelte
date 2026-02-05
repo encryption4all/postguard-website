@@ -38,7 +38,7 @@
             </div>
             <button class="help-text-toggle" type="button" onclick={() => helpTextExpanded = !helpTextExpanded}>
                 <span class="arrow" class:expanded={helpTextExpanded}>▶</span>
-                <span class="toggle-label">Wat vul ik hier in?</span>
+                <span class="toggle-label">{$_('filesharing.encryptPanel.RecipientsHelpToggle')}</span>
             </button>
             {#if helpTextExpanded}
                 <p class="help-text-content">
