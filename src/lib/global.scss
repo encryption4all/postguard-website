@@ -1,6 +1,38 @@
 @font-face {
     font-family: 'Overpass';
-    src: url('$lib/assets/fonts/Overpass-Regular.ttf') format('truetype');
+    src: url('$lib/assets/fonts/overpass-thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Overpass';
+    src: url('$lib/assets/fonts/overpass-extralight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Overpass';
+    src: url('$lib/assets/fonts/overpass-light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Overpass';
+    src: url('$lib/assets/fonts/overpass-regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Overpass';
+    src: url('$lib/assets/fonts/overpass-semibold.ttf') format('truetype');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
@@ -8,9 +40,25 @@
 
 @font-face {
     font-family: 'Overpass';
-    src: url('$lib/assets/fonts/Overpass-Bold.ttf') format('truetype');
+    src: url('$lib/assets/fonts/overpass-bold.ttf') format('truetype');
     font-weight: 700;
-    font-style: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Overpass';
+    src: url('$lib/assets/fonts/overpass-extrabold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Overpass';
+    src: url('$lib/assets/fonts/overpass-heavy.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
     font-display: swap;
 }
 
@@ -51,6 +99,50 @@ button {
 
 .btn-accent:active {
     transform: translateY(0);
+}
+
+/* Global input styling */
+input.pg-input,
+select.pg-input,
+textarea.pg-input {
+    font-family: var(--pg-font-family);
+    font-size: var(--pg-input-font-size);
+    height: 2.2em;
+    background-color: white;
+    border: 1.5px solid var(--pg-border-color);
+    border-radius: var(--pg-border-radius-md);
+    padding: 0 0.85em;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Textarea should not have fixed height */
+textarea.pg-input {
+    height: auto;
+    min-height: 5em;
+    padding: 0.5em 0.85em;
+}
+
+input.pg-input:hover,
+select.pg-input:hover,
+textarea.pg-input:hover {
+    border-color: var(--pg-border-color-hover);
+}
+
+input.pg-input:focus,
+select.pg-input:focus,
+textarea.pg-input:focus {
+    outline: none;
+    border-color: var(--pg-accent-color);
+    box-shadow: 0 0 0 3px rgba(var(--pg-accent-color-rgb), 0.1);
+}
+
+input.pg-input:disabled,
+select.pg-input:disabled,
+textarea.pg-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 //*, *::before, *::after {
@@ -121,7 +213,7 @@ body {
 
     /* Typography */
     --pg-font-family: 'Overpass', sans-serif;
-    --pg-input-font-size: 1em;
+    --pg-input-font-size: 0.9em;
 
     /* Colors */
     --pg-text-primary: #1f2937;
