@@ -12,7 +12,7 @@
     let { isMobile, stage = $bindable() }:props = $props()
 </script>
 
-<div class="inputs-container">
+<div class="sign-container">
     <div id="crypt-irma-qr"></div>
 
     <button onclick={() => {stage = EncryptionState.FileSelection}}
@@ -22,15 +22,16 @@
 </div>
 
 <style>
-    .inputs-container {
+    .sign-container {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: center;
         width: 100%;
         margin-inline: 20px;
-        max-width: 400px;
+        /* max-width: 400px; */
         justify-self: center;
+        height: 100%;
     }
 
     #crypt-irma-qr {
@@ -38,11 +39,12 @@
         flex-direction: column;
         align-items: center;
         margin-top: 20px;
+        width: 100%;
     }
 
     .back-btn {
         margin-top: 1em;
-        padding: 0.5em 0em;
+        padding: 0.5em 2em;
         background-color: #000000;
         color: #ffffff;
         border: none;
@@ -50,6 +52,7 @@
         cursor: pointer;
         font-size: 1em;
         width: 100%;
+        max-width: 256px;
         text-align: center;
     }
 
