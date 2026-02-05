@@ -42,7 +42,7 @@
         placeholder={$_('filesharing.encryptPanel.emailRecipientPlaceholder')}
         type="email"
         required
-        class="email-input"
+        class="pg-input"
         class:is-confirming-bg={isConfirming}
         bind:value={recipient.email}
     />
@@ -118,25 +118,6 @@
         /* margin-bottom: 0.5em; */
     }
 
-    .email-input {
-        font-family: var(--pg-font-family);
-        font-size: var(--pg-input-font-size);
-        background-color: white;
-        border: 1.5px solid var(--pg-border-color);
-        border-radius: var(--pg-border-radius-md);
-        padding: 0.3em 0.85em;
-        transition: all 0.2s ease;
-    }
-
-    .email-input:hover {
-        border-color: var(--pg-border-color-hover);
-    }
-
-    .email-input:focus {
-        outline: none;
-        border-color: var(--pg-accent-color);
-        box-shadow: 0 0 0 3px rgba(var(--pg-accent-color-rgb), 0.1);
-    }
 
     .optionals-container {
         display: flex;

@@ -20,33 +20,7 @@
     padding-bottom: 0;
 }
 
-.crypt-select-protection-input-box input,
-textarea {
-    font-family: var(--pg-font-family);
-    font-size: var(--pg-input-font-size);
-    border: 1.5px solid var(--pg-border-color);
-    border-radius: var(--pg-border-radius-md);
-    padding: 0.65em 0.85em;
-    width: 100%;
-    resize: none;
-    transition: all 0.2s ease;
-    background-color: transparent;
-    box-sizing: border-box;
-}
-
-.crypt-select-protection-input-box input:hover,
-textarea:hover {
-    border-color: var(--pg-border-color-hover);
-    background-color: transparent;
-}
-
-.crypt-select-protection-input-box input:focus,
-textarea:focus {
-    outline: none;
-    border-color: var(--pg-accent-color);
-    background-color: transparent;
-    box-shadow: 0 0 0 3px rgba(var(--pg-accent-color-rgb), 0.1);
-}
+/* Input styles moved to global .pg-input class in global.scss */
 
 @media only screen and (max-width: 400px) {
     .crypt-btn-cancel {

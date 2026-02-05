@@ -9,9 +9,10 @@
 </script>
 
 <div class="crypt-select-protection-input-box">
-    <h3>{$_('filesharing.encryptPanel.messageHeading')}</h3>
+    <h3>{@html $_('filesharing.encryptPanel.messageHeading').replace(/\s*\([^)]*\)/, (match) => ` <span class="optional-text">${match.trim()}</span>`)}</h3>
     <p>{$_('filesharing.encryptPanel.messageText')}</p>
     <textarea
+        class="pg-input"
         required={false}
         placeholder={$_('filesharing.encryptPanel.messagePlaceholder')}
         bind:value={message}
@@ -26,6 +27,10 @@
         color: var(--pg-text-secondary);
         margin-bottom: 0.5em;
         font-family: var(--pg-font-family);
+    }
+
+    :global(.optional-text) {
+        font-weight: 400;
     }
 
     textarea {
