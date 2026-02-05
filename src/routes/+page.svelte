@@ -3,10 +3,10 @@
         type AttType,
         EncryptionState,
         type EncryptState,
-    } from '$lib/lib/types/filesharing/attributes'
+    } from '$lib/types/filesharing/attributes'
     import { browser } from '$app/environment'
     import RecipientSelection from '$lib/components/filesharing/RecipientSelection.svelte'
-    import { isMobile, GetBrowserInfo } from '$lib/lib/browser-detect'
+    import { isMobile, GetBrowserInfo } from '$lib/browser-detect'
     import MessageInput from '$lib/components/filesharing/inputs/MessageInput.svelte'
     import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
     import SendButton from '$lib/components/filesharing/SendButton.svelte'

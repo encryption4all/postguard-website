@@ -1,4 +1,4 @@
-import { Lang } from '$lib/lib/types/filesharing/attributes'
+import { Lang } from '$lib/types/filesharing/attributes'
 
 interface FileState {
     token: string;

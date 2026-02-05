@@ -7,7 +7,7 @@
     import rawAdd from '$lib/assets/images/google-icons/add.svg?raw'
     import BasketDrawing from '$lib/assets/images/basket_no_plane.svg'
     import UploadedFileTemplate from '$lib/components/filesharing/inputs/UploadedFileTemplate.svelte'
-    import { EncryptionState } from '$lib/lib/types/filesharing/attributes'
+    import { EncryptionState } from '$lib/types/filesharing/attributes'
 
     // Disable auto-discover to prevent Dropzone from automatically attaching to all .dropzone elements
     Dropzone.autoDiscover = false

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
-    import { EncryptionState } from '$lib/lib/types/filesharing/attributes'
+    import { EncryptionState } from '$lib/types/filesharing/attributes'
 
     interface props {
         encryptionState: EncryptionState;

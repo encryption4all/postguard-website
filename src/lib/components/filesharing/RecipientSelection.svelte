@@ -3,7 +3,7 @@
     import RecipientSelectionFields from '$lib/components/filesharing/RecipientSelectionFields.svelte'
     import addIcon from '$lib/assets/images/google-icons/add.svg'
     import type { AttributeCon } from '@e4a/pg-wasm'
-    import type { AttType } from '$lib/lib/types/filesharing/attributes'
+    import type { AttType } from '$lib/types/filesharing/attributes'
 
 
     interface props {

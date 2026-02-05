@@ -4,10 +4,10 @@
 
     import yiviLogo from '$lib/assets/images/non-free/yivi-logo.svg'
     import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
-    import { EncryptionState, type EncryptState, Lang } from '$lib/lib/types/filesharing/attributes'
-    import { RetrieveSignKeys } from '$lib/lib/yivi-tools'
-    import Chunker, { withTransform } from '$lib/lib/filesharing/utils'
-    import { createFileReadable, getFileStoreStream } from '$lib/lib/filesharing/FileProvider'
+    import { EncryptionState, type EncryptState, Lang } from '$lib/types/filesharing/attributes'
+    import { RetrieveSignKeys } from '$lib/yivi-tools'
+    import Chunker, { withTransform } from '$lib/filesharing/utils'
+    import { createFileReadable, getFileStoreStream } from '$lib/filesharing/FileProvider'
     import { browser } from '$app/environment'
 
     let Writer: Promise<any>
