@@ -45,7 +45,7 @@
             alt="compose"
         />
     </div>
-    <div class="grid-item instruction" style="height: {height}px">
+    <div class="grid-item instruction" style="min-height: {height}px">
         <h2>{$_('addons.instruction.header')}</h2>
         <p>{$_('addons.instruction.download')}</p>
         <Tabs {tabItems} {activeItem} on:tabChange={triggerTabChange} />
