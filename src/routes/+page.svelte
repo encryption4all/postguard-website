@@ -154,7 +154,7 @@
       max-height: 100%;
       margin: 1em 1em 0 0;
       overflow-y: auto;
-      border-left: 1px solid var(--pg-strong-background, #C6E2F6);
+      border-left: 2px solid var(--pg-strong-background, #C6E2F6);
       display: flex;
       justify-content: flex-start;
     }
