@@ -151,12 +151,12 @@
     }
 
     .inputs-container {
-      height: 100%;
+      max-height: 100%;
       margin: 1em 1em 0 0;
       overflow-y: auto;
       border-left: 1px solid var(--pg-strong-background, #C6E2F6);
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
     }
   }
 </style>
