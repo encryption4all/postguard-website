@@ -1,17 +1,13 @@
 <script lang="ts">
     import { locale } from 'svelte-i18n'
     import { browser } from '$app/environment'
-    import { onMount } from 'svelte'
 
-    let selectedLocale: string = 'en-US'
+    let isNL = $derived($locale === 'nl-NL')
+    let isEN = $derived($locale === 'en-US')
 
-    onMount(() => {
-        selectedLocale = $locale ?? 'en-US'
-    })
-
-    function handleChange() {
-        locale.set(selectedLocale)
-        if (browser) localStorage.setItem('preferredLanguage', selectedLocale)
+    function handleChange(newLocale: string) {
+        locale.set(newLocale)
+        if (browser) localStorage.setItem('preferredLanguage', newLocale)
     }
 </script>
 
@@ -23,29 +19,29 @@
     <p class="hidden" id="language-switcher">
         Choose a language for this website
     </p>
-    <div class="language-container-left language-container-nl">
+    <div class="language-container-left language-container-nl" class:selected={isNL}>
         <input
-            bind:group={selectedLocale}
-            on:change={handleChange}
-            value="nl-NL"
-            class="language-control"
             type="radio"
+            class="language-control"
             id="language1-1"
             name="language-switch1"
+            value="nl-NL"
+            checked={isNL}
+            onchange={() => handleChange('nl-NL')}
         />
         <label class="language-label" for="language1-1">
             NL<span class="hidden"> Nederlands</span>
         </label>
     </div>
-    <div class="language-container-right language-container-en">
+    <div class="language-container-right language-container-en" class:selected={isEN}>
         <input
-            bind:group={selectedLocale}
-            on:change={handleChange}
-            value="en-US"
-            class="language-control"
             type="radio"
+            class="language-control"
             id="language1-2"
             name="language-switch1"
+            value="en-US"
+            checked={isEN}
+            onchange={() => handleChange('en-US')}
         />
         <label class="language-label" for="language1-2">
             EN<span class="hidden"> English</span>
@@ -97,6 +93,7 @@
     background-color: $white;
     text-align: center;
     text-transform: uppercase;
+    cursor: pointer;
   }
 
   .language-container-left .language-label {
@@ -109,20 +106,18 @@
     border-radius: 0 4px 4px 0;
   }
 
-  .language-control:hover + .language-label,
-  .language-control:focus + .language-label {
+  .language-label:hover {
     background-color: $language-hover;
   }
 
-  .language-control:checked + .language-label {
-    text-decoration: underline 2px;
+  .selected .language-label {
+    text-decoration: 2px underline;
     text-decoration-color: #1f2937;
+    text-underline-offset: 4px;
   }
 
-  .language-control:focus + .language-label,
-  .language-control:checked:focus + .language-label {
-    z-index: 2;
+  .language-control:focus-visible + .language-label {
     outline: 2px solid $language-focus;
-    box-shadow: 0 0 8px $language-focus;
+    outline-offset: 2px;
   }
 </style>
