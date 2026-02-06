@@ -16,6 +16,7 @@
 
     // So we have a unique id for the label-input pair so we can handle multiple inputs correctly in a list even with multiple recipients
     const randomId = Math.random().toString(36).substring(2, 15)
+    const phonePattern = '[0-9]{8,15}'
     let showingValue = $state('')
     let selectedCountryPrefix = $state('+31')
 
@@ -60,6 +61,8 @@
                 class:is-confirming-bg={isConfirming}
                 disabled={isConfirming}
                 type="tel"
+                pattern={phonePattern}
+                title="Voer een geldig telefoonnummer in (8-15 cijfers)"
                 placeholder={$_(translation_key + '.placeholder')}
                 bind:value={showingValue}
             />
@@ -69,9 +72,7 @@
                 class="pg-input"
                 class:is-confirming-bg={isConfirming}
                 disabled={isConfirming}
-                type="text"
-                pattern="\d{2}-\d{2}-\d{4}"
-                placeholder={$_(translation_key + '.placeholder')}
+                type="date"
                 bind:value={value}
             />
         {:else}
@@ -113,7 +114,7 @@
 
     .phone-select {
         width: auto;
-        min-width: 5.5em;
+        min-width: 6.5em;
     }
 
     label {
