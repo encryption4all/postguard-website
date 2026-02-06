@@ -41,6 +41,11 @@
         min-width: 0;
     }
 
+    .files > div:first-child > div {
+        min-width: 0;
+        flex: 1;
+    }
+
     .files > div:last-child {
         display: flex;
         align-items: center;
@@ -60,7 +65,6 @@
 
     .file-title {
         overflow: hidden;
-        text-overflow: ellipsis;
         white-space: nowrap;
         font-family: var(--pg-font-family);
         font-weight: 400;
@@ -68,6 +72,9 @@
         color: var(--pg-text-primary);
         min-width: 0;
         font-size: 0.9rem;
+        direction: rtl;
+        text-align: left;
+        text-overflow: ellipsis;
     }
 
     .files > div:last-child p {
