@@ -3,14 +3,14 @@
     import file from '$lib/assets/images/google-icons/file.svg'
 </script>
 
-<div class="files" id="template">
+<div class="files">
     <div>
         <div><p class="file-title" data-dz-name></p></div>
     </div>
 
     <div>
         <p data-dz-size></p>
-        <button class="remove-button" data-dz-remove>
+        <button class="remove-button" data-dz-remove type="button">
             <img src={remove} alt="remove button" />
         </button>
         <div class="dz-error-message"><span data-dz-errormessage></span></div>
@@ -27,21 +27,10 @@
         align-items: center;
         justify-content: space-between;
         gap: 0.5em;
-
-        background-color: white;
-        border: 1px solid #e5e7eb;
-        padding: 12px 14px;
-        border-radius: var(--pg-border-radius-lg);
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-
         width: 100%;
-        margin-bottom: 10px;
-        transition: all 0.2s ease;
-    }
-
-    .files:hover {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        border-color: var(--pg-border-color);
+        margin-bottom: 0;
+        padding: 8px 0;
+        border-bottom: 2px solid var(--pg-border-color-light);
     }
 
     .files > div:first-child {
@@ -74,10 +63,19 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         font-family: var(--pg-font-family);
-        font-weight: 600;
+        font-weight: 400;
         margin: 0;
         color: var(--pg-text-primary);
         min-width: 0;
+        font-size: 0.9rem;
+    }
+
+    .files > div:last-child p {
+        font-family: var(--pg-font-family);
+        font-weight: 400;
+        margin: 0;
+        color: var(--pg-text-secondary);
+        font-size: 0.9rem;
     }
 
     .remove-button {
@@ -89,6 +87,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        pointer-events: auto;
     }
 
     .remove-button:hover {

@@ -20,16 +20,20 @@
         stage: EncryptionState;
     }
 
-    let MAX_UPLOAD_SIZE = import.meta.env.VITE_MAX_UPLOAD_SIZE
+    let MAX_UPLOAD_SIZE = Number(import.meta.env.VITE_MAX_UPLOAD_SIZE)
 
     let maxFileSizeMB = MAX_UPLOAD_SIZE / (1024 * 1024)
 
     let { files = $bindable(), percentages = $bindable(), done = $bindable(), stage = $bindable() }: props = $props()
 
+    let totalSize = $derived(files.reduce((acc, file) => acc + file.size, 0))
+    let remainingSize = $derived(MAX_UPLOAD_SIZE - totalSize)
+    let remainingSizeGB = $derived((remainingSize / (1024 * 1024 * 1024)).toFixed(2))
+
     // handle all the Dropzone setup in onMount to ensure it only runs in the browser
     onMount(() => {
         // @ts-ignore, it's always set if UploadedFileTemplate is set because it's SSR'd
-        let previewTemplate = document.querySelector('#template').parentNode.innerHTML
+        let previewTemplate = document.querySelector('#template-container').innerHTML
 
         myDropzone = new Dropzone('#my-form', {
             url: '#', // Dummy URL, can't be empty
@@ -37,7 +41,7 @@
             maxFilesize: maxFileSizeMB,
             previewsContainer: '#previews',
             previewTemplate: previewTemplate,
-            clickable: '.upload-butt, .choose-files-btn, .post-upload-button', // Only these elements trigger file selection
+            clickable: '.dropzone-box, .choose-files-btn, .add-more-button', // Only these elements trigger file selection
         })
 
         myDropzone.on('addedfile', file => {
@@ -69,7 +73,7 @@
       class:hidden={stage === EncryptionState.Encrypting || stage === EncryptionState.Done || stage === EncryptionState.Error}
 >
     <!-- so dropzone can get the template but its invisible -->
-    <div class="hidden">
+    <div class="hidden" id="template-container">
         <UploadedFileTemplate />
     </div>
     <div class="dz-message">
@@ -77,21 +81,29 @@
             {$_('filesharing.encryptPanel.fileBox.tagline')}
         </h1>
 
-        <div class="upload-butt middle-block-size" class:hidden={files.length > 0}>
-            <img class="drawing" src={BasketDrawing} alt="Add files" />
-            <p class="drag-text">Sleep bestanden hierheen</p>
-            <p class="or-text">of</p>
-            <button class="choose-files-btn btn-accent" type="button">Kies bestanden</button>
-            <p class="max-size-text">Maximaal 2 GB</p>
-        </div>
+        <div class="dropzone-box" class:has-files={files.length > 0}>
+            <div class="upload-butt middle-block-size" class:hidden={files.length > 0}>
+                <img class="drawing" src={BasketDrawing} alt="Add files" />
+                <p class="drag-text">{$_('filesharing.encryptPanel.fileBox.dragText')}</p>
+                <p class="or-text">{$_('filesharing.encryptPanel.fileBox.orText')}</p>
+                <button class="choose-files-btn btn-accent" type="button">{$_('filesharing.encryptPanel.fileBox.chooseFilesButton')}</button>
+                <p class="max-size-text">{$_('filesharing.encryptPanel.fileBox.maxSizeText')}</p>
+            </div>
 
-        <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
-        <div id="previews" class="middle-block-size dz-previews" class:hidden={files.length <= 0}
-             class:signing={stage === EncryptionState.Sign}></div>
-        <button class="dz-message post-upload-button desktop-hide" class:hidden={files.length <= 0}>
-            <span style="display: flex; align-items: center; pointer-events: none;">{@html rawAdd}</span>
-            Upload file
-        </button>
+            <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
+            <div class="files-container" class:hidden={files.length <= 0}>
+                <div id="previews" class="dz-previews"
+                     class:signing={stage === EncryptionState.Sign}></div>
+
+                <button class="add-more-button" type="button">
+                    + {$_('filesharing.encryptPanel.fileBox.addMoreFiles')}
+                </button>
+
+                <div class="file-summary">
+                    <p>{$_('filesharing.encryptPanel.fileBox.fileSummary', { values: { count: files.length, size: remainingSizeGB } })}</p>
+                </div>
+            </div>
+        </div>
     </div>
 </form>
 
@@ -141,7 +153,33 @@
         width: 95%;
         max-width: 600px;
         min-height: fit-content;
+    }
 
+    .dropzone-box {
+        width: 95%;
+        max-width: 600px;
+        background: var(--pg-strong-background) 0%;
+        border: 2px dashed var(--pg-border-color-light);
+        border-radius: var(--pg-border-radius-lg);
+        padding: 1.5rem 1rem;
+        box-shadow: 0 2px 8px rgba(48, 149, 222, 0.08);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: fit-content;
+    }
+
+    .dropzone-box.has-files {
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .dropzone-box:hover:not(.has-files) {
+        border-color: #6096f2;
+        box-shadow: 0 4px 16px rgba(48, 149, 222, 0.15);
     }
 
     .upload-butt {
@@ -150,21 +188,10 @@
         align-items: center;
         justify-content: center;
         font-weight: 600;
-        background: var(--pg-strong-background) 0%;
-        border: 2px dashed var(--pg-border-color-light);
-        border-radius: var(--pg-border-radius-lg);
         margin: 0;
-        padding: 1.5rem 1rem;
+        padding: 0;
         transition: all 0.3s ease;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(48, 149, 222, 0.08);
-    }
-
-    .upload-butt:hover {
-        background: linear-gradient(135deg, #f3f8fd 0%, #c0d5ff 100%);
-        border-color: #6096f2;
-        box-shadow: 0 4px 16px rgba(48, 149, 222, 0.15);
-        transform: translateY(-2px);
+        width: 100%;
     }
 
     .upload-butt img {
@@ -222,51 +249,77 @@
         text-align: center;
     }
 
+    .files-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .dropzone-box.has-files .files-container {
+        pointer-events: auto;
+    }
+
     .dz-previews {
         height: fit-content;
         width: 100%;
-        margin-top: 1em;
         display: flex;
         flex-direction: column;
-        gap: 0;
-        flex: 1 1 auto;
-        overflow: auto;
+        gap: 0.5rem;
+        max-height: 300px;
+        overflow-y: auto;
+        pointer-events: auto;
+    }
+
+    .add-more-button {
+        all: unset;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5em;
+        padding: 0.2em 1em;
+        background-color: white;
+        border: 1.5px solid var(--pg-border-color);
+        border-radius: var(--pg-border-radius-lg);
+        cursor: pointer;
+        font-family: var(--pg-font-family);
+        font-size: 0.95em;
+        font-weight: 600;
+        color: var(--pg-text-primary);
+        transition: all 0.2s ease;
+        width: fit-content;
+        box-sizing: border-box;
+        pointer-events: auto;
+        margin: 0 auto;
+    }
+
+    .add-more-button:hover {
+        background-color: #f9fafb;
+        border-color: var(--pg-accent-color);
+        color: var(--pg-accent-color);
+        box-shadow: 0 2px 4px rgba(48, 149, 222, 0.15);
+    }
+
+    .file-summary {
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem 0;
+        pointer-events: none;
+    }
+
+    .file-summary p {
+        margin: 0;
+        font-size: 0.875rem;
+        color: var(--pg-text-secondary);
+        font-weight: 600;
     }
 
     .dropzone-with-files {
         padding: 0;
         justify-content: start;
         height: fit-content;
-        max-height: 200px; /* So it shows roughly 2 and a half files (the half so it's clear it's scrollable)*/
     }
 
-    .post-upload-button {
-        flex: 0 0 auto;
-        display: flex;
-        width: 100%;
-        flex-direction: row;
-        align-items: center;
-        justify-content: start;
-        background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-        fill: white;
-        color: white;
-        padding: 0.75em 1em;
-        border-radius: var(--pg-border-radius-lg);
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        transition: all 0.2s ease;
-        gap: 0.5em;
-    }
-
-    .post-upload-button:hover {
-        background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-        transform: translateY(-1px);
-    }
-
-    .post-upload-button:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    }
 
     @media only screen and (min-width: 768px) {
         .middle-block-size {
@@ -274,8 +327,19 @@
             width: 70%;
         }
 
-        .upload-butt {
+        .dropzone-box {
+            width: 70%;
             padding: 3rem 2rem;
+            min-height: 50vh;
+        }
+
+        .dropzone-box.has-files {
+            min-height: fit-content;
+            padding: 1.5rem 1rem;
+        }
+
+        .upload-butt {
+            padding: 0;
         }
 
         .upload-butt img {
@@ -290,9 +354,7 @@
 
         .dropzone-with-files {
             height: auto;
-            max-height: none;
             justify-content: center;
-            padding: 20px 20px;
         }
 
         .signing {
