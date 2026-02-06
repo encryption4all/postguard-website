@@ -30,7 +30,18 @@
         <div class="divider"></div>
         <div class="recipients-list">
             {#each EncryptState.recipients as recipient}
-                <div class="recipient-item">{recipient.email}</div>
+                <div class="recipient-item">
+                    <div class="recipient-email">{recipient.email}</div>
+                    {#if recipient.extra.length > 0}
+                        <div class="recipient-attributes">
+                            {#each recipient.extra as attr}
+                                <span class="attribute-badge">
+                                    {attr.v}
+                                </span>
+                            {/each}
+                        </div>
+                    {/if}
+                </div>
             {/each}
         </div>
     </div>
@@ -117,6 +128,35 @@
     .file-item:last-child,
     .recipient-item:last-child {
         border-bottom: none;
+    }
+
+    .recipient-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .recipient-email {
+        font-weight: 500;
+    }
+
+    .recipient-attributes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .attribute-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        background-color: white;
+        border: 1.5px solid #1f2937;
+        border-radius: var(--pg-border-radius-md);
+        font-family: var(--pg-font-family);
+        font-size: 0.85rem;
+        color: var(--pg-text-primary);
+        white-space: nowrap;
     }
 
     .send-another-btn {
