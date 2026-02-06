@@ -99,7 +99,13 @@
                 "tagline": "Securely send your files",
                 "upperTextDropZone": "Drag & drop files <br/> or",
                 "lowerTextDropZone": "click to upload",
-                "sizeLimitText": "max. 2GB"
+                "sizeLimitText": "max. 2GB",
+                "dragText": "Drag files here",
+                "orText": "or",
+                "chooseFilesButton": "Choose files",
+                "maxSizeText": "Maximum 2 GB",
+                "addMoreFiles": "Add more files",
+                "fileSummary": "{count} {count, plural, one {file} other {files}} added, {size} GB remaining"
             },
 
             "RecipientsHeading": "Recipients",

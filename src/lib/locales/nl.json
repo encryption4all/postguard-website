@@ -98,7 +98,13 @@
             "fileBox": {
                 "tagline": "Verstuur je bestanden veilig",
                 "upperTextDropZone": "Sleep bestanden hierheen <br/> of",
-                "lowerTextDropZone": "klik om te uploaden <br/> (max. 2GB)"
+                "lowerTextDropZone": "klik om te uploaden <br/> (max. 2GB)",
+                "dragText": "Sleep bestanden hierheen",
+                "orText": "of",
+                "chooseFilesButton": "Kies bestanden",
+                "maxSizeText": "Maximaal 2 GB",
+                "addMoreFiles": "Voeg meer bestanden toe",
+                "fileSummary": "{count} {count, plural, one {bestand} other {bestanden}} toegevoegd, nog {size} GB over"
             },
 
             "RecipientsHeading": "Ontvangers",
