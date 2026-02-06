@@ -138,6 +138,12 @@ textarea.pg-input:focus {
     box-shadow: 0 0 0 3px rgba(var(--pg-accent-color-rgb), 0.1);
 }
 
+input.pg-input:invalid:not(:focus),
+select.pg-input:invalid:not(:focus),
+textarea.pg-input:invalid:not(:focus) {
+    border-color: var(--pg-border-color-error);
+}
+
 input.pg-input:disabled,
 select.pg-input:disabled,
 textarea.pg-input:disabled {
@@ -223,6 +229,7 @@ body {
     --pg-border-color-hover: #9ca3af;
     --pg-border-color-accent: #b0cbe2;
     --pg-border-color-light: #c8dff0;
+    --pg-border-color-error: #dc2626;
     --pg-bg-input: #fafafa;
     --pg-bg-input-hover: white;
 
