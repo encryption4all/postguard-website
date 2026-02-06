@@ -2,6 +2,7 @@
     import { _ } from 'svelte-i18n'
     import type { EncryptState } from '$lib/types/filesharing/attributes'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
+    import airplane from '$lib/assets/images/airplane.svg'
 
     interface props {
         EncryptState: EncryptState;
@@ -61,6 +62,9 @@
     >
         {$_('filesharing.encryptPanel.another')}
     </button>
+
+    <!-- Airplane decoration -->
+    <img src={airplane} alt="airplane" class="airplane-decoration" />
 </div>
 
 <style>
@@ -117,7 +121,7 @@
 
     .file-item,
     .recipient-item {
-        padding: 0.5rem 1.5rem;
+        padding: 0.3rem 1.5rem;
         margin: 0 0rem;
         font-family: var(--pg-font-family);
         font-size: 1rem;
@@ -133,7 +137,7 @@
     .recipient-item {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 0.25rem;
     }
 
     .recipient-email {
@@ -149,9 +153,9 @@
     .attribute-badge {
         display: inline-flex;
         align-items: center;
-        padding: 4px 10px;
+        padding: 0px 8px;
         background-color: white;
-        border: 1.5px solid #1f2937;
+        border: 1.5px solid var(--pg-border-color-accent);
         border-radius: var(--pg-border-radius-md);
         font-family: var(--pg-font-family);
         font-size: 0.85rem;
@@ -181,5 +185,13 @@
         background-color: #f9fafb;
         transform: translateY(-1px);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .airplane-decoration {
+        width: 120%;
+        max-width: 800px;
+        height: auto;
+        margin-top: 2rem;
+        opacity: 0.6;
     }
 </style>
