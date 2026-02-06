@@ -1,6 +1,7 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
     import RecipientSelectionFields from '$lib/components/filesharing/RecipientSelectionFields.svelte'
+    import HelpToggle from '$lib/components/HelpToggle.svelte'
     import addIcon from '$lib/assets/images/google-icons/add.svg'
     import type { AttributeCon } from '@e4a/pg-wasm'
     import type { AttType } from '$lib/types/filesharing/attributes'
@@ -13,8 +14,6 @@
     }
 
     let { recipients = $bindable([]), attributes, isConfirming = false }: props = $props()
-
-    let helpTextExpanded = $state(false)
 
     function removeRecipient(index: number) {
         recipients.splice(index, 1)
@@ -36,15 +35,10 @@
                     {$_('filesharing.encryptPanel.RecipientsHeading')}
                 </h3>
             </div>
-            <button class="help-text-toggle" type="button" onclick={() => helpTextExpanded = !helpTextExpanded}>
-                <span class="arrow" class:expanded={helpTextExpanded}>▶</span>
-                <span class="toggle-label">{$_('filesharing.encryptPanel.RecipientsHelpToggle')}</span>
-            </button>
-            {#if helpTextExpanded}
-                <p class="help-text-content">
-                    {$_('filesharing.encryptPanel.RecipientsText')}
-                </p>
-            {/if}
+            <HelpToggle
+                title={$_('filesharing.encryptPanel.RecipientsHelpToggle')}
+                content={$_('filesharing.encryptPanel.RecipientsText')}
+            />
         {/if}
 
         {#each recipients as _, index}
@@ -67,50 +61,6 @@
 </div>
 
 <style lang="scss">
-  p {
-    font-size: 0.85em;
-    color: var(--pg-text-secondary);
-    margin-bottom: 1em;
-    font-family: var(--pg-font-family);
-  }
-
-  .help-text-toggle {
-    all: unset;
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-    cursor: pointer;
-    margin: 0 0 0.5em;
-    user-select: none;
-    background: transparent;
-  }
-
-  .arrow {
-    font-size: 0.7em;
-    color: var(--pg-text-secondary);
-    transition: transform 0.2s ease;
-    display: inline-block;
-  }
-
-  .arrow.expanded {
-    transform: rotate(90deg);
-  }
-
-  .toggle-label {
-    font-size: 0.9em;
-    color: var(--pg-text-secondary);
-    font-weight: 600;
-    font-family: var(--pg-font-family);
-  }
-
-  .help-text-content {
-    font-size: 0.85em;
-    color: var(--pg-text-secondary);
-    font-family: var(--pg-font-family);
-    margin: 0 0 1em 1.5em;
-    line-height: 1.4;
-  }
-
   .recipient-heading {
     display: flex;
     justify-content: space-between;
