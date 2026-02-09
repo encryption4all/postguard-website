@@ -23,53 +23,58 @@
 </script>
 
 <li class="crypt-recipient" class:is-confirming-bg={isConfirming}>
-    <div class="recipient-heading">
-        <label class="field-label" for="recipient-email-{recipient.email}">
-            {$_('filesharing.encryptPanel.emailRecipient')}
-        </label>
+    <div class="recipient-container">
         {#if !isFirstRecipient}
             <button
                 class="btn-delete"
                 class:hidden={isConfirming}
                 onclick={remove}
             >
-                <img style="width: 20px" src={closebutton} alt="close button" />
+                <img style="width: 14px; height: 14px;" src={closebutton} alt="close button" />
             </button>
         {/if}
-    </div>
-    <input
-        id="recipient-email-{recipient.email}"
-        placeholder={$_('filesharing.encryptPanel.emailRecipientPlaceholder')}
-        type="email"
-        required
-        class="pg-input"
-        class:is-confirming-bg={isConfirming}
-        bind:value={recipient.email}
-        disabled={isConfirming}
-    />
 
-    <div class="optionals-container">
-        {#each recipient.extra as attribute, index}
-            <MultiInput
-                translation_key={'filesharing.attributes.' + attribute.t}
-                bind:value={attribute.v}
-                deleteAction={() => {
-                    recipient.extra.splice(index, 1)
-                }}
-                isConfirming={isConfirming}
+        <div class="recipient-content">
+            <div class="recipient-heading">
+                <label class="field-label" for="recipient-email-{recipient.email}">
+                    {$_('filesharing.encryptPanel.emailRecipient')}
+                </label>
+            </div>
+            <input
+                id="recipient-email-{recipient.email}"
+                placeholder={$_('filesharing.encryptPanel.emailRecipientPlaceholder')}
+                type="email"
+                required
+                class="pg-input"
+                class:is-confirming-bg={isConfirming}
+                bind:value={recipient.email}
+                disabled={isConfirming}
             />
-        {/each}
-        {#if !isConfirming}
-            <div class="attributes-list">
-                {#each addableButtons as attribute}
-                    <AttributeButton
-                        type="add"
-                        translation_key={'filesharing.attributes.' + attribute}
-                        clickAction={() => addAttribute(attribute)}
+
+            <div class="optionals-container">
+                {#each recipient.extra as attribute, index}
+                    <MultiInput
+                        translation_key={'filesharing.attributes.' + attribute.t}
+                        bind:value={attribute.v}
+                        deleteAction={() => {
+                            recipient.extra.splice(index, 1)
+                        }}
+                        isConfirming={isConfirming}
                     />
                 {/each}
+                {#if !isConfirming}
+                    <div class="attributes-list">
+                        {#each addableButtons as attribute}
+                            <AttributeButton
+                                type="add"
+                                translation_key={'filesharing.attributes.' + attribute}
+                                clickAction={() => addAttribute(attribute)}
+                            />
+                        {/each}
+                    </div>
+                {/if}
             </div>
-        {/if}
+        </div>
     </div>
 </li>
 
@@ -92,6 +97,12 @@
         margin-bottom: 0.5em;
     }
 
+    .recipient-container {
+        display: flex;
+        gap: 0.75em;
+        align-items: flex-start;
+    }
+
     .btn-delete {
         all: unset;
         cursor: pointer;
@@ -101,10 +112,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
     }
 
     .btn-delete:hover {
         background-color: #fee2e2;
+    }
+
+    .recipient-content {
+        flex: 1;
+        min-width: 0;
     }
 
     .recipient-heading {
@@ -118,7 +135,6 @@
         font-weight: 800;
         color: var(--pg-text-primary);
         font-family: var(--pg-font-family);
-        /* margin-bottom: 0.5em; */
     }
 
 
@@ -126,8 +142,6 @@
         display: flex;
         flex-direction: column;
         gap: 0.5em;
-        /* border-left: 3px solid var(--pg-accent-color); */
-        /* padding-left: 0.75em; */
         margin-top: 0.5em;
     }
 </style>

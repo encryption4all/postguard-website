@@ -84,12 +84,11 @@
     cursor: pointer;
     font-family: var(--pg-font-family);
     font-size: 0.95em;
-    font-weight: 600;
+    font-weight: 400;
     color: var(--pg-text-primary);
     transition: all 0.2s ease;
     width: fit-content;
     box-sizing: border-box;
-    // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   }
 
   .add-recipient-btn:hover {

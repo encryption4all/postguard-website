@@ -144,7 +144,7 @@
             "irmaInstructionQr": "Versleutel de bestanden door je e-mailadres te verifieren. Scan daarvoor de onderstaande QR-code met de identificatie app Yivi.",
             "irmaInstructionMobile": "Versleutel de bestanden door je e-mailadres te verifieren. Click daarvoor op de onderstaande knop om naar de identificatie app Yivi te gaan.",
             "addRecipient": "ontvanger",
-            "addRecipientButton": "Nog een ontvanger toevoegen",
+            "addRecipientButton": "Voeg nog een ontvanger toe",
             "emailSenderConfirm": "Stuur mij een bevestiging",
 
             "timeremaining": {

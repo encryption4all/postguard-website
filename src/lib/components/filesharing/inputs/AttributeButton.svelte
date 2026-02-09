@@ -39,7 +39,7 @@
         background-color: white;
         font-family: var(--pg-font-family);
         cursor: pointer;
-        padding: 6px 10px;
+        padding: 2px 10px;
         font-size: 14px;
         transition: all 0.2s ease;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);

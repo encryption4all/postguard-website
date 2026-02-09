@@ -89,11 +89,11 @@
         {#if deleteAction}
             <button
                 class:hidden={isConfirming}
-                class="btn-delete field-height"
+                class="btn-delete"
                 onclick={deleteAction}
             >
                 <img
-                    style="width: 18px; height: 18px;"
+                    style="width: 14px; height: 14px;"
                     src={closeIcon}
                     alt="remove optional attribute"
                 />
@@ -128,15 +128,16 @@
 
     .btn-delete {
         all: unset;
+        aspect-ratio : 1 / 1;
         border-radius: var(--pg-border-radius-md);
-        /* padding: 0 8px; */
+        margin: 4px;
+        margin-left: 0px;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: all 0.2s ease;
         background-color: transparent;
-        height: 40px;
-        /* min-width: 8px; */
+        height: 80%;
         cursor: pointer;
     }
 
