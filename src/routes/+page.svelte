@@ -78,23 +78,32 @@
     let EncryptState: EncryptState = $state(defaultEncryptState)
 </script>
 
-<div class:container={EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Error}>
+<div class:container={EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Encrypting || EncryptState.encryptionState === EncryptionState.Error}>
     <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
                bind:done={EncryptState.done} bind:stage={EncryptState.encryptionState} />
-    {#if EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign}
+    {#if EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Encrypting}
         <div class="inputs-container">
-            {#if EncryptState.encryptionState === EncryptionState.FileSelection}
+            {#if EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Encrypting}
+                <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
+                <MessageInput bind:message={EncryptState.message} readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
+                <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
+                              bind:senderConfirm={EncryptState.senderConfirm}
+                              attributes={ATTRIBUTES}
+                              readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
+                <SendButton bind:EncryptState={EncryptState} />
+            {:else if EncryptState.encryptionState === EncryptionState.Sign && isMobileDevice}
+                <Sign isMobile={isMobileDevice} bind:stage={EncryptState.encryptionState} />
+            {:else if EncryptState.encryptionState === EncryptionState.Sign && !isMobileDevice}
+                <!-- On desktop: Show the form with button (popup is inside SendButton) -->
                 <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} />
                 <MessageInput bind:message={EncryptState.message} />
                 <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
                               bind:senderConfirm={EncryptState.senderConfirm}
                               attributes={ATTRIBUTES} />
                 <SendButton bind:EncryptState={EncryptState} />
-            {:else if EncryptState.encryptionState === EncryptionState.Sign}
-                <Sign isMobile={isMobileDevice} bind:stage={EncryptState.encryptionState} />
             {/if}
         </div>
-    {:else if EncryptState.encryptionState === EncryptionState.Encrypting}
+    {:else if false && EncryptState.encryptionState === EncryptionState.Encrypting}
         <EncryptionProgress encryptStartTime={EncryptState.encryptionState}
                             files={EncryptState.files}
                             recipients={EncryptState.recipients}

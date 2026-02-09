@@ -9,6 +9,8 @@
     import Chunker, { withTransform } from '$lib/filesharing/utils'
     import { createFileReadable, getFileStoreStream } from '$lib/filesharing/FileProvider'
     import { browser } from '$app/environment'
+    import { isMobile } from '$lib/browser-detect'
+    import YiviQRCode from './YiviQRCode.svelte'
 
     let Writer: Promise<any>
     if (browser) {
@@ -22,6 +24,8 @@
     }
 
     let { EncryptState = $bindable() }: props = $props()
+
+    let isMobileDevice = isMobile()
 
     let MAX_UPLOAD_SIZE = import.meta.env.VITE_MAX_UPLOAD_SIZE
     let UPLOAD_CHUNK_SIZE = import.meta.env.VITE_UPLOAD_CHUNK_SIZE
@@ -257,16 +261,35 @@
     }
 
     let yiviInfoExpanded = $state(false)
+    let buttonRef: HTMLButtonElement | null = $state(null)
 </script>
 <div class="button-container">
-    <button
-        class="crypt-btn-main crypt-btn yivi-btn-logo {canEncrypt() ? '' : ' crypt-btn-disabled'}"
-        onclick={onSign}
-        disabled={!canEncrypt()}
-    >
-        <img src={canEncrypt() ? yiviLogoDark : yiviLogo} alt="yivi-logo" width={50} height={27} />
-        {$_('filesharing.encryptPanel.encryptSend')}
-    </button>
+    {#if EncryptState.encryptionState === EncryptionState.Encrypting}
+        <!-- Loading info box during upload -->
+        {@const totalProgress = EncryptState.percentages.length > 0
+            ? Math.round(EncryptState.percentages.reduce((a, b) => a + b, 0) / EncryptState.percentages.length)
+            : 0}
+        <div class="upload-info-box">
+            <div class="progress-bar" class:complete={totalProgress >= 100} style="width: {totalProgress >= 100 ? '100%' : totalProgress + '%'}"></div>
+            <div class="upload-info-content">
+                <svg class="spinner" viewBox="0 0 24 24" width="24" height="24">
+                    <circle class="spinner-circle" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3"></circle>
+                </svg>
+                {$_('filesharing.encryptPanel.sending')}
+            </div>
+        </div>
+    {:else}
+        <!-- Normal button -->
+        <button
+            bind:this={buttonRef}
+            class="crypt-btn-main crypt-btn yivi-btn-logo {canEncrypt() ? '' : ' crypt-btn-disabled'}"
+            onclick={onSign}
+            disabled={!canEncrypt()}
+        >
+            <img src={canEncrypt() ? yiviLogoDark : yiviLogo} alt="yivi-logo" width={50} height={27} />
+            {$_('filesharing.encryptPanel.encryptSend')}
+        </button>
+    {/if}
 
     <p class="yivi-tip">
         {$_('filesharing.encryptPanel.yiviTip')}
@@ -284,6 +307,37 @@
             </a>
         </p>
     {/if}
+
+    <!-- Desktop Yivi popup above the button -->
+    {#if !isMobileDevice && EncryptState.encryptionState === EncryptionState.Sign && buttonRef}
+        <div class="desktop-backdrop" onclick={() => {EncryptState.encryptionState = EncryptionState.FileSelection}}></div>
+        <div
+            class="desktop-yivi-popup"
+            style="
+                left: {buttonRef.getBoundingClientRect().left + buttonRef.offsetWidth / 2}px;
+                top: {buttonRef.getBoundingClientRect().top - 15}px;
+            "
+        >
+            <div class="popup-content">
+                <div class="popup-header">
+                    <h2 class="popup-title">{$_('filesharing.encryptPanel.encryptSend')}</h2>
+                    <button
+                        class="close-btn"
+                        onclick={() => {EncryptState.encryptionState = EncryptionState.FileSelection}}
+                    >
+                        ✕ {$_('filesharing.sign.close')}
+                    </button>
+                </div>
+
+                <p class="popup-instruction">{$_('filesharing.sign.scanQR')}</p>
+
+                <div class="qr-code-wrapper">
+                    <YiviQRCode />
+                </div>
+            </div>
+            <div class="popup-arrow"></div>
+        </div>
+    {/if}
 </div>
 <style lang="scss">
   .button-container {
@@ -294,6 +348,7 @@
     gap: 0.5rem;
     margin-bottom: 1rem;
     padding-left: 1.25em;
+    position: relative;
   }
 
   .crypt-btn-main {
@@ -333,6 +388,72 @@
     opacity: 0.5;
   }
 
+  .upload-info-box {
+    position: relative;
+    width: 100%;
+    border-radius: var(--pg-border-radius-sm);
+    background: #cbe1f4;
+    margin-bottom: 0.75em;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background: #2579b8;
+    transition: width 0.3s ease;
+  }
+
+  .upload-info-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75em;
+    padding: 1em 1em;
+    font-size: 1em;
+    font-weight: 400;
+    font-family: var(--pg-font-family);
+    color: #000;
+    z-index: 1;
+  }
+
+  .upload-info-box .spinner-circle {
+    stroke: #000;
+  }
+
+  .spinner {
+    animation: spin 1s linear infinite;
+    margin-right: 0.5em;
+  }
+
+  .spinner-circle {
+    stroke-dasharray: 60;
+    stroke-dashoffset: 0;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes dash {
+    0% {
+      stroke-dashoffset: 60;
+    }
+    50% {
+      stroke-dashoffset: 15;
+    }
+    100% {
+      stroke-dashoffset: 60;
+    }
+  }
+
   .yivi-info-toggle {
     all: unset;
     display: flex;
@@ -366,7 +487,7 @@
     font-size: 0.85em;
     color: var(--pg-text-secondary);
     font-family: var(--pg-font-family);
-    margin: 0 0 1em 1.5em;
+    padding: 0 0 1em 1.5em;
     line-height: 1.4;
   }
 
@@ -386,5 +507,106 @@
     font-family: var(--pg-font-family);
     margin: 0;
     line-height: 1.4;
+  }
+
+  /* Desktop Yivi popup styles */
+  .desktop-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(48, 149, 150, 0.10);
+    z-index: 999;
+    cursor: pointer;
+  }
+
+  .desktop-yivi-popup {
+    --qr-size: 230px;
+    --qr-container-size: calc(var(--qr-size) / 0.96);
+    --popup-width: calc(var(--qr-container-size) );
+
+    position: fixed;
+    transform: translate(-50%, -100%);
+    background: var(--pg-strong-background);
+    border-radius: var(--pg-border-radius-md);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 1em 1.5em 1.5em 1.5em;
+    width: var(--popup-width);
+    z-index: 10000;
+  }
+
+  .popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
+
+  .popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 0.5em;
+  }
+
+  .popup-title {
+    font-size: 0.85em;
+    font-weight: bold;
+    margin: 0;
+    text-align: left;
+    color: var(--pg-text-primary, #000);
+    font-family: var(--pg-font-family);
+    flex: 1;
+  }
+
+  .popup-instruction {
+    font-size: 0.75em;
+    margin: 0 0 0.5em 0;
+    text-align: left;
+    color: var(--pg-text-secondary, #333);
+    font-family: var(--pg-font-family);
+    width: 100%;
+  }
+
+  .qr-code-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .close-btn {
+    background: white;
+    border: 1px solid #000;
+    border-radius: var(--pg-border-radius-sm);
+    padding: 0.25em 0.5em;
+    cursor: pointer;
+    font-size: 0.75em;
+    font-family: var(--pg-font-family);
+    color: #000;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    line-height: 1;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .close-btn:hover {
+    background: #f5f5f5;
+  }
+
+  .popup-arrow {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid var(--pg-strong-background);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
   }
 </style>
