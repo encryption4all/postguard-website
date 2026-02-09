@@ -8,9 +8,10 @@
         senderAttributes: AttributeCon;
         senderConfirm: boolean;
         attributes: AttType[];
+        readonly?: boolean;
     }
 
-    let { senderAttributes = $bindable(), senderConfirm = $bindable(), attributes }: props = $props()
+    let { senderAttributes = $bindable(), senderConfirm = $bindable(), attributes, readonly = false }: props = $props()
 
     let addableButtons: AttType[] = $derived(attributes.filter((att) => !senderAttributes.some(({ t }) => t === att)))
 

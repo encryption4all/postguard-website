@@ -45,6 +45,7 @@
         class="pg-input"
         class:is-confirming-bg={isConfirming}
         bind:value={recipient.email}
+        disabled={isConfirming}
     />
 
     <div class="optionals-container">
@@ -58,15 +59,17 @@
                 isConfirming={isConfirming}
             />
         {/each}
-        <div class="attributes-list">
-            {#each addableButtons as attribute}
-                <AttributeButton
-                    type="add"
-                    translation_key={'filesharing.attributes.' + attribute}
-                    clickAction={() => {isConfirming ? null : addAttribute(attribute)}}
-                />
-            {/each}
-        </div>
+        {#if !isConfirming}
+            <div class="attributes-list">
+                {#each addableButtons as attribute}
+                    <AttributeButton
+                        type="add"
+                        translation_key={'filesharing.attributes.' + attribute}
+                        clickAction={() => addAttribute(attribute)}
+                    />
+                {/each}
+            </div>
+        {/if}
     </div>
 </li>
 

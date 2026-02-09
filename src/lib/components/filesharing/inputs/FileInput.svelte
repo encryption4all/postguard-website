@@ -70,7 +70,7 @@
 </script>
 <form id="my-form" class="dropzone"
       class:dropzone-with-files={files.length > 0}
-      class:hidden={stage === EncryptionState.Encrypting || stage === EncryptionState.Done || stage === EncryptionState.Error}
+      class:hidden={stage === EncryptionState.Done || stage === EncryptionState.Error}
 >
     <!-- so dropzone can get the template but its invisible -->
     <div class="hidden" id="template-container">
@@ -93,11 +93,14 @@
             <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
             <div class="files-container" class:hidden={files.length <= 0}>
                 <div id="previews" class="dz-previews"
-                     class:signing={stage === EncryptionState.Sign}></div>
+                     class:signing={stage === EncryptionState.Sign}
+                     class:encrypting={stage === EncryptionState.Encrypting}></div>
 
-                <button class="add-more-button" type="button">
-                    + {$_('filesharing.encryptPanel.fileBox.addMoreFiles')}
-                </button>
+                {#if stage !== EncryptionState.Encrypting}
+                    <button class="add-more-button" type="button">
+                        + {$_('filesharing.encryptPanel.fileBox.addMoreFiles')}
+                    </button>
+                {/if}
 
                 <div class="file-summary">
                     <p>{$_('filesharing.encryptPanel.fileBox.fileSummary', { values: { count: files.length, size: remainingSizeGB } })}</p>
@@ -174,6 +177,10 @@
 
     .dropzone-box.has-files {
         cursor: default;
+        pointer-events: none;
+    }
+
+    .dz-previews.encrypting {
         pointer-events: none;
     }
 
@@ -269,6 +276,10 @@
         max-height: 300px;
         overflow-y: auto;
         pointer-events: auto;
+    }
+
+    .dz-previews.encrypting :global(.remove-button) {
+        display: none !important;
     }
 
     .add-more-button {

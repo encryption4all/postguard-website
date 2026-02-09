@@ -11,9 +11,10 @@
         recipients: { email: string; extra: AttributeCon }[];
         attributes: AttType[];
         isConfirming?: boolean;
+        readonly?: boolean;
     }
 
-    let { recipients = $bindable([]), attributes, isConfirming = false }: props = $props()
+    let { recipients = $bindable([]), attributes, isConfirming = false, readonly = false }: props = $props()
 
     function removeRecipient(index: number) {
         recipients.splice(index, 1)
@@ -47,12 +48,12 @@
                 remove={() => removeRecipient(index)}
                 addAttribute={(att: AttType) => addAttributeToRecipient(index, att)}
                 {attributes}
-                isConfirming={isConfirming}
+                isConfirming={isConfirming || readonly}
                 isFirstRecipient={index === 0}
             />
         {/each}
 
-        {#if !isConfirming}
+        {#if !isConfirming && !readonly}
             <button class="add-recipient-btn" onclick={addRecipient}>
                 + {$_('filesharing.encryptPanel.addRecipientButton')}
             </button>

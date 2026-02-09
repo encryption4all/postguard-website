@@ -3,9 +3,10 @@
 
     interface props {
         message: string
+        readonly?: boolean
     }
 
-    let { message = $bindable() }: props = $props()
+    let { message = $bindable(), readonly = false }: props = $props()
 </script>
 
 <div class="crypt-select-protection-input-box">
@@ -16,6 +17,7 @@
         required={false}
         placeholder={$_('filesharing.encryptPanel.messagePlaceholder')}
         bind:value={message}
+        disabled={readonly}
     ></textarea>
 </div>
 
