@@ -1,5 +1,13 @@
-@import './assets/fonts/overpass.css';
-@import './assets/fonts/overpass-mono.css';
+@import './assets/fonts/overpass-webfont/overpass';
+@import './assets/fonts/overpass-mono-webfont/overpass-mono';
+
+@include print-overpass-font-face(
+    $path_to_dist: './assets/fonts/overpass-webfont/'
+);
+
+@include print-overpass-mono-font-face(
+    $path_to_dist: './assets/fonts/overpass-mono-webfont/'
+);
 
 .custom-field input {
   border: none;
