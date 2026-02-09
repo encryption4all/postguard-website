@@ -79,6 +79,10 @@
         "error": "Oeps... Excuses, er is iets fout gegaan. Probeer het nog een keer of neem contact op met ons",
         "tryAgain": "Probeer opnieuw",
         "cancel": "Annuleer",
+        "sign": {
+            "scanQR": "Scan deze QR-code met je Yivi app.",
+            "close": "Sluit"
+        },
         "decryptpanel": {
             "header": "DOWNLOAD & ONTSLEUTEL",
             "downloadDecrypt": "Downloading & ontsleutelen...",
@@ -125,6 +129,7 @@
             "yiviInfoText": "Yivi is een gratis en privacy-vriendelijke authenticatie-app. Met Yivi kun je bewijzen wie je bent door selectief persoonlijke gegevens te delen, zoals je e-mailadres, telefoonnummer of naam. Bij PostGuard gebruiken we Yivi om bestanden veilig te versleutelen en ontsleutelen.",
             "yiviInfoLink": "Meer informatie over Yivi",
             "yiviTip": "Tip: In de Yivi-app kun je optionele gegevens toevoegen. Zo laat je de ontvanger(s) zeker weten dat deze bestanden van jou komen.",
+            "sending": "Je bestanden worden verzonden",
             "encrypting": "Ondertekenen & verzenden...",
             "encryptingInfo": "Jouw bestanden worden versleuteld en daarna verzonden naar: ",
             "succes": "Je bestanden zijn verzonden!",

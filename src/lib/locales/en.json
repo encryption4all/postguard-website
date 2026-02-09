@@ -79,6 +79,10 @@
         "error": "Oops... We are really sorry but something went wrong. Please try again or contact us",
         "tryAgain": "Try again",
         "cancel": "Cancel",
+        "sign": {
+            "scanQR": "Scan this QR code with your Yivi app.",
+            "close": "Close"
+        },
         "decryptpanel": {
             "header": "Decrypt your files",
             "downloadDecrypt": "Downloading & Decrypting...",
@@ -126,6 +130,7 @@
             "yiviInfoText": "Yivi is a free and privacy-friendly authentication app. With Yivi you can prove who you are by selectively sharing personal data, such as your email address, phone number, or name. At PostGuard we use Yivi to securely encrypt and decrypt files.",
             "yiviInfoLink": "Learn more about Yivi",
             "yiviTip": "Tip: In the Yivi app you can add optional data. This way you let the recipient(s) know for sure that these files come from you.",
+            "sending": "Your files are being sent",
             "encrypting": "Encrypting & uploading...",
             "encryptingInfo": "Your files are being encrypted first and afterwards are sent to: ",
             "succes": "Your files have been sent!",
