@@ -12,7 +12,6 @@
 
     import { _ } from 'svelte-i18n'
 
-    import { fly } from 'svelte/transition'
     import EmailView from '$lib/components/fallback/EmailView.svelte'
     import ListView from '$lib/components/fallback/ListView.svelte'
 
@@ -88,19 +87,11 @@
     </div>
     <div class="right">
         {#if currRight === RIGHTMODES.MailView}
-            <div
-                id="mail-container"
-                in:fly={{ y: 1000, duration: 150 }}
-                out:fly={{ y: 1000, duration: 150 }}
-            >
+            <div id="mail-container">
                 <EmailView />
             </div>
         {:else if currRight === RIGHTMODES.Nothing}
-            <div
-                id="image-container"
-                in:fly={{ y: 1000, duration: 150 }}
-                out:fly={{ y: 1000, duration: 150 }}
-            >
+            <div id="image-container">
                 <img
                     src={decryptImgLq}
                     data-src={decryptImg}
