@@ -1,6 +1,4 @@
 <script>
-    import { run } from 'svelte/legacy';
-
     import { onMount } from 'svelte'
 
     import decryptImg from '$lib/assets/images/decrypt.svg'
@@ -30,7 +28,7 @@
     }
 
     let currRight = $state();
-    run(() => {
+    $effect(() => {
         currRight = $currSelected >= 0 ? RIGHTMODES.MailView : RIGHTMODES.Nothing
     });
 
