@@ -2,15 +2,44 @@
     import '@privacybydesign/yivi-css'
     import { onMount } from 'svelte'
 
+    interface props {
+        mode?: 'qr' | 'deeplink'
+    }
+
+    let { mode = 'qr' }: props = $props()
+
     let qrLoaded = $state(false)
     let containerEl: HTMLDivElement
 
     onMount(() => {
-        // Watch for Yivi injecting a canvas or svg (the QR code)
+        let autoClicked = false
+
         const observer = new MutationObserver(() => {
-            if (containerEl.querySelector('canvas, svg')) {
+            // Check for QR canvas (Yivi renders QR codes as canvas elements)
+            if (containerEl.querySelector('canvas')) {
                 qrLoaded = true
                 observer.disconnect()
+                return
+            }
+
+            // On mobile, YiviWeb shows a button instead of a QR code.
+            // Handle based on mode:
+            if (!autoClicked) {
+                if (mode === 'deeplink') {
+                    // Deep link mode: auto-click the app button to open Yivi
+                    const buttonLink = containerEl.querySelector<HTMLElement>('.yivi-web-button-link')
+                    if (buttonLink) {
+                        autoClicked = true
+                        buttonLink.click()
+                    }
+                } else {
+                    // QR mode: auto-click "show QR" to force QR rendering
+                    const chooseQR = containerEl.querySelector<HTMLElement>('[data-yivi-glue-transition="chooseQR"]')
+                    if (chooseQR) {
+                        autoClicked = true
+                        chooseQR.click()
+                    }
+                }
             }
         })
         observer.observe(containerEl, { childList: true, subtree: true })

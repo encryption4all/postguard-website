@@ -67,20 +67,16 @@ async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon, showQR: 
         language: selectedLang.toLowerCase(),
     }
 
-    // Only specify element if we want to show QR
-    if (showQR) {
-        yiviConfig.element = '#crypt-irma-qr'
-    }
+    // Always use YiviWeb: it handles QR rendering on desktop
+    // and deep link generation on mobile.
+    yiviConfig.element = '#crypt-irma-qr'
 
     const yivi = new YiviCore(yiviConfig)
 
     // sleep for half a second to allow the DOM to update
     await new Promise((resolve) => setTimeout(resolve, 500))
 
-    // YiviClient handles session communication, YiviWeb renders the QR UI
-    if (showQR) {
-        yivi.use(YiviWeb)
-    }
+    yivi.use(YiviWeb)
     yivi.use(YiviClient)
 
     return await yivi

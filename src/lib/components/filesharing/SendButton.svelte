@@ -28,7 +28,7 @@
     let { EncryptState = $bindable() }: props = $props()
 
     let isMobileDevice = isMobile()
-    let forceShowQR = $state(false)
+    let mobilePopupMode: 'none' | 'direct' | 'qr' = $state('none')
 
     let MAX_UPLOAD_SIZE = import.meta.env.VITE_MAX_UPLOAD_SIZE
     let UPLOAD_CHUNK_SIZE = import.meta.env.VITE_UPLOAD_CHUNK_SIZE
@@ -64,6 +64,9 @@
 
     async function onSign(): Promise<void> {
         if (!canEncrypt) return
+        if (isMobileDevice && mobilePopupMode === 'none') {
+            mobilePopupMode = 'direct'
+        }
         await startSigning()
     }
 
@@ -75,8 +78,8 @@
                 { t: 'pbdf.sidn-pbdf.email.email' },
             ]
 
-            // Show QR if desktop or if forceShowQR is true on mobile
-            const shouldShowQR = !isMobileDevice || forceShowQR
+            // Show QR if desktop or if mobile user chose QR mode
+            const shouldShowQR = !isMobileDevice || mobilePopupMode === 'qr'
 
             const keys = await RetrieveSignKeys(
                 pubSignId,
@@ -95,9 +98,11 @@
             EncryptState.pubSignKey = keys.pubSignKey
 
             await onEncrypt()
+            mobilePopupMode = 'none'
         } catch (e) {
             console.error('Error occurred during signing: ', e)
             EncryptState.encryptionState = EncryptionState.Error
+            mobilePopupMode = 'none'
         }
     }
 
@@ -306,7 +311,7 @@
             <Chip
                 text={$_('filesharing.sign.signOtherDevice')}
                 onclick={() => {
-                    forceShowQR = true
+                    mobilePopupMode = 'qr'
                     onSign()
                 }}
                 size="md"
@@ -318,7 +323,7 @@
     <!-- Debug info (remove later) -->
     {#if import.meta.env.DEV}
         <div style="font-size: 10px; color: gray; margin-top: 0.5rem;">
-            Debug: isMobile={isMobileDevice}, state={EncryptState.encryptionState}, forceQR={forceShowQR}, canEncrypt={canEncrypt()}
+            Debug: isMobile={isMobileDevice}, state={EncryptState.encryptionState}, mobilePopup={mobilePopupMode}, canEncrypt={canEncrypt()}
             <br>Sign should be state=2
         </div>
     {/if}
@@ -336,11 +341,10 @@
         bordered
     />
 
-    <!-- Desktop/Mobile (with force QR) Yivi popup above the button -->
-    {#if (!isMobileDevice || forceShowQR) && EncryptState.encryptionState === EncryptionState.Sign && buttonRef}
+    <!-- Desktop Yivi popup above the button -->
+    {#if !isMobileDevice && EncryptState.encryptionState === EncryptionState.Sign && buttonRef}
         <div class="desktop-backdrop" onclick={() => {
             EncryptState.encryptionState = EncryptionState.FileSelection
-            forceShowQR = false
         }}></div>
         <div
             class="desktop-yivi-popup"
@@ -356,7 +360,6 @@
                         text={$_('filesharing.sign.close')}
                         onclick={() => {
                             EncryptState.encryptionState = EncryptionState.FileSelection
-                            forceShowQR = false
                         }}
                         icon="×"
                         size="md"
@@ -371,6 +374,46 @@
                 </div>
             </div>
             <div class="popup-arrow"></div>
+        </div>
+    {/if}
+
+    <!-- Mobile bottom sheet -->
+    {#if isMobileDevice && mobilePopupMode !== 'none' && EncryptState.encryptionState === EncryptionState.Sign}
+        <div class="mobile-backdrop" onclick={() => {
+            EncryptState.encryptionState = EncryptionState.FileSelection
+            mobilePopupMode = 'none'
+        }}></div>
+        <div class="mobile-bottom-sheet">
+            <div class="bottom-sheet-content">
+                {#if mobilePopupMode === 'qr'}
+                    <h2 class="bottom-sheet-title">{$_('filesharing.encryptPanel.encryptSend')}</h2>
+                    <p class="bottom-sheet-instruction">{$_('filesharing.sign.scanQR')}</p>
+                    <div class="qr-code-wrapper"><YiviQRCode /></div>
+                    <Chip
+                        text={$_('filesharing.sign.close')}
+                        onclick={() => {
+                            EncryptState.encryptionState = EncryptionState.FileSelection
+                            mobilePopupMode = 'none'
+                        }}
+                        icon="×"
+                        size="md"
+                        variant="dark"
+                    />
+                {:else}
+                    <p class="bottom-sheet-instruction">{$_('filesharing.sign.followSteps')}</p>
+                    <div style="display: none;"><YiviQRCode mode="deeplink" /></div>
+                    <Chip
+                        text={$_('filesharing.sign.cancel')}
+                        onclick={() => {
+                            EncryptState.encryptionState = EncryptionState.FileSelection
+                            mobilePopupMode = 'none'
+                        }}
+                        icon="×"
+                        size="md"
+                        variant="dark"
+                    />
+                {/if}
+            </div>
         </div>
     {/if}
 </div>
@@ -632,5 +675,50 @@
     border-right: 10px solid transparent;
     border-top: 10px solid var(--pg-strong-background);
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  }
+
+  /* Mobile bottom sheet styles */
+  .mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+  }
+
+  .mobile-bottom-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--pg-soft-background);
+    border-radius: var(--pg-border-radius-lg) var(--pg-border-radius-lg) 0 0;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.15);
+    padding: 1.5em;
+    z-index: 10000;
+    box-sizing: border-box;
+  }
+
+  .bottom-sheet-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+  }
+
+  .bottom-sheet-title {
+    font-size: 0.85em;
+    font-weight: bold;
+    margin: 0;
+    text-align: center;
+    color: var(--pg-text-primary, #000);
+    font-family: var(--pg-font-family);
+  }
+
+  .bottom-sheet-instruction {
+    font-size: 0.75em;
+    margin: 0;
+    text-align: center;
+    color: var(--pg-text-secondary, #333);
+    font-family: var(--pg-font-family);
   }
 </style>

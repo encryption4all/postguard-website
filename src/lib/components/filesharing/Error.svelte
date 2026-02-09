@@ -31,7 +31,8 @@
         width: 100%;
         height: 100%;
         min-height: 400px;
-        padding: 2rem;
+        padding: 1.5rem;
+        box-sizing: border-box;
     }
 
     .error-content {

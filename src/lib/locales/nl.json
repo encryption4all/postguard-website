@@ -82,7 +82,9 @@
         "sign": {
             "scanQR": "Scan deze QR-code met je Yivi app.",
             "close": "Sluit",
-            "signOtherDevice": "Onderteken met Yivi op een ander apparaat"
+            "signOtherDevice": "Onderteken met Yivi op een ander apparaat",
+            "followSteps": "Volg de stappen in de Yivi app",
+            "cancel": "Annuleren"
         },
         "decryptpanel": {
             "header": "DOWNLOAD & ONTSLEUTEL",

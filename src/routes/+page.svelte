@@ -11,7 +11,6 @@
     import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
     import SendButton from '$lib/components/filesharing/SendButton.svelte'
     import FileInput from '$lib/components/filesharing/inputs/FileInput.svelte'
-    import Sign from '$lib/components/filesharing/Sign.svelte'
     import EncryptionProgress from '$lib/components/filesharing/EncryptionProgress.svelte'
     import Error from '$lib/components/filesharing/Error.svelte'
     import Done from '$lib/components/filesharing/Done.svelte'
@@ -83,25 +82,13 @@
                bind:done={EncryptState.done} bind:stage={EncryptState.encryptionState} />
     {#if EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Encrypting}
         <div class="inputs-container">
-            {#if EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Encrypting}
-                <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
-                <MessageInput bind:message={EncryptState.message} readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
-                <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
-                              bind:senderConfirm={EncryptState.senderConfirm}
-                              attributes={ATTRIBUTES}
-                              readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
-                <SendButton bind:EncryptState={EncryptState} />
-            {:else if EncryptState.encryptionState === EncryptionState.Sign && isMobileDevice}
-                <Sign isMobile={isMobileDevice} bind:stage={EncryptState.encryptionState} />
-            {:else if EncryptState.encryptionState === EncryptionState.Sign && !isMobileDevice}
-                <!-- On desktop: Show the form with button (popup is inside SendButton) -->
-                <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} />
-                <MessageInput bind:message={EncryptState.message} />
-                <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
-                              bind:senderConfirm={EncryptState.senderConfirm}
-                              attributes={ATTRIBUTES} />
-                <SendButton bind:EncryptState={EncryptState} />
-            {/if}
+            <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
+            <MessageInput bind:message={EncryptState.message} readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
+            <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
+                          bind:senderConfirm={EncryptState.senderConfirm}
+                          attributes={ATTRIBUTES}
+                          readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
+            <SendButton bind:EncryptState={EncryptState} />
         </div>
     {:else if false && EncryptState.encryptionState === EncryptionState.Encrypting}
         <EncryptionProgress encryptStartTime={EncryptState.encryptionState}
