@@ -188,10 +188,15 @@
     }
 
     .airplane-decoration {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
         width: 120%;
         max-width: 800px;
         height: auto;
-        margin-top: 2rem;
         opacity: 0.6;
+        pointer-events: none;
+        z-index: -1;
     }
 </style>
