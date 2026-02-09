@@ -1,11 +1,11 @@
-@import '$lib/assets/fonts/overpass-webfont/_overpass.scss';
-@import '$lib/assets/fonts/overpass-mono-webfont/_overpass-mono.scss';
+@use '$lib/assets/fonts/overpass-webfont/_overpass' as overpass;
+@use '$lib/assets/fonts/overpass-mono-webfont/_overpass-mono' as overpass-mono;
 
-@include print-overpass-font-face(
+@include overpass.print-overpass-font-face(
     $path_to_dist: '$lib/assets/fonts/overpass-webfont/'
 );
 
-@include print-overpass-mono-font-face(
+@include overpass-mono.print-overpass-mono-font-face(
     $path_to_dist: '$lib/assets/fonts/overpass-mono-webfont/'
 );
 

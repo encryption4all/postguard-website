@@ -1,3 +1,5 @@
+@use "sass:map";
+
 /* Overpass helper mixins */
 
 //-- This is a map of the current font weights, keyed on their file names
@@ -30,22 +32,23 @@ $supported-styles: (normal italic);
 //            that maps the key extrabold to the value bolder -> `extrabold: bolder`
 // * The path to dist represents the location of the overpass font files relative to your architecture
 @mixin print-overpass-font-face(
-    $weights: map-keys($supported-weights),
+    $weights: map.keys($supported-weights),
     $styles: $supported-styles,
     $weight-map: $supported-weights,
     $path_to_dist: './'
 ) {
     @each $weight in $weights {
       @each $style in $styles {
+          $style-suffix: if($style != normal, "-#{$style}", "");
           @font-face {
             font-family: 'overpass';
-            src: url("#{$path_to_dist}overpass-#{$weight}#{if($style != normal, #{-$style}, "")}.eot?");
-            src: url("#{$path_to_dist}overpass-#{$weight}#{if($style != normal, #{-$style}, "")}.eot?#iefix") format("embedded-opentype"),
-                 url("#{$path_to_dist}overpass-#{$weight}#{if($style != normal, #{-$style}, "")}.woff?") format("woff"),
-                 url("#{$path_to_dist}overpass-#{$weight}#{if($style != normal, #{-$style}, "")}.ttf?") format("truetype");
-            font-weight: map-get($weight-map, $weight);
+            src: url("#{$path_to_dist}overpass-#{$weight}#{$style-suffix}.eot?");
+            src: url("#{$path_to_dist}overpass-#{$weight}#{$style-suffix}.eot?#iefix") format("embedded-opentype"),
+                 url("#{$path_to_dist}overpass-#{$weight}#{$style-suffix}.woff?") format("woff"),
+                 url("#{$path_to_dist}overpass-#{$weight}#{$style-suffix}.ttf?") format("truetype");
+            font-weight: map.get($weight-map, $weight);
             font-style: $style;
           }
-      } 
+      }
     }
 }
