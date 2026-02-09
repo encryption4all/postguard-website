@@ -82,7 +82,10 @@
             {$_('filesharing.encryptPanel.fileBox.tagline')}
         </h1>
 
-        <div class="dropzone-box" class:has-files={files.length > 0}>
+        <div class="dropzone-box"
+             class:has-files={files.length > 0}
+             class:encrypting={stage === EncryptionState.Encrypting}
+             class:signing={stage === EncryptionState.Sign}>
             <div class="upload-butt middle-block-size" class:hidden={files.length > 0}>
                 <img class="drawing" src={BasketDrawing} alt="Add files" />
                 <p class="drag-text">{$_('filesharing.encryptPanel.fileBox.dragText')}</p>
@@ -186,6 +189,12 @@
         pointer-events: none;
     }
 
+    .dropzone-box.encrypting,
+    .dropzone-box.signing {
+        cursor: default;
+        pointer-events: none !important;
+    }
+
     .dz-previews.encrypting {
         pointer-events: none;
     }
@@ -273,6 +282,17 @@
 
     .dropzone-box.has-files .files-container {
         pointer-events: auto;
+    }
+
+    .dropzone-box.encrypting .files-container,
+    .dropzone-box.signing .files-container {
+        pointer-events: none;
+    }
+
+    .dropzone-box.encrypting .add-more-chip-container,
+    .dropzone-box.signing .add-more-chip-container {
+        pointer-events: none;
+        display: none;
     }
 
     .dz-previews {
