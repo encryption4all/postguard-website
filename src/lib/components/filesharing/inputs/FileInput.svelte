@@ -341,7 +341,8 @@
         .dropzone-box {
             width: 70%;
             padding: 3rem 2rem;
-            min-height: 50vh;
+            min-height: 20rem;
+            max-height: 30rem;
         }
 
         .dropzone-box.has-files {
