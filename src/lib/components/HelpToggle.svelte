@@ -76,11 +76,11 @@
     }
 
     .help-content {
-        margin: 0 0 0.5rem 1.5rem;
+        margin: 0 1rem 1rem 1.2rem;
     }
 
     .help-section.bordered .help-content {
-        margin: 0 0 0.5rem 2.5rem;
+        margin: 0 1em 1rem 2.2rem;
     }
 
     .help-text {

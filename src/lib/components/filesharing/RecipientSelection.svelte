@@ -2,6 +2,7 @@
     import { _ } from 'svelte-i18n'
     import RecipientSelectionFields from '$lib/components/filesharing/RecipientSelectionFields.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
+    import Chip from '$lib/components/Chip.svelte'
     import addIcon from '$lib/assets/images/google-icons/add.svg'
     import type { AttributeCon } from '@e4a/pg-wasm'
     import type { AttType } from '$lib/types/filesharing/attributes'
@@ -54,9 +55,13 @@
         {/each}
 
         {#if !isConfirming && !readonly}
-            <button class="add-recipient-btn" onclick={addRecipient}>
-                + {$_('filesharing.encryptPanel.addRecipientButton')}
-            </button>
+            <Chip
+                text={$_('filesharing.encryptPanel.addRecipientButton')}
+                onclick={addRecipient}
+                icon="+"
+                size="lg"
+                variant="default"
+            />
         {/if}
     </div>
 </div>
@@ -70,31 +75,5 @@
 
   .remove-border {
     border: none;
-  }
-
-  .add-recipient-btn {
-    all: unset;
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-    padding: 0.2em 1em;
-    background-color: transparent;
-    border: 1.5px solid var(--pg-border-color);
-    border-radius: var(--pg-border-radius-lg);
-    cursor: pointer;
-    font-family: var(--pg-font-family);
-    font-size: 0.95em;
-    font-weight: 400;
-    color: var(--pg-text-primary);
-    transition: all 0.2s ease;
-    width: fit-content;
-    box-sizing: border-box;
-  }
-
-  .add-recipient-btn:hover {
-    background-color: #f9fafb;
-    border-color: var(--pg-accent-color);
-    color: var(--pg-accent-color);
-    box-shadow: 0 2px 4px rgba(48, 149, 222, 0.15);
   }
 </style>

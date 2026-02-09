@@ -12,6 +12,7 @@
     import { isMobile } from '$lib/browser-detect'
     import YiviQRCode from './YiviQRCode.svelte'
     import HelpToggle from '../HelpToggle.svelte'
+    import Chip from '../Chip.svelte'
 
     let Writer: Promise<any>
     if (browser) {
@@ -27,6 +28,7 @@
     let { EncryptState = $bindable() }: props = $props()
 
     let isMobileDevice = isMobile()
+    let forceShowQR = $state(false)
 
     let MAX_UPLOAD_SIZE = import.meta.env.VITE_MAX_UPLOAD_SIZE
     let UPLOAD_CHUNK_SIZE = import.meta.env.VITE_UPLOAD_CHUNK_SIZE
@@ -62,6 +64,7 @@
 
     async function onSign(): Promise<void> {
         if (!canEncrypt) return
+        forceShowQR = false // Reset when signing
         EncryptState.encryptionState = EncryptionState.Sign
 
         try {
@@ -292,6 +295,16 @@
         </button>
     {/if}
 
+    <!-- Mobile: Show QR option when in Sign state and QR not forced yet -->
+    {#if isMobileDevice && EncryptState.encryptionState === EncryptionState.Sign && !forceShowQR}
+        <Chip
+            text={$_('filesharing.sign.signOtherDevice')}
+            onclick={() => forceShowQR = true}
+            size="md"
+            variant="default"
+        />
+    {/if}
+
     <p class="yivi-tip">
         {$_('filesharing.encryptPanel.yiviTip')}
     </p>
@@ -305,9 +318,12 @@
         bordered
     />
 
-    <!-- Desktop Yivi popup above the button -->
-    {#if !isMobileDevice && EncryptState.encryptionState === EncryptionState.Sign && buttonRef}
-        <div class="desktop-backdrop" onclick={() => {EncryptState.encryptionState = EncryptionState.FileSelection}}></div>
+    <!-- Desktop/Mobile (with force QR) Yivi popup above the button -->
+    {#if (!isMobileDevice || forceShowQR) && EncryptState.encryptionState === EncryptionState.Sign && buttonRef}
+        <div class="desktop-backdrop" onclick={() => {
+            EncryptState.encryptionState = EncryptionState.FileSelection
+            forceShowQR = false
+        }}></div>
         <div
             class="desktop-yivi-popup"
             style="
@@ -318,12 +334,16 @@
             <div class="popup-content">
                 <div class="popup-header">
                     <h2 class="popup-title">{$_('filesharing.encryptPanel.encryptSend')}</h2>
-                    <button
-                        class="close-btn"
-                        onclick={() => {EncryptState.encryptionState = EncryptionState.FileSelection}}
-                    >
-                        ✕ {$_('filesharing.sign.close')}
-                    </button>
+                    <Chip
+                        text={$_('filesharing.sign.close')}
+                        onclick={() => {
+                            EncryptState.encryptionState = EncryptionState.FileSelection
+                            forceShowQR = false
+                        }}
+                        icon="×"
+                        size="md"
+                        variant="dark"
+                    />
                 </div>
 
                 <p class="popup-instruction">{$_('filesharing.sign.scanQR')}</p>
@@ -513,7 +533,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(48, 149, 150, 0.10);
+    background: #0D030E17;
     z-index: 999;
     cursor: pointer;
   }
@@ -525,7 +545,7 @@
 
     position: fixed;
     transform: translate(-50%, -100%);
-    background: var(--pg-strong-background);
+    background: var(--pg-soft-background);
     border-radius: var(--pg-border-radius-md);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     padding: 1em 1.5em 1.5em 1.5em;
@@ -574,25 +594,6 @@
     align-items: center;
   }
 
-  .close-btn {
-    background: white;
-    border: 1px solid #000;
-    border-radius: var(--pg-border-radius-sm);
-    padding: 0.25em 0.5em;
-    cursor: pointer;
-    font-size: 0.75em;
-    font-family: var(--pg-font-family);
-    color: #000;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    line-height: 1;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .close-btn:hover {
-    background: #f5f5f5;
-  }
 
   .popup-arrow {
     position: absolute;

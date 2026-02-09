@@ -6,6 +6,7 @@
     import rawAdd from '$lib/assets/images/google-icons/add.svg?raw'
     import BasketDrawing from '$lib/assets/images/basket_no_plane.svg'
     import UploadedFileTemplate from '$lib/components/filesharing/inputs/UploadedFileTemplate.svelte'
+    import Chip from '$lib/components/Chip.svelte'
     import { EncryptionState } from '$lib/types/filesharing/attributes'
 
     // Disable auto-discover to prevent Dropzone from automatically attaching to all .dropzone elements
@@ -41,7 +42,7 @@
             maxFilesize: maxFileSizeMB,
             previewsContainer: '#previews',
             previewTemplate: previewTemplate,
-            clickable: '.dropzone-box, .choose-files-btn, .add-more-button', // Only these elements trigger file selection
+            clickable: '.dropzone-box, .choose-files-btn, .add-more-chip-container', // Only these elements trigger file selection
         })
 
         myDropzone.on('addedfile', file => {
@@ -97,9 +98,14 @@
                      class:encrypting={stage === EncryptionState.Encrypting}></div>
 
                 {#if stage !== EncryptionState.Encrypting}
-                    <button class="add-more-button" type="button">
-                        + {$_('filesharing.encryptPanel.fileBox.addMoreFiles')}
-                    </button>
+                    <div class="add-more-chip-container">
+                        <Chip
+                            text={$_('filesharing.encryptPanel.fileBox.addMoreFiles')}
+                            icon="+"
+                            size="lg"
+                            variant="default"
+                        />
+                    </div>
                 {/if}
 
                 <div class="file-summary">
@@ -284,33 +290,14 @@
         display: none !important;
     }
 
-    .add-more-button {
-        all: unset;
+    .add-more-chip-container {
         display: flex;
-        align-items: center;
         justify-content: center;
-        gap: 0.5em;
-        padding: 0.2em 1em;
-        background-color: white;
-        border: 1.5px solid var(--pg-border-color);
-        border-radius: var(--pg-border-radius-lg);
-        cursor: pointer;
-        font-family: var(--pg-font-family);
-        font-size: 0.95em;
-        font-weight: 600;
-        color: var(--pg-text-primary);
-        transition: all 0.2s ease;
-        width: fit-content;
-        box-sizing: border-box;
         pointer-events: auto;
-        margin: 0 auto;
     }
 
-    .add-more-button:hover {
-        background-color: #f9fafb;
-        border-color: var(--pg-accent-color);
-        color: var(--pg-accent-color);
-        box-shadow: 0 2px 4px rgba(48, 149, 222, 0.15);
+    .add-more-chip-container :global(.chip) {
+        cursor: pointer;
     }
 
     .file-summary {

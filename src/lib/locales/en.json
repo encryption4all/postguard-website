@@ -81,7 +81,8 @@
         "cancel": "Cancel",
         "sign": {
             "scanQR": "Scan this QR code with your Yivi app.",
-            "close": "Close"
+            "close": "Close",
+            "signOtherDevice": "Sign with Yivi on another device"
         },
         "decryptpanel": {
             "header": "Decrypt your files",

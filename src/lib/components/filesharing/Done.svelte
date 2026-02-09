@@ -2,6 +2,7 @@
     import { _ } from 'svelte-i18n'
     import type { EncryptState } from '$lib/types/filesharing/attributes'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
+    import Chip from '$lib/components/Chip.svelte'
     import airplane from '$lib/assets/images/airplane.svg'
 
     interface props {
@@ -36,9 +37,7 @@
                     {#if recipient.extra.length > 0}
                         <div class="recipient-attributes">
                             {#each recipient.extra as attr}
-                                <span class="attribute-badge">
-                                    {attr.v}
-                                </span>
+                                <Chip text={attr.v} size="sm" variant="default" />
                             {/each}
                         </div>
                     {/if}
@@ -55,13 +54,12 @@
     />
 
     <!-- Send another button -->
-    <button
-        class="send-another-btn"
+    <Chip
+        text={$_('filesharing.encryptPanel.another')}
         onclick={() => EncryptState = defaultEncryptState}
-        type="button"
-    >
-        {$_('filesharing.encryptPanel.another')}
-    </button>
+        size="lg"
+        variant="dark"
+    />
 
     <!-- Airplane decoration -->
     <img src={airplane} alt="airplane" class="airplane-decoration" />
@@ -148,43 +146,6 @@
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
-    }
-
-    .attribute-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 0px 8px;
-        background-color: white;
-        border: 1.5px solid var(--pg-border-color-accent);
-        border-radius: var(--pg-border-radius-md);
-        font-family: var(--pg-font-family);
-        font-size: 0.85rem;
-        color: var(--pg-text-primary);
-        white-space: nowrap;
-    }
-
-    .send-another-btn {
-        all: unset;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.6rem 1.5rem;
-        background-color: white;
-        border: 2px solid #1f2937;
-        border-radius: var(--pg-border-radius-md);
-        cursor: pointer;
-        font-family: var(--pg-font-family);
-        font-size: 1rem;
-        font-weight: 600;
-        color: #1f2937;
-        transition: all 0.2s ease;
-        box-sizing: border-box;
-    }
-
-    .send-another-btn:hover {
-        background-color: #f9fafb;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .airplane-decoration {
