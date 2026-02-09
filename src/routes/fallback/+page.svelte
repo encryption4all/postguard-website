@@ -48,10 +48,6 @@
     onMount(async () => {
         mod = await import('@e4a/pg-wasm')
     })
-
-    run(() => {
-        console.log(`left: ${currLeft}, right: ${currRight}`)
-    });
 </script>
 
 <div class="grid-container">
