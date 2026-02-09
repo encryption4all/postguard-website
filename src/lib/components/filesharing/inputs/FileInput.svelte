@@ -226,6 +226,7 @@
     .or-text {
         margin: 0.5rem 0;
         font-size: 0.95rem;
+        font-weight: 300;
         color: #9ca3af;
         text-align: center;
     }
@@ -237,7 +238,7 @@
         padding: 0.8rem 1.3rem;
         border-radius: var(--pg-border-radius-sm);
         font-size: 1.2rem;
-        font-weight: 600;
+        font-weight: 400;
         cursor: pointer;
         transition: all 0.2s ease;
         box-sizing: border-box;
@@ -252,6 +253,7 @@
     .max-size-text {
         margin: 0.75rem 0 0 0;
         font-size: 0.875rem;
+        font-weight: 300;
         color: #9ca3af;
         text-align: center;
     }

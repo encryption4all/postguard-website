@@ -3,9 +3,11 @@
         title: string;
         content: string;
         bordered?: boolean;
+        linkText?: string;
+        linkUrl?: string;
     }
 
-    let { title, content, bordered = false }: props = $props()
+    let { title, content, bordered = false, linkText, linkUrl }: props = $props()
     let expanded = $state(false)
 </script>
 
@@ -15,13 +17,21 @@
         <span class="toggle-label">{title}</span>
     </button>
     {#if expanded}
-        <p class="help-text">{content}</p>
+        <div class="help-content">
+            <p class="help-text">{content}</p>
+            {#if linkText && linkUrl}
+                <a href={linkUrl} target="_blank" rel="noopener noreferrer" class="help-link">
+                    {linkText} →
+                </a>
+            {/if}
+        </div>
     {/if}
 </div>
 
 <style>
     .help-section {
         width: 100%;
+        box-sizing: border-box;
     }
 
     .help-section.bordered {
@@ -41,8 +51,11 @@
         user-select: none;
         background: transparent;
         font-family: var(--pg-font-family);
-        padding: 0.5rem 1rem;
+        padding: 0.25rem 0;
+    }
 
+    .help-section.bordered .help-toggle {
+        padding: 0.5rem 1rem;
     }
 
     .arrow {
@@ -62,11 +75,35 @@
         font-weight: 600;
     }
 
+    .help-content {
+        margin: 0 0 0.5rem 1.5rem;
+    }
+
+    .help-section.bordered .help-content {
+        margin: 0 0 0.5rem 2.5rem;
+    }
+
     .help-text {
         font-size: 0.85rem;
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
         line-height: 1.5;
-        margin: 0rem 0 0.5rem 1.5rem;
+        margin: 0;
+    }
+
+    .help-link {
+        display: inline-block;
+        font-size: 0.85rem;
+        color: var(--pg-accent-color);
+        font-family: var(--pg-font-family);
+        font-weight: 600;
+        text-decoration: none;
+        margin-top: 0.5rem;
+        transition: color 0.2s ease;
+    }
+
+    .help-link:hover {
+        color: var(--pg-primary-contrast);
+        text-decoration: underline;
     }
 </style>

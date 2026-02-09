@@ -11,6 +11,7 @@
     import { browser } from '$app/environment'
     import { isMobile } from '$lib/browser-detect'
     import YiviQRCode from './YiviQRCode.svelte'
+    import HelpToggle from '../HelpToggle.svelte'
 
     let Writer: Promise<any>
     if (browser) {
@@ -295,18 +296,14 @@
         {$_('filesharing.encryptPanel.yiviTip')}
     </p>
 
-    <button class="yivi-info-toggle" type="button" onclick={() => yiviInfoExpanded = !yiviInfoExpanded}>
-        <span class="arrow" class:expanded={yiviInfoExpanded}>▶</span>
-        <span class="toggle-label">{$_('filesharing.encryptPanel.yiviInfo')}</span>
-    </button>
-    {#if yiviInfoExpanded}
-        <p class="yivi-info-content">
-            {$_('filesharing.encryptPanel.yiviInfoText')}
-            <a href={"https://yivi.app/" + lang} target="_blank" class="yivi-link">
-                {$_('filesharing.encryptPanel.yiviInfoLink')}
-            </a>
-        </p>
-    {/if}
+
+    <HelpToggle
+        title={$_('filesharing.encryptPanel.yiviInfo')}
+        content={$_('filesharing.encryptPanel.yiviInfoText')}
+        linkText={$_('filesharing.encryptPanel.yiviInfoLink')}
+        linkUrl="https://yivi.app"
+        bordered
+    />
 
     <!-- Desktop Yivi popup above the button -->
     {#if !isMobileDevice && EncryptState.encryptionState === EncryptionState.Sign && buttonRef}
