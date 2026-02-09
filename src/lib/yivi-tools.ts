@@ -4,7 +4,7 @@ import YiviWeb from '@privacybydesign/yivi-web'
 import YiviClient from '@privacybydesign/yivi-client'
 import { browser } from '$app/environment'
 
-async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise<any> {
+async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon, showQR: boolean = true): Promise<any> {
     if (!browser) return
     let PKG_URL = import.meta.env.VITE_PKG_URL
 
@@ -53,9 +53,8 @@ async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise
         selectedLang = selectedLang.split('-')[0]
     }
 
-    const yivi = new YiviCore({
+    const yiviConfig: any = {
         debugging: false,
-        element: '#crypt-irma-qr',
         session,
         state: {
             serverSentEvents: false,
@@ -66,12 +65,22 @@ async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise
             },
         },
         language: selectedLang.toLowerCase(),
-    })
+    }
+
+    // Only specify element if we want to show QR
+    if (showQR) {
+        yiviConfig.element = '#crypt-irma-qr'
+    }
+
+    const yivi = new YiviCore(yiviConfig)
 
     // sleep for half a second to allow the DOM to update
     await new Promise((resolve) => setTimeout(resolve, 500))
 
-    yivi.use(YiviWeb)
+    // YiviClient handles session communication, YiviWeb renders the QR UI
+    if (showQR) {
+        yivi.use(YiviWeb)
+    }
     yivi.use(YiviClient)
 
     return await yivi

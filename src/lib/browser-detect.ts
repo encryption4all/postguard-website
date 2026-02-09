@@ -48,7 +48,7 @@ function GetBrowserInfo() : { name: string; version: string } {
 }
 
 function isMobile(): boolean {
-    if (browser || typeof window === "undefined") {
+    if (!browser || typeof window === "undefined") {
         return false
     }
     // IE11 doesn't have window.navigator, test differently

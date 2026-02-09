@@ -1,15 +1,30 @@
 <script lang="ts">
     import '@privacybydesign/yivi-css'
+    import { onMount } from 'svelte'
 
-    interface props {
-        // This component just renders the QR code
-        // Yivi initialization happens externally
-    }
+    let qrLoaded = $state(false)
+    let containerEl: HTMLDivElement
 
-    let { }: props = $props()
+    onMount(() => {
+        // Watch for Yivi injecting a canvas or svg (the QR code)
+        const observer = new MutationObserver(() => {
+            if (containerEl.querySelector('canvas, svg')) {
+                qrLoaded = true
+                observer.disconnect()
+            }
+        })
+        observer.observe(containerEl, { childList: true, subtree: true })
+        return () => observer.disconnect()
+    })
 </script>
 
-<div id="crypt-irma-qr" class="yivi-qr-container"></div>
+<div id="crypt-irma-qr" class="yivi-qr-container" bind:this={containerEl}>
+    {#if !qrLoaded}
+        <svg class="spinner" viewBox="0 0 24 24" width="32" height="32">
+            <circle class="spinner-circle" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3"></circle>
+        </svg>
+    {/if}
+</div>
 
 <style>
     .yivi-qr-container {
@@ -114,5 +129,26 @@
         align-items: center !important;
         visibility: visible !important;
         opacity: 1 !important;
+    }
+
+    .spinner {
+        animation: spin 1s linear infinite;
+        color: #9ca3af;
+    }
+
+    .spinner-circle {
+        stroke-dasharray: 60;
+        stroke-dashoffset: 0;
+        animation: dash 1.5s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes dash {
+        0% { stroke-dashoffset: 60; }
+        50% { stroke-dashoffset: 15; }
+        100% { stroke-dashoffset: 60; }
     }
 </style>

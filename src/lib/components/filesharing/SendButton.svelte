@@ -64,7 +64,10 @@
 
     async function onSign(): Promise<void> {
         if (!canEncrypt) return
-        forceShowQR = false // Reset when signing
+        await startSigning()
+    }
+
+    async function startSigning(): Promise<void> {
         EncryptState.encryptionState = EncryptionState.Sign
 
         try {
@@ -72,9 +75,13 @@
                 { t: 'pbdf.sidn-pbdf.email.email' },
             ]
 
+            // Show QR if desktop or if forceShowQR is true on mobile
+            const shouldShowQR = !isMobileDevice || forceShowQR
+
             const keys = await RetrieveSignKeys(
                 pubSignId,
                 EncryptState.senderAttributes,
+                shouldShowQR
             )
 
             if (!keys || !keys.pubSignKey) {
@@ -293,16 +300,27 @@
             <img src={canEncrypt() ? yiviLogoDark : yiviLogo} alt="yivi-logo" width={50} height={27} />
             {$_('filesharing.encryptPanel.encryptSend')}
         </button>
+
+        <!-- Mobile: Always show QR option when button is enabled -->
+        {#if isMobileDevice && canEncrypt()}
+            <Chip
+                text={$_('filesharing.sign.signOtherDevice')}
+                onclick={() => {
+                    forceShowQR = true
+                    onSign()
+                }}
+                size="md"
+                variant="default"
+            />
+        {/if}
     {/if}
 
-    <!-- Mobile: Show QR option when in Sign state and QR not forced yet -->
-    {#if isMobileDevice && EncryptState.encryptionState === EncryptionState.Sign && !forceShowQR}
-        <Chip
-            text={$_('filesharing.sign.signOtherDevice')}
-            onclick={() => forceShowQR = true}
-            size="md"
-            variant="default"
-        />
+    <!-- Debug info (remove later) -->
+    {#if import.meta.env.DEV}
+        <div style="font-size: 10px; color: gray; margin-top: 0.5rem;">
+            Debug: isMobile={isMobileDevice}, state={EncryptState.encryptionState}, forceQR={forceShowQR}, canEncrypt={canEncrypt()}
+            <br>Sign should be state=2
+        </div>
     {/if}
 
     <p class="yivi-tip">
@@ -366,6 +384,14 @@
     margin-bottom: 1rem;
     padding-left: 1.25em;
     position: relative;
+  }
+
+  .mobile-sign-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
   }
 
   .crypt-btn-main {
