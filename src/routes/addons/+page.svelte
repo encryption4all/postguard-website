@@ -1,7 +1,7 @@
 <script>
     import { _ } from 'svelte-i18n'
     import Tabs from '$lib/components/Tabs.svelte'
-    import { fade } from 'svelte/transition'
+    // import { fade } from 'svelte/transition'
     import { tweened } from 'svelte/motion'
     import { cubicOut } from 'svelte/easing'
 
@@ -53,8 +53,6 @@
             {#key activeItem}
                 <div
                     id="client-instruction"
-                    in:fade|global={{ delay: 250, duration: 250 }}
-                    out:fade|global={{ duration: 250 }}
                 >
                     {@html $_(`addons.${activeItem}`)}
                 </div>
