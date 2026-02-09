@@ -344,9 +344,6 @@
                 })
         }
     });
-    run(() => {
-        console.log('state changed: ', state)
-    });
 </script>
 
 {#if state === STATES.Init}
