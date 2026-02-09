@@ -50,8 +50,8 @@
 </div>
 
 <style lang="scss">
-  $language-width: 50px;
-  $language-height: 20px;
+  $language-width: 100%;
+  $language-height: 100%;
   $language-focus: #85bffd;
   $language-border: #ccc;
   $language-hover: #eee;
@@ -64,7 +64,7 @@
 
   .language {
     display: flex;
-    width: $language-width * 2 + 20px;
+    width: 6rem;
     height: auto;
     font-size: 16px;
     line-height: 1;

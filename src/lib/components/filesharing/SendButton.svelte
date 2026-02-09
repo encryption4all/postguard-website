@@ -63,7 +63,7 @@
     })
 
     async function onSign(): Promise<void> {
-        if (!canEncrypt) return
+        if (!canEncrypt()) return
         if (isMobileDevice && mobilePopupMode === 'none') {
             mobilePopupMode = 'direct'
         }
@@ -78,13 +78,9 @@
                 { t: 'pbdf.sidn-pbdf.email.email' },
             ]
 
-            // Show QR if desktop or if mobile user chose QR mode
-            const shouldShowQR = !isMobileDevice || mobilePopupMode === 'qr'
-
             const keys = await RetrieveSignKeys(
                 pubSignId,
-                EncryptState.senderAttributes,
-                shouldShowQR
+                EncryptState.senderAttributes
             )
 
             if (!keys || !keys.pubSignKey) {
@@ -134,7 +130,7 @@
     }
 
     async function applyEncryption() {
-        if (!canEncrypt) return
+        if (!canEncrypt()) return
 
         // make sure these are fulfilled
         const pk = await EncryptState.pkPromise
@@ -320,14 +316,6 @@
         {/if}
     {/if}
 
-    <!-- Debug info (remove later) -->
-    {#if import.meta.env.DEV}
-        <div style="font-size: 10px; color: gray; margin-top: 0.5rem;">
-            Debug: isMobile={isMobileDevice}, state={EncryptState.encryptionState}, mobilePopup={mobilePopupMode}, canEncrypt={canEncrypt()}
-            <br>Sign should be state=2
-        </div>
-    {/if}
-
     <p class="yivi-tip">
         {$_('filesharing.encryptPanel.yiviTip')}
     </p>
@@ -427,14 +415,6 @@
     margin-bottom: 1rem;
     padding-left: 1.25em;
     position: relative;
-  }
-
-  .mobile-sign-options {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    align-items: flex-start;
-    margin-bottom: 0.75rem;
   }
 
   .crypt-btn-main {
@@ -540,53 +520,6 @@
     }
   }
 
-  .yivi-info-toggle {
-    all: unset;
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-    cursor: pointer;
-    margin-top: 0.5em;
-    user-select: none;
-    background: transparent;
-  }
-
-  .arrow {
-    font-size: 0.7em;
-    color: var(--pg-text-secondary);
-    transition: transform 0.2s ease;
-    display: inline-block;
-  }
-
-  .arrow.expanded {
-    transform: rotate(90deg);
-  }
-
-  .toggle-label {
-    font-size: 0.9em;
-    color: var(--pg-text-secondary);
-    font-weight: 600;
-    font-family: var(--pg-font-family);
-  }
-
-  .yivi-info-content {
-    font-size: 0.85em;
-    color: var(--pg-text-secondary);
-    font-family: var(--pg-font-family);
-    padding: 0 0 1em 1.5em;
-    line-height: 1.4;
-  }
-
-  .yivi-link {
-    color: #3095de !important;
-    text-decoration: underline;
-    transition: color 0.2s ease;
-  }
-
-  .yivi-link:hover {
-    color: #1e7ac7 !important;
-  }
-
   .yivi-tip {
     font-size: 0.85em;
     color: var(--pg-text-secondary);
@@ -608,10 +541,6 @@
   }
 
   .desktop-yivi-popup {
-    --qr-size: 230px;
-    --qr-container-size: calc(var(--qr-size) / 0.96);
-    --popup-width: calc(var(--qr-container-size) );
-
     position: fixed;
     transform: translate(-50%, -100%);
     background: var(--pg-soft-background);
@@ -695,7 +624,6 @@
     box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.15);
     padding: 1.5em;
     z-index: 10000;
-    box-sizing: border-box;
   }
 
   .bottom-sheet-content {

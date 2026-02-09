@@ -98,9 +98,9 @@ textarea.pg-input:disabled {
     cursor: not-allowed;
 }
 
-//*, *::before, *::after {
-//  box-sizing: border-box;
-//}
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
 .lazyload {
     opacity: 0;
@@ -179,6 +179,8 @@ body {
     --pg-border-color-error: #dc2626;
     --pg-bg-input: #fafafa;
     --pg-bg-input-hover: white;
+    --pg-general-bg: white;
+    --pg-general-bg-darkmode: #061B2D;
 
     /* Filesharing specific colors */
     --pg-soft-background: #F2F8FD;
@@ -249,7 +251,7 @@ body {
 .grid-container {
     position: relative;
     display: grid;
-    max-width: 900px;
+    // max-width: 900px;
     margin: 0 5%;
     grid-gap: 5%;
     height: 90%;
@@ -283,12 +285,12 @@ body {
 }
 
 .grid-item.header {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    height: 100%;
-    max-width: 400px;
-    text-align: left;
+    // display: flex;
+    // flex-direction: column;
+    // position: relative;
+    // height: 100%;
+    // max-width: 400px;
+    // text-align: left;
 
     h3 r {
         margin-bottom: 0;

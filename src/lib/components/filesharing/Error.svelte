@@ -11,7 +11,7 @@
 
 <div class="error-container">
     <div class="error-content">
-        <h3 class="error-title">{"Error occured"}</h3>
+        <h3 class="error-title">{$_('filesharing.errorTitle')}</h3>
         <p class="error-message">{$_('filesharing.error')}</p>
         <button
             class="error-btn"
@@ -32,7 +32,6 @@
         height: 100%;
         min-height: 400px;
         padding: 1.5rem;
-        box-sizing: border-box;
     }
 
     .error-content {

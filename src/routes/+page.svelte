@@ -11,7 +11,6 @@
     import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
     import SendButton from '$lib/components/filesharing/SendButton.svelte'
     import FileInput from '$lib/components/filesharing/inputs/FileInput.svelte'
-    import EncryptionProgress from '$lib/components/filesharing/EncryptionProgress.svelte'
     import Error from '$lib/components/filesharing/Error.svelte'
     import Done from '$lib/components/filesharing/Done.svelte'
 
@@ -90,16 +89,6 @@
                           readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
             <SendButton bind:EncryptState={EncryptState} />
         </div>
-    {:else if false && EncryptState.encryptionState === EncryptionState.Encrypting}
-        <EncryptionProgress encryptStartTime={EncryptState.encryptionState}
-                            files={EncryptState.files}
-                            recipients={EncryptState.recipients}
-                            bind:percentages={EncryptState.percentages}
-                            bind:done={EncryptState.done}
-                            bind:stage={EncryptState.encryptionState}
-                            bind:selfAborted={EncryptState.selfAborted}
-                            abort={EncryptState.abort}
-        />
     {:else if EncryptState.encryptionState === EncryptionState.Error}
         <div class="inputs-container">
             <Error bind:encryptionState={EncryptState.encryptionState} />

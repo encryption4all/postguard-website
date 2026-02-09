@@ -58,23 +58,23 @@
 <style>
     .yivi-qr-container {
         --qr-size: 230px;
-        --container-size: calc(var(--qr-size) / 0.96);
+        --container-size: 230px;
 
-        width: var(--container-size) !important;
-        height: var(--container-size) !important;
-        min-width: var(--container-size) !important;
-        max-width: var(--container-size) !important;
-        min-height: var(--container-size) !important;
-        max-height: var(--container-size) !important;
+        /* width: var(--container-size);
+        height: var(--container-size); */
+        min-width: var(--container-size) ;
+        max-width: var(--container-size) ;
+        min-height: var(--container-size) ;
+        max-height: var(--container-size) ;
         border-radius: var(--pg-border-radius-md);
         background: white;
         display: flex;
         justify-content: center;
         align-items: center;
         overflow: hidden;
-        box-sizing: border-box;
+        /* box-sizing: border-box;
         margin: 0;
-        padding: 0;
+        padding: 0; */
     }
 
     /* Hide all Yivi UI elements except the QR code */
@@ -90,74 +90,74 @@
     .yivi-qr-container :global(h1),
     .yivi-qr-container :global(h2),
     .yivi-qr-container :global(h3) {
-        display: none !important;
+        display: none;
     }
 
     /* Constrain all direct children */
-    .yivi-qr-container :global(> *) {
-        max-width: var(--container-size) !important;
-        max-height: var(--container-size) !important;
-    }
+    /* .yivi-qr-container :global(> *) {
+        max-width: var(--container-size);
+        max-height: var(--container-size);
+    } */
 
     /* Force Yivi containers to fit our dimensions */
     .yivi-qr-container :global(.yivi-web-content) {
-        width: var(--container-size) !important;
-        height: var(--container-size) !important;
-        min-width: var(--container-size) !important;
-        max-width: var(--container-size) !important;
-        min-height: var(--container-size) !important;
-        max-height: var(--container-size) !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden !important;
-        box-sizing: border-box !important;
+        /* width: var(--container-size);
+        height: var(--container-size); */
+        /* min-width: var(--container-size);
+        max-width: var(--container-size); */
+        /* min-height: var(--container-size);
+        max-height: var(--container-size); */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+        /* overflow: hidden;
+        box-sizing: border-box; */
     }
 
     .yivi-qr-container :global(.yivi-web-form) {
-        width: var(--container-size) !important;
-        height: var(--container-size) !important;
-        min-width: var(--container-size) !important;
-        max-width: var(--container-size) !important;
-        min-height: var(--container-size) !important;
-        max-height: var(--container-size) !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
-        align-items: center !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: transparent !important;
-        box-shadow: none !important;
-        border: none !important;
-        overflow: hidden !important;
-        box-sizing: border-box !important;
+        /* width: var(--container-size);
+        height: var(--container-size); */
+        /* min-width: var(--container-size);
+        max-width: var(--container-size); */
+        /* min-height: var(--container-size);
+        max-height: var(--container-size); */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+        border: none;
+        /* overflow: hidden;
+        box-sizing: border-box; */
     }
 
     /* QR code elements - let them render at native size, constrain with max */
     .yivi-qr-container :global(canvas),
     .yivi-qr-container :global(svg) {
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        max-width: var(--qr-size) !important;
-        max-height: var(--qr-size) !important;
-        width: auto !important;
-        height: auto !important;
-        image-rendering: pixelated !important;
-        image-rendering: crisp-edges !important;
+        display: block;
+        visibility: visible;
+        opacity: 1;
+        /* max-width: var(--qr-size);
+        max-height: var(--qr-size); */
+        /* width: auto;
+        height: auto; */
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
     }
 
     /* Ensure any div containing QR is visible */
     .yivi-qr-container :global(div:has(> canvas)),
     .yivi-qr-container :global(div:has(> svg)) {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        visibility: visible !important;
-        opacity: 1 !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        visibility: visible;
+        opacity: 1;
     }
 
     .spinner {

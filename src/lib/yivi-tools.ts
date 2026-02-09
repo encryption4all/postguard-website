@@ -4,7 +4,7 @@ import YiviWeb from '@privacybydesign/yivi-web'
 import YiviClient from '@privacybydesign/yivi-client'
 import { browser } from '$app/environment'
 
-async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon, showQR: boolean = true): Promise<any> {
+async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise<any> {
     if (!browser) return
     let PKG_URL = import.meta.env.VITE_PKG_URL
 

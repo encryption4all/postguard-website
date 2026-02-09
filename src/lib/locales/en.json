@@ -76,6 +76,7 @@
         "title": "File Sharing",
         "subtitle1": "How does filesharing work?",
         "subpar1": "With PostGuard you can securely send files in a privacy-friendly manner. Every file is encrypted specifically for the receiver. Only that person can decrypt that file. To do that, the email address must be shown. For this, the identification app Yivi is used. <a href=\"https://yivi.app/\">Learn more about the Yivi-app.</a>",
+        "errorTitle": "Error occurred",
         "error": "Oops... We are really sorry but something went wrong. Please try again or contact us",
         "tryAgain": "Try again",
         "cancel": "Cancel",
