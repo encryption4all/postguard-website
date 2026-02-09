@@ -76,7 +76,7 @@
         align-items: center;
         justify-content: center;
         gap: 1.5rem;
-        padding: 2rem;
+        padding: 2rem 2rem 0 2rem;
         max-width: 600px;
         margin: 0 auto;
     }
@@ -188,15 +188,12 @@
     }
 
     .airplane-decoration {
-        position: fixed;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
         width: 120%;
         max-width: 800px;
         height: auto;
         opacity: 0.6;
         pointer-events: none;
-        z-index: -1;
+        margin: 2rem 0 0 0;
+        padding: 0;
     }
 </style>
