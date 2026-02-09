@@ -1,6 +1,13 @@
 <script lang="ts">
+    import { dev } from '$app/environment'
+    import { goto } from '$app/navigation'
     import Done from '$lib/components/filesharing/Done.svelte'
     import { EncryptionState } from '$lib/types/filesharing/attributes'
+
+    // Redirect to home if not in development mode
+    if (!dev) {
+        goto('/')
+    }
 
     // Hardcoded test data
     let testEncryptState = $state({
