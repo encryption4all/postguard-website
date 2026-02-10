@@ -125,7 +125,7 @@
     @import "files-shared-sheet.css";
 
     h1 {
-        font-size: 1.75em;
+        font-size: 1.75rem;
         font-weight: 700;
         color: --pg-text;
         margin: 0;

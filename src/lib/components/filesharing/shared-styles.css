@@ -1,7 +1,7 @@
 .crypt-select-protection-input-box {
     background-color: var(--pg-hard-background);
-    padding: 0.25em;
-    padding-left: 1.25em;
+    padding: 0.25rem;
+    padding-left: 1.25rem;
     /* border-left: 3px solid #3095de; */
     /* border-radius: 8px; */
     display: flex;
@@ -24,21 +24,21 @@
 
 @media only screen and (max-width: 400px) {
     .crypt-btn-cancel {
-        width: 13em !important;
+        width: 13rem !important;
     }
 }
 
 
 .crypt-btn {
     border: none;
-    border-radius: 2.6em;
+    border-radius: 2.6rem;
     background: linear-gradient(135deg, var(--pg-input-active) 0%, var(--pg-text) 100%);
     cursor: pointer;
     color: var(--pg-general-background);
     font-weight: 700;
-    font-size: 1.15em;
-    line-height: 1.6em;
-    padding: 0.5em 0;
+    font-size: 1.15rem;
+    line-height: 1.6rem;
+    padding: 0.5rem 0;
     text-align: center;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transition: all 0.2s ease;
@@ -66,10 +66,10 @@
 
 .yivi-btn-logo {
     display: flex;
-    padding-right: 1em;
+    padding-right: 1rem;
     align-items: center;
     justify-content: center;
-    gap: 0.5em;
+    gap: 0.5rem;
 }
 
 .attributes-list {

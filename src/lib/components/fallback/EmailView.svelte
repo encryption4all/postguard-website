@@ -110,7 +110,7 @@
             display: flex;
             align-items: center;
             text-align: left;
-            padding-left: 1em;
+            padding-left: 1rem;
 
             &:not(:last-child, .toolbar) {
                 border-bottom: 2px solid var(--pg-text);
@@ -141,8 +141,8 @@
                 all: unset;
                 cursor: pointer;
                 margin-left: auto;
-                margin-right: 0.5em;
-                margin-top: 0.5em;
+                margin-right: 0.5rem;
+                margin-top: 0.5rem;
             }
         }
 
@@ -171,7 +171,7 @@
                         all: unset;
                         cursor: pointer;
                         font-size: 14px;
-                        padding: 0.5em;
+                        padding: 0.5rem;
                         width: 100%;
                         height: 100%;
                     }

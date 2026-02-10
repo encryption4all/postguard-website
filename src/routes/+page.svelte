@@ -111,7 +111,7 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    margin-inline: 1em;
+    margin-inline: 1rem;
     padding: 0.5rem 0;
   }
 
@@ -119,9 +119,9 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    font-size: 1.15em;
+    font-size: 1.15rem;
     min-width: 0;
-    gap: 1.25em;
+    gap: 1.25rem;
     margin: 0;
   }
 
@@ -137,8 +137,8 @@
 
     .inputs-container {
       max-height: 100%;
-      margin: 1em 0 0 0;
-      padding-right: 1em;
+      margin: 1rem 0 0 0;
+      padding-right: 1rem;
       overflow-y: auto;
       border-left: 2px solid var(--pg-strong-background);
       display: flex;

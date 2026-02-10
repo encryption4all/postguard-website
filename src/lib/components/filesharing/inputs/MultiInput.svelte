@@ -114,12 +114,12 @@
 
     .phone-select {
         width: auto;
-        min-width: 6.5em;
+        min-width: 6.5rem;
     }
 
     label {
         font-family: var(--pg-font-family);
-        font-size: 0.8em;
+        font-size: 0.8rem;
         font-weight: 800;
         color: var(--pg-text);
         display: block;
@@ -152,7 +152,7 @@
     .optional-value {
         display: flex;
         align-items: center;
-        gap: 0.5em;
+        gap: 0.5rem;
         height: 40px;
     }
 

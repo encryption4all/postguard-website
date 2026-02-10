@@ -26,7 +26,7 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        gap: 0.5em;
+        gap: 0.5rem;
         width: 100%;
         margin-bottom: 0;
         padding: 8px 0;
@@ -36,7 +36,7 @@
     .files > div:first-child {
         display: flex;
         align-items: center;
-        gap: 0.5em;
+        gap: 0.5rem;
         flex: 1;
         min-width: 0;
     }
@@ -49,7 +49,7 @@
     .files > div:last-child {
         display: flex;
         align-items: center;
-        gap: 0.5em;
+        gap: 0.5rem;
         flex-shrink: 0;
     }
 

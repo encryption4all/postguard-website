@@ -28,7 +28,7 @@ body {
 
     /* Typography */
     --pg-font-family: 'Overpass', sans-serif;
-    --pg-input-font-size: 0.9em;
+    --pg-input-font-size: 0.9rem;
 
     /* Colors */
     --pg-primary: #3095DE;
@@ -129,10 +129,11 @@ textarea.pg-input {
     background-color: var(--pg-general-background);
     border: 1.5px solid var(--pg-input-normal);
     border-radius: var(--pg-border-radius-md);
-    padding: 0 0.85em;
+    padding: 0 0.85rem;
     transition: all 0.2s ease;
     box-sizing: border-box;
     width: 100%;
+    color: var(--pg-text)
 }
 
 input::placeholder {
@@ -146,8 +147,8 @@ textarea::placeholder {
 /* Textarea should not have fixed height */
 textarea.pg-input {
     height: auto;
-    min-height: 5em;
-    padding: 0.5em 0.85em;
+    min-height: 5rem;
+    padding: 0.5rem 0.85rem;
 }
 
 input.pg-input:hover,
@@ -216,11 +217,11 @@ h2 {
     font-size: 24px;
     font-weight: 800;
     line-height: 30px;
-    letter-spacing: 0em;
+    letter-spacing: 0;
 }
 
 h3 {
-    font-size: 1.1em;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--pg-text);
     margin: 0;

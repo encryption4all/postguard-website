@@ -80,7 +80,7 @@
     }
 
     .help-section.bordered .help-content {
-        margin: 0 1em 1rem 2.2rem;
+        margin: 0 1rem 1rem 2.2rem;
     }
 
     .help-text {

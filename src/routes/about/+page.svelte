@@ -83,7 +83,7 @@
         h3 {
             margin-top: 1.5rem;
             margin-bottom: 0.5rem;
-            font-size: 1.1em;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--pg-text);
         }
@@ -111,7 +111,7 @@
     #team {
         border: 1px dashed var(--pg-text);
         border-radius: 16px; 
-        padding: 1.5em 2em;
+        padding: 1.5rem 2rem;
 
         h3 {
             margin-top: 0;

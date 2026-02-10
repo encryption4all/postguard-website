@@ -116,13 +116,13 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: repeat(9, 1fr);
-        border-radius: 3em;
+        border-radius: 3rem;
         gap: 2px;
         background-color: var(--pg-general-background);
         border: 2px solid var(--pg-input-normal);
         overflow: hidden;
-        height: calc(100% - 2em);
-        margin: 1em;
+        height: calc(100% - 2rem);
+        margin: 1rem;
         max-width: 1200px;
         align-self: center;
         justify-self: center;
@@ -135,7 +135,7 @@
             display: flex;
             align-items: center;
             text-align: left;
-            padding-left: 1em;
+            padding-left: 1rem;
 
             &:not(:last-child) {
                 border-bottom: 2px solid var(--pg-input-normal);
@@ -155,7 +155,7 @@
             .upload {
                 grid-row: 1 / 4;
                 display: flex;
-                padding: 0.5em;
+                padding: 0.5rem;
 
                 .file-upload {
                     input[type='file'] {
@@ -176,7 +176,7 @@
 
             .search {
                 display: flex;
-                gap: 2em;
+                gap: 2rem;
                 grid-row: 4 / 6;
                 width: 100%;
 
@@ -194,13 +194,13 @@
                     input {
                         width: 75%;
                         color: var(--pg-input-normal);
-                        border-radius: 1em;
+                        border-radius: 1rem;
                     }
                 }
 
                 button {
                     all: unset;
-                    margin: auto 2em auto auto;
+                    margin: auto 2rem auto auto;
                     cursor: pointer;
                     display: flex;
                 }

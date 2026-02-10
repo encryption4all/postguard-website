@@ -50,7 +50,7 @@
         {/each}
     </ol>
 {:else}
-    <div style="margin: auto 3em; text-align: center;">
+    <div style="margin: auto 3rem; text-align: center;">
         <h4>
             {$_('fallback.list.nothing')}
         </h4>
@@ -78,9 +78,9 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        height: 4.5em;
+        height: 4.5rem;
         border-bottom: 1px solid var(--pg-text);
-        padding-left: 0.5em;
+        padding-left: 0.5rem;
 
         button {
             all: unset;
@@ -90,8 +90,8 @@
 
             div {
                 border-radius: 10px;
-                margin: 1em 0.5em 1em 0em;
-                padding-left: 0.25em;
+                margin: 1rem 0.5rem 1rem 0rem;
+                padding-left: 0.25rem;
 
                 &.selected,
                 &:hover,

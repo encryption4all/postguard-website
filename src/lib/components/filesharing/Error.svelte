@@ -46,7 +46,7 @@
     .error-title {
         color: var(--pg-input-error);
         font-family: var(--pg-font-family);
-        font-size: 1.5em;
+        font-size: 1.5rem;
         font-weight: 700;
         margin: 0;
     }
@@ -54,20 +54,20 @@
     .error-message {
         color: var(--pg-text);
         font-family: var(--pg-font-family);
-        font-size: 1em;
+        font-size: 1rem;
         line-height: 1.5;
         margin: 0;
     }
 
     .error-btn {
-        margin-top: 1em;
-        padding: 0.75em 2em;
+        margin-top: 1rem;
+        padding: 0.75rem 2rem;
         background-color: var(--pg-text);
         color: var(--pg-general-background);
         border: none;
         border-radius: var(--pg-border-radius-sm);
         cursor: pointer;
-        font-size: 1em;
+        font-size: 1rem;
         font-family: var(--pg-font-family);
         font-weight: 600;
         transition: all 0.2s ease;

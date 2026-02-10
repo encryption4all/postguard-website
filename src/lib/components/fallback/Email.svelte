@@ -106,7 +106,7 @@
     #sidebar {
         overflow: scroll;
         border-right: 1px solid;
-        width: 20em;
+        width: 20rem;
     }
 
     #sb-th {
@@ -140,7 +140,7 @@
     }
 
     #buttons {
-        min-width: 6em;
+        min-width: 6rem;
     }
 
     #noemails {

@@ -81,7 +81,7 @@
 <style>
     .crypt-recipient {
         background-color: var(--pg-soft-background);
-        padding: 1em;
+        padding: 1rem;
         border-radius: var(--pg-border-radius-lg);
         border: 1px solid var(--pg-strong-background);
         /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06); */
@@ -94,12 +94,12 @@
     }
 
     .crypt-recipient:not(:last-child) {
-        margin-bottom: 0.5em;
+        margin-bottom: 0.5rem;
     }
 
     .recipient-container {
         display: flex;
-        gap: 0.75em;
+        gap: 0.75rem;
         align-items: flex-start;
     }
 
@@ -131,7 +131,7 @@
     }
 
     .field-label {
-        font-size: 0.8em;
+        font-size: 0.8rem;
         font-weight: 800;
         color: var(--pg-text);
         font-family: var(--pg-font-family);
@@ -141,7 +141,7 @@
     .optionals-container {
         display: flex;
         flex-direction: column;
-        gap: 0.5em;
-        margin-top: 0.5em;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
     }
 </style>

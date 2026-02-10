@@ -41,9 +41,9 @@
     @import "../shared-styles.css";
 
     p {
-        font-size: 0.85em;
+        font-size: 0.85rem;
         color: var(--pg-text-secondary);
-        margin: 0 0 0.5em;
+        margin: 0 0 0.5rem;
         font-family: var(--pg-font-family);
     }
 
@@ -52,8 +52,8 @@
     }
 
     textarea {
-        min-height: 5em;
-        margin-top: 0.25em;
+        min-height: 5rem;
+        margin-top: 0.25rem;
         width: 100%;
         resize: none;
         overflow: hidden;
@@ -61,14 +61,14 @@
 
     @media only screen and (min-height: 768px) {
         textarea {
-            min-height: 6em;
+            min-height: 6rem;
         }
     }
 
 
     @media only screen and (min-height: 1024px) {
         textarea {
-            min-height: 8em;
+            min-height: 8rem;
         }
     }
 </style>

@@ -121,20 +121,20 @@
     {/if}
     <button
         on:click|preventDefault={() => (currMode = 'List')}
-        style="float:right; margin-right: 1em"
+        style="float:right; margin-right: 1rem"
     >{$_('fallback.settings.back')}</button
     >
 </div>
 
 <style lang="scss">
   #settings-container {
-    padding: 0 1em 1em 1em;
+    padding: 0 1rem 1rem 1rem;
     width: 100%;
   }
 
   #creds {
     border-collapse: collapse;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.5rem;
   }
 
   #creds td,

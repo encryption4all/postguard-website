@@ -55,7 +55,7 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 0.35em;
+        gap: 0.35rem;
         border-radius: var(--pg-border-radius-md);
         font-family: var(--pg-font-family);
         color: var(--pg-text);
@@ -97,8 +97,8 @@
     }
 
     .chip-lg {
-        padding: 0.2em 1em;
-        font-size: 0.95em;
+        padding: 0.2rem 1rem;
+        font-size: 0.95rem;
     }
 
     /* Variant: default (white background, light border) */
