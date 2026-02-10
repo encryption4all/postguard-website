@@ -7,6 +7,7 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 
 import nodePolyfills from 'rollup-plugin-node-polyfills'
+import path from 'path'
 
 const config: UserConfig = {
   resolve: {
@@ -68,6 +69,11 @@ const config: UserConfig = {
       // @ts-ignore
       plugins: [nodePolyfills()],
     },
+  },
+  server: {
+    fs: {
+      allow: [path.resolve(__dirname, '..')]
+    }
   },
   plugins: [sveltekit(), wasm(), topLevelAwait()],
 }

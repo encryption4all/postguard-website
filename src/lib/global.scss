@@ -1,0 +1,348 @@
+@use '$lib/assets/fonts/overpass-webfont/_overpass' as overpass;
+@use '$lib/assets/fonts/overpass-mono-webfont/_overpass-mono' as overpass-mono;
+
+@include overpass.print-overpass-font-face(
+    $path_to_dist: '$lib/assets/fonts/overpass-webfont/'
+);
+
+@include overpass-mono.print-overpass-mono-font-face(
+    $path_to_dist: '$lib/assets/fonts/overpass-mono-webfont/'
+);
+
+
+summary {
+    cursor: pointer;
+}
+
+html,
+body {
+    position: relative;
+    height: 100%;
+    margin: 0;
+    overflow-x: hidden;
+    background: var(--pg-general-background);
+}
+
+:root {
+
+
+    /* Typography */
+    --pg-font-family: 'Overpass', sans-serif;
+    --pg-input-font-size: 0.9rem;
+
+    /* Colors */
+    --pg-primary: #3095DE;
+    --pg-primary-contrast: #1673B6;
+    --pg-general-background: #ffffff;
+    --pg-soft-background: #F2F8FD;
+    --pg-strong-background: #C6E2F6;
+    --pg-text: #030E17;
+    --pg-text-secondary: #5F7381;
+    --pg-input-normal: #5F7381;
+    --pg-input-hover: #45545E;
+    --pg-input-active: #2B343B;
+    --pg-input-error: #B61616;
+
+    /* Spacing */
+    --pg-border-radius-sm: 4px;
+    --pg-border-radius-md: 6px;
+    --pg-border-radius-lg: 8px;
+}
+
+.dark {
+    /* Dark mode */
+    --pg-primary: #3095DE;
+    --pg-primary-contrast: #3095DE;
+    --pg-general-background: #061B2D;
+    --pg-soft-background: #092944;
+    --pg-strong-background: #0C365A;
+    --pg-text: #FFFFFF;
+    --pg-text-secondary: #7E92A0;
+    --pg-input-normal: #7E92A0;
+    --pg-input-hover: #98A8B3;
+    --pg-input-active: #C4CDD4;
+    --pg-input-error: #DE3030;
+
+    .invert {
+        filter: invert(100%);
+    }
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--pg-general-background);
+}
+
+.custom-field input {
+  border: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: transparent;
+  padding: 12px;
+  border-radius: 3px;
+}
+
+select {
+    color: var(--pg-text-secondary)
+}
+
+button {
+    all: unset;
+    cursor: pointer;
+    font-family: 'Overpass';
+    font-style: normal;
+    box-sizing: border-box;
+}
+
+.btn-accent {
+    font-size: 14px;
+    border-radius: 100px;
+    background: linear-gradient(135deg, var(--pg-input-active) 0%, var(--pg-text) 100%);
+    color: var(--pg-general-background);
+    padding: 6px 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    transition: all 0.2s ease;
+}
+
+.btn-accent:hover {
+    background: linear-gradient(135deg, var(--pg-input-hover) 0%, var(--pg-input-active) 100%);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+.btn-accent:active {
+    transform: translateY(0);
+}
+
+/* Global input styling */
+input.pg-input,
+select.pg-input,
+textarea.pg-input {
+    font-family: var(--pg-font-family);
+    font-size: var(--pg-input-font-size);
+    height: 2.5rem;
+    background-color: var(--pg-general-background);
+    border: 1.5px solid var(--pg-input-normal);
+    border-radius: var(--pg-border-radius-md);
+    padding: 0 0.85rem;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    width: 100%;
+    color: var(--pg-text)
+}
+
+input::placeholder {
+  color: var(--pg-text-secondary);
+}
+
+textarea::placeholder {
+  color: var(--pg-text-secondary);
+}
+
+/* Textarea should not have fixed height */
+textarea.pg-input {
+    height: auto;
+    min-height: 5rem;
+    padding: 0.5rem 0.85rem;
+}
+
+input.pg-input:hover,
+select.pg-input:hover,
+textarea.pg-input:hover {
+    border-color: var(--pg-input-normal-hover);
+}
+
+input.pg-input:focus,
+select.pg-input:focus,
+textarea.pg-input:focus {
+    outline: none;
+    border-color: var(--pg-accent-color);
+    box-shadow: 0 0 0 3px rgba(var(--pg-accent-color-rgb), 0.1);
+}
+
+input.pg-input:invalid:not(:focus):not(:placeholder-shown),
+select.pg-input:invalid:not(:focus),
+textarea.pg-input:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: var(--pg-input-error);
+}
+
+input.pg-input:disabled,
+select.pg-input:disabled,
+textarea.pg-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.lazyload {
+    opacity: 0;
+}
+
+.lazyloading {
+    opacity: 1;
+    transition: opacity 250ms;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+a,
+p,
+li,
+label, td, tr, summary {
+    font-family: 'Overpass';
+    font-style: normal;
+    color: var(--pg-text);
+}
+
+p {
+    font-size: 16px;
+}
+
+a {
+    text-decoration-color: var(--pg-accent-color);
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 30px;
+    letter-spacing: 0;
+}
+
+h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--pg-text);
+    margin: 0;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--pg-soft-background);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--pg-strong-background);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--pg-text-secondary);
+}
+
+.swiper {
+    width: 100%;
+    height: auto;
+}
+
+.swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.swiper-pagination-bullet {
+    display: visible;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 1px solid var(--pg-text);
+    background-color: transparent;
+    opacity: 100%;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: var(--pg-text);
+}
+
+.grid-container {
+    position: relative;
+    display: grid;
+    // max-width: 900px;
+    margin: 0 5%;
+    grid-gap: 5%;
+    height: 90%;
+    align-items: center;
+    justify-content: center;
+}
+
+@media only screen and (max-width: 800px) {
+    .grid-container {
+        grid-auto-flow: row;
+        max-height: 100%;
+        overflow-y: scroll;
+        margin: 0 3% 0 3%;
+        padding-bottom: 5%;
+        grid-gap: 1rem;
+        border-bottom: 1px solid var(--pg-text);
+
+        .grid-item {
+            max-width: 550px;
+            width: 92%;
+
+            &.header h2 {
+                inline-size: unset;
+            }
+        }
+    }
+
+    .swiper-pagination-bullet {
+        display: none;
+    }
+}
+
+.grid-item.header {
+    // display: flex;
+    // flex-direction: column;
+    // position: relative;
+    // height: 100%;
+    // max-width: 400px;
+    // text-align: left;
+
+    h3 r {
+        margin-bottom: 0;
+    }
+
+    h2 {
+        position: relative;
+        inline-size: 350px;
+        overflow-wrap: break-word;
+        margin-bottom: 0;
+
+        span {
+            background-color: transparent;
+            padding-right: 10px;
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            right: 50px;
+            height: 4px;
+            background-color: var(--pg-accent-color);
+            border-radius: 3.5px;
+            z-index: -1;
+        }
+    }
+}

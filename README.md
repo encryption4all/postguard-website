@@ -1,38 +1,37 @@
-# create-svelte
+# PostGuard Website
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+The PostGuard web frontend for encrypting and sending files using [Yivi](https://yivi.app)-based identity attributes. Built with SvelteKit.
 
-## Creating a project
+## Prerequisites
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+- [Node.js](https://nodejs.org/)
+- A running [Cryptify](https://github.com/nickt/cryptify) backend (otherwise you'll end up on the "error occurred" page)
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Install dependencies and create a `.env` file based on `.env.example`. Make sure the chunk size matches your Cryptify backend configuration.
 
 ```bash
+npm install
+cp .env.example .env
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
+
+## Mobile Debugging
+
+To test on a physical Android device over USB:
+
+```bash
+npm run dev -- --host
+adb reverse tcp:5173 tcp:5173
+adb reverse tcp:8000 tcp:8000
+```
+
+Port 5173 is the dev server, port 8000 is for the Cryptify backend. Then open `http://localhost:5173` in the phone's browser.
 
 ## Building
 
-To create a production version of your app:
-
 ```bash
 npm run build
+npm run preview  # preview the production build
 ```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.

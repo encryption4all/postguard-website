@@ -1,0 +1,82 @@
+.crypt-select-protection-input-box {
+    background-color: var(--pg-hard-background);
+    padding: 0.25rem;
+    padding-left: 1.25rem;
+    /* border-left: 3px solid #3095de; */
+    /* border-radius: 8px; */
+    display: flex;
+    flex-direction: column;
+    /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); */
+    /* transition: box-shadow 0.2s ease; */
+}
+
+
+.crypt-select-protection-input-box h4 {
+    font-size: 11pt;
+    text-align: left;
+    color: var(--pg-input-hover);
+    font-weight: bold;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* Input styles moved to global .pg-input class in global.scss */
+
+@media only screen and (max-width: 400px) {
+    .crypt-btn-cancel {
+        width: 13rem !important;
+    }
+}
+
+
+.crypt-btn {
+    border: none;
+    border-radius: 2.6rem;
+    background: linear-gradient(135deg, var(--pg-input-active) 0%, var(--pg-text) 100%);
+    cursor: pointer;
+    color: var(--pg-general-background);
+    font-weight: 700;
+    font-size: 1.15rem;
+    line-height: 1.6rem;
+    padding: 0.5rem 0;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+}
+
+.crypt-btn:hover:not(:disabled):not([disabled]):not(.crypt-btn-disabled) {
+    background: linear-gradient(135deg, var(--pg-input-hover) 0%, var(--pg-input-active) 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transform: translateY(-1px);
+}
+
+.crypt-btn:active:not(:disabled):not([disabled]):not(.crypt-btn-disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.crypt-btn:disabled,
+.crypt-btn[disabled],
+.crypt-btn-disabled {
+    background: var(--pg-strong-background);
+    color: var(--pg-text-secondary);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.yivi-btn-logo {
+    display: flex;
+    padding-right: 1rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.attributes-list {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
+    text-wrap: nowrap;
+    overflow-x: auto;
+}

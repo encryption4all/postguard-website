@@ -1,6 +1,0 @@
-export { default as About } from './About.svelte'
-export { default as Addons } from './Addons.svelte'
-export { default as Fallback } from './Fallback.svelte'
-export { default as Home } from './Home.svelte'
-export { default as PrivacyPolicy } from './PrivacyPolicy.svelte'
-export { default as Filesharing } from './Filesharing.svelte'

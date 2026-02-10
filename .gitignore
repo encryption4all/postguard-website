@@ -1,4 +1,11 @@
 /node_modules
+.claude/
 .svelte-kit
 build
 package
+.idea
+.vscode
+.env
+
+# macOS
+.DS_Store
