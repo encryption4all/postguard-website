@@ -1,6 +1,7 @@
 <script lang="ts">
     import { _, locale, init } from 'svelte-i18n'
     import logo from '$lib/assets/images/logo.svg'
+    import logoDark from '$lib/assets/images/logo-dark.svg'
     import LocaleSwitcher from './LocaleSwitcher.svelte'
     import '$lib/global.scss'
     import Hamburger from '$lib/components/header/Hamburger.svelte'
@@ -21,7 +22,10 @@
 </script>
 
 <div class="pg-topbar">
-    <a href="/"><img src={logo} alt="postguard logo" width="84" height="46" /></a>
+    <a href="/">
+        <img src={logo} alt="postguard logo" width="128" height="70" class="logo-light" />
+        <img src={logoDark} alt="postguard logo" width="128" height="70" class="logo-dark" />
+    </a>
     <div class="pg-desktop-menu">
         <ul>
             {#each items as item, i}
@@ -43,6 +47,18 @@
 </div>
 
 <style lang="scss">
+  .logo-dark {
+    display: none;
+  }
+
+  :global(.dark) .logo-light {
+    display: none;
+  }
+
+  :global(.dark) .logo-dark {
+    display: block;
+  }
+
   .pg-topbar {
     width: auto;
     margin: 0.5rem 1rem 1rem 1rem;
@@ -75,12 +91,12 @@
     padding-right: 15px;
 
     &:not(:last-child) {
-      border-right: 1px solid black;
+      border-right: 1px solid var(--pg-text);
     }
 
     &.selected a {
       text-decoration: 2px underline;
-      text-decoration-color: --pg-text-primary;
+      text-decoration-color: --pg-text;
       text-underline-offset: 4px;
     }
 
@@ -95,7 +111,7 @@
         height: 2px;
         bottom: 0;
         left: 0;
-        background-color: --pg-text-primary;
+        background-color: --pg-text;
         transform-origin: bottom right;
         transition: transform 0.25s ease-out;
       }

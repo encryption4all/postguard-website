@@ -3,6 +3,7 @@
     import closeIcon from '$lib/assets/images/google-icons/close.svg'
     import LocaleSwitcher from '$lib/components/LocaleSwitcher.svelte'
     import logo from '$lib/assets/images/logo.svg'
+    import logoDark from '$lib/assets/images/logo-dark.svg'
     import { _, locale } from 'svelte-i18n'
     import { page } from '$app/state'
 
@@ -37,7 +38,8 @@
 
 <div class:open={hamburgerOpen} class="hamburger-menu">
     <div class="topbar">
-        <img src={logo} alt="postguard logo" width="84" height="46" />
+        <img src={logo} alt="postguard logo" width="128" height="70" class="logo-light" />
+        <img src={logoDark} alt="postguard logo" width="128" height="70" class="logo-dark" />
         <button onclick={() => {
         hamburgerOpen = !hamburgerOpen
     }}
@@ -72,6 +74,18 @@
 <style>
     @import "$lib/shared-styles.css";
 
+    .logo-dark {
+        display: none;
+    }
+
+    :global(.dark) .logo-light {
+        display: none;
+    }
+
+    :global(.dark) .logo-dark {
+        display: block;
+    }
+
     @media only screen and (min-width: 768px) {
         .hamburger-icon {
             display: none;
@@ -88,7 +102,7 @@
         flex-direction: column;
         top: 0;
         right: 0;
-        background-color: transparant;
+        background-color: transparent;
         border-radius: 4px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         padding: 0;
@@ -110,7 +124,7 @@
     }
 
     .hamburger-menu li {
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--pg-soft-background);
     }
 
     .hamburger-menu li:last-child {
@@ -120,13 +134,13 @@
     .hamburger-menu li a {
         display: block;
         padding: 10px 15px;
-        color: #333;
+        color: var(--pg-text);
         text-decoration: none;
     }
 
     .hamburger-menu li a:hover,
     .hamburger-menu li.selected a {
-        background-color: #f0f0f0;
+        background-color: var(--pg-soft-background);
     }
 
     .topbar {
