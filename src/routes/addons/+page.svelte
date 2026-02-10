@@ -64,7 +64,7 @@
 
     .grid-container {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 550px));
         height: auto;
         align-items: start;
         overflow-y: auto;
