@@ -71,7 +71,7 @@
         }
 
         &:not(:last-child) {
-            border-right: 2px solid black;
+            border-right: 2px solid var(--pg-text);
             padding-right: 20px;
             &.active {
                 &:before {

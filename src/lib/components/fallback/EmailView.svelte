@@ -113,7 +113,7 @@
             padding-left: 1em;
 
             &:not(:last-child, .toolbar) {
-                border-bottom: 2px solid black;
+                border-bottom: 2px solid var(--pg-text);
             }
         }
 
@@ -165,7 +165,7 @@
                 li {
                     padding: 0;
                     text-align: start;
-                    border-right: 1px solid black;
+                    border-right: 1px solid var(--pg-text);
 
                     button {
                         all: unset;

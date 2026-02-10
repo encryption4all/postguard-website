@@ -20,7 +20,7 @@ body {
     height: 100%;
     margin: 0;
     overflow-x: hidden;
-    background: var(--pg-general-bg);
+    background: var(--pg-general-background);
 }
 
 :root {
@@ -63,7 +63,7 @@ body {
     --pg-input-active: #C4CDD4;
     --pg-input-error: #DE3030;
 
-    img {
+    .invert {
         filter: invert(100%);
     }
 }
@@ -73,7 +73,7 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: var(--pg-general-bg);
+    background-color: var(--pg-general-background);
 }
 
 .custom-field input {
@@ -102,15 +102,15 @@ button {
 .btn-accent {
     font-size: 14px;
     border-radius: 100px;
-    background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--pg-input-active) 0%, var(--pg-text) 100%);
+    color: var(--pg-general-background);
     padding: 6px 14px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     transition: all 0.2s ease;
 }
 
 .btn-accent:hover {
-    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    background: linear-gradient(135deg, var(--pg-input-hover) 0%, var(--pg-input-active) 100%);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     transform: translateY(-1px);
 }
@@ -125,8 +125,8 @@ select.pg-input,
 textarea.pg-input {
     font-family: var(--pg-font-family);
     font-size: var(--pg-input-font-size);
-    height: 2.2em;
-    background-color: transparent;
+    height: 2.5rem;
+    background-color: var(--pg-general-background);
     border: 1.5px solid var(--pg-input-normal);
     border-radius: var(--pg-border-radius-md);
     padding: 0 0.85em;
@@ -153,7 +153,7 @@ textarea.pg-input {
 input.pg-input:hover,
 select.pg-input:hover,
 textarea.pg-input:hover {
-    border-color: var(--pg-border-color-hover);
+    border-color: var(--pg-input-normal-hover);
 }
 
 input.pg-input:focus,
@@ -164,10 +164,10 @@ textarea.pg-input:focus {
     box-shadow: 0 0 0 3px rgba(var(--pg-accent-color-rgb), 0.1);
 }
 
-input.pg-input:invalid:not(:focus),
+input.pg-input:invalid:not(:focus):not(:placeholder-shown),
 select.pg-input:invalid:not(:focus),
-textarea.pg-input:invalid:not(:focus) {
-    border-color: var(--pg-border-color-error);
+textarea.pg-input:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: var(--pg-input-error);
 }
 
 input.pg-input:disabled,
@@ -201,7 +201,7 @@ li,
 label, td, tr, summary {
     font-family: 'Overpass';
     font-style: normal;
-    color: var(--pg-text-primary);
+    color: var(--pg-text);
 }
 
 p {
@@ -222,7 +222,7 @@ h2 {
 h3 {
     font-size: 1.1em;
     font-weight: 700;
-    color: var(--pg-text-primary);
+    color: var(--pg-text);
     margin: 0;
 }
 
@@ -233,18 +233,18 @@ h3 {
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: var(--pg-soft-background);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: var(--pg-strong-background);
     border-radius: 4px;
     transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: var(--pg-text-secondary);
 }
 
 .swiper {
@@ -264,13 +264,13 @@ h3 {
     width: 11px;
     height: 11px;
     border-radius: 50%;
-    border: 1px solid #000000;
-    background-color: transparant;
+    border: 1px solid var(--pg-text);
+    background-color: transparent;
     opacity: 100%;
 }
 
 .swiper-pagination-bullet-active {
-    background-color: black;
+    background-color: var(--pg-text);
 }
 
 .grid-container {
@@ -292,7 +292,7 @@ h3 {
         margin: 0 3% 0 3%;
         padding-bottom: 5%;
         grid-gap: 1rem;
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid var(--pg-text);
 
         .grid-item {
             max-width: 550px;
@@ -328,7 +328,7 @@ h3 {
         margin-bottom: 0;
 
         span {
-            background-color: transparant;
+            background-color: transparent;
             padding-right: 10px;
         }
 

@@ -37,7 +37,7 @@
         <p>{$_('addons.par')}</p>
         <img
             src={composeImg}
-            class="image"
+            class="image invert"
             alt="compose"
         />
     </div>

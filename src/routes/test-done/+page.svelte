@@ -77,7 +77,7 @@
 <style>
     .test-container {
         min-height: 100vh;
-        background: #fff;
+        background: var(--pg-general-background);
         padding: 2rem;
     }
 
@@ -85,18 +85,18 @@
         text-align: center;
         margin-bottom: 2rem;
         padding: 1rem;
-        background: transparant;
+        background: transparent;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .test-header h1 {
         margin: 0 0 0.5rem 0;
-        color: --pg-text-primary;
+        color: --pg-text;
     }
 
     .test-header p {
         margin: 0;
-        color: #6b7280;
+        color: var(--pg-text-secondary);
     }
 </style>

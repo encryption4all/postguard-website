@@ -49,20 +49,20 @@
     }
 
     h1 {
-        color: #333;
+        color: var(--pg-text);
         margin-bottom: 2rem;
     }
 
     .debug-info {
-        background: #e8f4f8;
+        background: var(--pg-strong-background);
         padding: 1.5rem;
         border-radius: 8px;
-        border-left: 4px solid #3095de;
+        border-left: 4px solid var(--pg-primary);
     }
 
     .debug-info h2 {
         margin-top: 0;
-        color: #2c5aa0;
+        color: var(--pg-primary-contrast);
     }
 
     .debug-info ul {
@@ -72,6 +72,6 @@
 
     .debug-info li {
         margin-bottom: 0.5rem;
-        color: #555;
+        color: var(--pg-text-secondary);
     }
 </style>

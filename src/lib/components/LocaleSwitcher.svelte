@@ -52,11 +52,11 @@
 <style lang="scss">
   $language-width: 100%;
   $language-height: 100%;
-  $language-focus: #85bffd;
-  $language-border: #ccc;
-  $language-hover: #eee;
-  $language-checked: #ddd;
-  $white: #ffffff;
+  $language-focus: var(--pg-primary);
+  $language-border: var(--pg-input-normal);
+  $language-hover: var(--pg-soft-background);
+  $language-checked: var(--pg-strong-background);
+  $white: var(--pg-general-background);
 
   // hide radio buttons language and theme switcher
   input.language-control { 
@@ -125,7 +125,7 @@
 
   .selected .language-label {
     text-decoration: 2px underline;
-    text-decoration-color: --pg-text-primary;
+    text-decoration-color: --pg-text;
     text-underline-offset: 4px;
   }
 

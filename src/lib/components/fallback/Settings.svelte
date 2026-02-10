@@ -139,18 +139,18 @@
 
   #creds td,
   #creds th {
-    border: 1px solid #d6d6d6;
+    border: 1px solid var(--pg-strong-background);
     padding: 7px;
   }
 
   #creds tr:hover {
-    background-color: #ddd;
+    background-color: var(--pg-strong-background);
   }
 
   #creds th {
     padding: 7px;
     text-align: left;
-    background-color: #d6d6d6;
+    background-color: var(--pg-strong-background);
   }
 
   #deletebutton {

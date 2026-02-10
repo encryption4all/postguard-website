@@ -80,17 +80,17 @@
 
 <style>
     .crypt-recipient {
-        background-color: var(--pg-strong-background);
+        background-color: var(--pg-soft-background);
         padding: 1em;
         border-radius: var(--pg-border-radius-lg);
-        border: 1px solid var(--pg-input-normal);
+        border: 1px solid var(--pg-strong-background);
         /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06); */
         transition: all 0.2s ease;
     }
 
     .crypt-recipient:hover {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        border-color: var(--pg-border-color);
+        border-color: var(--pg-input-normal);
     }
 
     .crypt-recipient:not(:last-child) {
@@ -116,7 +116,7 @@
     }
 
     .btn-delete:hover {
-        background-color: #fee2e2;
+        background-color: var(--pg-soft-background);
     }
 
     .recipient-content {
@@ -133,7 +133,7 @@
     .field-label {
         font-size: 0.8em;
         font-weight: 800;
-        color: var(--pg-text-primary);
+        color: var(--pg-text);
         font-family: var(--pg-font-family);
     }
 

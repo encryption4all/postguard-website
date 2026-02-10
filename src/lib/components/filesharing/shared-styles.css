@@ -14,7 +14,7 @@
 .crypt-select-protection-input-box h4 {
     font-size: 11pt;
     text-align: left;
-    color: #424242;
+    color: var(--pg-input-hover);
     font-weight: bold;
     margin-bottom: 0;
     padding-bottom: 0;
@@ -32,9 +32,9 @@
 .crypt-btn {
     border: none;
     border-radius: 2.6em;
-    background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+    background: linear-gradient(135deg, var(--pg-input-active) 0%, var(--pg-text) 100%);
     cursor: pointer;
-    color: white;
+    color: var(--pg-general-background);
     font-weight: 700;
     font-size: 1.15em;
     line-height: 1.6em;
@@ -45,7 +45,7 @@
 }
 
 .crypt-btn:hover:not(:disabled):not([disabled]):not(.crypt-btn-disabled) {
-    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    background: linear-gradient(135deg, var(--pg-input-hover) 0%, var(--pg-input-active) 100%);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     transform: translateY(-1px);
 }
@@ -58,8 +58,8 @@
 .crypt-btn:disabled,
 .crypt-btn[disabled],
 .crypt-btn-disabled {
-    background: #e8e8e8;
-    color: #9ca3af;
+    background: var(--pg-strong-background);
+    color: var(--pg-text-secondary);
     cursor: not-allowed;
     box-shadow: none;
 }

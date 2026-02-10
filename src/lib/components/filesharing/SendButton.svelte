@@ -351,7 +351,7 @@
                         }}
                         icon="×"
                         size="md"
-                        variant="dark"
+                        variant="default"
                     />
                 </div>
 
@@ -428,22 +428,22 @@
     font-size: 1.05em;
     font-weight: 600;
     border-radius: var(--pg-border-radius-sm);
-    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%) !important;
+    background: linear-gradient(135deg, var(--pg-input-hover) 0%, var(--pg-input-active) 100%) !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
     transition: all 0.2s ease;
     margin-bottom: 0.75em;
   }
 
   .crypt-btn-main:hover:not(.crypt-btn-disabled):not(:disabled) {
-    background: linear-gradient(135deg, #5a6578 0%, #3d4758 100%) !important;
+    background: linear-gradient(135deg, var(--pg-text-secondary) 0%, var(--pg-input-hover) 100%) !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
     transform: translateY(-1px);
   }
 
   .crypt-btn-main:disabled,
   .crypt-btn-main.crypt-btn-disabled {
-    background: #e8e8e8 !important;
-    color: #9ca3af !important;
+    background: var(--pg-strong-background) !important;
+    color: var(--pg-text-secondary) !important;
     cursor: not-allowed !important;
     box-shadow: none !important;
     opacity: 0.6;
@@ -458,7 +458,7 @@
     position: relative;
     width: 100%;
     border-radius: var(--pg-border-radius-sm);
-    background: #cbe1f4;
+    background: var(--pg-strong-background);
     margin-bottom: 0.75em;
     box-sizing: border-box;
     overflow: hidden;
@@ -469,7 +469,7 @@
     bottom: 0;
     left: 0;
     height: 4px;
-    background: #2579b8;
+    background: var(--pg-primary-contrast);
     transition: width 0.3s ease;
   }
 
@@ -483,12 +483,12 @@
     font-size: 1em;
     font-weight: 400;
     font-family: var(--pg-font-family);
-    color: #000;
+    color: var(--pg-text);
     z-index: 1;
   }
 
   .upload-info-box .spinner-circle {
-    stroke: #000;
+    stroke: var(--pg-text);
   }
 
   .spinner {
@@ -535,7 +535,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: #0D030E17;
+    background: rgba(3, 14, 23, 0.09);
     z-index: 999;
     cursor: pointer;
   }
@@ -571,7 +571,7 @@
     font-weight: bold;
     margin: 0;
     text-align: left;
-    color: var(--pg-text-primary, #000);
+    color: var(--pg-text);
     font-family: var(--pg-font-family);
     flex: 1;
   }
@@ -580,7 +580,7 @@
     font-size: 0.75em;
     margin: 0 0 0.5em 0;
     text-align: left;
-    color: var(--pg-text-secondary, #333);
+    color: var(--pg-text-secondary);
     font-family: var(--pg-font-family);
     width: 100%;
   }
@@ -602,8 +602,7 @@
     height: 0;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
-    border-top: 10px solid var(--pg-strong-background);
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    border-top: 10px solid var(--pg-soft-background);
   }
 
   /* Mobile bottom sheet styles */
@@ -638,7 +637,7 @@
     font-weight: bold;
     margin: 0;
     text-align: center;
-    color: var(--pg-text-primary, #000);
+    color: var(--pg-text);
     font-family: var(--pg-font-family);
   }
 
@@ -646,7 +645,7 @@
     font-size: 0.75em;
     margin: 0;
     text-align: center;
-    color: var(--pg-text-secondary, #333);
+    color: var(--pg-text-secondary);
     font-family: var(--pg-font-family);
   }
 </style>

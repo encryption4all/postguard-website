@@ -140,7 +140,7 @@
       margin: 1em 0 0 0;
       padding-right: 1em;
       overflow-y: auto;
-      border-left: 2px solid var(--pg-strong-background, #C6E2F6);
+      border-left: 2px solid var(--pg-strong-background);
       display: flex;
       justify-content: flex-start;
     }

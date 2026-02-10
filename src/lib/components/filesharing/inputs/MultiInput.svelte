@@ -121,7 +121,7 @@
         font-family: var(--pg-font-family);
         font-size: 0.8em;
         font-weight: 800;
-        color: var(--pg-text-primary);
+        color: var(--pg-text);
         display: block;
     }
 
@@ -142,7 +142,7 @@
     }
 
     .btn-delete:hover {
-        background-color: #fee2e2;
+        background-color: var(--pg-soft-background);
     }
 
     .removed-del-border {

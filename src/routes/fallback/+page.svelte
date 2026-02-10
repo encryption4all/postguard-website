@@ -74,7 +74,7 @@
                             ? LEFTMODES.ListView
                             : LEFTMODES.Settings)}
             >
-                <Icon icon="mdi:cog" class="button-image" width="30px" />
+                <Icon icon="mdi:cog" class="button-image invert" width="30px" />
             </button>
         </div>
         <div class="item list">
@@ -118,7 +118,7 @@
         grid-template-rows: repeat(9, 1fr);
         border-radius: 3em;
         gap: 2px;
-        background-color: var(--pg-general-bg);
+        background-color: var(--pg-general-background);
         border: 2px solid var(--pg-input-normal);
         overflow: hidden;
         height: calc(100% - 2em);

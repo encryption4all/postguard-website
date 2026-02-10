@@ -82,31 +82,27 @@
     h2 {
         font-size: 1.75rem;
         font-weight: 700;
-        color: --pg-text-primary;
+        color: --pg-text;
         margin: 0 0 1rem 0;
         text-align: center;
     }
 
     .info-box {
         width: 100%;
-        background: var(--pg-strong-background);
-        border: 2px solid var(--pg-border-color-light);
+        background: var(--pg-soft-background);
+        border: 1px solid var(--pg-strong-background);
         border-radius: var(--pg-border-radius-lg);
-        /* padding: 1.5rem; */
         box-shadow: 0 2px 8px rgba(48, 149, 222, 0.08);
     }
 
     .info-box h3 {
-        padding: 0.5rem 1.5rem;
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: --pg-text-primary;
+        padding: 0.3rem 1rem;
     }
 
     .divider {
         width: 100%;
-        height: 2px;
-        background-color: var(--pg-border-color-light);
+        height: 1px;
+        background-color: var(--pg-strong-background);
         margin: 0rem 0rem;
     }
 
@@ -114,17 +110,16 @@
     .recipients-list {
         display: flex;
         flex-direction: column;
-        /* gap: 0.5rem; */
     }
 
     .file-item,
     .recipient-item {
-        padding: 0.3rem 1.5rem;
+        padding: 0.3rem 0 0.4rem 1rem;
         margin: 0 0rem;
         font-family: var(--pg-font-family);
         font-size: 1rem;
-        color: var(--pg-text-primary);
-        border-bottom: 2px solid var(--pg-border-color-light);
+        color: var(--pg-text);
+        border-bottom: 1px solid var(--pg-strong-background);
     }
 
     .file-item:last-child,

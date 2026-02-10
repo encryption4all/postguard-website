@@ -30,7 +30,7 @@
         width: 100%;
         margin-bottom: 0;
         padding: 8px 0;
-        border-bottom: 2px solid var(--pg-border-color-light);
+        border-bottom: 2px solid var(--pg-input-normal-light);
     }
 
     .files > div:first-child {
@@ -69,7 +69,7 @@
         font-family: var(--pg-font-family);
         font-weight: 400;
         margin: 0;
-        color: var(--pg-text-primary);
+        color: var(--pg-text);
         min-width: 0;
         font-size: 0.9rem;
         direction: rtl;
@@ -98,7 +98,7 @@
     }
 
     .remove-button:hover {
-        background-color: #fee2e2;
+        background-color: var(--pg-soft-background);
     }
 
     .remove-button * {

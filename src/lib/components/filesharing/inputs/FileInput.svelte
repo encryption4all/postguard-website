@@ -86,7 +86,7 @@
              class:encrypting={stage === EncryptionState.Encrypting}
              class:signing={stage === EncryptionState.Sign}>
             <div class="upload-butt middle-block-size" class:hidden={files.length > 0}>
-                <img class="drawing" src={BasketDrawing} alt="Add files" />
+                <img class="drawing invert" src={BasketDrawing} alt="Add files" />
                 <p class="drag-text">{$_('filesharing.encryptPanel.fileBox.dragText')}</p>
                 <p class="or-text">{$_('filesharing.encryptPanel.fileBox.orText')}</p>
                 <button class="choose-files-btn btn-accent" type="button">{$_('filesharing.encryptPanel.fileBox.chooseFilesButton')}</button>
@@ -127,7 +127,7 @@
     h1 {
         font-size: 1.75em;
         font-weight: 700;
-        color: --pg-text-primary;
+        color: --pg-text;
         margin: 0;
     }
 
@@ -169,8 +169,8 @@
     .dropzone-box {
         width: 95%;
         max-width: 600px;
-        background: var(--pg-strong-background) 0%;
-        border: 2px dashed var(--pg-border-color-light);
+        background: var(--pg-soft-background) 0%;
+        border: 2px dashed var(--pg-primary);
         border-radius: var(--pg-border-radius-lg);
         padding: 1.5rem 1rem;
         box-shadow: 0 2px 8px rgba(48, 149, 222, 0.08);
@@ -199,7 +199,7 @@
     }
 
     .dropzone-box:hover:not(.has-files) {
-        border-color: #6096f2;
+        border-color: var(--pg-primary);
         box-shadow: 0 4px 16px rgba(48, 149, 222, 0.15);
     }
 
@@ -233,7 +233,7 @@
         margin: 1rem 0 0rem 0;
         font-size: clamp(1.4rem, 2.5vw, 1.25rem);
         font-weight: 800;
-        color: --pg-text-primary;
+        color: --pg-text;
         text-align: center;
     }
 
@@ -241,14 +241,14 @@
         margin: 0.5rem 0;
         font-size: 0.95rem;
         font-weight: 300;
-        color: #9ca3af;
+        color: var(--pg-text-secondary);
         text-align: center;
     }
 
     .choose-files-btn {
-        background: var(--pg-text-primary);
-        box-shadow: 1px 1px 5px grey;
-        color: var(--pg-general-bg);
+        background: var(--pg-text);
+        box-shadow: 1px 1px 5px var(--pg-text-secondary);
+        color: var(--pg-general-background);
         padding: 0.8rem 1.3rem;
         border-radius: var(--pg-border-radius-sm);
         font-size: 1.2rem;
@@ -259,7 +259,7 @@
     }
 
     .choose-files-btn:hover {
-        background: #1a1a1a;
+        background: var(--pg-input-active);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     }
@@ -268,7 +268,7 @@
         margin: 0.75rem 0 0 0;
         font-size: 0.875rem;
         font-weight: 300;
-        color: #9ca3af;
+        color: var(--pg-text-secondary);
         text-align: center;
     }
 

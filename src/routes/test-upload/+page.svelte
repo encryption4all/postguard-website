@@ -150,21 +150,21 @@
 
   .test-header {
     padding: 1rem;
-    background-color: #fff3cd;
-    border-bottom: 2px solid #ffc107;
+    background-color: var(--pg-soft-background);
+    border-bottom: 2px solid var(--pg-primary);
     text-align: center;
   }
 
   .test-header h1 {
     margin: 0 0 0.5rem 0;
     font-size: 1.5rem;
-    color: #856404;
+    color: var(--pg-text-secondary);
   }
 
   .test-header p {
     margin: 0;
     font-size: 0.9rem;
-    color: #856404;
+    color: var(--pg-text-secondary);
   }
 
   * {
@@ -203,7 +203,7 @@
       max-height: 100%;
       margin: 1em 1em 0 0;
       overflow-y: auto;
-      border-left: 2px solid var(--pg-strong-background, #C6E2F6);
+      border-left: 2px solid var(--pg-strong-background);
       display: flex;
       justify-content: flex-start;
     }

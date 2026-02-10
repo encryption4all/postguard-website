@@ -44,7 +44,7 @@
     }
 
     .error-title {
-        color: #dc2626;
+        color: var(--pg-input-error);
         font-family: var(--pg-font-family);
         font-size: 1.5em;
         font-weight: 700;
@@ -52,7 +52,7 @@
     }
 
     .error-message {
-        color: var(--pg-text-primary);
+        color: var(--pg-text);
         font-family: var(--pg-font-family);
         font-size: 1em;
         line-height: 1.5;
@@ -62,8 +62,8 @@
     .error-btn {
         margin-top: 1em;
         padding: 0.75em 2em;
-        background-color: #000000;
-        color: #ffffff;
+        background-color: var(--pg-text);
+        color: var(--pg-general-background);
         border: none;
         border-radius: var(--pg-border-radius-sm);
         cursor: pointer;
@@ -75,7 +75,7 @@
     }
 
     .error-btn:hover {
-        background-color: #1a1a1a;
+        background-color: var(--pg-input-active);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     }

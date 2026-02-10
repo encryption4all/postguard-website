@@ -375,12 +375,12 @@
     #yivi-web {
         height: 100%;
         width: 100%;
-        background-color: #eae5e2;
+        background-color: var(--pg-soft-background);
         max-width: unset;
     }
     select {
         padding: 5px;
-        border: 1px solid #d6d6d6;
+        border: 1px solid var(--pg-strong-background);
         border-radius: 5px;
     }
 </style>

@@ -121,21 +121,21 @@
 
   .test-header {
     padding: 1rem;
-    background-color: #d1ecf1;
-    border-bottom: 2px solid #0c5460;
+    background-color: var(--pg-strong-background);
+    border-bottom: 2px solid var(--pg-primary-contrast);
     text-align: center;
   }
 
   .test-header h1 {
     margin: 0 0 0.5rem 0;
     font-size: 1.5rem;
-    color: #0c5460;
+    color: var(--pg-primary-contrast);
   }
 
   .test-header p {
     margin: 0;
     font-size: 0.9rem;
-    color: #0c5460;
+    color: var(--pg-primary-contrast);
   }
 
   * {
@@ -174,7 +174,7 @@
       max-height: 100%;
       margin: 1em 1em 0 0;
       overflow-y: auto;
-      border-left: 2px solid var(--pg-strong-background, #C6E2F6);
+      border-left: 2px solid var(--pg-strong-background);
       display: flex;
       justify-content: flex-start;
     }

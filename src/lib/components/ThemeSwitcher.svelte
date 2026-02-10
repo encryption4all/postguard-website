@@ -45,7 +45,7 @@
             onchange={() => setTheme('light')}
         />
         <label class="theme-label" for="theme-light">
-            <img src={sun} width="16" height="16" alt="" />
+            <img src={sun} width="16" height="16" alt="" class="invert" />
             <span class="hidden">Light mode</span>
         </label>
     </div>
@@ -60,7 +60,7 @@
             onchange={() => setTheme('dark')}
         />
         <label class="theme-label" for="theme-dark">
-            <img src={moon} width="16" height="16" alt="" />
+            <img src={moon} width="16" height="16" alt="" class="invert" />
             <span class="hidden">Dark mode</span>
         </label>
     </div>
@@ -70,11 +70,11 @@
 <style lang="scss">
   $theme-width: 100%;
   $theme-height: 100%;
-  $theme-focus: #85bffd;
-  $theme-border: #ccc;
-  $theme-hover: #eee;
-  $theme-checked: #ddd;
-  $white: #ffffff;
+  $theme-focus: var(--pg-primary);
+  $theme-border: var(--pg-input-normal);
+  $theme-hover: var(--pg-soft-background);
+  $theme-checked: var(--pg-strong-background);
+  $white: var(--pg-general-background);
 
  // hide radio buttons language and theme switcher
   input.theme-control { 
@@ -143,7 +143,7 @@
 
   .selected .theme-label {
     text-decoration: 2px underline;
-    text-decoration-color: --pg-text-primary;
+    text-decoration-color: --pg-text;
     text-underline-offset: 4px;
   }
 

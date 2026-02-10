@@ -58,7 +58,7 @@
         gap: 0.35em;
         border-radius: var(--pg-border-radius-md);
         font-family: var(--pg-font-family);
-        color: var(--pg-text-primary);
+        color: var(--pg-text);
         transition: all 0.2s ease;
         box-sizing: border-box;
         white-space: nowrap;
@@ -103,13 +103,13 @@
 
     /* Variant: default (white background, light border) */
     .chip-default {
-        background-color: var(--pg-general-bg);
-        border: 1.5px solid var(--pg-border-color);
+        background-color: var(--pg-general-background);
+        border: 1.5px solid var(--pg-input-normal);
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
 
     button.chip-default:hover:not(:disabled) {
-        background-color: #f9fafb;
+        background-color: var(--pg-soft-background);
         border-color: var(--pg-accent-color);
         color: var(--pg-accent-color);
         box-shadow: 0 2px 4px rgba(48, 149, 222, 0.15);
@@ -117,24 +117,24 @@
 
     /* Variant: filled (gray background) */
     .chip-filled {
-        background-color: #e5e7eb;
-        border: 1px solid var(--pg-border-color);
+        background-color: var(--pg-strong-background);
+        border: 1px solid var(--pg-input-normal);
     }
 
     button.chip-filled:hover:not(:disabled) {
-        background-color: #fee2e2;
-        border-color: #fca5a5;
-        color: #991b1b;
+        background-color: var(--pg-soft-background);
+        border-color: var(--pg-input-error);
+        color: var(--pg-input-error);
     }
 
     /* Variant: dark (black border, for close buttons) */
     .chip-dark {
-        background-color: transparant;
-        border: 1px solid --pg-text-primary;
+        background-color: transparent;
+        border: 1px solid var(--pg-text);
     }
 
     button.chip-dark:hover:not(:disabled) {
-        background-color: #f9fafb;
+        background-color: var(--pg-soft-background);
         transform: translateY(-1px);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }

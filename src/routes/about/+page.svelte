@@ -27,6 +27,7 @@
                 <img
                     src={aboutImg}
                     alt="about"
+                    class="invert"
                 />
                 
             </div>
@@ -84,7 +85,7 @@
             margin-bottom: 0.5rem;
             font-size: 1.1em;
             font-weight: 700;
-            color: var(--pg-text-primary);
+            color: var(--pg-text);
         }
 
         h3:first-child {
@@ -108,7 +109,7 @@
     }
 
     #team {
-        border: 1px dashed #1e1e1e;
+        border: 1px dashed var(--pg-text);
         border-radius: 16px; 
         padding: 1.5em 2em;
 

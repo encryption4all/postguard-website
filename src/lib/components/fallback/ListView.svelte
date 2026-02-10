@@ -79,7 +79,7 @@
         flex-direction: column;
         justify-content: center;
         height: 4.5em;
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid var(--pg-text);
         padding-left: 0.5em;
 
         button {
@@ -96,7 +96,7 @@
                 &.selected,
                 &:hover,
                 &:focus {
-                    background: #a3ccf780;
+                    background: var(--pg-strong-background);
                 }
             }
         }
