@@ -56,113 +56,50 @@
 </div>
 
 <style>
-    .yivi-qr-container {
-        --qr-size: 230px;
-        --container-size: 230px;
+    /* Reset all Yivi plugin CSS */
+    .yivi-qr-container :global(*) {
+        all: revert !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+    }
 
-        /* width: var(--container-size);
-        height: var(--container-size); */
-        min-width: var(--container-size) ;
-        max-width: var(--container-size) ;
-        min-height: var(--container-size) ;
-        max-height: var(--container-size) ;
-        border-radius: var(--pg-border-radius-md);
-        background: transparant;
+    .yivi-qr-container {
+        width: 230px;
+        height: 230px;
         display: flex;
         justify-content: center;
         align-items: center;
         overflow: hidden;
-        /* box-sizing: border-box;
-        margin: 0;
-        padding: 0; */
+        background: var(--pg-general-background);
+        border: 1.5px solid var(--pg-strong-background);
+        border-radius: var(--pg-border-radius-sm);
     }
 
-    /* Hide all Yivi UI elements except the QR code */
-    .yivi-qr-container :global(.yivi-web-header),
-    .yivi-qr-container :global(.yivi-web-button-link),
-    .yivi-qr-container :global(.yivi-web-loading-animation),
-    .yivi-qr-container :global(.yivi-web-logo),
-    .yivi-qr-container :global(.yivi-web-button),
-    .yivi-qr-container :global(.yivi-web-waiting-for-user),
-    .yivi-qr-container :global(footer),
-    .yivi-qr-container :global(header),
-    .yivi-qr-container :global(p),
-    .yivi-qr-container :global(h1),
-    .yivi-qr-container :global(h2),
-    .yivi-qr-container :global(h3) {
-        display: none;
+    /* Hide everything except the QR canvas/svg */
+    .yivi-qr-container :global(:not(canvas, svg, div:has(canvas), div:has(svg))) {
+        display: none !important;
     }
 
-    /* Constrain all direct children */
-    /* .yivi-qr-container :global(> *) {
-        max-width: var(--container-size);
-        max-height: var(--container-size);
-    } */
-
-    /* Force Yivi containers to fit our dimensions */
-    .yivi-qr-container :global(.yivi-web-content) {
-        /* width: var(--container-size);
-        height: var(--container-size); */
-        /* min-width: var(--container-size);
-        max-width: var(--container-size); */
-        /* min-height: var(--container-size);
-        max-height: var(--container-size); */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0;
-        padding: 0;
-        /* overflow: hidden;
-        box-sizing: border-box; */
-    }
-
-    .yivi-qr-container :global(.yivi-web-form) {
-        /* width: var(--container-size);
-        height: var(--container-size); */
-        /* min-width: var(--container-size);
-        max-width: var(--container-size); */
-        /* min-height: var(--container-size);
-        max-height: var(--container-size); */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin: 0;
-        padding: 0;
-        background: transparent;
-        box-shadow: none;
-        border: none;
-        /* overflow: hidden;
-        box-sizing: border-box; */
-    }
-
-    /* QR code elements - let them render at native size, constrain with max */
-    .yivi-qr-container :global(canvas),
-    .yivi-qr-container :global(svg) {
-        display: block;
-        visibility: visible;
-        opacity: 1;
-        /* max-width: var(--qr-size);
-        max-height: var(--qr-size); */
-        /* width: auto;
-        height: auto; */
-        image-rendering: pixelated;
-        image-rendering: crisp-edges;
-    }
-
-    /* Ensure any div containing QR is visible */
     .yivi-qr-container :global(div:has(> canvas)),
     .yivi-qr-container :global(div:has(> svg)) {
-        display: flex;
+        display: flex !important;
         justify-content: center;
         align-items: center;
-        visibility: visible;
-        opacity: 1;
+    }
+
+    .yivi-qr-container :global(canvas),
+    .yivi-qr-container :global(svg) {
+        display: block !important;
+        image-rendering: pixelated !important;
+        image-rendering: crisp-edges !important;
     }
 
     .spinner {
         animation: spin 1s linear infinite;
-        color: #9ca3af;
+        color: var(--pg-text-secondary);
     }
 
     .spinner-circle {
