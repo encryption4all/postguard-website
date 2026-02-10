@@ -30,10 +30,10 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: Build frontend
-        run: npm run build-main
+        run: yarn build-main
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
