@@ -1,6 +1,6 @@
 # See, https://github.com/nginxinc/docker-nginx/tree/master/modules.
 
-FROM nginx:1.23.1 as builder
+FROM nginx:1.23.1 AS builder
 
 ARG ENABLED_MODULES="brotli"
 
