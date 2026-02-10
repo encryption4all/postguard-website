@@ -41,12 +41,6 @@ jobs:
           yarn install
           yarn build
 
-      - name: Build cryptify frontend
-        working-directory: ./cryptify/cryptify-front-end
-        run: |
-          npm ci
-          npm run build-main
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
