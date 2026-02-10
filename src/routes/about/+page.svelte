@@ -1,7 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n'
     import aboutImg from '$lib/assets/images/about.svg'
-    import aboutImgLq from '$lib/assets/images/lqip/about.svg'
 </script>
 
 <div class="about-container">
@@ -26,25 +25,30 @@
 
             <div class="image-content">
                 <img
-                    src={aboutImgLq}
-                    data-src={aboutImg}
-                    class="lazyload"
+                    src={aboutImg}
                     alt="about"
-                    width="567"
-                    height="128"
                 />
-                <div id="team">
+                
+            </div>
+            <div id="team">
                     <h3>{$_('about.team.header')}</h3>
                     <p>
                         {@html $_('about.team.par')}
                     </p>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
 <style lang="scss">
+    .image-content{ 
+        display: flex;
+        justify-content: center
+    }
+
+    img {
+        width: 100%;
+    }
     .about-container {
         display: flex;
         justify-content: center;
@@ -105,8 +109,7 @@
 
     #team {
         border: 1px dashed #1e1e1e;
-        border-radius: 16px;
-        margin-top: 3rem;
+        border-radius: 16px; 
         padding: 1.5em 2em;
 
         h3 {
@@ -133,16 +136,6 @@
         .content-grid {
             grid-template-columns: 1fr;
             gap: 2rem;
-        }
-
-        .image-content {
-            img {
-                width: 100%;
-            }
-        }
-
-        #team {
-            margin-top: 2rem;
         }
     }
 </style>

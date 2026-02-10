@@ -5,6 +5,7 @@
     import '$lib/global.scss'
     import Hamburger from '$lib/components/header/Hamburger.svelte'
     import { page } from '$app/state';
+    import ThemeSwitcher from './ThemeSwitcher.svelte'
 
     let items = [
         { name: 'fs', route: '/' },
@@ -34,6 +35,7 @@
         <LocaleSwitcher
             lang={$locale}
         />
+        <ThemeSwitcher />
     </div>
     <Hamburger
         {items}
@@ -78,7 +80,7 @@
 
     &.selected a {
       text-decoration: 2px underline;
-      text-decoration-color: #1f2937;
+      text-decoration-color: --pg-text-primary;
       text-underline-offset: 4px;
     }
 
@@ -93,7 +95,7 @@
         height: 2px;
         bottom: 0;
         left: 0;
-        background-color: #1f2937;
+        background-color: --pg-text-primary;
         transform-origin: bottom right;
         transition: transform 0.25s ease-out;
       }

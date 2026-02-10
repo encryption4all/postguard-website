@@ -67,7 +67,7 @@
         min-height: var(--container-size) ;
         max-height: var(--container-size) ;
         border-radius: var(--pg-border-radius-md);
-        background: white;
+        background: transparant;
         display: flex;
         justify-content: center;
         align-items: center;

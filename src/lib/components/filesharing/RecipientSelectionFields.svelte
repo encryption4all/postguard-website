@@ -83,7 +83,7 @@
         background-color: var(--pg-strong-background);
         padding: 1em;
         border-radius: var(--pg-border-radius-lg);
-        border: 1px solid var(--pg-border-color-light);
+        border: 1px solid var(--pg-input-normal);
         /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06); */
         transition: all 0.2s ease;
     }

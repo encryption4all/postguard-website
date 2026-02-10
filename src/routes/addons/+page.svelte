@@ -58,87 +58,24 @@
 </div>
 
 <style lang="scss">
-    img { 
+    img {
         width: 90%;
     }
 
     .grid-container {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        // grid-template-columns: 1fr 1fr;
-        // grid-gap: 10%;
-        // max-width: 1000px;
-        // max-height: 600px;
-        
-    }
-
-    .grid-item {
-        // &.header {
-        //     max-width: 10rem;
-        //     height: 500px;
-        //     align-self: center;
-
-        //     h2 {
-        //         inline-size: 300px;
-        //         margin-bottom: 0;
-        //     }
-
-        //     img {
-        //         position: absolute;
-        //         bottom: 0;
-        //         width: 100%;
-        //     }
-        // }
-
-        // &.instruction {
-        //     text-align: left;
-        //     border: 1px dashed black;
-        //     border-radius: 15px;
-        //     padding: 25px;
-        //     width: 450px;
-
-        //     h2 {
-        //         margin-bottom: 5px;
-        //         margin-top: 5px;
-        //     }
-
-        //     :global(p),
-        //     :global(li) {
-        //         font-size: 14px;
-        //     }
-
-        //     :global(ol) {
-        //         list-style-position: outside;
-        //         padding-left: 10px;
-        //     }
-
-        //     :global(p) {
-        //         margin-top: 0;
-        //         margin-bottom: 0;
-        //     }
-        // }
+        height: auto;
+        align-items: start;
+        overflow-y: auto;
+        margin-right: 0;
+        padding-right: 5%;
+        padding-bottom: 2rem;
     }
 
     @media only screen and (max-width: 800px) {
         .grid-container {
-            // margin-top: 0;
-            // max-height: unset;
-            // grid-auto-flow: row;
-            // grid-template-columns: unset;
-            // justify-items: center;
-        }
-        .grid-item {
-            // object-fit: contain;
-            // height: 100%;
-            // &.header {
-            //     height: 350px;
-            //     align-self: center;
-            // }
-
-            // &.instruction {
-            //     width: 90%;
-            //     border: none;
-            // }
+            grid-template-columns: 1fr;
         }
     }
 </style>

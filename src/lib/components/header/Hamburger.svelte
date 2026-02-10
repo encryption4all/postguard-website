@@ -88,7 +88,7 @@
         flex-direction: column;
         top: 0;
         right: 0;
-        background-color: white;
+        background-color: transparant;
         border-radius: 4px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         padding: 0;

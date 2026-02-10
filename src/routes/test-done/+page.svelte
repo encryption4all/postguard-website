@@ -85,14 +85,14 @@
         text-align: center;
         margin-bottom: 2rem;
         padding: 1rem;
-        background: white;
+        background: transparant;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .test-header h1 {
         margin: 0 0 0.5rem 0;
-        color: #1f2937;
+        color: --pg-text-primary;
     }
 
     .test-header p {

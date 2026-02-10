@@ -82,7 +82,7 @@
     h2 {
         font-size: 1.75rem;
         font-weight: 700;
-        color: #1f2937;
+        color: --pg-text-primary;
         margin: 0 0 1rem 0;
         text-align: center;
     }
@@ -100,7 +100,7 @@
         padding: 0.5rem 1.5rem;
         font-size: 1.1rem;
         font-weight: 700;
-        color: #1f2937;
+        color: --pg-text-primary;
     }
 
     .divider {

@@ -39,7 +39,10 @@ $supported-styles: (normal italic);
 ) {
     @each $weight in $weights {
       @each $style in $styles {
-          $style-suffix: if($style != normal, "-#{$style}", "");
+          $style-suffix: "";
+          @if $style != normal {
+            $style-suffix: "-#{$style}";
+          }
           @font-face {
             font-family: 'overpass';
             src: url("#{$path_to_dist}overpass-#{$weight}#{$style-suffix}.eot?");

@@ -3,7 +3,6 @@
     import { onMount } from 'svelte'
     import Dropzone from 'dropzone'
     import 'dropzone/dist/dropzone.css'
-    import rawAdd from '$lib/assets/images/google-icons/add.svg?raw'
     import BasketDrawing from '$lib/assets/images/basket_no_plane.svg'
     import UploadedFileTemplate from '$lib/components/filesharing/inputs/UploadedFileTemplate.svelte'
     import Chip from '$lib/components/Chip.svelte'
@@ -128,7 +127,7 @@
     h1 {
         font-size: 1.75em;
         font-weight: 700;
-        color: #1f2937;
+        color: --pg-text-primary;
         margin: 0;
     }
 
@@ -234,7 +233,7 @@
         margin: 1rem 0 0rem 0;
         font-size: clamp(1.4rem, 2.5vw, 1.25rem);
         font-weight: 800;
-        color: #1f2937;
+        color: --pg-text-primary;
         text-align: center;
     }
 
@@ -247,9 +246,9 @@
     }
 
     .choose-files-btn {
-        background: #050e16;
+        background: var(--pg-text-primary);
         box-shadow: 1px 1px 5px grey;
-        color: white;
+        color: var(--pg-general-bg);
         padding: 0.8rem 1.3rem;
         border-radius: var(--pg-border-radius-sm);
         font-size: 1.2rem;

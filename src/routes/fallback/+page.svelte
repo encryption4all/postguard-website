@@ -109,20 +109,27 @@
 </div>
 
 <style lang="scss">
+    input {
+        background-color: transparent;
+    }
     .grid-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: repeat(9, 1fr);
         border-radius: 3em;
         gap: 2px;
-        background-color: black;
-        border: 2px solid black;
-        min-width: 800px;
-        width: 100%;
-        margin-left: 10%;
-        margin-right: 10%;
+        background-color: var(--pg-general-bg);
+        border: 2px solid var(--pg-input-normal);
         overflow: hidden;
+        height: calc(100% - 2em);
+        margin: 1em;
         max-width: 1200px;
+        align-self: center;
+        justify-self: center;
+
+        // not implemented yet https://www.w3.org/TR/css-gaps-1/
+        // row-rule: 6px solid red;
+        // column-rule: 6px solid blue;
 
         .item {
             display: flex;
@@ -131,7 +138,7 @@
             padding-left: 1em;
 
             &:not(:last-child) {
-                border-bottom: 2px solid black;
+                border-bottom: 2px solid var(--pg-input-normal);
             }
         }
 
@@ -139,10 +146,11 @@
             height: 100%;
             grid-row: 1 / 10;
             grid-column: 1 / 1;
-            background-color: white;
+            background-color: transparant;
 
             display: grid;
             grid-template-rows: repeat(16, 1fr);
+            border-right: 2px solid var(--pg-input-normal);
 
             .upload {
                 grid-row: 1 / 4;
@@ -161,7 +169,7 @@
                     flex-direction: column;
                     justify-content: center;
                     align-items: center;
-                    border: 1px dashed black;
+                    border: 1px dashed var(--pg-input-normal);
                     border-radius: 40px 10px 10px 10px;
                 }
             }
@@ -185,7 +193,7 @@
 
                     input {
                         width: 75%;
-                        color: black;
+                        color: var(--pg-input-normal);
                         border-radius: 1em;
                     }
                 }
@@ -209,7 +217,7 @@
         .right {
             grid-row: 1 / 10;
             grid-column: 2 / 2;
-            background-color: white;
+            background-color: transparant;
             height: 100%;
 
             #mail-container {

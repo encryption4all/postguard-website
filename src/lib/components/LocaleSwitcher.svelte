@@ -58,6 +58,19 @@
   $language-checked: #ddd;
   $white: #ffffff;
 
+  // hide radio buttons language and theme switcher
+  input.language-control { 
+      /*
+      Source - https://stackoverflow.com/a/22462740
+      Posted by Joe H, modified by community. See post 'Timeline' for change history
+      Retrieved 2026-02-10, License - CC BY-SA 4.0
+      */
+
+      position: fixed;
+      opacity: 0;
+      pointer-events: none;
+  }
+
   .hidden {
     display: none;
   }
@@ -90,7 +103,7 @@
     height: $language-height;
     border: 1px solid $language-border;
     padding: 6px 0 2px 0;
-    background-color: $white;
+    background-color: transparent;
     text-align: center;
     text-transform: uppercase;
     cursor: pointer;
@@ -112,7 +125,7 @@
 
   .selected .language-label {
     text-decoration: 2px underline;
-    text-decoration-color: #1f2937;
+    text-decoration-color: --pg-text-primary;
     text-underline-offset: 4px;
   }
 

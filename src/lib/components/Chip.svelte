@@ -103,7 +103,7 @@
 
     /* Variant: default (white background, light border) */
     .chip-default {
-        background-color: white;
+        background-color: var(--pg-general-bg);
         border: 1.5px solid var(--pg-border-color);
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
@@ -129,8 +129,8 @@
 
     /* Variant: dark (black border, for close buttons) */
     .chip-dark {
-        background-color: white;
-        border: 1px solid #1f2937;
+        background-color: transparant;
+        border: 1px solid --pg-text-primary;
     }
 
     button.chip-dark:hover:not(:disabled) {

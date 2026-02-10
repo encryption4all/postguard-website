@@ -137,7 +137,8 @@
 
     .inputs-container {
       max-height: 100%;
-      margin: 1em 1em 0 0;
+      margin: 1em 0 0 0;
+      padding-right: 1em;
       overflow-y: auto;
       border-left: 2px solid var(--pg-strong-background, #C6E2F6);
       display: flex;

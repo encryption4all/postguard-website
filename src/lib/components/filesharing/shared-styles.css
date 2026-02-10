@@ -1,5 +1,5 @@
 .crypt-select-protection-input-box {
-    background-color: white;
+    background-color: var(--pg-hard-background);
     padding: 0.25em;
     padding-left: 1.25em;
     /* border-left: 3px solid #3095de; */
