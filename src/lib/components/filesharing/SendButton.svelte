@@ -536,7 +536,7 @@
     right: 0;
     bottom: 0;
     background: rgba(3, 14, 23, 0.09);
-    z-index: 999;
+    z-index: 3;
     cursor: pointer;
   }
 
@@ -548,7 +548,7 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     padding: 1rem 1.5rem 1.5rem 1.5rem;
     width: var(--popup-width);
-    z-index: 10000;
+    z-index: 4;
   }
 
   .popup-content {
@@ -610,7 +610,7 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.4);
-    z-index: 9999;
+    z-index: 3;
   }
 
   .mobile-bottom-sheet {
@@ -622,7 +622,7 @@
     border-radius: var(--pg-border-radius-lg) var(--pg-border-radius-lg) 0 0;
     box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.15);
     padding: 1.5rem;
-    z-index: 10000;
+    z-index: 4;
   }
 
   .bottom-sheet-content {

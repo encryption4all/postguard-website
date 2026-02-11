@@ -94,7 +94,7 @@
     .help-link {
         display: inline-block;
         font-size: 0.85rem;
-        color: var(--pg-accent-color);
+        color: var(--pg-primary);
         font-family: var(--pg-font-family);
         font-weight: 600;
         text-decoration: none;
