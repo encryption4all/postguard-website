@@ -66,9 +66,13 @@
         background: transparent !important;
     }
 
+    .yivi-web-content {
+        min-width: 0px !important;
+    }
+
     .yivi-qr-container {
-        width: 230px;
-        height: 230px;
+        width: 250px;
+        height: 250px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -76,6 +80,7 @@
         background: var(--pg-general-background);
         border: 1.5px solid var(--pg-strong-background);
         border-radius: var(--pg-border-radius-sm);
+        padding: 10px;
     }
 
     /* Hide everything except the QR canvas/svg */

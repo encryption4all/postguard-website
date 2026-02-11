@@ -306,6 +306,12 @@ h3 {
     }
 }
 
+.yivi-web-content,
+.yivi-web-form {
+    min-width: 0 !important;
+}
+
+
 .grid-item.header, .privacy-content {
     // display: flex;
     // flex-direction: column;
