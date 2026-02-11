@@ -22,6 +22,7 @@ body {
     margin: 0;
     overflow-x: hidden;
     background: var(--pg-general-background);
+    z-index: -5;
 }
 
 :root {
@@ -162,8 +163,8 @@ input.pg-input:focus,
 select.pg-input:focus,
 textarea.pg-input:focus {
     outline: none;
-    border-color: var(--pg-accent-color);
-    box-shadow: 0 0 0 3px rgba(var(--pg-accent-color-rgb), 0.1);
+    border-color: var(--pg-primary);
+    box-shadow: 0 0 0 3px rgba(var(--pg-primary-rgb), 0.1);
 }
 
 input.pg-input:invalid:not(:focus):not(:placeholder-shown),
@@ -183,14 +184,6 @@ textarea.pg-input:disabled {
   box-sizing: border-box;
 }
 
-.lazyload {
-    opacity: 0;
-}
-
-.lazyloading {
-    opacity: 1;
-    transition: opacity 250ms;
-}
 
 h1,
 h2,
@@ -208,10 +201,12 @@ label, td, tr, summary {
 
 p {
     font-size: 16px;
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
 }
 
 a {
-    text-decoration-color: var(--pg-accent-color);
+    text-decoration-color: var(--pg-primary);
 }
 
 h2 {
@@ -328,9 +323,10 @@ h3 {
         inline-size: 350px;
         overflow-wrap: break-word;
         margin-bottom: 0;
+        z-index: 0;
 
         span {
-            background-color: transparent;
+            background-color: var(--pg-general-background);
             padding-right: 10px;
         }
 
@@ -341,7 +337,7 @@ h3 {
             left: 0;
             right: 50px;
             height: 4px;
-            background-color: var(--pg-accent-color);
+            background-color: var(--pg-primary);
             border-radius: 3.5px;
             z-index: -1;
         }

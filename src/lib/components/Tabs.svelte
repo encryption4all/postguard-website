@@ -55,7 +55,7 @@
                 z-index: -1;
                 bottom: -3px;
                 height: 0;
-                border: 2px solid rgba(var(--pg-accent-color-rgb), 50%);
+                border: 2px solid rgba(var(--pg-primary-rgb), 50%);
                 border-radius: 10px;
             }
         }

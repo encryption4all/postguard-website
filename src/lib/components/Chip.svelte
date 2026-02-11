@@ -110,8 +110,8 @@
 
     button.chip-default:hover:not(:disabled) {
         background-color: var(--pg-soft-background);
-        border-color: var(--pg-accent-color);
-        color: var(--pg-accent-color);
+        border-color: var(--pg-primary);
+        color: var(--pg-primary);
         box-shadow: 0 2px 4px rgba(48, 149, 222, 0.15);
     }
 
