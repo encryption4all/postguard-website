@@ -93,9 +93,8 @@
         {:else if currRight === RIGHTMODES.Nothing}
             <div id="image-container">
                 <img
-                    src={decryptImgLq}
-                    data-src={decryptImg}
-                    class="grid-item lazyload"
+                    src={decryptImg}
+                    class="grid-item"
                     alt="decrypt"
                     width="400"
                     height="450"
