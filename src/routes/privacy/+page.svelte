@@ -25,12 +25,10 @@
     .privacy-content {
         max-width: 900px;
         width: 100%;
-        text-align: center;
     }
 
     h2 {
         margin-bottom: 2rem;
-        text-align: center;
     }
 
     .privacy-text {
