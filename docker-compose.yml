@@ -1,0 +1,68 @@
+services:
+  # Cryptify for filesharing
+  cryptify-backend:
+    image: ghcr.io/encryption4all/cryptify-backend:edge
+    container_name: postguard-cryptify-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - cryptify-data:/app/data
+    environment:
+      - RUST_LOG=info
+    networks:
+      - postguard
+    restart: unless-stopped
+    # To develop cryptify locally, comment out this service, then clone and run:
+    # git clone git@github.com:encryption4all/cryptify.git
+    # cd /path/to/cryptify && cargo run
+    # Make sure it runs on localhost:8000
+
+  # PKG service (Private Key Generator)
+  postguard-pkg:
+    image: ghcr.io/encryption4all/postguard:edge
+    container_name: postguard-pkg
+    ports:
+      - "8087:8087"
+    environment:
+      - RUST_LOG=info
+    networks:
+      - postguard
+    restart: unless-stopped
+    # To develop cryptify locally, comment out this service, then clone and run:
+    # git clone git@github.com:encryption4all/postguard.git
+    # cd /path/to/postguard && cargo run
+    # Make sure it runs on localhost:8087
+
+  # Email testing tool
+  mailcrab:
+    image: marlonb/mailcrab:latest
+    container_name: postguard-mailcrab
+    ports:
+      - "1080:1080"  # Web UI
+      - "1025:1025"  # SMTP
+    networks:
+      - postguard
+    restart: unless-stopped
+
+  # PostGuard website - Production build
+  postguard-website:
+    build:
+      context: .
+      dockerfile: docker/nginx.Dockerfile
+    container_name: postguard-website-prod
+    ports:
+      - "80:80"
+    networks:
+      - postguard
+    depends_on:
+      - cryptify-backend
+      - postguard-pkg
+      - mailcrab
+    restart: unless-stopped
+
+networks:
+  postguard:
+    driver: bridge
+
+volumes:
+  cryptify-data:
