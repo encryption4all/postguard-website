@@ -79,15 +79,16 @@ RUN set -ex \
     && rm -rf /tmp/packages \
     && rm -rf /var/lib/apt/lists/
 
-# Download PostGuard Thunderbird addon from GitHub releases
-ARG TB_ADDON_VERSION=0.7.8
+# Download PostGuard Thunderbird addon from latest GitHub release
 RUN apt update \
-    && apt install -y --no-install-suggests --no-install-recommends wget \
+    && apt install -y --no-install-suggests --no-install-recommends curl jq \
     && mkdir -p /usr/share/nginx/html/downloads \
-    && wget -O /usr/share/nginx/html/downloads/postguard-tb-addon-${TB_ADDON_VERSION}.xpi \
-       https://github.com/encryption4all/postguard-tb-addon/releases/download/v${TB_ADDON_VERSION}/postguard-tb-addon-${TB_ADDON_VERSION}.xpi \
-    && ln -s postguard-tb-addon-${TB_ADDON_VERSION}.xpi /usr/share/nginx/html/downloads/postguard-tb-addon.xpi \
-    && apt remove -y wget \
+    && LATEST_RELEASE=$(curl -s https://api.github.com/repos/encryption4all/postguard-tb-addon/releases/latest) \
+    && DOWNLOAD_URL=$(echo $LATEST_RELEASE | jq -r '.assets[] | select(.name | endswith(".xpi")) | .browser_download_url') \
+    && FILENAME=$(echo $LATEST_RELEASE | jq -r '.assets[] | select(.name | endswith(".xpi")) | .name') \
+    && curl -L -o /usr/share/nginx/html/downloads/$FILENAME $DOWNLOAD_URL \
+    && ln -s $FILENAME /usr/share/nginx/html/downloads/postguard-tb-addon.xpi \
+    && apt remove -y curl jq \
     && apt autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
