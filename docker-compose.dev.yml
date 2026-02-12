@@ -1,0 +1,73 @@
+services:
+  # Cryptify for filesharing
+  cryptify-backend:
+    image: ghcr.io/encryption4all/cryptify-backend:edge
+    container_name: postguard-cryptify-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - cryptify-data:/app/data
+    environment:
+      - RUST_LOG=info
+    networks:
+      - postguard
+    # To develop cryptify locally, comment out this service, then clone and run:
+    # git clone git@github.com:encryption4all/cryptify.git
+    # cd /path/to/cryptify && cargo run
+    # Make sure it runs on localhost:8000
+
+  # PKG service (Private Key Generator)
+  postguard-pkg:
+    image: ghcr.io/encryption4all/postguard:edge
+    container_name: postguard-pkg
+    ports:
+      - "8087:8087"
+    environment:
+      - RUST_LOG=info
+    networks:
+      - postguard
+    # To develop cryptify locally, comment out this service, then clone and run:
+    # git clone git@github.com:encryption4all/postguard.git
+    # cd /path/to/postguard && cargo run
+    # Make sure it runs on localhost:8087
+
+  # Email testing tool
+  mailcrab:
+    image: marlonb/mailcrab:latest
+    container_name: postguard-mailcrab
+    ports:
+      - "1080:1080"  # Web UI
+      - "1025:1025"  # SMTP
+    networks:
+      - postguard
+
+  # PostGuard website - Development with hot reload
+  postguard-website:
+    build:
+      context: .
+      dockerfile: docker/dev.Dockerfile
+    container_name: postguard-website-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.svelte-kit
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+    networks:
+      - postguard
+    depends_on:
+      - cryptify-backend
+      - postguard-pkg
+      - mailcrab
+    command: npm run dev -- --host
+
+networks:
+  postguard:
+    driver: bridge
+
+volumes:
+  cryptify-data:

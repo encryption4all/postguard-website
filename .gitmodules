@@ -1,8 +1,0 @@
-[submodule "cryptify"]
-	path = cryptify
-	url = https://github.com/encryption4all/cryptify.git
-	branch = main
-[submodule "postguard-tb-addon"]
-	path = postguard-tb-addon
-	url = https://github.com/encryption4all/postguard-tb-addon.git
-	branch = main

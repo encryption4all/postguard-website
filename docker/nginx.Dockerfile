@@ -80,6 +80,5 @@ RUN set -ex \
     && rm -rf /var/lib/apt/lists/
 
 COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY postguard-tb-addon/dist /usr/share/nginx/html/downloads
 COPY build /usr/share/nginx/html/postguard
 
