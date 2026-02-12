@@ -79,7 +79,18 @@ RUN set -ex \
     && rm -rf /tmp/packages \
     && rm -rf /var/lib/apt/lists/
 
+# Download PostGuard Thunderbird addon from GitHub releases
+ARG TB_ADDON_VERSION=0.7.8
+RUN apt update \
+    && apt install -y --no-install-suggests --no-install-recommends wget \
+    && mkdir -p /usr/share/nginx/html/downloads \
+    && wget -O /usr/share/nginx/html/downloads/postguard-tb-addon-${TB_ADDON_VERSION}.xpi \
+       https://github.com/encryption4all/postguard-tb-addon/releases/download/v${TB_ADDON_VERSION}/postguard-tb-addon-${TB_ADDON_VERSION}.xpi \
+    && ln -s postguard-tb-addon-${TB_ADDON_VERSION}.xpi /usr/share/nginx/html/downloads/postguard-tb-addon.xpi \
+    && apt remove -y wget \
+    && apt autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY postguard-tb-addon/dist /usr/share/nginx/html/downloads
 COPY build /usr/share/nginx/html/postguard
 
