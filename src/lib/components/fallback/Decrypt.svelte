@@ -42,7 +42,7 @@
         Fail: 'Fail',
     }
 
-    let PKG_URL = import.meta.env.VITE_PKG_URL
+    import { PKG_URL } from '$lib/env'
     
     let state = $state(STATES.Uninit)
 

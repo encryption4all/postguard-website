@@ -6,7 +6,7 @@ import { browser } from '$app/environment'
 
 async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise<any> {
     if (!browser) return
-    let PKG_URL = import.meta.env.VITE_PKG_URL
+    const { PKG_URL } = await import('$lib/env')
 
     const session = {
         start: {

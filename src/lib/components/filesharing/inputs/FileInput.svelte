@@ -20,7 +20,7 @@
         stage: EncryptionState;
     }
 
-    let MAX_UPLOAD_SIZE = Number(import.meta.env.VITE_MAX_UPLOAD_SIZE)
+    import { MAX_UPLOAD_SIZE } from '$lib/env'
 
     let maxFileSizeMB = MAX_UPLOAD_SIZE / (1024 * 1024)
 
