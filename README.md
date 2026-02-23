@@ -44,7 +44,16 @@ docker-compose -f docker-compose.prod.yml down
 To test on a physical Android device over USB (make sure Yivi is in [developer mode](https://docs.yivi.app/yivi-app/#developer-mode) )
 
 ```bash
-adb reverse tcp:5173 tcp:5173
+adb reverse tcp:8088 tcp:8088
+```
+
+## Building
+Building is done automatically through Github Actions. Building manually can be done through creating a docker image or by using npm/yarn.
+
+```bash
+docker build . 
+
+npm run build
 ```
 
 ## Environment Variables
