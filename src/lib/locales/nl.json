@@ -88,22 +88,24 @@
             "cancel": "Annuleren"
         },
         "decryptpanel": {
-            "header": "DOWNLOAD & ONTSLEUTEL",
+            "header": "Download je bestanden",
+            "pageDescription": "Om de bestanden te downloaden, moet je ze ontsleutelen. Dit doe je door te bewijzen wie je bent met Yivi.",
             "downloadDecrypt": "Downloading & ontsleutelen...",
-            "irmaInstructionHeaderQr": "Scan QR-code met Yivi",
+            "irmaInstructionHeaderQr": "Ontsleutel",
             "irmaInstructionHeaderMobile": "Bewijs identiteit met Yivi",
-            "irmaInstructionQr": "Ontsleutel het bestand door je e-mailadres te tonen. Scan daarvoor de onderstaande QR-code met de identificatie app Yivi.",
+            "irmaInstructionQr": "Scan deze QR code met je Yivi app.",
             "irmaInstructionMobile": "Ontsleutel het bestand door je e-mailadres te tonen. Click daarvoor op de onderstaande knop om naar de identificatie app Yivi te gaan.",
             "noIrma": "Nog geen Yivi-app?",
             "decrypting": "Jouw bestand wordt gedownload en vervolgens ontsleuteld.",
             "succes": "Succesvol gedownload en ontsleuteld",
             "askDownload": "Download",
             "askDownloadText": "Druk op onderstaande knop om de bestanden te ontsleutelen en downloaden.",
-            "verifiedEmail": "De bestanden zijn afkomstig van",
+            "doneMessage": "Je bestanden worden gedownload en ontsleuteld",
+            "verifiedEmail": "De bestanden komen van",
             "verifiedExtra": "De bestanden zijn ondertekend met"
         },
         "encryptPanel": {
-            "fileBox": {
+            "fileBox": { 
                 "tagline": "Verstuur je bestanden veilig",
                 "upperTextDropZone": "Sleep bestanden hierheen <br/> of",
                 "lowerTextDropZone": "klik om te uploaden <br/> (max. 2GB)",

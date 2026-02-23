@@ -88,17 +88,19 @@
             "cancel": "Cancel"
         },
         "decryptpanel": {
-            "header": "Decrypt your files",
+            "header": "Download your files",
+            "pageDescription": "To download the files, you need to decrypt them. You do this by proving who you are with Yivi.",
             "downloadDecrypt": "Downloading & Decrypting...",
-            "irmaInstructionHeaderQr": "Scan QR-code with Yivi",
+            "irmaInstructionHeaderQr": "Decrypt",
             "irmaInstructionHeaderMobile": "Prove your identity with Yivi",
-            "irmaInstructionQr": "Decrypt the files by verifying your e-mail address. Please scan the QR-code below with the identification app Yivi.",
+            "irmaInstructionQr": "Scan this QR code with your Yivi app.",
             "irmaInstructionMobile": "Decrypt the files by verifying your e-mail address. Please click the button below to open the Yivi-app.",
             "noIrma": "Don't have the Yivi-app yet?",
             "decrypting": "Your files are being downloaded and decrypted afterwards.",
             "succes": "Successfully downloaded and decrypted",
             "askDownload": "Download",
             "askDownloadText": "Press the button below to start decrypting and downloading your files",
+            "doneMessage": "Your files are being downloaded and decrypted",
             "verifiedEmail": "The files are from",
             "verifiedExtra": "The files were signed using"
         },
