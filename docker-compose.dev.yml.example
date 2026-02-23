@@ -64,7 +64,7 @@ services:
   irma-server:
     image: ghcr.io/privacybydesign/irma:latest
     container_name: postguard-irma-server
-    command: server --no-auth --url http://10.50.0.184:8088 --jwt-privkey-file /etc/irma/jwt_privkey.pem
+    command: server --no-auth --url http://<internal_ip_here>:8088 --jwt-privkey-file /etc/irma/jwt_privkey.pem
     ports:
       - "8088:8088"
     volumes:
@@ -82,14 +82,6 @@ services:
     networks:
       - postguard
 
-  # Copy .env.example to .env
-  init:
-    image: alpine:latest
-    volumes:
-      - .:/app
-    working_dir: /app
-    command: sh -c "[ ! -f .env ] && cp .env.example .env || true"
-    
   # PostGuard website - Development with hot reload
   postguard-website:
     build:
@@ -101,14 +93,11 @@ services:
       - /app/node_modules
       - /app/.svelte-kit
     env_file:
-      - .env
+      - .env.dev
     environment:
       - NODE_ENV=development
     networks:
       - postguard
-    depends_on:
-      init:
-        condition: service_completed_successfully
     command: npm run dev -- --host
 
   # Nginx reverse proxy
