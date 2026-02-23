@@ -1,37 +1,72 @@
 services:
   # Cryptify for filesharing
-  cryptify-backend:
-    image: ghcr.io/encryption4all/cryptify-backend:edge
-    container_name: postguard-cryptify-backend
+  cryptify-fileshare:
+    build:
+      context: cryptify
+      dockerfile: dev.Dockerfile
+    container_name: postguard-cryptify-fileshare
+    # Turn into healthcheck
+    # command: >
+    #   /bin/sh -c '
+    #     until /usr/local/bin/cryptify; do
+    #       echo "Cryptify failed to start, retrying in 3s..."
+    #       sleep 3
+    #     done
+    #   '
     ports:
       - "8000:8000"
     volumes:
       - cryptify-data:/app/data
+      - /Users/rubenhensen/Repos/cryptify/conf/config.dev.toml:/app/config.toml:ro
     environment:
       - RUST_LOG=info
+      - ROCKET_CONFIG=/app/config.toml
     networks:
       - postguard
-    restart: unless-stopped
-    # To develop cryptify locally, comment out this service, then clone and run:
-    # git clone git@github.com:encryption4all/cryptify.git
-    # cd /path/to/cryptify && cargo run
-    # Make sure it runs on localhost:8000
+    depends_on:
+      - postguard-pkg
 
   # PKG service (Private Key Generator)
   postguard-pkg:
-    image: ghcr.io/encryption4all/postguard:edge
+    # image: ghcr.io/encryption4all/postguard:edge
+    build:
+      context: postguard
+      dockerfile: Dockerfile
     container_name: postguard-pkg
+    # Turn into healthcheck
+    # command: >
+    #   /bin/bash -c '
+    #     echo "Waiting for IRMA server..."
+    #     while ! echo > /dev/tcp/irma-server/8088 2>/dev/null; do
+    #       sleep 2
+    #     done
+    #     echo "IRMA server is ready, starting PKG"
+    #     exec /usr/local/bin/pg-pkg server -i $${IRMA_SERVER}
+    #   '
     ports:
       - "8087:8087"
     environment:
       - RUST_LOG=info
+      - IRMA_SERVER=http://irma-server:8088
     networks:
       - postguard
-    restart: unless-stopped
-    # To develop cryptify locally, comment out this service, then clone and run:
-    # git clone git@github.com:encryption4all/postguard.git
-    # cd /path/to/postguard && cargo run
-    # Make sure it runs on localhost:8087
+    depends_on:
+      - irma-server
+
+  # IRMA/Yivi server (unauthenticated, for development only)
+  # generate priv/pub key automatically
+  irma-server:
+    build:
+      context: irmago
+      dockerfile: Dockerfile
+    container_name: postguard-irma-server
+    command: server --no-auth --url http://localhost:8088 --jwt-privkey-file /etc/irma/jwt_privkey.pem 
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./docker/irma/jwt_privkey.pem:/etc/irma/jwt_privkey.pem:ro
+    networks:
+      - postguard
 
   # Email testing tool
   mailcrab:
@@ -42,23 +77,40 @@ services:
       - "1025:1025"  # SMTP
     networks:
       - postguard
-    restart: unless-stopped
 
-  # PostGuard website - Production build
+  # PostGuard website - Development with hot reload
   postguard-website:
     build:
       context: .
-      dockerfile: docker/nginx.Dockerfile
-    container_name: postguard-website-prod
+      dockerfile: docker/dev.Dockerfile
+    container_name: postguard-website-dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.svelte-kit
+    env_file:
+      - .env.dev
+    environment:
+      - NODE_ENV=development
+    networks:
+      - postguard
+    command: npm run dev -- --host
+
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: postguard-nginx
     ports:
-      - "80:80"
+      - "8080:80"
+    volumes:
+      - ./docker/nginx.dev.conf:/etc/nginx/nginx.conf:ro
     networks:
       - postguard
     depends_on:
-      - cryptify-backend
+      - postguard-website
+      - cryptify-fileshare
       - postguard-pkg
-      - mailcrab
-    restart: unless-stopped
+      - irma-server
 
 networks:
   postguard:
