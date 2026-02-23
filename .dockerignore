@@ -1,9 +1,15 @@
+# Submodules (have their own build contexts)
+cryptify
+postguard
+irmago
+
 # Dependencies
 node_modules
 .pnp
 .pnp.js
 
 # Testing
+tests
 coverage
 .nyc_output
 
@@ -52,6 +58,7 @@ yarn-error.log*
 !README.md
 
 # Docker
+docker
 Dockerfile*
 docker-compose*.yml
 .dockerignore

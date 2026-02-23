@@ -5,46 +5,50 @@ services:
       context: cryptify
       dockerfile: dev.Dockerfile
     container_name: postguard-cryptify-fileshare
-    # Turn into healthcheck
-    # command: >
-    #   /bin/sh -c '
-    #     until /usr/local/bin/cryptify; do
-    #       echo "Cryptify failed to start, retrying in 3s..."
-    #       sleep 3
-    #     done
-    #   '
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      start_interval: 5s
     ports:
       - "8000:8000"
     volumes:
       - cryptify-data:/app/data
-      - /Users/rubenhensen/Repos/cryptify/conf/config.dev.toml:/app/config.toml:ro
+      - ./cryptify/conf/config.dev.toml:/app/config.toml:ro
+      - ./cryptify/cryptify/src:/app/src
+      - ./cryptify/cryptify/templates:/app/templates
+      - cryptify-target:/app/target
     environment:
       - RUST_LOG=info
       - ROCKET_CONFIG=/app/config.toml
+      - RUST_BACKTRACE=1
     networks:
       - postguard
     depends_on:
-      - postguard-pkg
+      postguard-pkg:
+        condition: service_healthy
 
   # PKG service (Private Key Generator)
   postguard-pkg:
     # image: ghcr.io/encryption4all/postguard:edge
     build:
       context: postguard
-      dockerfile: Dockerfile
+      dockerfile: dev.Dockerfile
     container_name: postguard-pkg
-    # Turn into healthcheck
-    # command: >
-    #   /bin/bash -c '
-    #     echo "Waiting for IRMA server..."
-    #     while ! echo > /dev/tcp/irma-server/8088 2>/dev/null; do
-    #       sleep 2
-    #     done
-    #     echo "IRMA server is ready, starting PKG"
-    #     exec /usr/local/bin/pg-pkg server -i $${IRMA_SERVER}
-    #   '
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8087/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+      start_interval: 5s
     ports:
       - "8087:8087"
+    volumes:
+      - ./postguard:/app
+      - postguard-pkg-target:/app/target
     environment:
       - RUST_LOG=info
       - IRMA_SERVER=http://irma-server:8088
@@ -94,7 +98,6 @@ services:
       - NODE_ENV=development
     networks:
       - postguard
-    command: npm run dev -- --host
 
   # Nginx reverse proxy
   nginx:
@@ -118,3 +121,5 @@ networks:
 
 volumes:
   cryptify-data:
+  cryptify-target:
+  postguard-pkg-target:
