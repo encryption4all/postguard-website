@@ -10,10 +10,12 @@ The easiest way to get started is using Docker Compose, which sets up everything
 
 ```bash
 # Start all services (cryptify, mailcrab, and postguard)
-docker-compose -f docker-compose.dev.yml up
+git submodule update --init --recursive
+docker-compose up
 
-# Access the app at http://localhost:5173
+# Postguard website at http://localhost:5173
 # Mailcrab UI at http://localhost:1080
+# Also launches IRMA server, Cryptify fileshare server and PKG server
 ```
 
 Your code changes will automatically reload! The source code is mounted as a volume.
@@ -21,8 +23,8 @@ Your code changes will automatically reload! The source code is mounted as a vol
 ### Production Environment
 
 ```bash
-# Build and start all services
-docker-compose up --build
+# Build and start all services from prebuild images
+docker-compose -f docker-compose.prod.yml up
 
 # Access the app at http://localhost
 ```
@@ -31,109 +33,18 @@ docker-compose up --build
 
 ```bash
 # Development
-docker-compose -f docker-compose.dev.yml down
+docker-compose down
 
 # Production
-docker-compose down
+docker-compose -f docker-compose.prod.yml down
 ```
-
-## Manual Development Setup
-
-If you prefer to run the services manually without Docker:
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) v20 or higher
-- [Docker](https://www.docker.com/) (for running dependencies)
-- A running [Cryptify](https://github.com/encryption4all/cryptify) backend
-
-### Setup
-
-1. **Start dependencies** (Cryptify backend, PKG service, and Mailcrab):
-
-```bash
-# Start just the backend services
-docker-compose -f docker-compose.dev.yml up cryptify-backend postguard-pkg mailcrab
-```
-
-2. **Install dependencies and configure**:
-
-```bash
-npm install
-cp .env.example .env
-# Edit .env if needed - defaults point to localhost services
-```
-
-3. **Run the development server**:
-
-```bash
-npm run dev
-```
-
-Access the app at `http://localhost:5173`
-
-## Developing Individual Services
-
-If you need to develop or modify a specific service (cryptify, pkg, etc.):
-
-1. **Comment out the service** in `docker-compose.dev.yml`
-2. **Run your local version** on the same port
-3. **Continue developing** - no other changes needed!
-
-### Example: Developing Cryptify Locally
-
-```bash
-# 1. Comment out cryptify-backend in docker-compose.dev.yml
-
-# 2. Clone and run cryptify locally
-git clone https://github.com/encryption4all/cryptify.git
-cd cryptify
-cargo run  # Runs on localhost:8000 by default
-
-# 3. Start other services
-cd ../postguard-website
-docker-compose -f docker-compose.dev.yml up postguard-pkg mailcrab postguard-website
-```
-
-The PostGuard app will connect to your local Cryptify instance on `localhost:8000`.
-
-### Example: Developing PKG Service Locally
-
-```bash
-# 1. Comment out postguard-pkg in docker-compose.dev.yml
-
-# 2. Clone and run postguard locally
-git clone https://github.com/encryption4all/postguard.git
-cd postguard
-cargo run  # Runs on localhost:8087 by default
-
-# 3. Start other services
-cd ../postguard-website
-docker-compose -f docker-compose.dev.yml up cryptify-backend mailcrab postguard-website
-```
-
-The PostGuard app will connect to your local PKG instance on `localhost:8087`.
 
 ## Mobile Debugging
 
-To test on a physical Android device over USB:
+To test on a physical Android device over USB (make sure Yivi is in [developer mode](https://docs.yivi.app/yivi-app/#developer-mode) )
 
 ```bash
-npm run dev -- --host
 adb reverse tcp:5173 tcp:5173
-adb reverse tcp:8000 tcp:8000
-```
-
-Port 5173 is the dev server, port 8000 is for the Cryptify backend. Then open `http://localhost:5173` in the phone's browser.
-
-## Building
-
-```bash
-# Build for production
-npm run build
-
-# Preview the production build locally
-npm run preview
 ```
 
 ## Environment Variables
