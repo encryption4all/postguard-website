@@ -5,7 +5,8 @@ build
 package
 .idea
 .vscode
-.env
+.env.local
+.env.*.local
 *.pem 
 
 # macOS
