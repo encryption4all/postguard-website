@@ -267,7 +267,7 @@
 
 <div class="page-wrapper">
     <div class="content">
-        <h2>{$_('filesharing.decryptpanel.header')}</h2>
+        <h2>{downloadState === 'Fail' ? $_('filesharing.decryptpanel.notFoundTitle') : $_('filesharing.decryptpanel.header')}</h2>
 
         {#if downloadState === 'Downloading'}
             <div class="spinner-wrapper">
@@ -364,13 +364,8 @@
             {/if}
 
         {:else if downloadState === 'Fail'}
-            <p class="error-text">{err}</p>
-            <Chip
-                text={$_('filesharing.tryAgain')}
-                onclick={startDownload}
-                size="lg"
-                variant="default"
-            />
+            <p class="error-description">{$_('filesharing.decryptpanel.notFoundSubtitle')}</p>
+            <p class="error-description">{@html $_('filesharing.decryptpanel.notFoundMessage')}</p>
         {/if}
     </div>
 </div>
@@ -546,11 +541,12 @@
         background: var(--pg-general-background);
     }
 
-    .error-text {
-        color: var(--pg-input-error);
-        font-size: 0.9rem;
-        word-break: break-word;
+    .error-description {
         margin: 0;
         font-family: var(--pg-font-family);
+        font-size: 0.95rem;
+        line-height: 1.5;
+        text-align: center;
+        color: var(--pg-text);
     }
 </style>

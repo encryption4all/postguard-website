@@ -102,7 +102,10 @@
             "askDownloadText": "Press the button below to start decrypting and downloading your files",
             "doneMessage": "Your files are being downloaded and decrypted",
             "verifiedEmail": "The files are from",
-            "verifiedExtra": "The files were signed using"
+            "verifiedExtra": "The files were signed using",
+            "notFoundTitle": "These files no longer exist",
+            "notFoundSubtitle": "The link may have expired, or there may be an error in it.",
+            "notFoundMessage": "Ask the sender to send the files <strong>once more</strong>."
         },
         "encryptPanel": {
             "fileBox": {
