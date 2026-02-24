@@ -4,9 +4,11 @@
 
     interface props {
         mode?: 'qr' | 'deeplink'
+        id?: string
+        responsive?: boolean
     }
 
-    let { mode = 'qr' }: props = $props()
+    let { mode = 'qr', id = 'crypt-irma-qr', responsive = false }: props = $props()
 
     let qrLoaded = $state(false)
     let containerEl: HTMLDivElement
@@ -47,7 +49,7 @@
     })
 </script>
 
-<div id="crypt-irma-qr" class="yivi-qr-container" bind:this={containerEl}>
+<div {id} class="yivi-qr-container" class:responsive bind:this={containerEl}>
     {#if !qrLoaded}
         <svg class="spinner" viewBox="0 0 24 24" width="32" height="32">
             <circle class="spinner-circle" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3"></circle>
@@ -81,6 +83,18 @@
         border: 1.5px solid var(--pg-strong-background);
         border-radius: var(--pg-border-radius-sm);
         padding: 10px;
+    }
+
+    .yivi-qr-container.responsive {
+        /* width: 100%; */
+        height: auto;
+        min-height: 200px;
+    }
+
+    .yivi-qr-container.responsive :global(canvas),
+    .yivi-qr-container.responsive :global(svg) {
+        width: 100% !important;
+        height: auto !important;
     }
 
     /* Hide everything except the QR canvas/svg */
