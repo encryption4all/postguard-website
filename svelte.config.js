@@ -8,7 +8,7 @@ const config = {
     preprocess: sveltePreprocess(),
 
     kit: {
-        adapter: adapter({ fallback: 'index.html', precompress: true }),
+        adapter: adapter({ fallback: 'index.html', precompress: false }),
     },
 }
 
