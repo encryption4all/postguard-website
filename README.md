@@ -44,68 +44,22 @@ docker-compose -f docker-compose.prod.yml down
 To test on a physical Android device over USB (make sure Yivi is in [developer mode](https://docs.yivi.app/yivi-app/#developer-mode) )
 
 ```bash
-adb reverse tcp:8088 tcp:8088
+adb reverse tcp:8088 tcp:8088 # to scan QR codes / irma server
+adb reverse tcp:8080 tcp:8080 # to visit the mobile postguard site
 ```
 
 ## Building
-Building is done automatically through Github Actions. Building manually can be done through creating a docker image or by using npm/yarn.
+Building is done automatically through Github Actions. Building manually can be done through docker-compose. Building only the Postguard website can be done with npm/yarn.
 
 ```bash
-docker build . 
-
+docker-compose build
 npm run build
 ```
 
 ## Environment Variables
-
-Key environment variables in `.env`:
-
 - `VITE_FILEHOST_URL` - Filehosting service URL, uses Cryptify (default: `http://localhost:8000`)
 - `VITE_PKG_URL` - PKG service URL (default: `http://localhost:8087`)
 - `VITE_MAX_UPLOAD_SIZE` - Maximum file upload size in bytes
 - `VITE_UPLOAD_CHUNK_SIZE` - Upload chunk size in bytes
 - `VITE_FILEREAD_CHUNK_SIZE` - File read chunk size in bytes
 
-## Architecture
-
-The PostGuard website consists of four main components:
-
-1. **PostGuard Frontend** (this repo) - SvelteKit app for the UI
-2. **Cryptify Backend** (port 8000) - Handles file encryption/decryption with Yivi attributes
-3. **PKG Service** (port 8087) - PostGuard backend service from [encryption4all/postguard](https://github.com/encryption4all/postguard)
-4. **Mailcrab** (ports 1080, 1025) - Email testing tool for development
-
-## Troubleshooting
-
-### Port Already in Use
-
-If you get port conflicts, check what's using the ports:
-
-```bash
-# Check ports 5173, 8000, 8087, 1080, 1025
-lsof -i :5173
-lsof -i :8000
-lsof -i :8087
-
-# Stop conflicting services or change ports in docker-compose files
-```
-
-### Backend Connection Errors
-
-Make sure the backend services are running and accessible:
-
-```bash
-# Check Cryptify backend
-curl http://localhost:8000/health
-
-# Check PKG service
-curl http://localhost:8087/health
-```
-
-If using Docker, check the service status:
-
-```bash
-docker-compose -f docker-compose.dev.yml ps
-docker-compose -f docker-compose.dev.yml logs cryptify-backend
-docker-compose -f docker-compose.dev.yml logs postguard-pkg
-```
