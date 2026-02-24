@@ -2,36 +2,64 @@
 
 The PostGuard web frontend for encrypting and sending files using [Yivi](https://yivi.app)-based identity attributes. Built with SvelteKit.
 
-## Prerequisites
+## Quick Start with Docker Compose (Recommended)
 
-- [Node.js](https://nodejs.org/)
-- A running [Cryptify](https://github.com/nickt/cryptify) backend (otherwise you'll end up on the "error occurred" page)
+The easiest way to get started is using Docker Compose, which sets up everything you need:
 
-## Developing
-
-Install dependencies and create a `.env` file based on `.env.example`. Make sure the chunk size matches your Cryptify backend configuration.
+### Development Environment (with hot reload)
 
 ```bash
-npm install
-cp .env.example .env
-npm run dev
+# Start all services (cryptify, mailcrab, and postguard)
+git submodule update --init --recursive
+docker-compose up
+
+# Postguard website at http://localhost:5173
+# Mailcrab UI at http://localhost:1080
+# Also launches IRMA server, Cryptify fileshare server and PKG server
+```
+
+Your code changes will automatically reload! The source code is mounted as a volume.
+
+### Production Environment
+
+```bash
+# Build and start all services from prebuild images
+docker-compose -f docker-compose.prod.yml up
+
+# Access the app at http://localhost
+```
+
+### Stopping Services
+
+```bash
+# Development
+docker-compose down
+
+# Production
+docker-compose -f docker-compose.prod.yml down
 ```
 
 ## Mobile Debugging
 
-To test on a physical Android device over USB:
+To test on a physical Android device over USB (make sure Yivi is in [developer mode](https://docs.yivi.app/yivi-app/#developer-mode) )
 
 ```bash
-npm run dev -- --host
-adb reverse tcp:5173 tcp:5173
-adb reverse tcp:8000 tcp:8000
+adb reverse tcp:8088 tcp:8088 # to scan QR codes / irma server
+adb reverse tcp:8080 tcp:8080 # to visit the mobile postguard site
 ```
-
-Port 5173 is the dev server, port 8000 is for the Cryptify backend. Then open `http://localhost:5173` in the phone's browser.
 
 ## Building
+Building is done automatically through Github Actions. Building manually can be done through docker-compose. Building only the Postguard website can be done with npm/yarn.
 
 ```bash
+docker-compose build
 npm run build
-npm run preview  # preview the production build
 ```
+
+## Environment Variables
+- `VITE_FILEHOST_URL` - Filehosting service URL, uses Cryptify (default: `http://localhost:8000`)
+- `VITE_PKG_URL` - PKG service URL (default: `http://localhost:8087`)
+- `VITE_MAX_UPLOAD_SIZE` - Maximum file upload size in bytes
+- `VITE_UPLOAD_CHUNK_SIZE` - Upload chunk size in bytes
+- `VITE_FILEREAD_CHUNK_SIZE` - File read chunk size in bytes
+

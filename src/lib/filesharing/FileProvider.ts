@@ -1,12 +1,10 @@
 import { Lang } from '$lib/types/filesharing/attributes'
+import { FILEREAD_CHUNK_SIZE, FILEHOST_URL } from '$lib/env'
 
 interface FileState {
     token: string;
     uuid: string;
 }
-
-let FILEREAD_CHUNK_SIZE = import.meta.env.VITE_FILEREAD_CHUNK_SIZE
-let BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
 export function createFileReadable(file: File): ReadableStream {
     let offset = 0;
@@ -41,7 +39,7 @@ async function initFile(
     mailContent: string | null,
     lang: Lang,
 ): Promise<[FileState, string]> {
-    const response = await fetch(`${BACKEND_URL}/fileupload/init`, {
+    const response = await fetch(`${FILEHOST_URL}/fileupload/init`, {
         signal: abortSignal,
         method: "POST",
         headers: {
@@ -81,7 +79,7 @@ async function storeChunk(
     chunk: Uint8Array,
     offset: number
 ): Promise<FileState> {
-    const response = await fetch(`${BACKEND_URL}/fileupload/${state.uuid}`, {
+    const response = await fetch(`${FILEHOST_URL}/fileupload/${state.uuid}`, {
         signal: abortSignal,
         method: "PUT",
         headers: {
@@ -114,7 +112,7 @@ async function finalize(
     size: number
 ): Promise<void> {
     const response = await fetch(
-        `${BACKEND_URL}/fileupload/finalize/${state.uuid}`,
+        `${FILEHOST_URL}/fileupload/finalize/${state.uuid}`,
         {
             signal: abortSignal,
             method: "POST",
@@ -137,7 +135,7 @@ export async function getFileLoadStream(
     abortSignal: AbortSignal,
     uuid: string
 ): Promise<[number, ReadableStream<Uint8Array>]> {
-    const response = await fetch(`${BACKEND_URL}/filedownload/${uuid}`, {
+    const response = await fetch(`${FILEHOST_URL}/filedownload/${uuid}`, {
         signal: abortSignal,
         method: "GET",
     });

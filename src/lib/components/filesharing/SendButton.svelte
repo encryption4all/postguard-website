@@ -30,8 +30,7 @@
     let isMobileDevice = isMobile()
     let mobilePopupMode: 'none' | 'direct' | 'qr' = $state('none')
 
-    let MAX_UPLOAD_SIZE = import.meta.env.VITE_MAX_UPLOAD_SIZE
-    let UPLOAD_CHUNK_SIZE = import.meta.env.VITE_UPLOAD_CHUNK_SIZE
+    import { MAX_UPLOAD_SIZE, UPLOAD_CHUNK_SIZE } from '$lib/env'
     let SMOOTH_TIME = 2
 
     let canEncrypt = $derived(() => {

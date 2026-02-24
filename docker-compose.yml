@@ -1,0 +1,121 @@
+services:
+  # Cryptify for filesharing
+  cryptify-fileshare:
+    build:
+      context: cryptify
+      dockerfile: dev.Dockerfile
+    container_name: postguard-cryptify-fileshare
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      start_interval: 5s
+    ports:
+      - "8000:8000"
+    volumes:
+      - cryptify-data:/app/data
+      - ./cryptify/conf/config.dev.toml:/app/config.toml:ro
+      - ./cryptify/cryptify/src:/app/src
+      - ./cryptify/cryptify/templates:/app/templates
+      - cryptify-target:/app/target
+    environment:
+      - RUST_LOG=info
+      - ROCKET_CONFIG=/app/config.toml
+      - RUST_BACKTRACE=1
+    networks:
+      - postguard
+    depends_on:
+      postguard-pkg:
+        condition: service_healthy
+
+  # PKG service (Private Key Generator)
+  postguard-pkg:
+    build:
+      context: postguard
+      dockerfile: dev.Dockerfile
+    container_name: postguard-pkg
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8087/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+      start_interval: 5s
+    ports:
+      - "8087:8087"
+    volumes:
+      - ./postguard:/app
+      - postguard-pkg-target:/app/target
+    environment:
+      - RUST_LOG=info
+      - IRMA_SERVER=http://irma-server:8088
+    networks:
+      - postguard
+    depends_on:
+      - irma-server
+
+  # IRMA/Yivi server (unauthenticated, for development only)
+  irma-server:
+    image: ghcr.io/privacybydesign/irma:latest
+    container_name: postguard-irma-server
+    command: server --no-auth --url http://localhost:8088 --jwt-privkey-file /etc/irma/jwt_privkey.pem
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./docker/irma/jwt_privkey.pem:/etc/irma/jwt_privkey.pem:ro
+    networks:
+      - postguard
+
+  # Email testing tool
+  mailcrab:
+    image: marlonb/mailcrab:latest
+    container_name: postguard-mailcrab
+    ports:
+      - "1080:1080"  # Web UI
+      - "1025:1025"  # SMTP
+    networks:
+      - postguard
+
+  # PostGuard website - Development with hot reload
+  postguard-website:
+    build:
+      context: .
+      dockerfile: docker/dev.Dockerfile
+    container_name: postguard-website-dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.svelte-kit
+    env_file:
+      - .env.dev
+    environment:
+      - NODE_ENV=development
+    networks:
+      - postguard
+
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: postguard-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docker/nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - postguard
+    depends_on:
+      - postguard-website
+      - cryptify-fileshare
+      - postguard-pkg
+      - irma-server
+
+networks:
+  postguard:
+    driver: bridge
+
+volumes:
+  cryptify-data:
+  cryptify-target:
+  postguard-pkg-target:

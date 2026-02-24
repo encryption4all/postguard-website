@@ -27,9 +27,7 @@
     async function getParameters(): Promise<String> {
         let { name: browsername, version: browserversion } = GetBrowserInfo()
 
-        let PKG_URL = import.meta.env.VITE_PKG_URL
-        let APP_NAME = import.meta.env.VITE_APP_NAME
-        let APP_VERSION = import.meta.env.VITE_APP_VERSION
+        const { PKG_URL, APP_NAME, APP_VERSION } = await import('$lib/env')
 
         const METRICS_HEADER = {
             'X-PostGuard-Client-Version': `${browsername}${
