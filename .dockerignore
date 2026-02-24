@@ -15,7 +15,6 @@ coverage
 
 # Production build
 dist
-build
 
 # Misc
 .DS_Store
@@ -57,9 +56,7 @@ yarn-error.log*
 *.md
 !README.md
 
-# Docker
-docker
-Dockerfile*
+# Docker compose (not needed in build)
 docker-compose*.yml
 .dockerignore
 

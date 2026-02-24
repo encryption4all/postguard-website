@@ -71,8 +71,11 @@ services:
     container_name: postguard-website-prod
     ports:
       - "8080:80"
-    volumes:
-      - ./docker/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+    environment:
+      - PKG_UPSTREAM_URL=http://postguard-pkg:8087
+      - IRMA_UPSTREAM_URL=http://irma-server:8088
+      - VITE_PKG_URL=/pkg
+      - VITE_FILEHOST_URL=http://cryptify-fileshare:8000
     networks:
       - postguard
     restart: unless-stopped

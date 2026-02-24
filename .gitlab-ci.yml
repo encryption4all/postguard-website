@@ -18,7 +18,7 @@ build-root:
     image: node:18-alpine3.15
     script:
         - yarn
-        - yarn build-${CI_COMMIT_REF_NAME}
+        - yarn build
     artifacts:
         paths:
             - build
@@ -32,7 +32,7 @@ build-image:
     image: docker:stable
     script:
         - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-        - docker build -f docker/nginx.Dockerfile -t ${CONTAINER_IMAGE} .
+        - docker build -f docker/Dockerfile -t ${CONTAINER_IMAGE} .
         - docker push ${CONTAINER_IMAGE}
 
 deploy-main:

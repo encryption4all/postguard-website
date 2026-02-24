@@ -1,84 +1,53 @@
-# See, https://github.com/nginxinc/docker-nginx/tree/master/modules.
+# Compiles ngx_brotli from source as a dynamic module, then copies the
+# .so files into the official nginx image (which keeps envsubst template
+# support and the standard entrypoint).
 
-FROM nginx:1.29.5 AS builder
+ARG NGINX_VERSION=1.27.4
 
-ARG ENABLED_MODULES="brotli"
+# ============================================================
+# Stage 1 — Build brotli dynamic modules
+# ============================================================
+FROM debian:bookworm-slim AS builder
 
-RUN set -ex \
-    && if [ "$ENABLED_MODULES" = "" ]; then \
-        echo "No additional modules enabled, exiting"; \
-        exit 1; \
-    fi
+ARG NGINX_VERSION
+ARG NGX_BROTLI_COMMIT=a71f9312c2deb28875acc7bacfdd5695a111aa53
 
-RUN set -ex \
-    && apt update \
-    && apt install -y --no-install-suggests --no-install-recommends \
-                patch make wget mercurial devscripts debhelper dpkg-dev \
-                quilt lsb-release build-essential libxml2-utils xsltproc \
-                equivs git g++ libparse-recdescent-perl \
-    && XSLSCRIPT_SHA512="f7194c5198daeab9b3b0c3aebf006922c7df1d345d454bd8474489ff2eb6b4bf8e2ffe442489a45d1aab80da6ecebe0097759a1e12cc26b5f0613d05b7c09ffa *stdin" \
-    && wget -O /tmp/xslscript.pl https://hg.nginx.org/xslscript/raw-file/01dc9ba12e1b/xslscript.pl \
-    && if [ "$(cat /tmp/xslscript.pl | openssl sha512 -r)" = "$XSLSCRIPT_SHA512" ]; then \
-        echo "XSLScript checksum verification succeeded!"; \
-        chmod +x /tmp/xslscript.pl; \
-        mv /tmp/xslscript.pl /usr/local/bin/; \
-    else \
-        echo "XSLScript checksum verification failed!"; \
-        exit 1; \
-    fi \
-    && hg clone -r ${NGINX_VERSION}-${PKG_RELEASE%%~*} https://hg.nginx.org/pkg-oss/ \
-    && cd pkg-oss \
-    && mkdir /tmp/packages \
-    && for module in $ENABLED_MODULES; do \
-        echo "Building $module for nginx-$NGINX_VERSION"; \
-        if [ -d /modules/$module ]; then \
-            echo "Building $module from user-supplied sources"; \
-            # check if module sources file is there and not empty
-            if [ ! -s /modules/$module/source ]; then \
-                echo "No source file for $module in modules/$module/source, exiting"; \
-                exit 1; \
-            fi; \
-            # some modules require build dependencies
-            if [ -f /modules/$module/build-deps ]; then \
-                echo "Installing $module build dependencies"; \
-                apt update && apt install -y --no-install-suggests --no-install-recommends $(cat /modules/$module/build-deps | xargs); \
-            fi; \
-            # if a module has a build dependency that is not in a distro, provide a
-            # shell script to fetch/build/install those
-            # note that shared libraries produced as a result of this script will
-            # not be copied from the builder image to the main one so build static
-            if [ -x /modules/$module/prebuild ]; then \
-                echo "Running prebuild script for $module"; \
-                /modules/$module/prebuild; \
-            fi; \
-            /pkg-oss/build_module.sh -v $NGINX_VERSION -f -y -o /tmp/packages -n $module $(cat /modules/$module/source); \
-            BUILT_MODULES="$BUILT_MODULES $(echo $module | tr '[A-Z]' '[a-z]' | tr -d '[/_\-\.\t ]')"; \
-        elif make -C /pkg-oss/debian list | grep -P "^$module\s+\d" > /dev/null; then \
-            echo "Building $module from pkg-oss sources"; \
-            cd /pkg-oss/debian; \
-            make rules-module-$module BASE_VERSION=$NGINX_VERSION NGINX_VERSION=$NGINX_VERSION; \
-            mk-build-deps --install --tool="apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes" debuild-module-$module/nginx-$NGINX_VERSION/debian/control; \
-            make module-$module BASE_VERSION=$NGINX_VERSION NGINX_VERSION=$NGINX_VERSION; \
-            find ../../ -maxdepth 1 -mindepth 1 -type f -name "*.deb" -exec mv -v {} /tmp/packages/ \;; \
-            BUILT_MODULES="$BUILT_MODULES $module"; \
-        else \
-            echo "Don't know how to build $module module, exiting"; \
-            exit 1; \
-        fi; \
-    done \
-    && echo "BUILT_MODULES=\"$BUILT_MODULES\"" > /tmp/packages/modules.env
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential cmake git libpcre2-dev libssl-dev zlib1g-dev wget ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
 
-FROM nginx:1.29.5
+# Clone ngx_brotli and build its brotli C library
+WORKDIR /usr/local/src
+RUN git clone https://github.com/google/ngx_brotli.git \
+  && cd ngx_brotli \
+  && git checkout ${NGX_BROTLI_COMMIT} \
+  && git submodule update --init --recursive
 
-COPY --from=builder /tmp/packages /tmp/packages
-RUN set -ex \
-    && apt update \
-    && . /tmp/packages/modules.env \
-    && for module in $BUILT_MODULES; do \
-           apt install --no-install-suggests --no-install-recommends -y /tmp/packages/nginx-module-${module}_${NGINX_VERSION}*.deb; \
-       done \
-    && rm -rf /tmp/packages \
-    && rm -rf /var/lib/apt/lists/
+WORKDIR /usr/local/src/ngx_brotli/deps/brotli
+RUN cmake -B out -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF \
+  && cmake --build out --config Release --target brotlienc -j$(nproc)
+
+# Download nginx source and build only the brotli dynamic modules
+WORKDIR /usr/local/src
+RUN wget -q http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \
+  && tar -xzf nginx-${NGINX_VERSION}.tar.gz
+
+WORKDIR /usr/local/src/nginx-${NGINX_VERSION}
+RUN ./configure --with-compat --add-dynamic-module=/usr/local/src/ngx_brotli \
+  && make modules -j$(nproc)
+
+RUN mkdir -p /tmp/modules \
+  && cp objs/ngx_http_brotli_filter_module.so /tmp/modules/ \
+  && cp objs/ngx_http_brotli_static_module.so /tmp/modules/
+
+# ============================================================
+# Stage 2 — Runtime
+# ============================================================
+FROM nginx:${NGINX_VERSION}
+
+# Install brotli modules
+COPY --from=builder /tmp/modules/ngx_http_brotli_filter_module.so /usr/lib/nginx/modules/
+COPY --from=builder /tmp/modules/ngx_http_brotli_static_module.so /usr/lib/nginx/modules/
 
 # Remove default nginx site config
 RUN rm /etc/nginx/conf.d/default.conf
@@ -90,7 +59,8 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/default.conf.template /etc/nginx/templates/default.conf.template
 
 # Copy entrypoint script for SPA env var replacement
-COPY --chmod=755 docker/entrypoint.sh /docker-entrypoint.d/40-substitute-env-vars.sh
+COPY docker/entrypoint.sh /docker-entrypoint.d/40-substitute-env-vars.sh
+RUN chmod +x /docker-entrypoint.d/40-substitute-env-vars.sh
 
 # Copy pre-built frontend
 COPY build /usr/share/nginx/html/postguard
