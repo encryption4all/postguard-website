@@ -1,6 +1,6 @@
 # See, https://github.com/nginxinc/docker-nginx/tree/master/modules.
 
-FROM nginx:1.23.1 AS builder
+FROM nginx:1.29.5 AS builder
 
 ARG ENABLED_MODULES="brotli"
 
@@ -68,7 +68,8 @@ RUN set -ex \
     done \
     && echo "BUILT_MODULES=\"$BUILT_MODULES\"" > /tmp/packages/modules.env
 
-FROM nginx:1.23.1
+FROM nginx:1.29.5
+
 COPY --from=builder /tmp/packages /tmp/packages
 RUN set -ex \
     && apt update \
@@ -79,6 +80,19 @@ RUN set -ex \
     && rm -rf /tmp/packages \
     && rm -rf /var/lib/apt/lists/
 
+# Remove default nginx site config
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy nginx base config (global settings + brotli)
 COPY docker/nginx.conf /etc/nginx/nginx.conf
+
+# Copy nginx server template (envsubst processes this at startup)
+COPY docker/default.conf.template /etc/nginx/templates/default.conf.template
+
+# Copy entrypoint script for SPA env var replacement
+COPY --chmod=755 docker/entrypoint.sh /docker-entrypoint.d/40-substitute-env-vars.sh
+
+# Copy pre-built frontend
 COPY build /usr/share/nginx/html/postguard
 
+EXPOSE 80

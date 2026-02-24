@@ -1,0 +1,86 @@
+root /usr/share/nginx/html/postguard/;
+index index.html;
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header Referrer-Policy "no-referrer" always;
+
+    location /health {
+        access_log off;
+        return 200 "healthy\n";
+        add_header Content-Type text/plain;
+    }
+
+    location ~ ^/(mitm.html|sw.js) {
+        charset UTF-8;
+        add_header Cache-Control "no-cache";
+        alias /usr/share/nginx/html/filesharing/$1;
+    }
+
+    location /decrypt/ {
+        return 301 /#fallback;
+    }
+
+    location /filesharing/ {
+        alias /usr/share/nginx/html/filesharing/;
+        index index.html;
+
+        location ~* \.(?:svg|ttf|js|css|wasm)$ {
+            expires 1y;
+            add_header Cache-Control "public";
+        }
+
+        # these do not include hashes
+        location ~ /(static|icons)/ {
+            add_header Cache-Control "no-cache";
+        }
+
+        try_files $uri $uri/ index.html =404;
+    }
+
+    # these all include hashes, so we can cache them for a long time.
+    location ~* \.(?:svg|ttf|js|css|wasm)$ {
+        expires 1y;
+        add_header Cache-Control "public";
+    }
+
+
+    # Redirect tb-addon downloads to GitHub releases
+
+    # Latest release files
+    location = /downloads/postguard-tb-addon.xpi {
+        return 302 https://github.com/encryption4all/postguard-tb-addon/releases/latest/download/postguard-tb-addon.xpi;
+    }
+
+    location = /downloads/updates.json {
+        return 302 https://github.com/encryption4all/postguard-tb-addon/releases/latest/download/updates.json;
+    }
+
+    # Versioned release files (e.g., /downloads/v0.7.9/postguard-tb-addon-0.7.9.xpi)
+    location ~ ^/downloads/(v[\d\.]+)/postguard-tb-addon-([\d\.]+)\.xpi$ {
+        return 302 https://github.com/encryption4all/postguard-tb-addon/releases/download/$1/postguard-tb-addon-$2.xpi;
+    }
+
+    # Versioned updates.json (e.g., /downloads/v0.7.9/updates.json)
+    location ~ ^/downloads/(v[\d\.]+)/updates\.json$ {
+        return 302 https://github.com/encryption4all/postguard-tb-addon/releases/download/$1/updates.json;
+    }
+
+    location /downloads/ {
+        sendfile on;
+        tcp_nopush on;
+        alias /usr/share/nginx/html/downloads/;
+        add_header Content-disposition "attachment; filename=$1";
+    }
+
+    location /pkg/ {
+        proxy_pass ${PKG_UPSTREAM_URL}/;
+    }
+
+    location /irma/ {
+        proxy_pass ${IRMA_UPSTREAM_URL}/;
+    }
+}
