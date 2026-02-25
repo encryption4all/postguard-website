@@ -73,7 +73,11 @@ const config: UserConfig = {
   server: {
     fs: {
       allow: [path.resolve(__dirname, '..')]
-    }
+    },
+    watch: {
+      usePolling: true,
+      interval: 300,
+    },
   },
   plugins: [sveltekit(), wasm(), topLevelAwait()],
 }

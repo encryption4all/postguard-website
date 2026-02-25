@@ -3,6 +3,7 @@
     import type { EncryptState } from '$lib/types/filesharing/attributes'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
     import Chip from '$lib/components/Chip.svelte'
+    import FileList from '$lib/components/filesharing/FileList.svelte'
     import airplane from '$lib/assets/images/airplane.svg'
 
     interface props {
@@ -16,15 +17,7 @@
     <h2>{$_('filesharing.encryptPanel.succes')}</h2>
 
     <!-- Files box -->
-    <div class="info-box">
-        <h3>{$_('filesharing.encryptPanel.filesHeader')}</h3>
-        <div class="divider"></div>
-        <div class="files-list">
-            {#each EncryptState.files as file}
-                <div class="file-item">{file.name}</div>
-            {/each}
-        </div>
-    </div>
+    <FileList files={EncryptState.files.map(f => f.name)} />
 
     <!-- Recipients box -->
     <div class="info-box">
@@ -36,8 +29,8 @@
                     <div class="recipient-email">{recipient.email}</div>
                     {#if recipient.extra.length > 0}
                         <div class="recipient-attributes">
-                            {#each recipient.extra as attr}
-                                <Chip text={attr.v} size="sm" variant="default" />
+                            {#each recipient.extra.filter(a => a.v) as attr}
+                                <Chip text={attr.v!} size="sm" variant="default" />
                             {/each}
                         </div>
                     {/if}
@@ -106,13 +99,11 @@
         margin: 0rem 0rem;
     }
 
-    .files-list,
     .recipients-list {
         display: flex;
         flex-direction: column;
     }
 
-    .file-item,
     .recipient-item {
         padding: 0.3rem 0 0.4rem 1rem;
         margin: 0 0rem;
@@ -120,14 +111,6 @@
         font-size: 1rem;
         color: var(--pg-text);
         border-bottom: 1px solid var(--pg-strong-background);
-    }
-
-    .file-item:last-child,
-    .recipient-item:last-child {
-        border-bottom: none;
-    }
-
-    .recipient-item {
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
