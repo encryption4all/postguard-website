@@ -2,6 +2,7 @@ services:
   # Cryptify for filesharing
   cryptify-fileshare:
     image: ghcr.io/encryption4all/cryptify-backend:edge
+    pull_policy: always
     container_name: postguard-cryptify-fileshare
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
@@ -14,6 +15,9 @@ services:
       - "8000:8000"
     volumes:
       - cryptify-data:/app/data
+      - ./cryptify/conf/config.toml:/app/config.toml:ro
+    environment:
+      - ROCKET_CONFIG=/app/config.toml
     networks:
       - postguard
     restart: unless-stopped
@@ -23,7 +27,11 @@ services:
 
   # PKG service (Private Key Generator)
   postguard-pkg:
-    image: ghcr.io/encryption4all/postguard:edge
+    # image: ghcr.io/encryption4all/postguard:edge
+    build: 
+      context: postguard
+      dockerfile: Dockerfile
+    pull_policy: always
     container_name: postguard-pkg
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8087/health"]
@@ -34,6 +42,10 @@ services:
       start_interval: 5s
     ports:
       - "8087:8087"
+    environment:
+      - IRMA_SERVER=http://irma-server:8088
+    volumes:
+      - ./docker/pkg/keys:/keys:ro
     networks:
       - postguard
     restart: unless-stopped
@@ -68,6 +80,7 @@ services:
   # PostGuard website
   postguard-website:
     image: ghcr.io/encryption4all/postguard-website:edge
+    pull_policy: always
     container_name: postguard-website-prod
     ports:
       - "8080:80"
