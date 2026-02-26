@@ -27,10 +27,7 @@ services:
 
   # PKG service (Private Key Generator)
   postguard-pkg:
-    # image: ghcr.io/encryption4all/postguard:edge
-    build: 
-      context: postguard
-      dockerfile: Dockerfile
+    image: ghcr.io/encryption4all/postguard:edge
     pull_policy: always
     container_name: postguard-pkg
     healthcheck:
