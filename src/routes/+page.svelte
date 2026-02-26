@@ -52,26 +52,28 @@
         'pbdf.gemeente.personalData.dateofbirth',
     ]
 
-    const defaultEncryptState: EncryptState = {
-        recipients: [{ email: '', extra: [] }],
-        sender: '',
-        senderAttributes: [],
-        message: '',
-        files: [],
-        percentages: [],
-        done: [],
-        encryptionState: EncryptionState.FileSelection,
-        abort: new AbortController(),
-        selfAborted: false,
-        encryptStartTime: 0,
-        modPromise: modPromise,
-        pkPromise: getParameters(),
-        senderConfirm: true,
-        privSignKey: undefined,
-        pubSignKey: undefined,
+    function createDefaultEncryptState(): EncryptState {
+        return {
+            recipients: [{ email: '', extra: [] }],
+            sender: '',
+            senderAttributes: [],
+            message: '',
+            files: [],
+            percentages: [],
+            done: [],
+            encryptionState: EncryptionState.FileSelection,
+            abort: new AbortController(),
+            selfAborted: false,
+            encryptStartTime: 0,
+            modPromise: modPromise,
+            pkPromise: getParameters(),
+            senderConfirm: true,
+            privSignKey: undefined,
+            pubSignKey: undefined,
+        }
     }
 
-    let EncryptState: EncryptState = $state(defaultEncryptState)
+    let EncryptState: EncryptState = $state(createDefaultEncryptState())
 </script>
 
 <div class:container={EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Encrypting || EncryptState.encryptionState === EncryptionState.Error}>
@@ -92,7 +94,7 @@
             <Error bind:encryptionState={EncryptState.encryptionState} />
         </div>
     {:else if EncryptState.encryptionState === EncryptionState.Done}
-        <Done bind:EncryptState={EncryptState} defaultEncryptState={defaultEncryptState} />
+        <Done bind:EncryptState={EncryptState} {createDefaultEncryptState} />
     {/if}
 
 

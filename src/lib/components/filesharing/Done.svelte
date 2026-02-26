@@ -8,9 +8,9 @@
 
     interface props {
         EncryptState: EncryptState;
-        defaultEncryptState: EncryptState;
+        createDefaultEncryptState: () => EncryptState;
     }
-    let { EncryptState=$bindable(), defaultEncryptState }: props = $props()
+    let { EncryptState=$bindable(), createDefaultEncryptState }: props = $props()
 </script>
 
 <div class="container">
@@ -49,7 +49,7 @@
     <!-- Send another button -->
     <Chip
         text={$_('filesharing.encryptPanel.another')}
-        onclick={() => EncryptState = defaultEncryptState}
+        onclick={() => EncryptState = createDefaultEncryptState()}
         size="lg"
         variant="dark"
     />

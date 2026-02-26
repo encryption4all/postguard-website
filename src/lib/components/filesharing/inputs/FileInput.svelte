@@ -26,6 +26,12 @@
 
     let { files = $bindable(), percentages = $bindable(), done = $bindable(), stage = $bindable() }: props = $props()
 
+    $effect(() => {
+        if (files.length === 0 && myDropzone && myDropzone.files.length > 0) {
+            myDropzone.removeAllFiles(true)
+        }
+    })
+
     let totalSize = $derived(files.reduce((acc, file) => acc + file.size, 0))
     let remainingSize = $derived(MAX_UPLOAD_SIZE - totalSize)
     let remainingSizeGB = $derived((remainingSize / (1024 * 1024 * 1024)).toFixed(2))
