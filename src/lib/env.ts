@@ -7,7 +7,7 @@ function requireEnv(name: string): string {
 }
 
 export const FILEHOST_URL = requireEnv('VITE_FILEHOST_URL');
-export const PKG_URL = requireEnv('VITE_PKG_URL');
+export const PKG_URL = '/pkg';
 export const MAX_UPLOAD_SIZE = Number(requireEnv('VITE_MAX_UPLOAD_SIZE'));
 export const UPLOAD_CHUNK_SIZE = Number(requireEnv('VITE_UPLOAD_CHUNK_SIZE'));
 export const FILEREAD_CHUNK_SIZE = Number(requireEnv('VITE_FILEREAD_CHUNK_SIZE'));
