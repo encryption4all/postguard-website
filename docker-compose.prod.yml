@@ -41,8 +41,9 @@ services:
       - "8087:8087"
     environment:
       - IRMA_SERVER=http://irma-server:8088
-    volumes:
-      - ./docker/pkg/keys:/keys:ro
+    # Used to load pregenerated keys. If no keys are provided, the keys are generated on startup. 
+    # volumes:
+    #   - ./docker/pkg/keys:/keys:ro
     networks:
       - postguard
     restart: unless-stopped
