@@ -293,7 +293,8 @@
         <!-- Normal button -->
         <button
             bind:this={buttonRef}
-            class="crypt-btn-main crypt-btn yivi-btn-logo {canEncrypt() ? '' : ' crypt-btn-disabled'}"
+            class="primary-btn"
+            style="--primary-btn-padding: 0.8rem 1.5rem"
             onclick={onSign}
             disabled={!canEncrypt()}
         >
@@ -405,6 +406,13 @@
     {/if}
 </div>
 <style lang="scss">
+  @import "$lib/components/primaryButton.css";
+
+  /* Fade the Yivi logo when the button is disabled */
+  .primary-btn:disabled img {
+    opacity: 0.5;
+  }
+
   .button-container {
     display: flex;
     flex-direction: column;
@@ -414,48 +422,6 @@
     margin-bottom: 1rem;
     padding-left: 1.25rem;
     position: relative;
-  }
-
-  .crypt-btn-main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    padding: 0.5rem 1.5rem;
-    width: fit-content;
-    text-wrap: nowrap;
-    font-size: 1.05rem;
-    font-weight: 600;
-    border-radius: var(--pg-border-radius-sm);
-    background: linear-gradient(135deg, var(--pg-input-hover) 0%, var(--pg-input-active) 100%) !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
-    transition: all 0.2s ease;
-    margin-bottom: 0.75rem;
-  }
-
-  .crypt-btn-main:hover:not(.crypt-btn-disabled):not(:disabled) {
-    background: linear-gradient(135deg, var(--pg-text-secondary) 0%, var(--pg-input-hover) 100%) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
-    transform: translateY(-1px);
-  }
-
-  .crypt-btn-main:active:not(.crypt-btn-disabled):not(:disabled) {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-  }
-
-  .crypt-btn-main:disabled,
-  .crypt-btn-main.crypt-btn-disabled {
-    background: var(--pg-strong-background) !important;
-    color: var(--pg-text-secondary) !important;
-    cursor: not-allowed !important;
-    box-shadow: none !important;
-    opacity: 0.6;
-  }
-
-  .crypt-btn-main:disabled img,
-  .crypt-btn-main.crypt-btn-disabled img {
-    opacity: 0.5;
   }
 
   .upload-info-box {

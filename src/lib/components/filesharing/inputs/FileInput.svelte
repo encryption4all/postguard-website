@@ -47,7 +47,7 @@
             maxFilesize: maxFileSizeMB,
             previewsContainer: '#previews',
             previewTemplate: previewTemplate,
-            clickable: '.choose-files-btn, .add-more-chip-container', // Only these elements trigger file selection
+            clickable: '.primary-btn, .add-more-chip-container', // Only these elements trigger file selection
         })
 
         myDropzone.on('addedfile', file => {
@@ -95,7 +95,7 @@
                 <img class="drawing invert" src={BasketDrawing} alt="Add files" />
                 <p class="drag-text">{$_('filesharing.encryptPanel.fileBox.dragText')}</p>
                 <p class="or-text">{$_('filesharing.encryptPanel.fileBox.orText')}</p>
-                <button class="choose-files-btn btn-accent" type="button">{$_('filesharing.encryptPanel.fileBox.chooseFilesButton')}</button>
+                <button class="primary-btn" type="button">{$_('filesharing.encryptPanel.fileBox.chooseFilesButton')}</button>
                 <p class="max-size-text">{$_('filesharing.encryptPanel.fileBox.maxSizeText')}</p>
             </div>
 
@@ -129,6 +129,7 @@
     @import "../shared-styles.css";
     @import "$lib/shared-styles.css";
     @import "files-shared-sheet.css";
+    @import "$lib/components/primaryButton.css";
 
     h1 {
         font-size: 1.75rem;
@@ -251,29 +252,6 @@
         text-align: center;
     }
 
-    .choose-files-btn {
-        background: var(--pg-text);
-        box-shadow: 1px 1px 5px var(--pg-text-secondary);
-        color: var(--pg-general-background);
-        padding: 0.8rem 1.3rem;
-        border-radius: var(--pg-border-radius-sm);
-        font-size: 1.2rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        box-sizing: border-box;
-    }
-
-    .choose-files-btn:hover {
-        background: var(--pg-input-active);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    }
-
-    .choose-files-btn:active {
-        transform: translateY(0);
-        box-shadow: 1px 1px 5px var(--pg-text-secondary);
-    }
 
     .max-size-text {
         margin: 0.75rem 0 0 0;
