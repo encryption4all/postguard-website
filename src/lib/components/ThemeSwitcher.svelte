@@ -45,8 +45,7 @@
             onchange={() => setTheme('light')}
         />
         <label class="theme-label" for="theme-light">
-            <img src={sun} width="16" height="16" alt="" class="invert" />
-            <span class="hidden">Light mode</span>
+            <img src={sun} width="16" height="16" alt="Light mode" class="invert" />
         </label>
     </div>
 
@@ -60,8 +59,7 @@
             onchange={() => setTheme('dark')}
         />
         <label class="theme-label" for="theme-dark">
-            <img src={moon} width="16" height="16" alt="" class="invert" />
-            <span class="hidden">Dark mode</span>
+            <img src={moon} width="16" height="16" alt="Dark mode" class="invert" />
         </label>
     </div>
 </div>

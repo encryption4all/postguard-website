@@ -348,9 +348,9 @@
 
     <!-- Desktop Yivi popup above the button -->
     {#if !isMobileDevice && EncryptState.encryptionState === EncryptionState.Sign && buttonRef}
-        <div class="desktop-backdrop" onclick={() => {
+        <button type="button" class="desktop-backdrop" tabindex="-1" aria-hidden="true" onclick={() => {
             EncryptState.encryptionState = EncryptionState.FileSelection
-        }}></div>
+        }}></button>
         <div
             class="desktop-yivi-popup"
             style="
@@ -384,10 +384,10 @@
 
     <!-- Mobile bottom sheet -->
     {#if isMobileDevice && mobilePopupMode !== 'none' && EncryptState.encryptionState === EncryptionState.Sign}
-        <div class="mobile-backdrop" onclick={() => {
+        <button type="button" class="mobile-backdrop" tabindex="-1" aria-hidden="true" onclick={() => {
             EncryptState.encryptionState = EncryptionState.FileSelection
             mobilePopupMode = 'none'
-        }}></div>
+        }}></button>
         <div class="mobile-bottom-sheet">
             <div class="bottom-sheet-content">
                 {#if mobilePopupMode === 'qr'}
@@ -424,8 +424,7 @@
 </div>
 
 {#if showValidationModal}
-    <!-- svelte-ignore a11y_click_events_have_key_events -->
-    <div class="validation-backdrop" role="button" tabindex="-1" onclick={() => showValidationModal = false}></div>
+    <button type="button" class="validation-backdrop" tabindex="-1" aria-hidden="true" onclick={() => showValidationModal = false}></button>
     <div class="validation-modal" role="dialog" aria-modal="true">
         <h2 class="validation-title">{$_('filesharing.encryptPanel.validation.title')}</h2>
         <ul class="validation-errors">
