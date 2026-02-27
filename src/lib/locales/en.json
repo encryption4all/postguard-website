@@ -113,6 +113,8 @@
                 "lowerTextDropZone": "click to upload",
                 "sizeLimitText": "max. 2GB",
                 "dragText": "Drag files here",
+                "dropText": "Drop to add files",
+                "dropMoreText": "Drop to add more files",
                 "orText": "or",
                 "chooseFilesButton": "Choose files",
                 "maxSizeText": "Maximum 2 GB",

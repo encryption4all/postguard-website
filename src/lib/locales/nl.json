@@ -112,6 +112,8 @@
                 "upperTextDropZone": "Sleep bestanden hierheen <br/> of",
                 "lowerTextDropZone": "klik om te uploaden <br/> (max. 2GB)",
                 "dragText": "Sleep bestanden hierheen",
+                "dropText": "Loslaten om bestanden toe te voegen",
+                "dropMoreText": "Loslaten om meer bestanden toe te voegen",
                 "orText": "of",
                 "chooseFilesButton": "Kies bestanden",
                 "maxSizeText": "Maximaal 2 GB",

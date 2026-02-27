@@ -12,6 +12,7 @@
     Dropzone.autoDiscover = false
 
     let myDropzone: Dropzone | null = null
+    let isDragging = $state(false)
 
     interface props {
         files: File[];
@@ -58,6 +59,10 @@
             myDropzone!.emit('complete', file)
         })
 
+        myDropzone.on('dragover', () => { isDragging = true })
+        myDropzone.on('dragleave', () => { isDragging = false })
+        myDropzone.on('drop', () => { isDragging = false })
+
         myDropzone.on('removedfile', file => {
             const index = files.findIndex(f => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified)
             if (index !== -1) {
@@ -90,7 +95,8 @@
         <div class="dropzone-box"
              class:has-files={files.length > 0}
              class:encrypting={stage === EncryptionState.Encrypting}
-             class:signing={stage === EncryptionState.Sign}>
+             class:signing={stage === EncryptionState.Sign}
+             class:dragging={isDragging}>
             <div class="upload-butt middle-block-size" class:hidden={files.length > 0}>
                 <img class="drawing invert" src={BasketDrawing} alt="Add files" />
                 <p class="drag-text">{$_('filesharing.encryptPanel.fileBox.dragText')}</p>
@@ -98,6 +104,16 @@
                 <button class="primary-btn" type="button">{$_('filesharing.encryptPanel.fileBox.chooseFilesButton')}</button>
                 <p class="max-size-text">{$_('filesharing.encryptPanel.fileBox.maxSizeText')}</p>
             </div>
+
+            {#if isDragging}
+                <div class="drop-overlay">
+                    <p class="drop-hint-text">
+                        {files.length > 0
+                            ? $_('filesharing.encryptPanel.fileBox.dropMoreText')
+                            : $_('filesharing.encryptPanel.fileBox.dropText')}
+                    </p>
+                </div>
+            {/if}
 
             <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
             <div class="files-container" class:hidden={files.length <= 0}>
@@ -188,6 +204,37 @@
         align-items: center;
         justify-content: center;
         min-height: fit-content;
+        position: relative;
+    }
+
+    /* Override Dropzone's default dimming of .dz-message on drag — we use our own overlay */
+    :global(.dropzone.dz-drag-hover .dz-message) {
+        opacity: 1 !important;
+    }
+
+    .dropzone-box.dragging {
+        border-style: solid;
+        box-shadow: 0 4px 20px rgba(48, 149, 222, 0.25);
+    }
+
+    .drop-overlay {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: var(--pg-soft-background);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .drop-hint-text {
+        font-size: clamp(1.25rem, 3vw, 1.75rem);
+        font-weight: 800;
+        color: var(--pg-primary);
+        text-align: center;
+        margin: 0;
     }
 
     .dropzone-box.has-files {
