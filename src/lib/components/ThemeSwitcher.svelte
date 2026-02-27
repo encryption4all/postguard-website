@@ -1,5 +1,6 @@
 <script lang="ts">
     import { browser } from '$app/environment'
+    import { onMount } from 'svelte'
     import sun from '$lib/assets/images/google-icons/sun.svg'
     import moon from '$lib/assets/images/google-icons/moon.svg'
 
@@ -7,20 +8,34 @@
 
     if (browser) {
         const stored = localStorage.getItem('preferredtheme')
-        if (stored === 'dark') {
-            theme = 'dark'
-            document.documentElement.classList.add('dark')
+        if (stored === 'light' || stored === 'dark') {
+            theme = stored
+        } else {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
         }
+        document.documentElement.classList.toggle('dark', theme === 'dark')
     }
 
     function setTheme(newTheme: 'light' | 'dark') {
         theme = newTheme
-
         if (!browser) return
-
         document.documentElement.classList.toggle('dark', newTheme === 'dark')
         localStorage.setItem('preferredtheme', newTheme)
     }
+
+    onMount(() => {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+
+        function handleSystemChange(e: MediaQueryListEvent) {
+            if (!localStorage.getItem('preferredtheme')) {
+                theme = e.matches ? 'dark' : 'light'
+                document.documentElement.classList.toggle('dark', theme === 'dark')
+            }
+        }
+
+        mediaQuery.addEventListener('change', handleSystemChange)
+        return () => mediaQuery.removeEventListener('change', handleSystemChange)
+    })
 
     $: isLight = theme === 'light'
     $: isDark = theme === 'dark'
