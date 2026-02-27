@@ -47,6 +47,10 @@
 </div>
 
 <style lang="scss">
+  .logo-light {
+    display: block;
+  }
+
   .logo-dark {
     display: none;
   }
