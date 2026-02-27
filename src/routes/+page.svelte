@@ -137,8 +137,7 @@
   @media only screen and (min-width: 768px) {
     .container {
       display: grid;
-      grid-auto-columns: 4fr 3fr;
-      grid-auto-flow: column;
+      grid-template-columns: 1fr min(800px, 43%);
       gap: 2rem;
       height: calc(100vh - 52px - 0.5rem - 1rem); /* navbar height + margin */
       overflow-y: hidden;
