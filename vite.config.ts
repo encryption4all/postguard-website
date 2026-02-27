@@ -74,6 +74,7 @@ const config: UserConfig = {
     fs: {
       allow: [path.resolve(__dirname, '..')]
     },
+    // Polling mode so Claude Code file changes are picked up by the HMR watcher
     watch: {
       usePolling: true,
       interval: 300,
