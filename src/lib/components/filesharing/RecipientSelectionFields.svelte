@@ -52,17 +52,27 @@
             />
 
             <div class="optionals-container">
-                {#each recipient.extra as attribute, index}
-                    <MultiInput
-                        translation_key={'filesharing.attributes.' + attribute.t}
-                        bind:value={attribute.v}
-                        deleteAction={() => {
-                            recipient.extra.splice(index, 1)
-                        }}
-                        isConfirming={isConfirming}
-                    />
-                {/each}
-                {#if !isConfirming}
+                {#if isConfirming}
+                    {#if recipient.extra.length > 0}
+                        <div class="attributes-list">
+                            {#each recipient.extra as attribute}
+                                <AttributeButton
+                                    type="added"
+                                    translation_key={'filesharing.attributes.' + attribute.t}
+                                />
+                            {/each}
+                        </div>
+                    {/if}
+                {:else}
+                    {#each recipient.extra as attribute, index}
+                        <MultiInput
+                            translation_key={'filesharing.attributes.' + attribute.t}
+                            bind:value={attribute.v}
+                            deleteAction={() => {
+                                recipient.extra.splice(index, 1)
+                            }}
+                        />
+                    {/each}
                     <div class="attributes-list">
                         {#each addableButtons as attribute}
                             <AttributeButton
