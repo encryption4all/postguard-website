@@ -13,8 +13,13 @@ The easiest way to get started is using Docker Compose, which sets up everything
 git submodule update --init --recursive
 docker-compose up
 
+# Connect phone with USB debugging enabled, Yivi app in developer mode, then:
+adb reverse tcp:8088 tcp:8088 
+
 # Postguard website at http://localhost:5173
 # Mailcrab UI at http://localhost:1080
+
+
 # Also launches IRMA server, Cryptify fileshare server and PKG server
 ```
 

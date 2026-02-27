@@ -8,6 +8,8 @@ package
 .env.local
 .env.*.local
 *.pem 
+*.sec
+*.pub
 
 # macOS
 .DS_Store
