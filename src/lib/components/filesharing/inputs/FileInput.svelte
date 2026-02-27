@@ -47,7 +47,7 @@
             maxFilesize: maxFileSizeMB,
             previewsContainer: '#previews',
             previewTemplate: previewTemplate,
-            clickable: '.dropzone-box, .choose-files-btn, .add-more-chip-container', // Only these elements trigger file selection
+            clickable: '.choose-files-btn, .add-more-chip-container', // Only these elements trigger file selection
         })
 
         myDropzone.on('addedfile', file => {
