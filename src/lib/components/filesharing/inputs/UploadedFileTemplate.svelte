@@ -11,7 +11,7 @@
     <div>
         <p data-dz-size></p>
         <button class="remove-button" data-dz-remove type="button">
-            <img src={close} alt="remove button" />
+            <img class="invert" src={close} alt="remove button" />
         </button>
         <div class="dz-error-message"><span data-dz-errormessage></span></div>
     </div>
