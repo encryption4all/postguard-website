@@ -46,7 +46,7 @@
         "decrypt": {
             "helper": "Ontsleutel deze email door te laten zien wie je bent met <i class=\"yivi-web-logo\">Yivi</i>"
         },
-         "settings": {
+        "settings": {
             "h4": "Lokale opslag",
             "delete": {
                 "emailBtn": "Verwijder alle emails",
@@ -54,12 +54,11 @@
                 "emails": "Weet je zeker dat je alle emails wil weggooien? Deze actie is permanent!",
                 "creds": "Weet je zeker dat je alle persoonlijke data wil weggooien? Deze actie is permanent!"
             },
-            "storeEmails":"Sla mijn emails lokaal op",
+            "storeEmails": "Sla mijn emails lokaal op",
             "storeCreds": "Sla mijn data lokaal op",
             "creds": "Persoonlijke data",
             "exp": "Verloopt op",
             "back": "Terug"
-
         },
         "email": {
             "from": "Van",
@@ -108,7 +107,7 @@
             "notFoundMessage": "Vraag de verzender de bestanden <strong>nog een keer te versturen</strong>."
         },
         "encryptPanel": {
-            "fileBox": { 
+            "fileBox": {
                 "tagline": "Verstuur je bestanden veilig",
                 "upperTextDropZone": "Sleep bestanden hierheen <br/> of",
                 "lowerTextDropZone": "klik om te uploaden <br/> (max. 2GB)",
@@ -119,7 +118,6 @@
                 "addMoreFiles": "Voeg meer bestanden toe",
                 "fileSummary": "{count} {count, plural, one {bestand} other {bestanden}} toegevoegd, nog {size} GB over"
             },
-
             "RecipientsHeading": "Ontvangers",
             "RecipientsHelpToggle": "Wat vul ik hier in?",
             "emailRecipient": "E-mailadres",
@@ -155,16 +153,24 @@
             "addRecipient": "ontvanger",
             "addRecipientButton": "Voeg nog een ontvanger toe",
             "emailSenderConfirm": "Stuur mij een bevestiging",
-
             "timeremaining": {
                 "estimate": "Estimating...",
                 "unknown": "Nog meer dan een dag",
                 "hours": "Nog ongeveer {hours} uur",
                 "minutes": "Nog ongeveer {minutes} minuten",
                 "seconds": "Nog een ogenblikje"
+            },
+            "validation": {
+                "title": "Vul alle verplichte velden in",
+                "continueButton": "Verder met invullen",
+                "noFiles": "Je hebt nog geen bestanden toegevoegd",
+                "filesTooLarge": "De bestanden overschrijden de maximale grootte van {max} GB",
+                "noEmail": "Je hebt nog geen e-mailadres voor een ontvanger ingevuld",
+                "invalidEmail": "Het e-mailadres {email} is niet geldig",
+                "missingAttribute": "{attribute} van {email} ontbreekt"
             }
         },
-        "attributes":{
+        "attributes": {
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobiel telefoonnummer",
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber.placeholder": "612345678",
             "pbdf.gemeente.personalData.fullname": "Volledige naam",
@@ -173,7 +179,7 @@
             "pbdf.gemeente.personalData.dateofbirth.placeholder": "15-01-1990"
         }
     },
-    "yivi":{
+    "yivi": {
         "iosHref": "https://apps.apple.com/nl/app/yivi/id1294092994",
         "androidHref": "https://play.google.com/store/apps/details?id=org.irmacard.cardemu&hl=nl"
     },

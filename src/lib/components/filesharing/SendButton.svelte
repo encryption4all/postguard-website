@@ -2,7 +2,6 @@
     import { _, locale } from 'svelte-i18n'
     import type { ISealOptions } from '@e4a/pg-wasm'
 
-    import yiviLogo from '$lib/assets/images/non-free/yivi-logo.svg'
     import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
     import { EncryptionState, type EncryptState, Lang } from '$lib/types/filesharing/attributes'
     import { RetrieveSignKeys } from '$lib/yivi-tools'
@@ -29,40 +28,59 @@
 
     let isMobileDevice = isMobile()
     let mobilePopupMode: 'none' | 'direct' | 'qr' = $state('none')
+    let showValidationModal = $state(false)
+    let validationErrors: string[] = $state([])
 
     import { MAX_UPLOAD_SIZE, UPLOAD_CHUNK_SIZE } from '$lib/env'
     let SMOOTH_TIME = 2
 
+    const emailRegex =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+
     let canEncrypt = $derived(() => {
-        if (EncryptState.files.length === 0 || EncryptState.recipients.length === 0) return false
-
-        const totalSize = EncryptState.files
-            .map((f) => f.size)
-            .reduce((a, b) => a + b, 0)
-
+        if (EncryptState.files.length === 0) return false
+        const totalSize = EncryptState.files.reduce((a, f) => a + f.size, 0)
         if (totalSize >= MAX_UPLOAD_SIZE) return false
-
-        const regex =
-            /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-
-        if (EncryptState.recipients.length <= 0) return false
-
-        const addressesValid =
-            EncryptState.recipients.every(({ email }) => regex.test(email))
-        if (!addressesValid) return false
-
-
-        const optionalsFilled =
-            EncryptState.recipients.every(({ extra }) =>
-                extra.every((att) => att.v && att.v.length > 0),
-            )
-        if (!optionalsFilled) return false
-
+        if (!EncryptState.recipients.every(({ email }) => emailRegex.test(email))) return false
+        if (!EncryptState.recipients.every(({ extra }) => extra.every((att) => att.v && att.v.length > 0))) return false
         return true
     })
 
+    function getValidationErrors(): string[] {
+        const errors: string[] = []
+        if (EncryptState.files.length === 0) {
+            errors.push($_('filesharing.encryptPanel.validation.noFiles'))
+        }
+        const totalSize = EncryptState.files.reduce((a, f) => a + f.size, 0)
+        if (totalSize >= MAX_UPLOAD_SIZE) {
+            errors.push($_('filesharing.encryptPanel.validation.filesTooLarge', {
+                values: { max: (MAX_UPLOAD_SIZE / (1024 ** 3)).toFixed(0) }
+            }))
+        }
+        EncryptState.recipients.forEach(({ email, extra }) => {
+            if (!email || email.trim() === '') {
+                errors.push($_('filesharing.encryptPanel.validation.noEmail'))
+            } else if (!emailRegex.test(email)) {
+                errors.push($_('filesharing.encryptPanel.validation.invalidEmail', { values: { email } }))
+            } else {
+                extra.forEach(({ t, v }) => {
+                    if (!v || v.length === 0) {
+                        const attrName = $_(`filesharing.attributes.${t}`)
+                        errors.push($_('filesharing.encryptPanel.validation.missingAttribute', { values: { attribute: attrName, email } }))
+                    }
+                })
+            }
+        })
+        return errors
+    }
+
     async function onSign(): Promise<void> {
-        if (!canEncrypt()) return
+        const errors = getValidationErrors()
+        if (errors.length > 0) {
+            validationErrors = errors
+            showValidationModal = true
+            return
+        }
         if (isMobileDevice && mobilePopupMode === 'none') {
             mobilePopupMode = 'direct'
         }
@@ -296,9 +314,8 @@
             class="primary-btn"
             style="--primary-btn-padding: 0.8rem 1.5rem"
             onclick={onSign}
-            disabled={!canEncrypt()}
         >
-            <img src={canEncrypt() ? yiviLogoDark : yiviLogo} alt="yivi-logo" width={50} height={27} />
+            <img src={yiviLogoDark} alt="yivi-logo" width={50} height={27} />
             {$_('filesharing.encryptPanel.encryptSend')}
         </button>
 
@@ -405,6 +422,23 @@
         </div>
     {/if}
 </div>
+
+{#if showValidationModal}
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <div class="validation-backdrop" role="button" tabindex="-1" onclick={() => showValidationModal = false}></div>
+    <div class="validation-modal" role="dialog" aria-modal="true">
+        <h2 class="validation-title">{$_('filesharing.encryptPanel.validation.title')}</h2>
+        <ul class="validation-errors">
+            {#each validationErrors as error}
+                <li>{error}</li>
+            {/each}
+        </ul>
+        <button class="primary-btn" onclick={() => showValidationModal = false}>
+            {$_('filesharing.encryptPanel.validation.continueButton')}
+        </button>
+    </div>
+{/if}
+
 <style lang="scss">
   @import "$lib/components/primaryButton.css";
 
@@ -617,5 +651,59 @@
     text-align: center;
     color: var(--pg-text-secondary);
     font-family: var(--pg-font-family);
+  }
+
+  /* Validation modal */
+  .validation-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 10;
+    cursor: pointer;
+  }
+
+  .validation-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--pg-general-background);
+    border-radius: var(--pg-border-radius-lg);
+    padding: 1.75rem 1.5rem 1.5rem;
+    z-index: 11;
+    width: 90%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+
+  .validation-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--pg-text);
+    font-family: var(--pg-font-family);
+  }
+
+  .validation-errors {
+    margin: 0;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .validation-errors li {
+    font-size: 0.9rem;
+    color: var(--pg-text-secondary);
+    font-family: var(--pg-font-family);
+    line-height: 1.4;
+  }
+
+  .validation-modal .primary-btn {
+    align-self: stretch;
+    justify-content: center;
   }
 </style>

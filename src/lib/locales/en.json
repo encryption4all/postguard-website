@@ -32,7 +32,6 @@
         "team.header": "About the team",
         "team.par": "PostGuard is being developed by a multidisciplinary team from <a href=\"https://ihub.ru.nl\">iHub at Radboud University</a>, in the Netherlands, funded by NWO. The aim is to foster secure communication by offering free email encryption based on advanced (identity-based) encryption techniques. The team focuses on usability and accessibility of encryption technology by combing expertise in computing science, security, and user experience design. This project partners with several public and private organisations in the Netherlands, including <a href=\"https://nedap-healthcare.com/\">Nedap Healthcare</a>, <a href=\"https://www.vgz.nl/\">VGZ</a>, <a href=\"https://www.surf.nl/en\">SURFnet</a>, <a href=\"https://www.nijmegen.nl/\">the Municipality of Nijmegen</a> and <a href=\"https://www.compumatica.com/\">Compumatica</a>. For questions or other inquiries, please contact us via <a href=\"mailto:info@postguard.eu\">our contact address</a>."
     },
-
     "addons": {
         "title": "Add PostGuard to your mail client",
         "par": "Using the PostGuard addon for Thunderbird or Outlook, you can send encrypted emails in a breeze!",
@@ -120,7 +119,6 @@
                 "addMoreFiles": "Add more files",
                 "fileSummary": "{count} {count, plural, one {file} other {files}} added, {size} GB remaining"
             },
-
             "RecipientsHeading": "Recipients",
             "RecipientsHelpToggle": "What should I fill in here?",
             "emailRecipient": "Email address",
@@ -156,16 +154,24 @@
             "addRecipient": "recipient",
             "addRecipientButton": "Add another recipient",
             "emailSenderConfirm": "Send me a confirmation",
-
             "timeremaining": {
                 "estimate": "Estimating...",
                 "unknown": "More then one day left.",
                 "hours": "Approximately {hours} hours remaining",
                 "minutes": "Approximately {minutes} minutes remaining",
                 "seconds": "Less then a minute remaining"
+            },
+            "validation": {
+                "title": "Fill in all required fields",
+                "continueButton": "Continue filling in",
+                "noFiles": "You haven't added any files yet",
+                "filesTooLarge": "The files exceed the maximum size of {max} GB",
+                "noEmail": "You haven't filled in an email address for a recipient",
+                "invalidEmail": "The email address {email} is not valid",
+                "missingAttribute": "{attribute} of {email} is missing"
             }
         },
-        "attributes":{
+        "attributes": {
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobile phone number",
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber.placeholder": "612345678",
             "pbdf.gemeente.personalData.fullname": "Full name",
@@ -174,7 +180,7 @@
             "pbdf.gemeente.personalData.dateofbirth.placeholder": "15-01-1990"
         }
     },
-    "yivi":{
+    "yivi": {
         "iosHref": "https://apps.apple.com/us/app/yivi/id1294092994",
         "androidHref": "https://play.google.com/store/apps/details?id=org.irmacard.cardemu&hl=en"
     },

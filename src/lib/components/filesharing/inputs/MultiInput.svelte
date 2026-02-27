@@ -36,7 +36,7 @@
                 showingValue.replace(selectedCountryPrefix, '')
             }
 
-            value = selectedCountryPrefix + showingValue
+            value = showingValue.length > 0 ? selectedCountryPrefix + showingValue : ''
         }
     })
 
