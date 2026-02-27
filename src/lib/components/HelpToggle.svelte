@@ -8,25 +8,22 @@
     }
 
     let { title, content, bordered = false, linkText, linkUrl }: props = $props()
-    let expanded = $state(false)
 </script>
 
-<div class="help-section" class:bordered>
-    <button class="help-toggle" type="button" onclick={() => expanded = !expanded}>
-        <span class="arrow" class:expanded>▶</span>
+<details class="help-section" class:bordered>
+    <summary class="help-toggle">
+        <span class="arrow">▶</span>
         <span class="toggle-label">{title}</span>
-    </button>
-    {#if expanded}
-        <div class="help-content">
-            <p class="help-text">{content}</p>
-            {#if linkText && linkUrl}
-                <a href={linkUrl} target="_blank" rel="noopener noreferrer" class="help-link">
-                    {linkText} →
-                </a>
-            {/if}
-        </div>
-    {/if}
-</div>
+    </summary>
+    <div class="help-content">
+        <p class="help-text">{content}</p>
+        {#if linkText && linkUrl}
+            <a href={linkUrl} target="_blank" rel="noopener noreferrer" class="help-link">
+                {linkText} →
+            </a>
+        {/if}
+    </div>
+</details>
 
 <style>
     .help-section {
@@ -38,7 +35,6 @@
         background: transparant;
         border: 1px solid var(--pg-strong-background);
         border-radius: var(--pg-border-radius-lg);
-        /* padding: 1rem 1.5rem; */
         box-shadow: 0 2px 8px rgba(48, 149, 222, 0.08);
     }
 
@@ -71,7 +67,7 @@
         display: inline-block;
     }
 
-    .arrow.expanded {
+    details[open] .arrow {
         transform: rotate(90deg);
     }
 
