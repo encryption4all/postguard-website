@@ -48,6 +48,12 @@
             align-items: center;
         }
 
+        button:focus-visible {
+            outline: 2px solid var(--pg-primary);
+            outline-offset: 2px;
+            border-radius: var(--pg-border-radius-sm);
+        }
+
         &.active {
             &:before {
                 content: '';

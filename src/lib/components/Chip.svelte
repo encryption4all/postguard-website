@@ -75,6 +75,11 @@
         cursor: pointer;
     }
 
+    button.chip:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+    }
+
     button.chip:disabled {
         opacity: 0.6;
         cursor: not-allowed;

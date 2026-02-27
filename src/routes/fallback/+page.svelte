@@ -202,6 +202,12 @@
                     margin: auto 2rem auto auto;
                     cursor: pointer;
                     display: flex;
+
+                    &:focus-visible {
+                        outline: 2px solid var(--pg-primary);
+                        outline-offset: 2px;
+                        border-radius: var(--pg-border-radius-sm);
+                    }
                 }
             }
 

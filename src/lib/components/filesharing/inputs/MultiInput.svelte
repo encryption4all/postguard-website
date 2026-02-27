@@ -145,6 +145,11 @@
         background-color: var(--pg-soft-background);
     }
 
+    .btn-delete:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+    }
+
     .removed-del-border {
         border-radius: var(--pg-border-radius-md);
     }

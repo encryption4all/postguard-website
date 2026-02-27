@@ -88,14 +88,19 @@
             width: 100%;
             text-align: left;
 
+            &:focus-visible div {
+                background: var(--pg-strong-background);
+                outline: 2px solid var(--pg-primary);
+                outline-offset: 2px;
+            }
+
             div {
                 border-radius: 10px;
                 margin: 1rem 0.5rem 1rem 0rem;
                 padding-left: 0.25rem;
 
                 &.selected,
-                &:hover,
-                &:focus {
+                &:hover {
                     background: var(--pg-strong-background);
                 }
             }

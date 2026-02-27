@@ -143,6 +143,12 @@
                 margin-left: auto;
                 margin-right: 0.5rem;
                 margin-top: 0.5rem;
+
+                &:focus-visible {
+                    outline: 2px solid var(--pg-primary);
+                    outline-offset: 2px;
+                    border-radius: var(--pg-border-radius-sm);
+                }
             }
         }
 
@@ -174,6 +180,11 @@
                         padding: 0.5rem;
                         width: 100%;
                         height: 100%;
+
+                        &:focus-visible {
+                            outline: 2px solid var(--pg-primary);
+                            outline-offset: 2px;
+                        }
                     }
                 }
             }

@@ -54,6 +54,12 @@
         padding: 0.25rem 0;
     }
 
+    .help-toggle:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+        border-radius: var(--pg-border-radius-sm);
+    }
+
     .help-section.bordered .help-toggle {
         padding: 0.5rem 1rem;
     }
