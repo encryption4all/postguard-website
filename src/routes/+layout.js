@@ -6,7 +6,13 @@ set()
 
 async function set(){
     if (browser) {
-        locale.set(window.navigator.language)
+        const stored = localStorage.getItem('preferredLanguage')
+        if (stored) {
+            locale.set(stored)
+        } else {
+            const lang = window.navigator.language
+            locale.set(lang.startsWith('nl') ? 'nl-NL' : 'en-US')
+        }
     }
     await waitLocale()
 }
