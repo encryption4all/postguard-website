@@ -10,8 +10,8 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
-      start_period: 40s
       start_interval: 5s
+      start_period: 0s
     ports:
       - "8000:8000"
     volumes:
@@ -38,11 +38,11 @@ services:
     container_name: postguard-pkg
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8087/health"]
-      interval: 10s
+      interval: 1m30s
       timeout: 5s
       retries: 5
-      start_period: 30s
       start_interval: 5s
+      start_period: 0s
     ports:
       - "8087:8087"
     volumes:
