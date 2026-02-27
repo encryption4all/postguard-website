@@ -5,8 +5,6 @@
     import closebutton from '$lib/assets/images/google-icons/close.svg'
     import AttributeButton from '$lib/components/filesharing/inputs/AttributeButton.svelte'
     import MultiInput from '$lib/components/filesharing/inputs/MultiInput.svelte'
-    import './shared-styles.css'
-
     interface props {
         recipient: { email: string; extra: AttributeCon };
         remove: () => void;

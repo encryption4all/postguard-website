@@ -18,8 +18,6 @@
 </div>
 
 <style>
-    @import "../shared-styles.css";
-    @import "files-shared-sheet.css";
 
     .files {
         display: flex;

@@ -104,8 +104,6 @@
 </div>
 
 <style lang="scss">
-  @import "$lib/shared-styles.css";
-
   * {
     list-style-type: none;
   }

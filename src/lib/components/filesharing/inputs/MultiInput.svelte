@@ -1,8 +1,6 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
     import { getCountryCallingCode, type CountryCode } from 'libphonenumber-js/mobile'
-    import '../shared-styles.css'
-
     import closeIcon from '$lib/assets/images/google-icons/close.svg'
 
     interface props {

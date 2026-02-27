@@ -38,7 +38,6 @@
 </div>
 
 <style>
-    @import "../shared-styles.css";
 
     p {
         font-size: 0.85rem;

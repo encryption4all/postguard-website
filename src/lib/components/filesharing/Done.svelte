@@ -61,7 +61,6 @@
 </div>
 
 <style>
-    @import "shared-styles.css";
 
     .container {
         display: flex;

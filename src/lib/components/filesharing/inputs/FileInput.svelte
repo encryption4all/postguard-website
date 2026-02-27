@@ -142,11 +142,6 @@
 
 
 <style>
-    @import "../shared-styles.css";
-    @import "$lib/shared-styles.css";
-    @import "files-shared-sheet.css";
-    @import "$lib/components/primaryButton.css";
-
     h1 {
         font-size: 1.75rem;
         font-weight: 700;

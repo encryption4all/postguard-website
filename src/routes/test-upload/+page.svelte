@@ -146,8 +146,6 @@
 </div>
 
 <style lang="scss">
-  @import "$lib/shared-styles.css";
-
   .test-header {
     padding: 1rem;
     background-color: var(--pg-soft-background);

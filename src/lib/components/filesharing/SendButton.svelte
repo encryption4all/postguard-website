@@ -439,7 +439,6 @@
 {/if}
 
 <style lang="scss">
-  @import "$lib/components/primaryButton.css";
 
   /* Fade the Yivi logo when the button is disabled */
   .primary-btn:disabled img {

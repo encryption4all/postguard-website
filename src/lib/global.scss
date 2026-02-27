@@ -312,6 +312,180 @@ h3 {
 }
 
 
+/* ── Utility classes (from shared-styles.css) ───────────────────────── */
+
+/* Hide from sighted users but keep readable by screen readers */
+/* https://webaim.org/techniques/css/invisiblecontent/ */
+.sr-only {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.mobile-hide {
+    @media only screen and (max-width: 768px) {
+        display: none !important;
+    }
+}
+
+.desktop-hide {
+    @media only screen and (min-width: 768px) {
+        display: none !important;
+    }
+}
+
+.big-screen-hide {
+    @media only screen and (min-width: 1280px) {
+        display: none !important;
+    }
+}
+
+/* ── Primary button (from primaryButton.css) ─────────────────────────── */
+
+.primary-btn {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: fit-content;
+    white-space: nowrap;
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-family: var(--pg-font-family);
+    border-radius: var(--pg-border-radius-sm);
+    background: var(--pg-text);
+    color: var(--pg-general-background);
+    box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    padding: var(--primary-btn-padding, 0.8rem 1.3rem);
+}
+
+.primary-btn:hover:not(:disabled) {
+    background: var(--pg-input-active);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 4px -2px rgba(0, 0, 0, 0.5);
+}
+
+.primary-btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.5);
+}
+
+.primary-btn:focus-visible {
+    outline: 2px solid var(--pg-primary);
+    outline-offset: 2px;
+}
+
+.primary-btn:disabled {
+    background: var(--pg-strong-background);
+    color: var(--pg-text-secondary);
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.6;
+}
+
+/* ── Filesharing shared styles (from filesharing/shared-styles.css) ───── */
+
+.crypt-select-protection-input-box {
+    background-color: var(--pg-hard-background);
+    padding: 0.25rem;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.crypt-select-protection-input-box h4 {
+    font-size: 11pt;
+    text-align: left;
+    color: var(--pg-input-hover);
+    font-weight: bold;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+@media only screen and (max-width: 400px) {
+    .crypt-btn-cancel {
+        width: 13rem !important;
+    }
+}
+
+.crypt-btn {
+    border: none;
+    border-radius: 2.6rem;
+    background: linear-gradient(135deg, var(--pg-input-active) 0%, var(--pg-text) 100%);
+    cursor: pointer;
+    color: var(--pg-general-background);
+    font-weight: 700;
+    font-size: 1.15rem;
+    line-height: 1.6rem;
+    padding: 0.5rem 0;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+}
+
+.crypt-btn:hover:not(:disabled):not([disabled]):not(.crypt-btn-disabled) {
+    background: linear-gradient(135deg, var(--pg-input-hover) 0%, var(--pg-input-active) 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transform: translateY(-1px);
+}
+
+.crypt-btn:active:not(:disabled):not([disabled]):not(.crypt-btn-disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.crypt-btn:disabled,
+.crypt-btn[disabled],
+.crypt-btn-disabled {
+    background: var(--pg-strong-background);
+    color: var(--pg-text-secondary);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.yivi-btn-logo {
+    display: flex;
+    padding-right: 1rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.attributes-list {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
+    text-wrap: nowrap;
+    overflow-x: auto;
+}
+
+/* ── File input cross-component signing state (from files-shared-sheet.css) */
+/* Targets elements inside UploadedFileTemplate from FileInput's signing state */
+
+.signing {
+    .files {
+        div {
+            button {
+                display: none;
+            }
+        }
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+
 .grid-item.header, .privacy-content {
     // display: flex;
     // flex-direction: column;

@@ -72,7 +72,6 @@
 </div>
 
 <style>
-    @import "$lib/shared-styles.css";
 
     .logo-dark {
         display: none;
