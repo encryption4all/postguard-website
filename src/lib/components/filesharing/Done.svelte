@@ -54,6 +54,8 @@
         variant="dark"
     />
 
+    <div class="spacer"></div>
+
     <!-- Airplane decoration -->
     <img src={airplane} alt="airplane" class="airplane-decoration" />
 </div>
@@ -65,11 +67,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         gap: 1.5rem;
         padding: 2rem 2rem 0 2rem;
         max-width: 600px;
         margin: 0 auto;
+        flex: 1; /* fill the .done wrapper in +page.svelte */
     }
 
     h2 {
@@ -126,13 +128,17 @@
         gap: 0.5rem;
     }
 
+    .spacer {
+        flex: 1;
+    }
+
     .airplane-decoration {
         width: 120%;
         max-width: 800px;
         height: auto;
         opacity: 0.6;
         pointer-events: none;
-        margin: 2rem 0 0 0;
+        margin: 0;
         padding: 0;
     }
 </style>

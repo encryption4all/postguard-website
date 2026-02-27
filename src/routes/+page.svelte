@@ -76,7 +76,10 @@
     let EncryptState: EncryptState = $state(createDefaultEncryptState())
 </script>
 
-<div class:container={EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Encrypting || EncryptState.encryptionState === EncryptionState.Error}>
+<div
+    class:container={EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Encrypting || EncryptState.encryptionState === EncryptionState.Error}
+    class:done={EncryptState.encryptionState === EncryptionState.Done}
+>
     <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
                bind:done={EncryptState.done} bind:stage={EncryptState.encryptionState} />
     {#if EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Encrypting}
@@ -123,6 +126,12 @@
     min-width: 0;
     gap: 1.25rem;
     margin: 0;
+  }
+
+  .done {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 
   @media only screen and (min-width: 768px) {

@@ -50,53 +50,32 @@
         percentages: []
     })
 
-    let defaultEncryptState = {
-        stage: EncryptionState.FileSelection,
-        files: [],
-        recipients: [{ email: '', extra: [] }],
-        sender: [],
-        senderConfirm: false,
-        message: '',
-        done: [],
-        percentages: []
+    function createDefaultEncryptState() {
+        return {
+            stage: EncryptionState.FileSelection,
+            files: [],
+            recipients: [{ email: '', extra: [] }],
+            sender: [],
+            senderConfirm: false,
+            message: '',
+            done: [],
+            percentages: []
+        }
     }
 </script>
 
-<div class="test-container">
-    <!-- <div class="test-header">
-        <h1>Test: Done Component</h1>
-        <p>This is a test page to preview the Done component with hardcoded data.</p>
-    </div> -->
-
+<!-- Mirrors the .done wrapper from +page.svelte -->
+<div class="done">
     <Done
         bind:EncryptState={testEncryptState}
-        {defaultEncryptState}
+        {createDefaultEncryptState}
     />
 </div>
 
 <style>
-    .test-container {
-        min-height: 100vh;
-        background: var(--pg-general-background);
-        padding: 2rem;
-    }
-
-    .test-header {
-        text-align: center;
-        margin-bottom: 2rem;
-        padding: 1rem;
-        background: transparent;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .test-header h1 {
-        margin: 0 0 0.5rem 0;
-        color: --pg-text;
-    }
-
-    .test-header p {
-        margin: 0;
-        color: var(--pg-text-secondary);
+    .done {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
     }
 </style>
