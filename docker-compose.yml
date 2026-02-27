@@ -60,7 +60,7 @@ services:
   irma-server:
     image: ghcr.io/privacybydesign/irma:latest
     container_name: postguard-irma-server
-    command: server --no-auth --url http://localhost:8088 --jwt-privkey-file /etc/irma/jwt_privkey.pem
+    command: server --no-auth -v --url http://localhost:8088 --jwt-privkey-file /etc/irma/jwt_privkey.pem
     ports:
       - "8088:8088"
     volumes:
