@@ -258,7 +258,7 @@
         padding: 0.8rem 1.3rem;
         border-radius: var(--pg-border-radius-sm);
         font-size: 1.2rem;
-        font-weight: 400;
+        font-weight: 600;
         cursor: pointer;
         transition: all 0.2s ease;
         box-sizing: border-box;
@@ -268,6 +268,11 @@
         background: var(--pg-input-active);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .choose-files-btn:active {
+        transform: translateY(0);
+        box-shadow: 1px 1px 5px var(--pg-text-secondary);
     }
 
     .max-size-text {
@@ -323,6 +328,18 @@
 
     .add-more-chip-container :global(.chip) {
         cursor: pointer;
+    }
+
+    .add-more-chip-container :global(.chip:hover) {
+        background-color: var(--pg-soft-background);
+        border-color: var(--pg-primary);
+        color: var(--pg-primary);
+        box-shadow: 0 2px 4px rgba(48, 149, 222, 0.15);
+    }
+
+    .add-more-chip-container :global(.chip:active) {
+        transform: translateY(1px);
+        box-shadow: none;
     }
 
     .file-summary {

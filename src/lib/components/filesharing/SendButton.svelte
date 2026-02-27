@@ -439,6 +439,11 @@
     transform: translateY(-1px);
   }
 
+  .crypt-btn-main:active:not(.crypt-btn-disabled):not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  }
+
   .crypt-btn-main:disabled,
   .crypt-btn-main.crypt-btn-disabled {
     background: var(--pg-strong-background) !important;

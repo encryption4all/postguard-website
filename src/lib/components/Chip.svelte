@@ -115,6 +115,11 @@
         box-shadow: 0 2px 4px rgba(48, 149, 222, 0.15);
     }
 
+    button.chip-default:active:not(:disabled) {
+        transform: translateY(1px);
+        box-shadow: none;
+    }
+
     /* Variant: filled (gray background) */
     .chip-filled {
         background-color: var(--pg-strong-background);
@@ -127,6 +132,10 @@
         color: var(--pg-input-error);
     }
 
+    button.chip-filled:active:not(:disabled) {
+        transform: translateY(1px);
+    }
+
     /* Variant: dark (black border, for close buttons) */
     .chip-dark {
         background-color: transparent;
@@ -137,5 +146,10 @@
         background-color: var(--pg-soft-background);
         transform: translateY(-1px);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    button.chip-dark:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow: none;
     }
 </style>
