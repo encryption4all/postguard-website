@@ -94,7 +94,7 @@
             <div id="image-container">
                 <img
                     src={decryptImg}
-                    class="grid-item"
+                    class="grid-item invert"
                     alt="decrypt"
                     width="400"
                     height="450"
