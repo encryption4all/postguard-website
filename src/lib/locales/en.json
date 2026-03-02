@@ -176,6 +176,7 @@
         "attributes": {
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobile phone number",
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber.placeholder": "612345678",
+            "phoneInvalid": "Enter a valid phone number",
             "pbdf.gemeente.personalData.fullname": "Full name",
             "pbdf.gemeente.personalData.fullname.placeholder": "John Doe",
             "pbdf.gemeente.personalData.dateofbirth": "Date of birth",

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
-    import { getCountryCallingCode, type CountryCode } from 'libphonenumber-js/mobile'
+    import { getCountryCallingCode, isValidPhoneNumber, type CountryCode } from 'libphonenumber-js/mobile'
     import closeIcon from '$lib/assets/images/google-icons/close.svg'
 
     interface props {
@@ -14,9 +14,19 @@
 
     // So we have a unique id for the label-input pair so we can handle multiple inputs correctly in a list even with multiple recipients
     const randomId = Math.random().toString(36).substring(2, 15)
-    const phonePattern = '[0-9]{8,15}'
     let showingValue = $state('')
     let selectedCountryPrefix = $state('+31')
+    let phoneInputEl: HTMLInputElement | null = $state(null)
+    let phoneTouched = $state(false)
+    let phoneValid = $derived(
+        showingValue.length === 0 || isValidPhoneNumber(selectedCountryPrefix + showingValue)
+    )
+
+    $effect(() => {
+        if (phoneInputEl) {
+            phoneInputEl.setCustomValidity(phoneValid ? '' : 'Invalid phone number')
+        }
+    })
 
     const allowedCountries = ['at', 'be', 'bg', 'cy', 'dk', 'de', 'ee', 'fi', 'fr', 'gr', 'hu', 'ie',
         'is', 'it', 'hr', 'lv', 'lt', 'li', 'lu', 'mt', 'mc', 'nl', 'no', 'at',
@@ -54,15 +64,16 @@
                 {/each}
             </select>
             <input
+                bind:this={phoneInputEl}
                 id={randomId}
                 class="pg-input"
                 class:is-confirming-bg={isConfirming}
+                class:phone-invalid={!phoneValid && phoneTouched}
                 disabled={isConfirming}
                 type="tel"
-                pattern={phonePattern}
-                title="Voer een geldig telefoonnummer in (8-15 cijfers)"
                 placeholder={$_(translation_key + '.placeholder')}
                 bind:value={showingValue}
+                onblur={() => { phoneTouched = true }}
             />
         {:else if translation_key === 'filesharing.attributes.pbdf.gemeente.personalData.dateofbirth'}
             <input
@@ -98,6 +109,9 @@
             </button>
         {/if}
     </div>
+    {#if !phoneValid && phoneTouched && translation_key === 'filesharing.attributes.pbdf.sidn-pbdf.mobilenumber.mobilenumber'}
+        <p class="phone-error">{$_('filesharing.attributes.phoneInvalid')}</p>
+    {/if}
 </div>
 
 <style>
@@ -157,6 +171,17 @@
         align-items: center;
         gap: 0.5rem;
         height: 40px;
+    }
+
+    .phone-invalid {
+        border-color: var(--pg-error, #e53e3e) !important;
+    }
+
+    .phone-error {
+        font-size: 0.75rem;
+        color: var(--pg-error, #e53e3e);
+        margin: 0.25rem 0 0 0;
+        font-family: var(--pg-font-family);
     }
 
 </style>

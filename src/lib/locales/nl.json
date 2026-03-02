@@ -175,6 +175,7 @@
         "attributes": {
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobiel telefoonnummer",
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber.placeholder": "612345678",
+            "phoneInvalid": "Voer een geldig telefoonnummer in",
             "pbdf.gemeente.personalData.fullname": "Volledige naam",
             "pbdf.gemeente.personalData.fullname.placeholder": "Jan Jansen",
             "pbdf.gemeente.personalData.dateofbirth": "Geboortedatum",
