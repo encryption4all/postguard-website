@@ -580,10 +580,11 @@
   }
 
   .popup-instruction {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
+    font-weight: bold;
     margin: 0 0 0.5rem 0;
     text-align: left;
-    color: var(--pg-text-secondary);
+    color: var(--pg-text);
     font-family: var(--pg-font-family);
     width: 100%;
   }
@@ -645,10 +646,11 @@
   }
 
   .bottom-sheet-instruction {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
+    font-weight: bold;
     margin: 0;
     text-align: center;
-    color: var(--pg-text-secondary);
+    color: var(--pg-text);
     font-family: var(--pg-font-family);
   }
 
