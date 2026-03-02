@@ -469,10 +469,9 @@ h3 {
 .attributes-list {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 8px;
     width: 100%;
-    text-wrap: nowrap;
-    overflow-x: auto;
 }
 
 /* ── File input cross-component signing state (from files-shared-sheet.css) */
