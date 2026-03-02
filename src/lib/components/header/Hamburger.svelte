@@ -2,6 +2,7 @@
     import menuIcon from '$lib/assets/images/google-icons/menu.svg'
     import closeIcon from '$lib/assets/images/google-icons/close.svg'
     import LocaleSwitcher from '$lib/components/LocaleSwitcher.svelte'
+    import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte'
     import logo from '$lib/assets/images/logo.svg'
     import logoDark from '$lib/assets/images/logo-dark.svg'
     import { _, locale } from 'svelte-i18n'
@@ -70,10 +71,9 @@
             </li>
         {/each}
     </ul>
-    <div class="align-lang">
-        <LocaleSwitcher
-            lang={$locale}
-        />
+    <div class="bottom-bar">
+        <ThemeSwitcher />
+        <LocaleSwitcher lang={$locale} />
     </div>
 </div>
 
@@ -156,9 +156,10 @@
         margin: 0.5rem 1rem 1rem 1rem;
     }
 
-    .align-lang {
+    .bottom-bar {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
+        align-items: center;
         margin: 1rem;
     }
 </style>
