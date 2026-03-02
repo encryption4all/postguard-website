@@ -141,11 +141,14 @@
     width: $theme-width;
     height: $theme-height;
     border: 1px solid $theme-border;
-    padding: 6px 0 2px 0;
-    background-color: transparant;
-    text-align: center;
-    text-transform: uppercase;
+    padding: 0;
+    background-color: transparent;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
   }
 
   .theme-container-left .theme-label {
@@ -162,8 +165,11 @@
     background-color: $theme-hover;
   }
 
-  .selected .theme-label {
-    border-bottom: 2px solid var(--pg-text);
+  .selected .theme-label::after {
+    content: '';
+    width: 16px;
+    height: 2px;
+    background-color: var(--pg-text);
   }
 
   .theme-control:focus-visible + .theme-label {
