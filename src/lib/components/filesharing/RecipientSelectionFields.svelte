@@ -28,7 +28,7 @@
                 class:hidden={isConfirming}
                 onclick={remove}
             >
-                <img style="width: 14px; height: 14px;" src={closebutton} alt="close button" />
+                <img class="invert" style="width: 14px; height: 14px;" src={closebutton} alt="close button" />
             </button>
         {/if}
 
@@ -101,7 +101,7 @@
     .recipient-container {
         display: flex;
         gap: 0.75rem;
-        align-items: flex-start;
+        align-items: center;
     }
 
     .btn-delete {
