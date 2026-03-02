@@ -5,11 +5,13 @@
     import moon from '$lib/assets/images/google-icons/moon.svg'
 
     let theme: 'light' | 'dark' = 'light'
+    let userPreference: 'light' | 'dark' | null = null
 
     if (browser) {
         const stored = localStorage.getItem('preferredtheme')
         if (stored === 'light' || stored === 'dark') {
             theme = stored
+            userPreference = stored
         } else {
             theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
         }
@@ -18,6 +20,7 @@
 
     function setTheme(newTheme: 'light' | 'dark') {
         theme = newTheme
+        userPreference = newTheme
         if (!browser) return
         document.documentElement.classList.toggle('dark', newTheme === 'dark')
         localStorage.setItem('preferredtheme', newTheme)
@@ -37,8 +40,8 @@
         return () => mediaQuery.removeEventListener('change', handleSystemChange)
     })
 
-    $: isLight = theme === 'light'
-    $: isDark = theme === 'dark'
+    $: isLight = userPreference === 'light'
+    $: isDark = userPreference === 'dark'
 </script>
 
 <div
