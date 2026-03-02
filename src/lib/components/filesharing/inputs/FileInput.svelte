@@ -160,6 +160,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        padding: 0;
     }
 
     @media only screen and (min-width: 768px) {
