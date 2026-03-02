@@ -15,6 +15,11 @@
 
     let { items }: props = $props()
 
+    $effect(() => {
+        document.body.style.overflow = hamburgerOpen ? 'hidden' : ''
+        return () => { document.body.style.overflow = '' }
+    })
+
     function isSelected(route: String) {
         return page.url.pathname === route;
     }
@@ -32,7 +37,7 @@
         alt="open menu"
         width="32"
         height="32"
-        class="hamburger-icon"
+        class="hamburger-icon invert"
         hidden={hamburgerOpen}
     />
 </button>
@@ -51,7 +56,7 @@
                 alt="close menu"
                 width="32"
                 height="32"
-                class="hamburger-icon"
+                class="hamburger-icon invert"
             />
         </button>
     </div>
@@ -98,17 +103,18 @@
 
     .hamburger-menu {
         display: none;
-        position: absolute;
+        position: fixed;
         flex-direction: column;
         top: 0;
-        right: 0;
-        background-color: #fff;
+        left: 0;
+        background-color: var(--pg-general-background);
         border-radius: 4px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         padding: 0;
         margin: 0;
         width: 100%;
-        height: 100%;
+        height: 100dvh;
+        overflow: hidden;
         z-index: 4;
     }
 
