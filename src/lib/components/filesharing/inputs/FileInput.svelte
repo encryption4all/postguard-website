@@ -185,7 +185,7 @@
     }
 
     .dropzone-box {
-        width: 95%;
+        width: 100%;
         max-width: 600px;
         background: var(--pg-soft-background) 0%;
         border: 2px dashed var(--pg-primary);
