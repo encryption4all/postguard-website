@@ -163,9 +163,7 @@
   }
 
   .selected .theme-label {
-    text-decoration: 2px underline;
-    text-decoration-color: --pg-text;
-    text-underline-offset: 4px;
+    border-bottom: 2px solid var(--pg-text);
   }
 
   .theme-control:focus-visible + .theme-label {
