@@ -87,7 +87,7 @@
         {#if deleteAction}
             <button
                 class:hidden={isConfirming}
-                class="btn-delete"
+                class="btn-delete invert"
                 onclick={deleteAction}
             >
                 <img
