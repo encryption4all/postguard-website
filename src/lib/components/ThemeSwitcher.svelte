@@ -145,10 +145,8 @@
     background-color: transparent;
     cursor: pointer;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
   }
 
   .theme-container-left .theme-label {
@@ -167,7 +165,11 @@
 
   .selected .theme-label::after {
     content: '';
-    width: 16px;
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
     height: 2px;
     background-color: var(--pg-text);
   }
