@@ -139,5 +139,10 @@
         pointer-events: none;
         margin: 0;
         padding: 0;
+
+        @media only screen and (max-width: 768px) {
+            width: 100%;
+        }
     }
+
 </style>

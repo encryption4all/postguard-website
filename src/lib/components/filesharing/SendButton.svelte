@@ -319,7 +319,7 @@
         </button>
 
         <!-- Mobile: Always show QR option when button is enabled -->
-        {#if isMobileDevice && canEncrypt()}
+        {#if isMobileDevice}
             <Chip
                 text={$_('filesharing.sign.signOtherDevice')}
                 onclick={() => {
