@@ -10,8 +10,8 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
-      start_interval: 5s
-      start_period: 0s
+      start_interval: 1s
+      start_period: 30s
     ports:
       - "8000:8000"
     volumes:
@@ -40,9 +40,9 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8087/health"]
       interval: 1m30s
       timeout: 5s
-      retries: 5
-      start_interval: 5s
-      start_period: 0s
+      retries: 3
+      start_interval: 1s
+      start_period: 30s
     ports:
       - "8087:8087"
     volumes:
