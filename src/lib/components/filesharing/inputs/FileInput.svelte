@@ -266,7 +266,7 @@
 
     .upload-butt img {
         margin-bottom: 0.5rem;
-        width: 100%;
+        width: 80%;
         max-width: 300px;
         height: auto;
         transition: transform 0.2s ease;
@@ -279,6 +279,7 @@
     }
 
     .drag-text {
+        display: none;
         margin: 1rem 0 0rem 0;
         font-size: clamp(1.4rem, 2.5vw, 1.25rem);
         font-weight: 800;
@@ -287,6 +288,7 @@
     }
 
     .or-text {
+        display: none;
         margin: 0.5rem 0;
         font-size: 0.95rem;
         font-weight: 300;
@@ -383,7 +385,20 @@
     }
 
 
+    .upload-butt :global(.primary-btn) {
+        margin-top: 1.5rem;
+    }
+
     @media only screen and (min-width: 768px) {
+        .drag-text,
+        .or-text {
+            display: block;
+        }
+
+        .upload-butt :global(.primary-btn) {
+            margin-top: 0;
+        }
+
         .middle-block-size {
             min-height: 50vh;
             width: 70%;
