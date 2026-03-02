@@ -403,9 +403,14 @@ h3 {
 .crypt-select-protection-input-box {
     background-color: var(--pg-hard-background);
     padding: 0.25rem;
-    padding-left: 1.25rem;
     display: flex;
     flex-direction: column;
+}
+
+@media only screen and (min-width: 768px) {
+    .crypt-select-protection-input-box {
+        padding-left: 1.25rem;
+    }
 }
 
 .crypt-select-protection-input-box h4 {

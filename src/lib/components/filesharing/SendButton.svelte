@@ -453,8 +453,13 @@
     justify-content: center;
     gap: 0.5rem;
     margin-bottom: 1rem;
-    padding-left: 1.25rem;
     position: relative;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .button-container {
+      padding-left: 1.25rem;
+    }
   }
 
   .upload-info-box {
