@@ -311,8 +311,7 @@
         <!-- Normal button -->
         <button
             bind:this={buttonRef}
-            class="primary-btn"
-            style="--primary-btn-padding: 0.8rem 1.5rem"
+            class="primary-btn send-btn"
             onclick={onSign}
         >
             <img src={yiviLogoDark} alt="yivi-logo" width={50} height={27} />
@@ -439,7 +438,9 @@
 {/if}
 
 <style lang="scss">
-
+  .send-btn {
+    margin: 1.5rem 0 0.8rem 0;
+  }
   /* Fade the Yivi logo when the button is disabled */
   .primary-btn:disabled img {
     opacity: 0.5;

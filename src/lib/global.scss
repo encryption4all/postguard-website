@@ -367,7 +367,7 @@ h3 {
     cursor: pointer;
     box-sizing: border-box;
     transition: all 0.2s ease;
-    padding: var(--primary-btn-padding, 0.8rem 1.3rem);
+    padding: 0.8rem 1.3rem;
 }
 
 .primary-btn:hover:not(:disabled) {
