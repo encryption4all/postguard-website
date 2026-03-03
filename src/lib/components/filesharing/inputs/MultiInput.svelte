@@ -131,8 +131,8 @@
 
     label {
         font-family: var(--pg-font-family);
-        font-size: 0.8rem;
-        font-weight: 800;
+        font-size: var(--pg-font-size-xs);
+        font-weight: var(--pg-font-weight-extrabold);
         color: var(--pg-text);
         display: block;
     }
@@ -178,7 +178,7 @@
     }
 
     .phone-error {
-        font-size: 0.75rem;
+        font-size: var(--pg-font-size-xs);
         color: var(--pg-error, #e53e3e);
         margin: 0.25rem 0 0 0;
         font-family: var(--pg-font-family);

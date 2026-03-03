@@ -32,6 +32,21 @@ body {
     --pg-font-family: 'Overpass', sans-serif;
     --pg-input-font-size: 0.9rem;
 
+    /* Font sizes */
+    --pg-font-size-xs:   0.75rem;   /* tiny labels */
+    --pg-font-size-sm:   0.85rem;   /* secondary / caption text */
+    --pg-font-size-md:   0.95rem;   /* default body text (most common) */
+    --pg-font-size-base: 1rem;      /* base / 16 px equivalent */
+    --pg-font-size-lg:   1.15rem;   /* slightly larger body */
+    --pg-font-size-xl:   1.5rem;    /* section headings */
+    --pg-font-size-2xl:  1.75rem;   /* page-level headings */
+
+    /* Font weights */
+    --pg-font-weight-regular:   400;
+    --pg-font-weight-medium:    600;
+    --pg-font-weight-bold:      700;
+    --pg-font-weight-extrabold: 800;
+
     /* Colors */
     --pg-primary: #3095DE;
     --pg-primary-contrast: #1673B6;
@@ -102,7 +117,7 @@ button {
 }
 
 .btn-accent {
-    font-size: 14px;
+    font-size: var(--pg-font-size-sm);
     border-radius: 100px;
     background: linear-gradient(135deg, var(--pg-input-active) 0%, var(--pg-text) 100%);
     color: var(--pg-general-background);
@@ -200,7 +215,7 @@ label, td, tr, summary {
 }
 
 p {
-    font-size: 16px;
+    font-size: var(--pg-font-size-base);
     margin-top: 0.25em;
     margin-bottom: 0.25em;
 }
@@ -210,15 +225,15 @@ a {
 }
 
 h2 {
-    font-size: 24px;
-    font-weight: 800;
+    font-size: var(--pg-font-size-xl);
+    font-weight: var(--pg-font-weight-extrabold);
     line-height: 30px;
     letter-spacing: 0;
 }
 
 h3 {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: var(--pg-font-size-lg);
+    font-weight: var(--pg-font-weight-bold);
     color: var(--pg-text);
     margin: 0;
 }
@@ -361,8 +376,8 @@ h3 {
     gap: 0.75rem;
     width: fit-content;
     white-space: nowrap;
-    font-size: 1.2rem;
-    font-weight: 600;
+    font-size: var(--pg-font-size-lg);
+    font-weight: var(--pg-font-weight-medium);
     font-family: var(--pg-font-family);
     border-radius: var(--pg-border-radius-sm);
     background: var(--pg-text);
@@ -414,10 +429,10 @@ h3 {
 }
 
 .crypt-select-protection-input-box h4 {
-    font-size: 11pt;
+    font-size: var(--pg-font-size-md);
     text-align: left;
     color: var(--pg-input-hover);
-    font-weight: bold;
+    font-weight: var(--pg-font-weight-bold);
     margin-bottom: 0;
     padding-bottom: 0;
 }
@@ -434,8 +449,8 @@ h3 {
     background: linear-gradient(135deg, var(--pg-input-active) 0%, var(--pg-text) 100%);
     cursor: pointer;
     color: var(--pg-general-background);
-    font-weight: 700;
-    font-size: 1.15rem;
+    font-weight: var(--pg-font-weight-bold);
+    font-size: var(--pg-font-size-lg);
     line-height: 1.6rem;
     padding: 0.5rem 0;
     text-align: center;

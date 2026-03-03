@@ -176,7 +176,7 @@
                     button {
                         all: unset;
                         cursor: pointer;
-                        font-size: 14px;
+                        font-size: var(--pg-font-size-sm);
                         padding: 0.5rem;
                         width: 100%;
                         height: 100%;

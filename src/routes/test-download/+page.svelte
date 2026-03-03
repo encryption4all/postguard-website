@@ -116,13 +116,13 @@
 
         h1 {
             margin: 0 0 0.25rem;
-            font-size: 1.25rem;
+            font-size: var(--pg-font-size-lg);
             color: var(--pg-primary-contrast);
         }
 
         p {
             margin: 0;
-            font-size: 0.85rem;
+            font-size: var(--pg-font-size-sm);
             color: var(--pg-primary-contrast);
             opacity: 0.8;
         }
@@ -147,8 +147,8 @@
 
     .state-label {
         padding: 0.4rem 1rem;
-        font-size: 0.75rem;
-        font-weight: 600;
+        font-size: var(--pg-font-size-xs);
+        font-weight: var(--pg-font-weight-medium);
         text-transform: uppercase;
         letter-spacing: 0.05em;
         color: var(--pg-text-secondary);
@@ -177,8 +177,8 @@
 
     h2 {
         text-align: center;
-        font-size: 1.5rem;
-        font-weight: 700;
+        font-size: var(--pg-font-size-xl);
+        font-weight: var(--pg-font-weight-bold);
         color: var(--pg-text);
         margin: 0 0 0.25rem;
     }
@@ -187,7 +187,7 @@
         margin: 0;
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         line-height: 1.5;
     }
 
@@ -201,8 +201,8 @@
         gap: 0.75rem;
 
         h3 {
-            font-weight: 700;
-            font-size: 1.1rem;
+            font-weight: var(--pg-font-weight-bold);
+            font-size: var(--pg-font-size-lg);
             margin: 0;
             color: var(--pg-text);
         }
@@ -212,7 +212,7 @@
         margin: 0;
         color: var(--pg-text);
         font-family: var(--pg-font-family);
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         line-height: 1.5;
     }
 
@@ -262,14 +262,14 @@
 
     .sender-label {
         margin: 0;
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
     }
 
     .sender-email {
-        font-size: 0.95rem;
-        font-weight: 700;
+        font-size: var(--pg-font-size-md);
+        font-weight: var(--pg-font-weight-bold);
         color: var(--pg-text);
         font-family: var(--pg-font-family);
     }
@@ -287,7 +287,7 @@
         padding: 0.2rem 0.6rem;
         border: 1px solid var(--pg-strong-background);
         border-radius: 4px;
-        font-size: 0.8rem;
+        font-size: var(--pg-font-size-xs);
         font-family: var(--pg-font-family);
         color: var(--pg-text-secondary);
         background: var(--pg-soft-background);
@@ -296,7 +296,7 @@
     .error-description {
         margin: 0;
         font-family: var(--pg-font-family);
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         line-height: 1.5;
         text-align: center;
         color: var(--pg-text);

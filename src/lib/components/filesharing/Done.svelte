@@ -74,8 +74,8 @@
     }
 
     h2 {
-        font-size: 1.75rem;
-        font-weight: 700;
+        font-size: var(--pg-font-size-2xl);
+        font-weight: var(--pg-font-weight-bold);
         color: --pg-text;
         margin: 0 0 1rem 0;
         text-align: center;
@@ -90,7 +90,11 @@
     }
 
     .info-box h3 {
-        padding: 0.3rem 1rem;
+        padding: 0.5rem 1rem;
+        font-weight: var(--pg-font-weight-bold);
+        font-size: var(--pg-font-size-md);
+        font-family: var(--pg-font-family);
+        margin: 0;
     }
 
     .divider {
@@ -106,10 +110,9 @@
     }
 
     .recipient-item {
-        padding: 0.3rem 0 0.4rem 1rem;
-        margin: 0 0rem;
+        padding: 0.4rem 1rem;
         font-family: var(--pg-font-family);
-        font-size: 1rem;
+        font-size: var(--pg-font-size-md);
         color: var(--pg-text);
         border-bottom: 1px solid var(--pg-strong-background);
         display: flex;
@@ -118,7 +121,7 @@
     }
 
     .recipient-email {
-        font-weight: 500;
+        font-weight: var(--pg-font-weight-regular);
     }
 
     .recipient-attributes {

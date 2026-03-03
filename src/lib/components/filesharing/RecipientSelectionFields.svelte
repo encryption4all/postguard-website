@@ -137,8 +137,8 @@
     }
 
     .field-label {
-        font-size: 0.8rem;
-        font-weight: 800;
+        font-size: var(--pg-font-size-sm);
+        font-weight: var(--pg-font-weight-extrabold);
         color: var(--pg-text);
         font-family: var(--pg-font-family);
     }

@@ -488,8 +488,8 @@
     justify-content: flex-start;
     gap: 0.75rem;
     padding: 1rem 1rem;
-    font-size: 1rem;
-    font-weight: 400;
+    font-size: var(--pg-font-size-base);
+    font-weight: var(--pg-font-weight-regular);
     font-family: var(--pg-font-family);
     color: var(--pg-text);
     z-index: 1;
@@ -529,7 +529,7 @@
   }
 
   .yivi-tip {
-    font-size: 0.85rem;
+    font-size: var(--pg-font-size-sm);
     color: var(--pg-text-secondary);
     font-family: var(--pg-font-family);
     margin: 0;
@@ -575,8 +575,8 @@
   }
 
   .popup-title {
-    font-size: 0.85rem;
-    font-weight: bold;
+    font-size: var(--pg-font-size-sm);
+    font-weight: var(--pg-font-weight-bold);
     margin: 0;
     text-align: left;
     color: var(--pg-text);
@@ -585,8 +585,8 @@
   }
 
   .popup-instruction {
-    font-size: 0.85rem;
-    font-weight: bold;
+    font-size: var(--pg-font-size-sm);
+    font-weight: var(--pg-font-weight-bold);
     margin: 0 0 0.5rem 0;
     text-align: left;
     color: var(--pg-text);
@@ -642,8 +642,8 @@
   }
 
   .bottom-sheet-title {
-    font-size: 0.85rem;
-    font-weight: bold;
+    font-size: var(--pg-font-size-sm);
+    font-weight: var(--pg-font-weight-bold);
     margin: 0;
     text-align: center;
     color: var(--pg-text);
@@ -651,8 +651,8 @@
   }
 
   .bottom-sheet-instruction {
-    font-size: 0.85rem;
-    font-weight: bold;
+    font-size: var(--pg-font-size-sm);
+    font-weight: var(--pg-font-weight-bold);
     margin: 0;
     text-align: center;
     color: var(--pg-text);
@@ -686,8 +686,8 @@
   }
 
   .validation-title {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: var(--pg-font-size-lg);
+    font-weight: var(--pg-font-weight-bold);
     margin: 0;
     color: var(--pg-text);
     font-family: var(--pg-font-family);
@@ -702,7 +702,7 @@
   }
 
   .validation-errors li {
-    font-size: 0.9rem;
+    font-size: var(--pg-font-size-sm);
     color: var(--pg-text-secondary);
     font-family: var(--pg-font-family);
     line-height: 1.4;

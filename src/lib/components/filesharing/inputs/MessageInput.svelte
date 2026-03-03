@@ -40,14 +40,14 @@
 <style>
 
     p {
-        font-size: 0.85rem;
+        font-size: var(--pg-font-size-sm);
         color: var(--pg-text-secondary);
         margin: 0 0 0.5rem;
         font-family: var(--pg-font-family);
     }
 
     :global(.optional-text) {
-        font-weight: 400;
+        font-weight: var(--pg-font-weight-regular);
     }
 
     textarea {

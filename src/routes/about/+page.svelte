@@ -78,7 +78,7 @@
         }
 
         p {
-            font-size: 15px;
+            font-size: var(--pg-font-size-base);
             line-height: 1.6;
             margin-bottom: 0.5rem;
         }
@@ -102,7 +102,7 @@
         }
 
         p {
-            font-size: 15px;
+            font-size: var(--pg-font-size-base);
             line-height: 1.6;
             margin: 0;
         }

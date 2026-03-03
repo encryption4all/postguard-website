@@ -120,7 +120,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    font-size: 1.15rem;
+    font-size: var(--pg-font-size-lg);
     min-width: 0;
     gap: 1.25rem;
     margin: 0;

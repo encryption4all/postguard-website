@@ -136,7 +136,7 @@
 
     #title {
         width: 100%;
-        font-size: 20px;
+        font-size: var(--pg-font-size-lg);
     }
 
     #buttons {

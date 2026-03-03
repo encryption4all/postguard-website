@@ -65,11 +65,11 @@
         overflow: hidden;
         white-space: nowrap;
         font-family: var(--pg-font-family);
-        font-weight: 400;
+        font-weight: var(--pg-font-weight-regular);
         margin: 0;
         color: var(--pg-text);
         min-width: 0;
-        font-size: 0.9rem;
+        font-size: var(--pg-font-size-sm);
         direction: rtl;
         text-align: left;
         text-overflow: ellipsis;
@@ -77,10 +77,10 @@
 
     .files > div:last-child p {
         font-family: var(--pg-font-family);
-        font-weight: 400;
+        font-weight: var(--pg-font-weight-regular);
         margin: 0;
         color: var(--pg-text-secondary);
-        font-size: 0.9rem;
+        font-size: var(--pg-font-size-sm);
     }
 
     .remove-button {

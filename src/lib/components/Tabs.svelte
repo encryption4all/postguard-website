@@ -33,7 +33,7 @@
 
     li {
         white-space: nowrap;
-        font-size: 14px;
+        font-size: var(--pg-font-size-sm);
         position: relative;
         display: inline-block;
         z-index: 0;

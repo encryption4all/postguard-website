@@ -143,8 +143,8 @@
 
 <style>
     h1 {
-        font-size: 1.75rem;
-        font-weight: 700;
+        font-size: var(--pg-font-size-2xl);
+        font-weight: var(--pg-font-weight-bold);
         color: --pg-text;
         margin: 0;
     }
@@ -226,8 +226,8 @@
     }
 
     .drop-hint-text {
-        font-size: clamp(1.25rem, 3vw, 1.75rem);
-        font-weight: 800;
+        font-size: clamp(var(--pg-font-size-lg), 3vw, var(--pg-font-size-2xl));
+        font-weight: var(--pg-font-weight-extrabold);
         color: var(--pg-primary);
         text-align: center;
         margin: 0;
@@ -258,7 +258,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        font-weight: 600;
+        font-weight: var(--pg-font-weight-medium);
         margin: 0;
         padding: 0;
         transition: all 0.3s ease;
@@ -282,8 +282,8 @@
     .drag-text {
         display: none;
         margin: 1rem 0 0rem 0;
-        font-size: clamp(1.4rem, 2.5vw, 1.25rem);
-        font-weight: 800;
+        font-size: clamp(var(--pg-font-size-xl), 2.5vw, var(--pg-font-size-lg));
+        font-weight: var(--pg-font-weight-extrabold);
         color: --pg-text;
         text-align: center;
     }
@@ -291,7 +291,7 @@
     .or-text {
         display: none;
         margin: 0.5rem 0;
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         font-weight: 300;
         color: var(--pg-text-secondary);
         text-align: center;
@@ -300,7 +300,7 @@
 
     .max-size-text {
         margin: 0.75rem 0 0 0;
-        font-size: 0.875rem;
+        font-size: var(--pg-font-size-md);
         font-weight: 300;
         color: var(--pg-text-secondary);
         text-align: center;
@@ -374,9 +374,9 @@
 
     .file-summary p {
         margin: 0;
-        font-size: 0.875rem;
+        font-size: var(--pg-font-size-md);
         color: var(--pg-text-secondary);
-        font-weight: 600;
+        font-weight: var(--pg-font-weight-medium);
     }
 
     .dropzone-with-files {

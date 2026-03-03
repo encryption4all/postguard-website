@@ -93,17 +93,17 @@
     /* Size variants */
     .chip-sm {
         padding: 0px 8px;
-        font-size: 0.85rem;
+        font-size: var(--pg-font-size-sm);
     }
 
     .chip-md {
         padding: 2px 10px;
-        font-size: 0.9rem;
+        font-size: var(--pg-font-size-sm);
     }
 
     .chip-lg {
         padding: 0.2rem 1rem;
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
     }
 
     /* Variant: default (white background, light border) */

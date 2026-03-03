@@ -61,7 +61,7 @@
     }
 
     .arrow {
-        font-size: 0.7rem;
+        font-size: var(--pg-font-size-xs);
         color: var(--pg-text-secondary);
         transition: transform 0.2s ease;
         display: inline-block;
@@ -72,9 +72,9 @@
     }
 
     .toggle-label {
-        font-size: 0.9rem;
+        font-size: var(--pg-font-size-sm);
         color: var(--pg-text-secondary);
-        font-weight: 600;
+        font-weight: var(--pg-font-weight-medium);
     }
 
     .help-content {
@@ -86,7 +86,7 @@
     }
 
     .help-text {
-        font-size: 0.85rem;
+        font-size: var(--pg-font-size-sm);
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
         line-height: 1.5;
@@ -95,10 +95,10 @@
 
     .help-link {
         display: inline-block;
-        font-size: 0.85rem;
+        font-size: var(--pg-font-size-sm);
         color: var(--pg-primary);
         font-family: var(--pg-font-family);
-        font-weight: 600;
+        font-weight: var(--pg-font-weight-medium);
         text-decoration: none;
         margin-top: 0.5rem;
         transition: color 0.2s ease;
