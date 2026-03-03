@@ -170,7 +170,8 @@
                 "filesTooLarge": "The files exceed the maximum size of {max} GB",
                 "noEmail": "You haven't filled in an email address for a recipient",
                 "invalidEmail": "The email address {email} is not valid",
-                "missingAttribute": "{attribute} of {email} is missing"
+                "missingAttribute": "{attribute} of {email} is missing",
+                "invalidPhone": "The phone number of {email} is not valid"
             }
         },
         "attributes": {

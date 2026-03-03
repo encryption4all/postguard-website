@@ -1,5 +1,6 @@
 <script lang="ts">
     import { _, locale } from 'svelte-i18n'
+    import { isValidPhoneNumber } from 'libphonenumber-js/mobile'
     import type { ISealOptions } from '@e4a/pg-wasm'
 
     import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
@@ -42,7 +43,11 @@
         const totalSize = EncryptState.files.reduce((a, f) => a + f.size, 0)
         if (totalSize >= MAX_UPLOAD_SIZE) return false
         if (!EncryptState.recipients.every(({ email }) => emailRegex.test(email))) return false
-        if (!EncryptState.recipients.every(({ extra }) => extra.every((att) => att.v && att.v.length > 0))) return false
+        if (!EncryptState.recipients.every(({ extra }) => extra.every((att) => {
+            if (!att.v || att.v.length === 0) return false
+            if (att.t === 'pbdf.sidn-pbdf.mobilenumber.mobilenumber' && !isValidPhoneNumber(att.v)) return false
+            return true
+        }))) return false
         return true
     })
 
@@ -67,6 +72,8 @@
                     if (!v || v.length === 0) {
                         const attrName = $_(`filesharing.attributes.${t}`)
                         errors.push($_('filesharing.encryptPanel.validation.missingAttribute', { values: { attribute: attrName, email } }))
+                    } else if (t === 'pbdf.sidn-pbdf.mobilenumber.mobilenumber' && !isValidPhoneNumber(v)) {
+                        errors.push($_('filesharing.encryptPanel.validation.invalidPhone', { values: { email } }))
                     }
                 })
             }

@@ -169,7 +169,8 @@
                 "filesTooLarge": "De bestanden overschrijden de maximale grootte van {max} GB",
                 "noEmail": "Je hebt nog geen e-mailadres voor een ontvanger ingevuld",
                 "invalidEmail": "Het e-mailadres {email} is niet geldig",
-                "missingAttribute": "{attribute} van {email} ontbreekt"
+                "missingAttribute": "{attribute} van {email} ontbreekt",
+                "invalidPhone": "Het telefoonnummer van {email} is niet geldig"
             }
         },
         "attributes": {
