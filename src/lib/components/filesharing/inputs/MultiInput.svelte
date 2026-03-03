@@ -28,6 +28,20 @@
         }
     })
 
+    // Yivi discloses dates as DD-MM-YYYY, but <input type="date"> uses YYYY-MM-DD.
+    // These two helpers keep the stored `value` in Yivi's format so the IBE
+    // identity derived during decryption matches the one used during encryption.
+    function dateToHtml(ddmmyyyy: string): string {
+        if (!ddmmyyyy) return ''
+        const p = ddmmyyyy.split('-')
+        return p.length === 3 ? `${p[2]}-${p[1]}-${p[0]}` : ddmmyyyy
+    }
+    function dateFromHtml(yyyymmdd: string): string {
+        if (!yyyymmdd) return ''
+        const p = yyyymmdd.split('-')
+        return p.length === 3 ? `${p[2]}-${p[1]}-${p[0]}` : yyyymmdd
+    }
+
     const allowedCountries = ['at', 'be', 'bg', 'cy', 'dk', 'de', 'ee', 'fi', 'fr', 'gr', 'hu', 'ie',
         'is', 'it', 'hr', 'lv', 'lt', 'li', 'lu', 'mt', 'mc', 'nl', 'no', 'at',
         'pl', 'pt', 'ro', 'si', 'sk', 'es', 'cz', 'gb', 'se', 'ch']
@@ -82,7 +96,8 @@
                 class:is-confirming-bg={isConfirming}
                 disabled={isConfirming}
                 type="date"
-                bind:value={value}
+                value={dateToHtml(value)}
+                oninput={(e) => { value = dateFromHtml((e.target as HTMLInputElement).value) }}
             />
         {:else}
             <input

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, tick } from 'svelte'
-    import { browser } from '$app/environment'
+    import { browser, dev } from '$app/environment'
     import { _ } from 'svelte-i18n'
     import YiviCore from '@privacybydesign/yivi-core'
     import YiviClient from '@privacybydesign/yivi-client'
@@ -121,6 +121,7 @@
             const { StreamUnsealer } = await import('@e4a/pg-wasm')
             unsealer = await StreamUnsealer.new(response.body, vk)
             policies = unsealer.inspect_header()
+            if (dev) console.debug('[download] header policies:', Object.fromEntries(policies))
 
             try {
                 senderIdentity = unsealer.public_identity()
@@ -165,6 +166,7 @@
             con: recipientStripped,
             validity: secondsTill4AM(),
         }
+        if (dev) console.debug('[download] key request:', JSON.stringify(keyRequest))
 
         downloadState = 'Ready'
         tick().then(() => startYiviSession())
@@ -231,6 +233,7 @@
             downloadState = 'Decrypting'
             await decryptFiles()
         } catch (e) {
+            if (dev) console.error('[download] Yivi session error:', e)
             err = String(e)
             downloadState = 'Fail'
         }
@@ -244,7 +247,11 @@
             },
         })
 
-        await unsealer.unseal(key, usk, writable)
+        if (dev) console.debug('[download] unsealing for recipient:', key)
+        await unsealer.unseal(key, usk, writable).catch((e: unknown) => {
+            if (dev) console.error('[download] unseal failed:', e)
+            throw e
+        })
         if (!senderIdentity) {
             senderIdentity = unsealer.public_identity()
         }
@@ -499,7 +506,7 @@
 
     .success-banner {
         display: flex;
-        align-items: flex-start; 
+        align-items: center; 
         gap: 0.75rem;
         background: var(--pg-strong-background);
         border-radius: var(--pg-border-radius-lg);

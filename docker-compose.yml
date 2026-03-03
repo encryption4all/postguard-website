@@ -49,7 +49,8 @@ services:
       - ./postguard:/app
       - postguard-pkg-target:/app/target
     environment:
-      - RUST_LOG=info
+      - RUST_LOG=debug
+      - RUST_BACKTRACE=1
       - IRMA_SERVER=http://irma-server:8088
     networks:
       - postguard
