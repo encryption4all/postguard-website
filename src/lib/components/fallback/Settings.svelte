@@ -157,4 +157,10 @@
     all: unset;
     cursor: pointer;
   }
+
+  #deletebutton:focus-visible {
+    outline: 2px solid var(--pg-primary);
+    outline-offset: 2px;
+    border-radius: var(--pg-border-radius-sm);
+  }
 </style>

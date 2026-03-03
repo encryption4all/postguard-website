@@ -1,8 +1,6 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
-    import { getCountryCallingCode, type CountryCode } from 'libphonenumber-js/mobile'
-    import '../shared-styles.css'
-
+    import { getCountryCallingCode, isValidPhoneNumber, type CountryCode } from 'libphonenumber-js/mobile'
     import closeIcon from '$lib/assets/images/google-icons/close.svg'
 
     interface props {
@@ -16,9 +14,33 @@
 
     // So we have a unique id for the label-input pair so we can handle multiple inputs correctly in a list even with multiple recipients
     const randomId = Math.random().toString(36).substring(2, 15)
-    const phonePattern = '[0-9]{8,15}'
     let showingValue = $state('')
     let selectedCountryPrefix = $state('+31')
+    let phoneInputEl: HTMLInputElement | null = $state(null)
+    let phoneTouched = $state(false)
+    let phoneValid = $derived(
+        showingValue.length === 0 || isValidPhoneNumber(selectedCountryPrefix + showingValue)
+    )
+
+    $effect(() => {
+        if (phoneInputEl) {
+            phoneInputEl.setCustomValidity(phoneValid ? '' : 'Invalid phone number')
+        }
+    })
+
+    // Yivi discloses dates as DD-MM-YYYY, but <input type="date"> uses YYYY-MM-DD.
+    // These two helpers keep the stored `value` in Yivi's format so the IBE
+    // identity derived during decryption matches the one used during encryption.
+    function dateToHtml(ddmmyyyy: string): string {
+        if (!ddmmyyyy) return ''
+        const p = ddmmyyyy.split('-')
+        return p.length === 3 ? `${p[2]}-${p[1]}-${p[0]}` : ddmmyyyy
+    }
+    function dateFromHtml(yyyymmdd: string): string {
+        if (!yyyymmdd) return ''
+        const p = yyyymmdd.split('-')
+        return p.length === 3 ? `${p[2]}-${p[1]}-${p[0]}` : yyyymmdd
+    }
 
     const allowedCountries = ['at', 'be', 'bg', 'cy', 'dk', 'de', 'ee', 'fi', 'fr', 'gr', 'hu', 'ie',
         'is', 'it', 'hr', 'lv', 'lt', 'li', 'lu', 'mt', 'mc', 'nl', 'no', 'at',
@@ -36,7 +58,7 @@
                 showingValue.replace(selectedCountryPrefix, '')
             }
 
-            value = selectedCountryPrefix + showingValue
+            value = showingValue.length > 0 ? selectedCountryPrefix + showingValue : ''
         }
     })
 
@@ -56,15 +78,16 @@
                 {/each}
             </select>
             <input
+                bind:this={phoneInputEl}
                 id={randomId}
                 class="pg-input"
                 class:is-confirming-bg={isConfirming}
+                class:phone-invalid={!phoneValid && phoneTouched}
                 disabled={isConfirming}
                 type="tel"
-                pattern={phonePattern}
-                title="Voer een geldig telefoonnummer in (8-15 cijfers)"
                 placeholder={$_(translation_key + '.placeholder')}
                 bind:value={showingValue}
+                onblur={() => { phoneTouched = true }}
             />
         {:else if translation_key === 'filesharing.attributes.pbdf.gemeente.personalData.dateofbirth'}
             <input
@@ -73,7 +96,8 @@
                 class:is-confirming-bg={isConfirming}
                 disabled={isConfirming}
                 type="date"
-                bind:value={value}
+                value={dateToHtml(value)}
+                oninput={(e) => { value = dateFromHtml((e.target as HTMLInputElement).value) }}
             />
         {:else}
             <input
@@ -89,7 +113,7 @@
         {#if deleteAction}
             <button
                 class:hidden={isConfirming}
-                class="btn-delete"
+                class="btn-delete invert"
                 onclick={deleteAction}
             >
                 <img
@@ -100,6 +124,9 @@
             </button>
         {/if}
     </div>
+    {#if !phoneValid && phoneTouched && translation_key === 'filesharing.attributes.pbdf.sidn-pbdf.mobilenumber.mobilenumber'}
+        <p class="phone-error">{$_('filesharing.attributes.phoneInvalid')}</p>
+    {/if}
 </div>
 
 <style>
@@ -119,8 +146,8 @@
 
     label {
         font-family: var(--pg-font-family);
-        font-size: 0.8rem;
-        font-weight: 800;
+        font-size: var(--pg-font-size-xs);
+        font-weight: var(--pg-font-weight-extrabold);
         color: var(--pg-text);
         display: block;
     }
@@ -145,6 +172,11 @@
         background-color: var(--pg-soft-background);
     }
 
+    .btn-delete:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+    }
+
     .removed-del-border {
         border-radius: var(--pg-border-radius-md);
     }
@@ -154,6 +186,17 @@
         align-items: center;
         gap: 0.5rem;
         height: 40px;
+    }
+
+    .phone-invalid {
+        border-color: var(--pg-error, #e53e3e) !important;
+    }
+
+    .phone-error {
+        font-size: var(--pg-font-size-xs);
+        color: var(--pg-error, #e53e3e);
+        margin: 0.25rem 0 0 0;
+        font-family: var(--pg-font-family);
     }
 
 </style>

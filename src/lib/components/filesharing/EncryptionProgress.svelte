@@ -94,7 +94,6 @@
 </div>
 
 <style lang="scss">
-  @import "$lib/shared-styles.css";
 
   .container {
     display: flex;

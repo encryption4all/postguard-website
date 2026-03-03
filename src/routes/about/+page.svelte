@@ -40,10 +40,12 @@
 
 <style lang="scss">
     .page-wrapper {
-        height: 100%;
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
         display: flex;
-        align-items: center;
         justify-content: center;
+        padding: 1.5rem 1rem;
     }
 
     .grid-item {
@@ -55,9 +57,9 @@
     .grid-container {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 550px));
-        height: auto;
+        height: fit-content;
         align-items: start;
-        overflow-y: auto;
+        margin: auto;
     }
 
     img {
@@ -76,7 +78,7 @@
         }
 
         p {
-            font-size: 15px;
+            font-size: var(--pg-font-size-base);
             line-height: 1.6;
             margin-bottom: 0.5rem;
         }
@@ -100,7 +102,7 @@
         }
 
         p {
-            font-size: 15px;
+            font-size: var(--pg-font-size-base);
             line-height: 1.6;
             margin: 0;
         }

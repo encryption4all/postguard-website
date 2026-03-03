@@ -117,7 +117,6 @@
 </div>
 
 <style lang="scss">
-  @import "$lib/shared-styles.css";
 
   .test-header {
     padding: 1rem;
@@ -128,13 +127,13 @@
 
   .test-header h1 {
     margin: 0 0 0.5rem 0;
-    font-size: 1.5rem;
+    font-size: var(--pg-font-size-xl);
     color: var(--pg-primary-contrast);
   }
 
   .test-header p {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: var(--pg-font-size-sm);
     color: var(--pg-primary-contrast);
   }
 
@@ -154,7 +153,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    font-size: 1.15rem;
+    font-size: var(--pg-font-size-lg);
     min-width: 0;
     gap: 1.25rem;
     margin: 0;

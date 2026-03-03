@@ -1,5 +1,5 @@
 <script lang="ts">
-    import remove from '$lib/assets/images/google-icons/remove.svg'
+    import close from '$lib/assets/images/google-icons/close.svg'
     import file from '$lib/assets/images/google-icons/file.svg'
 </script>
 
@@ -11,15 +11,13 @@
     <div>
         <p data-dz-size></p>
         <button class="remove-button" data-dz-remove type="button">
-            <img src={remove} alt="remove button" />
+            <img class="invert" src={close} alt="remove button" />
         </button>
         <div class="dz-error-message"><span data-dz-errormessage></span></div>
     </div>
 </div>
 
 <style>
-    @import "../shared-styles.css";
-    @import "files-shared-sheet.css";
 
     .files {
         display: flex;
@@ -67,11 +65,11 @@
         overflow: hidden;
         white-space: nowrap;
         font-family: var(--pg-font-family);
-        font-weight: 400;
+        font-weight: var(--pg-font-weight-regular);
         margin: 0;
         color: var(--pg-text);
         min-width: 0;
-        font-size: 0.9rem;
+        font-size: var(--pg-font-size-sm);
         direction: rtl;
         text-align: left;
         text-overflow: ellipsis;
@@ -79,16 +77,16 @@
 
     .files > div:last-child p {
         font-family: var(--pg-font-family);
-        font-weight: 400;
+        font-weight: var(--pg-font-weight-regular);
         margin: 0;
         color: var(--pg-text-secondary);
-        font-size: 0.9rem;
+        font-size: var(--pg-font-size-sm);
     }
 
     .remove-button {
         cursor: pointer;
         height: 100%;
-        padding: 4px;
+        padding: 4px 0 4px 4px;
         border-radius: var(--pg-border-radius-md);
         transition: all 0.2s ease;
         display: flex;
@@ -103,5 +101,18 @@
 
     .remove-button * {
         cursor: pointer;
+    }
+
+    .remove-button img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .dz-error-message {
+        display: none;
+    }
+
+    :global(.dz-error) .dz-error-message {
+        display: block;
     }
 </style>

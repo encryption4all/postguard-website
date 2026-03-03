@@ -33,7 +33,7 @@
 
     li {
         white-space: nowrap;
-        font-size: 14px;
+        font-size: var(--pg-font-size-sm);
         position: relative;
         display: inline-block;
         z-index: 0;
@@ -46,6 +46,12 @@
             display: flex;
             gap: 5px;
             align-items: center;
+        }
+
+        button:focus-visible {
+            outline: 2px solid var(--pg-primary);
+            outline-offset: 2px;
+            border-radius: var(--pg-border-radius-sm);
         }
 
         &.active {

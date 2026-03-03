@@ -58,8 +58,17 @@
 </div>
 
 <style>
-    /* Reset all Yivi plugin CSS */
-    .yivi-qr-container :global(*) {
+    /*
+     * Reset all Yivi plugin CSS, but preserve the styles of Yivi's animation elements.
+     * Animation elements (phone, checkmark, etc.) rely on their Yivi CSS rules for
+     * colour, size, and keyframe animations — stripping them would break the visuals.
+     */
+    .yivi-qr-container :global(*:not(
+        .yivi-web-waiting-for-user-animation,
+        .yivi-web-checkmark-animation,
+        .yivi-web-forbidden-animation,
+        .yivi-web-clock-animation
+    )) {
         all: revert !important;
         box-shadow: none !important;
         margin: 0 !important;
@@ -97,8 +106,23 @@
         height: auto !important;
     }
 
-    /* Hide everything except the QR canvas/svg */
-    .yivi-qr-container :global(:not(canvas, svg, div:has(canvas), div:has(svg))) {
+    /*
+     * Hide everything except the QR canvas/svg and Yivi's post-scan animation states
+     * (waiting-for-user, success, cancelled, timeout/error).
+     * The :has() selectors ensure ancestor divs of visible content are also shown.
+     */
+    .yivi-qr-container :global(:not(
+        canvas, svg,
+        div:has(canvas), div:has(svg),
+        .yivi-web-waiting-for-user-animation,
+        .yivi-web-checkmark-animation,
+        .yivi-web-forbidden-animation,
+        .yivi-web-clock-animation,
+        div:has(.yivi-web-waiting-for-user-animation),
+        div:has(.yivi-web-checkmark-animation),
+        div:has(.yivi-web-forbidden-animation),
+        div:has(.yivi-web-clock-animation)
+    )) {
         display: none !important;
     }
 

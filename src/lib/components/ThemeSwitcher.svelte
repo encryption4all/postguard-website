@@ -1,29 +1,47 @@
 <script lang="ts">
     import { browser } from '$app/environment'
+    import { onMount } from 'svelte'
     import sun from '$lib/assets/images/google-icons/sun.svg'
     import moon from '$lib/assets/images/google-icons/moon.svg'
 
     let theme: 'light' | 'dark' = 'light'
+    let userPreference: 'light' | 'dark' | null = null
 
     if (browser) {
         const stored = localStorage.getItem('preferredtheme')
-        if (stored === 'dark') {
-            theme = 'dark'
-            document.documentElement.classList.add('dark')
+        if (stored === 'light' || stored === 'dark') {
+            theme = stored
+            userPreference = stored
+        } else {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
         }
+        document.documentElement.classList.toggle('dark', theme === 'dark')
     }
 
     function setTheme(newTheme: 'light' | 'dark') {
         theme = newTheme
-
+        userPreference = newTheme
         if (!browser) return
-
         document.documentElement.classList.toggle('dark', newTheme === 'dark')
         localStorage.setItem('preferredtheme', newTheme)
     }
 
-    $: isLight = theme === 'light'
-    $: isDark = theme === 'dark'
+    onMount(() => {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+
+        function handleSystemChange(e: MediaQueryListEvent) {
+            if (!localStorage.getItem('preferredtheme')) {
+                theme = e.matches ? 'dark' : 'light'
+                document.documentElement.classList.toggle('dark', theme === 'dark')
+            }
+        }
+
+        mediaQuery.addEventListener('change', handleSystemChange)
+        return () => mediaQuery.removeEventListener('change', handleSystemChange)
+    })
+
+    $: isLight = userPreference === 'light'
+    $: isDark = userPreference === 'dark'
 </script>
 
 <div
@@ -45,8 +63,7 @@
             onchange={() => setTheme('light')}
         />
         <label class="theme-label" for="theme-light">
-            <img src={sun} width="16" height="16" alt="" class="invert" />
-            <span class="hidden">Light mode</span>
+            <img src={sun} width="16" height="16" alt="Light mode" class="invert" />
         </label>
     </div>
 
@@ -60,8 +77,7 @@
             onchange={() => setTheme('dark')}
         />
         <label class="theme-label" for="theme-dark">
-            <img src={moon} width="16" height="16" alt="" class="invert" />
-            <span class="hidden">Dark mode</span>
+            <img src={moon} width="16" height="16" alt="Dark mode" class="invert" />
         </label>
     </div>
 </div>
@@ -90,14 +106,19 @@
   }
 
   .hidden {
-    display: none;
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
   }
 
   .theme {
     display: flex;
     width: 6rem;
     height: auto;
-    font-size: 16px;
+    font-size: var(--pg-font-size-base);
     line-height: 1;
     margin: 1rem 0;
     align-content: center;
@@ -120,11 +141,12 @@
     width: $theme-width;
     height: $theme-height;
     border: 1px solid $theme-border;
-    padding: 6px 0 2px 0;
-    background-color: transparant;
-    text-align: center;
-    text-transform: uppercase;
+    padding: 0;
+    background-color: transparent;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .theme-container-left .theme-label {
@@ -141,10 +163,15 @@
     background-color: $theme-hover;
   }
 
-  .selected .theme-label {
-    text-decoration: 2px underline;
-    text-decoration-color: --pg-text;
-    text-underline-offset: 4px;
+  .selected .theme-label::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background-color: var(--pg-text);
   }
 
   .theme-control:focus-visible + .theme-label {

@@ -27,8 +27,8 @@
     }
 
     .file-list-header {
-        font-weight: 700;
-        font-size: 0.95rem;
+        font-weight: var(--pg-font-weight-bold);
+        font-size: var(--pg-font-size-md);
         padding: 0.5rem 1rem;
         color: var(--pg-text);
         border-bottom: 1px solid var(--pg-strong-background);
@@ -37,7 +37,7 @@
 
     .file-list-item {
         padding: 0.4rem 1rem;
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         color: var(--pg-text);
         font-family: var(--pg-font-family);
 

@@ -52,29 +52,34 @@
         'pbdf.gemeente.personalData.dateofbirth',
     ]
 
-    const defaultEncryptState: EncryptState = {
-        recipients: [{ email: '', extra: [] }],
-        sender: '',
-        senderAttributes: [],
-        message: '',
-        files: [],
-        percentages: [],
-        done: [],
-        encryptionState: EncryptionState.FileSelection,
-        abort: new AbortController(),
-        selfAborted: false,
-        encryptStartTime: 0,
-        modPromise: modPromise,
-        pkPromise: getParameters(),
-        senderConfirm: true,
-        privSignKey: undefined,
-        pubSignKey: undefined,
+    function createDefaultEncryptState(): EncryptState {
+        return {
+            recipients: [{ email: '', extra: [] }],
+            sender: '',
+            senderAttributes: [],
+            message: '',
+            files: [],
+            percentages: [],
+            done: [],
+            encryptionState: EncryptionState.FileSelection,
+            abort: new AbortController(),
+            selfAborted: false,
+            encryptStartTime: 0,
+            modPromise: modPromise,
+            pkPromise: getParameters(),
+            senderConfirm: true,
+            privSignKey: undefined,
+            pubSignKey: undefined,
+        }
     }
 
-    let EncryptState: EncryptState = $state(defaultEncryptState)
+    let EncryptState: EncryptState = $state(createDefaultEncryptState())
 </script>
 
-<div class:container={EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Encrypting || EncryptState.encryptionState === EncryptionState.Error}>
+<div
+    class:container={EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Encrypting || EncryptState.encryptionState === EncryptionState.Error}
+    class:done={EncryptState.encryptionState === EncryptionState.Done}
+>
     <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
                bind:done={EncryptState.done} bind:stage={EncryptState.encryptionState} />
     {#if EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Encrypting}
@@ -92,15 +97,13 @@
             <Error bind:encryptionState={EncryptState.encryptionState} />
         </div>
     {:else if EncryptState.encryptionState === EncryptionState.Done}
-        <Done bind:EncryptState={EncryptState} defaultEncryptState={defaultEncryptState} />
+        <Done bind:EncryptState={EncryptState} {createDefaultEncryptState} />
     {/if}
 
 
 </div>
 
 <style lang="scss">
-  @import "$lib/shared-styles.css";
-
   * {
     list-style-type: none;
   }
@@ -117,17 +120,22 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    font-size: 1.15rem;
+    font-size: var(--pg-font-size-lg);
     min-width: 0;
     gap: 1.25rem;
     margin: 0;
   }
 
+  .done {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
   @media only screen and (min-width: 768px) {
     .container {
       display: grid;
-      grid-auto-columns: 4fr 3fr;
-      grid-auto-flow: column;
+      grid-template-columns: 1fr min(800px, 43%);
       gap: 2rem;
       height: calc(100vh - 52px - 0.5rem - 1rem); /* navbar height + margin */
       overflow-y: hidden;

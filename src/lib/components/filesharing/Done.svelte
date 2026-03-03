@@ -8,9 +8,9 @@
 
     interface props {
         EncryptState: EncryptState;
-        defaultEncryptState: EncryptState;
+        createDefaultEncryptState: () => EncryptState;
     }
-    let { EncryptState=$bindable(), defaultEncryptState }: props = $props()
+    let { EncryptState=$bindable(), createDefaultEncryptState }: props = $props()
 </script>
 
 <div class="container">
@@ -49,32 +49,33 @@
     <!-- Send another button -->
     <Chip
         text={$_('filesharing.encryptPanel.another')}
-        onclick={() => EncryptState = defaultEncryptState}
+        onclick={() => EncryptState = createDefaultEncryptState()}
         size="lg"
         variant="dark"
     />
+
+    <div class="spacer"></div>
 
     <!-- Airplane decoration -->
     <img src={airplane} alt="airplane" class="airplane-decoration" />
 </div>
 
 <style>
-    @import "shared-styles.css";
 
     .container {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         gap: 1.5rem;
         padding: 2rem 2rem 0 2rem;
         max-width: 600px;
         margin: 0 auto;
+        flex: 1; /* fill the .done wrapper in +page.svelte */
     }
 
     h2 {
-        font-size: 1.75rem;
-        font-weight: 700;
+        font-size: var(--pg-font-size-2xl);
+        font-weight: var(--pg-font-weight-bold);
         color: --pg-text;
         margin: 0 0 1rem 0;
         text-align: center;
@@ -89,7 +90,11 @@
     }
 
     .info-box h3 {
-        padding: 0.3rem 1rem;
+        padding: 0.5rem 1rem;
+        font-weight: var(--pg-font-weight-bold);
+        font-size: var(--pg-font-size-md);
+        font-family: var(--pg-font-family);
+        margin: 0;
     }
 
     .divider {
@@ -105,10 +110,9 @@
     }
 
     .recipient-item {
-        padding: 0.3rem 0 0.4rem 1rem;
-        margin: 0 0rem;
+        padding: 0.4rem 1rem;
         font-family: var(--pg-font-family);
-        font-size: 1rem;
+        font-size: var(--pg-font-size-md);
         color: var(--pg-text);
         border-bottom: 1px solid var(--pg-strong-background);
         display: flex;
@@ -117,7 +121,7 @@
     }
 
     .recipient-email {
-        font-weight: 500;
+        font-weight: var(--pg-font-weight-regular);
     }
 
     .recipient-attributes {
@@ -126,13 +130,22 @@
         gap: 0.5rem;
     }
 
+    .spacer {
+        flex: 1;
+    }
+
     .airplane-decoration {
         width: 120%;
         max-width: 800px;
         height: auto;
         opacity: 0.6;
         pointer-events: none;
-        margin: 2rem 0 0 0;
+        margin: 0;
         padding: 0;
+
+        @media only screen and (max-width: 768px) {
+            width: 100%;
+        }
     }
+
 </style>

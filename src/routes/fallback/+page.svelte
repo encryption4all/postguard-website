@@ -94,7 +94,7 @@
             <div id="image-container">
                 <img
                     src={decryptImg}
-                    class="grid-item"
+                    class="grid-item invert"
                     alt="decrypt"
                     width="400"
                     height="450"
@@ -202,6 +202,12 @@
                     margin: auto 2rem auto auto;
                     cursor: pointer;
                     display: flex;
+
+                    &:focus-visible {
+                        outline: 2px solid var(--pg-primary);
+                        outline-offset: 2px;
+                        border-radius: var(--pg-border-radius-sm);
+                    }
                 }
             }
 

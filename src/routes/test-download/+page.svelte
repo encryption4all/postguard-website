@@ -10,7 +10,27 @@
     }
 
     const mockSenderIdentity = {
-        con: [{ t: 'pbdf.sidn-pbdf.email.email', v: 'alice@example.com' }]
+        con: [
+            { t: 'pbdf.sidn-pbdf.email.email', v: 'alice@example.com' },
+            { t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber', v: '+31612345678' },
+            { t: 'pbdf.nijmegen.personalData.fullname', v: 'Alice Jansen' },
+        ]
+    }
+
+    function getSenderEmail(identity: any): string {
+        if (!identity?.con?.length) return ''
+        return (
+            identity.con.find((a: any) => a.t?.includes('email') && a.v)?.v ??
+            identity.con.find((a: any) => a.v)?.v ??
+            ''
+        )
+    }
+
+    function getSenderExtras(identity: any): string[] {
+        if (!identity?.con?.length) return []
+        return identity.con
+            .filter((a: any) => !a.t?.includes('email') && a.v)
+            .map((a: any) => a.v as string)
     }
 </script>
 
@@ -60,7 +80,14 @@
                         <path d="M1 5L4.5 8.5L11 1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     <p class="sender-label">{$_('filesharing.decryptpanel.verifiedEmail')}</p>
-                    <strong class="sender-email">{mockSenderIdentity.con[0].v}</strong>
+                    <strong class="sender-email">{getSenderEmail(mockSenderIdentity)}</strong>
+                    {#if getSenderExtras(mockSenderIdentity).length > 0}
+                        <div class="attr-chips">
+                            {#each getSenderExtras(mockSenderIdentity) as extra}
+                                <span class="attr-chip">{extra}</span>
+                            {/each}
+                        </div>
+                    {/if}
                 </div>
             </div>
         </div>
@@ -89,13 +116,13 @@
 
         h1 {
             margin: 0 0 0.25rem;
-            font-size: 1.25rem;
+            font-size: var(--pg-font-size-lg);
             color: var(--pg-primary-contrast);
         }
 
         p {
             margin: 0;
-            font-size: 0.85rem;
+            font-size: var(--pg-font-size-sm);
             color: var(--pg-primary-contrast);
             opacity: 0.8;
         }
@@ -120,8 +147,8 @@
 
     .state-label {
         padding: 0.4rem 1rem;
-        font-size: 0.75rem;
-        font-weight: 600;
+        font-size: var(--pg-font-size-xs);
+        font-weight: var(--pg-font-weight-medium);
         text-transform: uppercase;
         letter-spacing: 0.05em;
         color: var(--pg-text-secondary);
@@ -150,8 +177,8 @@
 
     h2 {
         text-align: center;
-        font-size: 1.5rem;
-        font-weight: 700;
+        font-size: var(--pg-font-size-xl);
+        font-weight: var(--pg-font-weight-bold);
         color: var(--pg-text);
         margin: 0 0 0.25rem;
     }
@@ -160,7 +187,7 @@
         margin: 0;
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         line-height: 1.5;
     }
 
@@ -174,8 +201,8 @@
         gap: 0.75rem;
 
         h3 {
-            font-weight: 700;
-            font-size: 1.1rem;
+            font-weight: var(--pg-font-weight-bold);
+            font-size: var(--pg-font-size-lg);
             margin: 0;
             color: var(--pg-text);
         }
@@ -185,7 +212,7 @@
         margin: 0;
         color: var(--pg-text);
         font-family: var(--pg-font-family);
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         line-height: 1.5;
     }
 
@@ -235,22 +262,41 @@
 
     .sender-label {
         margin: 0;
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
     }
 
     .sender-email {
-        font-size: 0.95rem;
-        font-weight: 700;
+        font-size: var(--pg-font-size-md);
+        font-weight: var(--pg-font-weight-bold);
         color: var(--pg-text);
         font-family: var(--pg-font-family);
+    }
+
+    .attr-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        justify-content: center;
+    }
+
+    .attr-chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0.6rem;
+        border: 1px solid var(--pg-strong-background);
+        border-radius: 4px;
+        font-size: var(--pg-font-size-xs);
+        font-family: var(--pg-font-family);
+        color: var(--pg-text-secondary);
+        background: var(--pg-soft-background);
     }
 
     .error-description {
         margin: 0;
         font-family: var(--pg-font-family);
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         line-height: 1.5;
         text-align: center;
         color: var(--pg-text);

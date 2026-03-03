@@ -12,6 +12,7 @@
     Dropzone.autoDiscover = false
 
     let myDropzone: Dropzone | null = null
+    let isDragging = $state(false)
 
     interface props {
         files: File[];
@@ -25,6 +26,12 @@
     let maxFileSizeMB = MAX_UPLOAD_SIZE / (1024 * 1024)
 
     let { files = $bindable(), percentages = $bindable(), done = $bindable(), stage = $bindable() }: props = $props()
+
+    $effect(() => {
+        if (files.length === 0 && myDropzone && myDropzone.files.length > 0) {
+            myDropzone.removeAllFiles(true)
+        }
+    })
 
     let totalSize = $derived(files.reduce((acc, file) => acc + file.size, 0))
     let remainingSize = $derived(MAX_UPLOAD_SIZE - totalSize)
@@ -41,7 +48,7 @@
             maxFilesize: maxFileSizeMB,
             previewsContainer: '#previews',
             previewTemplate: previewTemplate,
-            clickable: '.dropzone-box, .choose-files-btn, .add-more-chip-container', // Only these elements trigger file selection
+            clickable: '#my-form .primary-btn, .add-more-chip-container', // Only these elements trigger file selection
         })
 
         myDropzone.on('addedfile', file => {
@@ -51,6 +58,10 @@
 
             myDropzone!.emit('complete', file)
         })
+
+        myDropzone.on('dragover', () => { isDragging = true })
+        myDropzone.on('dragleave', () => { isDragging = false })
+        myDropzone.on('drop', () => { isDragging = false })
 
         myDropzone.on('removedfile', file => {
             const index = files.findIndex(f => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified)
@@ -84,14 +95,25 @@
         <div class="dropzone-box"
              class:has-files={files.length > 0}
              class:encrypting={stage === EncryptionState.Encrypting}
-             class:signing={stage === EncryptionState.Sign}>
+             class:signing={stage === EncryptionState.Sign}
+             class:dragging={isDragging}>
             <div class="upload-butt middle-block-size" class:hidden={files.length > 0}>
                 <img class="drawing invert" src={BasketDrawing} alt="Add files" />
                 <p class="drag-text">{$_('filesharing.encryptPanel.fileBox.dragText')}</p>
                 <p class="or-text">{$_('filesharing.encryptPanel.fileBox.orText')}</p>
-                <button class="choose-files-btn btn-accent" type="button">{$_('filesharing.encryptPanel.fileBox.chooseFilesButton')}</button>
+                <button class="primary-btn" type="button">{$_('filesharing.encryptPanel.fileBox.chooseFilesButton')}</button>
                 <p class="max-size-text">{$_('filesharing.encryptPanel.fileBox.maxSizeText')}</p>
             </div>
+
+            {#if isDragging}
+                <div class="drop-overlay">
+                    <p class="drop-hint-text">
+                        {files.length > 0
+                            ? $_('filesharing.encryptPanel.fileBox.dropMoreText')
+                            : $_('filesharing.encryptPanel.fileBox.dropText')}
+                    </p>
+                </div>
+            {/if}
 
             <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
             <div class="files-container" class:hidden={files.length <= 0}>
@@ -120,13 +142,9 @@
 
 
 <style>
-    @import "../shared-styles.css";
-    @import "$lib/shared-styles.css";
-    @import "files-shared-sheet.css";
-
     h1 {
-        font-size: 1.75rem;
-        font-weight: 700;
+        font-size: var(--pg-font-size-2xl);
+        font-weight: var(--pg-font-weight-bold);
         color: --pg-text;
         margin: 0;
     }
@@ -142,6 +160,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        padding: 0;
     }
 
     @media only screen and (min-width: 768px) {
@@ -167,7 +186,7 @@
     }
 
     .dropzone-box {
-        width: 95%;
+        width: 100%;
         max-width: 600px;
         background: var(--pg-soft-background) 0%;
         border: 2px dashed var(--pg-primary);
@@ -181,6 +200,37 @@
         align-items: center;
         justify-content: center;
         min-height: fit-content;
+        position: relative;
+    }
+
+    /* Override Dropzone's default dimming of .dz-message on drag — we use our own overlay */
+    :global(.dropzone.dz-drag-hover .dz-message) {
+        opacity: 1 !important;
+    }
+
+    .dropzone-box.dragging {
+        border-style: solid;
+        box-shadow: 0 4px 20px rgba(48, 149, 222, 0.25);
+    }
+
+    .drop-overlay {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: var(--pg-soft-background);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .drop-hint-text {
+        font-size: clamp(var(--pg-font-size-lg), 3vw, var(--pg-font-size-2xl));
+        font-weight: var(--pg-font-weight-extrabold);
+        color: var(--pg-primary);
+        text-align: center;
+        margin: 0;
     }
 
     .dropzone-box.has-files {
@@ -208,7 +258,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        font-weight: 600;
+        font-weight: var(--pg-font-weight-medium);
         margin: 0;
         padding: 0;
         transition: all 0.3s ease;
@@ -217,7 +267,7 @@
 
     .upload-butt img {
         margin-bottom: 0.5rem;
-        width: 100%;
+        width: 80%;
         max-width: 300px;
         height: auto;
         transition: transform 0.2s ease;
@@ -230,43 +280,27 @@
     }
 
     .drag-text {
+        display: none;
         margin: 1rem 0 0rem 0;
-        font-size: clamp(1.4rem, 2.5vw, 1.25rem);
-        font-weight: 800;
+        font-size: clamp(var(--pg-font-size-xl), 2.5vw, var(--pg-font-size-lg));
+        font-weight: var(--pg-font-weight-extrabold);
         color: --pg-text;
         text-align: center;
     }
 
     .or-text {
+        display: none;
         margin: 0.5rem 0;
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         font-weight: 300;
         color: var(--pg-text-secondary);
         text-align: center;
     }
 
-    .choose-files-btn {
-        background: var(--pg-text);
-        box-shadow: 1px 1px 5px var(--pg-text-secondary);
-        color: var(--pg-general-background);
-        padding: 0.8rem 1.3rem;
-        border-radius: var(--pg-border-radius-sm);
-        font-size: 1.2rem;
-        font-weight: 400;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        box-sizing: border-box;
-    }
-
-    .choose-files-btn:hover {
-        background: var(--pg-input-active);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    }
 
     .max-size-text {
         margin: 0.75rem 0 0 0;
-        font-size: 0.875rem;
+        font-size: var(--pg-font-size-md);
         font-weight: 300;
         color: var(--pg-text-secondary);
         text-align: center;
@@ -319,6 +353,18 @@
         cursor: pointer;
     }
 
+    .add-more-chip-container :global(.chip:hover) {
+        background-color: var(--pg-soft-background);
+        border-color: var(--pg-primary);
+        color: var(--pg-primary);
+        box-shadow: 0 2px 4px rgba(48, 149, 222, 0.15);
+    }
+
+    .add-more-chip-container :global(.chip:active) {
+        transform: translateY(1px);
+        box-shadow: none;
+    }
+
     .file-summary {
         width: 100%;
         text-align: center;
@@ -328,9 +374,9 @@
 
     .file-summary p {
         margin: 0;
-        font-size: 0.875rem;
+        font-size: var(--pg-font-size-md);
         color: var(--pg-text-secondary);
-        font-weight: 600;
+        font-weight: var(--pg-font-weight-medium);
     }
 
     .dropzone-with-files {
@@ -340,7 +386,20 @@
     }
 
 
+    .upload-butt :global(.primary-btn) {
+        margin-top: 1.5rem;
+    }
+
     @media only screen and (min-width: 768px) {
+        .drag-text,
+        .or-text {
+            display: block;
+        }
+
+        .upload-butt :global(.primary-btn) {
+            margin-top: 0;
+        }
+
         .middle-block-size {
             min-height: 50vh;
             width: 70%;

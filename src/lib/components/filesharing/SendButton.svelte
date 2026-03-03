@@ -1,8 +1,8 @@
 <script lang="ts">
     import { _, locale } from 'svelte-i18n'
+    import { isValidPhoneNumber } from 'libphonenumber-js/mobile'
     import type { ISealOptions } from '@e4a/pg-wasm'
 
-    import yiviLogo from '$lib/assets/images/non-free/yivi-logo.svg'
     import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
     import { EncryptionState, type EncryptState, Lang } from '$lib/types/filesharing/attributes'
     import { RetrieveSignKeys } from '$lib/yivi-tools'
@@ -29,40 +29,65 @@
 
     let isMobileDevice = isMobile()
     let mobilePopupMode: 'none' | 'direct' | 'qr' = $state('none')
+    let showValidationModal = $state(false)
+    let validationErrors: string[] = $state([])
 
     import { MAX_UPLOAD_SIZE, UPLOAD_CHUNK_SIZE } from '$lib/env'
     let SMOOTH_TIME = 2
 
+    const emailRegex =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+
     let canEncrypt = $derived(() => {
-        if (EncryptState.files.length === 0 || EncryptState.recipients.length === 0) return false
-
-        const totalSize = EncryptState.files
-            .map((f) => f.size)
-            .reduce((a, b) => a + b, 0)
-
+        if (EncryptState.files.length === 0) return false
+        const totalSize = EncryptState.files.reduce((a, f) => a + f.size, 0)
         if (totalSize >= MAX_UPLOAD_SIZE) return false
-
-        const regex =
-            /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-
-        if (EncryptState.recipients.length <= 0) return false
-
-        const addressesValid =
-            EncryptState.recipients.every(({ email }) => regex.test(email))
-        if (!addressesValid) return false
-
-
-        const optionalsFilled =
-            EncryptState.recipients.every(({ extra }) =>
-                extra.every((att) => att.v && att.v.length > 0),
-            )
-        if (!optionalsFilled) return false
-
+        if (!EncryptState.recipients.every(({ email }) => emailRegex.test(email))) return false
+        if (!EncryptState.recipients.every(({ extra }) => extra.every((att) => {
+            if (!att.v || att.v.length === 0) return false
+            if (att.t === 'pbdf.sidn-pbdf.mobilenumber.mobilenumber' && !isValidPhoneNumber(att.v)) return false
+            return true
+        }))) return false
         return true
     })
 
+    function getValidationErrors(): string[] {
+        const errors: string[] = []
+        if (EncryptState.files.length === 0) {
+            errors.push($_('filesharing.encryptPanel.validation.noFiles'))
+        }
+        const totalSize = EncryptState.files.reduce((a, f) => a + f.size, 0)
+        if (totalSize >= MAX_UPLOAD_SIZE) {
+            errors.push($_('filesharing.encryptPanel.validation.filesTooLarge', {
+                values: { max: (MAX_UPLOAD_SIZE / (1024 ** 3)).toFixed(0) }
+            }))
+        }
+        EncryptState.recipients.forEach(({ email, extra }) => {
+            if (!email || email.trim() === '') {
+                errors.push($_('filesharing.encryptPanel.validation.noEmail'))
+            } else if (!emailRegex.test(email)) {
+                errors.push($_('filesharing.encryptPanel.validation.invalidEmail', { values: { email } }))
+            } else {
+                extra.forEach(({ t, v }) => {
+                    if (!v || v.length === 0) {
+                        const attrName = $_(`filesharing.attributes.${t}`)
+                        errors.push($_('filesharing.encryptPanel.validation.missingAttribute', { values: { attribute: attrName, email } }))
+                    } else if (t === 'pbdf.sidn-pbdf.mobilenumber.mobilenumber' && !isValidPhoneNumber(v)) {
+                        errors.push($_('filesharing.encryptPanel.validation.invalidPhone', { values: { email } }))
+                    }
+                })
+            }
+        })
+        return errors
+    }
+
     async function onSign(): Promise<void> {
-        if (!canEncrypt()) return
+        const errors = getValidationErrors()
+        if (errors.length > 0) {
+            validationErrors = errors
+            showValidationModal = true
+            return
+        }
         if (isMobileDevice && mobilePopupMode === 'none') {
             mobilePopupMode = 'direct'
         }
@@ -293,16 +318,15 @@
         <!-- Normal button -->
         <button
             bind:this={buttonRef}
-            class="crypt-btn-main crypt-btn yivi-btn-logo {canEncrypt() ? '' : ' crypt-btn-disabled'}"
+            class="primary-btn send-btn"
             onclick={onSign}
-            disabled={!canEncrypt()}
         >
-            <img src={canEncrypt() ? yiviLogoDark : yiviLogo} alt="yivi-logo" width={50} height={27} />
+            <img src={yiviLogoDark} alt="yivi-logo" width={50} height={27} />
             {$_('filesharing.encryptPanel.encryptSend')}
         </button>
 
         <!-- Mobile: Always show QR option when button is enabled -->
-        {#if isMobileDevice && canEncrypt()}
+        {#if isMobileDevice}
             <Chip
                 text={$_('filesharing.sign.signOtherDevice')}
                 onclick={() => {
@@ -330,9 +354,9 @@
 
     <!-- Desktop Yivi popup above the button -->
     {#if !isMobileDevice && EncryptState.encryptionState === EncryptionState.Sign && buttonRef}
-        <div class="desktop-backdrop" onclick={() => {
+        <button type="button" class="desktop-backdrop" tabindex="-1" aria-hidden="true" onclick={() => {
             EncryptState.encryptionState = EncryptionState.FileSelection
-        }}></div>
+        }}></button>
         <div
             class="desktop-yivi-popup"
             style="
@@ -366,10 +390,10 @@
 
     <!-- Mobile bottom sheet -->
     {#if isMobileDevice && mobilePopupMode !== 'none' && EncryptState.encryptionState === EncryptionState.Sign}
-        <div class="mobile-backdrop" onclick={() => {
+        <button type="button" class="mobile-backdrop" tabindex="-1" aria-hidden="true" onclick={() => {
             EncryptState.encryptionState = EncryptionState.FileSelection
             mobilePopupMode = 'none'
-        }}></div>
+        }}></button>
         <div class="mobile-bottom-sheet">
             <div class="bottom-sheet-content">
                 {#if mobilePopupMode === 'qr'}
@@ -404,7 +428,31 @@
         </div>
     {/if}
 </div>
+
+{#if showValidationModal}
+    <button type="button" class="validation-backdrop" tabindex="-1" aria-hidden="true" onclick={() => showValidationModal = false}></button>
+    <div class="validation-modal" role="dialog" aria-modal="true">
+        <h2 class="validation-title">{$_('filesharing.encryptPanel.validation.title')}</h2>
+        <ul class="validation-errors">
+            {#each validationErrors as error}
+                <li>{error}</li>
+            {/each}
+        </ul>
+        <button class="primary-btn" onclick={() => showValidationModal = false}>
+            {$_('filesharing.encryptPanel.validation.continueButton')}
+        </button>
+    </div>
+{/if}
+
 <style lang="scss">
+  .send-btn {
+    margin: 1.5rem 0 0.8rem 0;
+  }
+  /* Fade the Yivi logo when the button is disabled */
+  .primary-btn:disabled img {
+    opacity: 0.5;
+  }
+
   .button-container {
     display: flex;
     flex-direction: column;
@@ -412,45 +460,13 @@
     justify-content: center;
     gap: 0.5rem;
     margin-bottom: 1rem;
-    padding-left: 1.25rem;
     position: relative;
   }
 
-  .crypt-btn-main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    padding: 0.5rem 1.5rem;
-    width: fit-content;
-    text-wrap: nowrap;
-    font-size: 1.05rem;
-    font-weight: 600;
-    border-radius: var(--pg-border-radius-sm);
-    background: linear-gradient(135deg, var(--pg-input-hover) 0%, var(--pg-input-active) 100%) !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
-    transition: all 0.2s ease;
-    margin-bottom: 0.75rem;
-  }
-
-  .crypt-btn-main:hover:not(.crypt-btn-disabled):not(:disabled) {
-    background: linear-gradient(135deg, var(--pg-text-secondary) 0%, var(--pg-input-hover) 100%) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
-    transform: translateY(-1px);
-  }
-
-  .crypt-btn-main:disabled,
-  .crypt-btn-main.crypt-btn-disabled {
-    background: var(--pg-strong-background) !important;
-    color: var(--pg-text-secondary) !important;
-    cursor: not-allowed !important;
-    box-shadow: none !important;
-    opacity: 0.6;
-  }
-
-  .crypt-btn-main:disabled img,
-  .crypt-btn-main.crypt-btn-disabled img {
-    opacity: 0.5;
+  @media only screen and (min-width: 768px) {
+    .button-container {
+      padding-left: 1.25rem;
+    }
   }
 
   .upload-info-box {
@@ -479,8 +495,8 @@
     justify-content: flex-start;
     gap: 0.75rem;
     padding: 1rem 1rem;
-    font-size: 1rem;
-    font-weight: 400;
+    font-size: var(--pg-font-size-base);
+    font-weight: var(--pg-font-weight-regular);
     font-family: var(--pg-font-family);
     color: var(--pg-text);
     z-index: 1;
@@ -520,7 +536,7 @@
   }
 
   .yivi-tip {
-    font-size: 0.85rem;
+    font-size: var(--pg-font-size-sm);
     color: var(--pg-text-secondary);
     font-family: var(--pg-font-family);
     margin: 0;
@@ -566,8 +582,8 @@
   }
 
   .popup-title {
-    font-size: 0.85rem;
-    font-weight: bold;
+    font-size: var(--pg-font-size-sm);
+    font-weight: var(--pg-font-weight-bold);
     margin: 0;
     text-align: left;
     color: var(--pg-text);
@@ -576,10 +592,11 @@
   }
 
   .popup-instruction {
-    font-size: 0.75rem;
+    font-size: var(--pg-font-size-sm);
+    font-weight: var(--pg-font-weight-bold);
     margin: 0 0 0.5rem 0;
     text-align: left;
-    color: var(--pg-text-secondary);
+    color: var(--pg-text);
     font-family: var(--pg-font-family);
     width: 100%;
   }
@@ -632,8 +649,8 @@
   }
 
   .bottom-sheet-title {
-    font-size: 0.85rem;
-    font-weight: bold;
+    font-size: var(--pg-font-size-sm);
+    font-weight: var(--pg-font-weight-bold);
     margin: 0;
     text-align: center;
     color: var(--pg-text);
@@ -641,10 +658,65 @@
   }
 
   .bottom-sheet-instruction {
-    font-size: 0.75rem;
+    font-size: var(--pg-font-size-sm);
+    font-weight: var(--pg-font-weight-bold);
     margin: 0;
     text-align: center;
+    color: var(--pg-text);
+    font-family: var(--pg-font-family);
+  }
+
+  /* Validation modal */
+  .validation-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 10;
+    cursor: pointer;
+  }
+
+  .validation-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--pg-general-background);
+    border-radius: var(--pg-border-radius-lg);
+    padding: 1.75rem 1.5rem 1.5rem;
+    z-index: 11;
+    width: 90%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+
+  .validation-title {
+    font-size: var(--pg-font-size-lg);
+    font-weight: var(--pg-font-weight-bold);
+    margin: 0;
+    color: var(--pg-text);
+    font-family: var(--pg-font-family);
+  }
+
+  .validation-errors {
+    margin: 0;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .validation-errors li {
+    font-size: var(--pg-font-size-sm);
     color: var(--pg-text-secondary);
     font-family: var(--pg-font-family);
+    line-height: 1.4;
+  }
+
+  .validation-modal .primary-btn {
+    align-self: stretch;
+    justify-content: center;
   }
 </style>

@@ -2,6 +2,7 @@
     import menuIcon from '$lib/assets/images/google-icons/menu.svg'
     import closeIcon from '$lib/assets/images/google-icons/close.svg'
     import LocaleSwitcher from '$lib/components/LocaleSwitcher.svelte'
+    import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte'
     import logo from '$lib/assets/images/logo.svg'
     import logoDark from '$lib/assets/images/logo-dark.svg'
     import { _, locale } from 'svelte-i18n'
@@ -14,6 +15,11 @@
     let hamburgerOpen = $state(false)
 
     let { items }: props = $props()
+
+    $effect(() => {
+        document.body.style.overflow = hamburgerOpen ? 'hidden' : ''
+        return () => { document.body.style.overflow = '' }
+    })
 
     function isSelected(route: String) {
         return page.url.pathname === route;
@@ -32,7 +38,8 @@
         alt="open menu"
         width="32"
         height="32"
-        class="hamburger-icon"
+        class="hamburger-icon invert"
+        hidden={hamburgerOpen}
     />
 </button>
 
@@ -50,7 +57,7 @@
                 alt="close menu"
                 width="32"
                 height="32"
-                class="hamburger-icon"
+                class="hamburger-icon invert"
             />
         </button>
     </div>
@@ -64,15 +71,13 @@
             </li>
         {/each}
     </ul>
-    <div class="align-lang">
-        <LocaleSwitcher
-            lang={$locale}
-        />
+    <div class="bottom-bar">
+        <ThemeSwitcher />
+        <LocaleSwitcher lang={$locale} />
     </div>
 </div>
 
 <style>
-    @import "$lib/shared-styles.css";
 
     .logo-dark {
         display: none;
@@ -98,17 +103,18 @@
 
     .hamburger-menu {
         display: none;
-        position: absolute;
+        position: fixed;
         flex-direction: column;
         top: 0;
-        right: 0;
-        background-color: transparent;
+        left: 0;
+        background-color: var(--pg-general-background);
         border-radius: 4px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         padding: 0;
         margin: 0;
         width: 100%;
-        height: 100%;
+        height: 100dvh;
+        overflow: hidden;
         z-index: 4;
     }
 
@@ -150,9 +156,10 @@
         margin: 0.5rem 1rem 1rem 1rem;
     }
 
-    .align-lang {
+    .bottom-bar {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
+        align-items: center;
         margin: 1rem;
     }
 </style>

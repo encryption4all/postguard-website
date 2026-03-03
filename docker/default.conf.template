@@ -87,4 +87,8 @@ server {
     location /irma/ {
         proxy_pass ${IRMA_UPSTREAM_URL}/;
     }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
 }

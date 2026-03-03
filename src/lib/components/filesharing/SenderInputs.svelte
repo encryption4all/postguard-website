@@ -72,5 +72,4 @@
 </div> -->
 
 <style lang="scss">
-  @import "shared-styles.css";
 </style>

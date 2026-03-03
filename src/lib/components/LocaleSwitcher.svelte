@@ -72,14 +72,19 @@
   }
 
   .hidden {
-    display: none;
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
   }
 
   .language {
     display: flex;
     width: 6rem;
     height: auto;
-    font-size: 16px;
+    font-size: var(--pg-font-size-base);
     line-height: 1;
     margin: 1rem 0;
     align-content: center;

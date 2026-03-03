@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, tick } from 'svelte'
-    import { browser } from '$app/environment'
+    import { browser, dev } from '$app/environment'
     import { _ } from 'svelte-i18n'
     import YiviCore from '@privacybydesign/yivi-core'
     import YiviClient from '@privacybydesign/yivi-client'
@@ -121,6 +121,7 @@
             const { StreamUnsealer } = await import('@e4a/pg-wasm')
             unsealer = await StreamUnsealer.new(response.body, vk)
             policies = unsealer.inspect_header()
+            if (dev) console.debug('[download] header policies:', Object.fromEntries(policies))
 
             try {
                 senderIdentity = unsealer.public_identity()
@@ -165,6 +166,7 @@
             con: recipientStripped,
             validity: secondsTill4AM(),
         }
+        if (dev) console.debug('[download] key request:', JSON.stringify(keyRequest))
 
         downloadState = 'Ready'
         tick().then(() => startYiviSession())
@@ -231,6 +233,7 @@
             downloadState = 'Decrypting'
             await decryptFiles()
         } catch (e) {
+            if (dev) console.error('[download] Yivi session error:', e)
             err = String(e)
             downloadState = 'Fail'
         }
@@ -244,7 +247,11 @@
             },
         })
 
-        await unsealer.unseal(key, usk, writable)
+        if (dev) console.debug('[download] unsealing for recipient:', key)
+        await unsealer.unseal(key, usk, writable).catch((e: unknown) => {
+            if (dev) console.error('[download] unseal failed:', e)
+            throw e
+        })
         if (!senderIdentity) {
             senderIdentity = unsealer.public_identity()
         }
@@ -389,8 +396,8 @@
 
     h2 {
         text-align: center;
-        font-size: 1.5rem;
-        font-weight: 700;
+        font-size: var(--pg-font-size-xl);
+        font-weight: var(--pg-font-weight-bold);
         color: var(--pg-text);
         margin: 0 0 0.25rem;
     }
@@ -399,7 +406,7 @@
         margin: 0;
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         line-height: 1.5;
     }
 
@@ -414,8 +421,8 @@
     }
 
     .decrypt-card h3 {
-        font-weight: 700;
-        font-size: 1.1rem;
+        font-weight: var(--pg-font-weight-bold);
+        font-size: var(--pg-font-size-lg);
         margin: 0;
         color: var(--pg-text);
     }
@@ -424,7 +431,7 @@
         margin: 0;
         color: var(--pg-text);
         font-family: var(--pg-font-family);
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         line-height: 1.5;
     }
 
@@ -464,7 +471,7 @@
         background: var(--pg-general-background);
         color: var(--pg-text);
         font-family: var(--pg-font-family);
-        font-size: 1rem;
+        font-size: var(--pg-font-size-base);
     }
 
     .sender-section {
@@ -485,21 +492,21 @@
 
     .sender-label {
         margin: 0;
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
     }
 
     .sender-email {
-        font-size: 0.95rem;
-        font-weight: 700;
+        font-size: var(--pg-font-size-md);
+        font-weight: var(--pg-font-weight-bold);
         color: var(--pg-text);
         font-family: var(--pg-font-family);
     }
 
     .success-banner {
         display: flex;
-        align-items: flex-start; 
+        align-items: center; 
         gap: 0.75rem;
         background: var(--pg-strong-background);
         border-radius: var(--pg-border-radius-lg);
@@ -508,7 +515,7 @@
         p {
             margin: 0;
             font-family: var(--pg-font-family);
-            font-size: 0.95rem;
+            font-size: var(--pg-font-size-md);
             line-height: 1.4;
             color: var(--pg-text);
         }
@@ -535,7 +542,7 @@
         padding: 0.2rem 0.6rem;
         border: 1px solid var(--pg-strong-background);
         border-radius: 4px;
-        font-size: 0.85rem;
+        font-size: var(--pg-font-size-sm);
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
         background: var(--pg-general-background);
@@ -544,7 +551,7 @@
     .error-description {
         margin: 0;
         font-family: var(--pg-font-family);
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
         line-height: 1.5;
         text-align: center;
         color: var(--pg-text);

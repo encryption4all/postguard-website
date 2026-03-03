@@ -75,6 +75,11 @@
         cursor: pointer;
     }
 
+    button.chip:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+    }
+
     button.chip:disabled {
         opacity: 0.6;
         cursor: not-allowed;
@@ -88,17 +93,17 @@
     /* Size variants */
     .chip-sm {
         padding: 0px 8px;
-        font-size: 0.85rem;
+        font-size: var(--pg-font-size-sm);
     }
 
     .chip-md {
         padding: 2px 10px;
-        font-size: 0.9rem;
+        font-size: var(--pg-font-size-sm);
     }
 
     .chip-lg {
         padding: 0.2rem 1rem;
-        font-size: 0.95rem;
+        font-size: var(--pg-font-size-md);
     }
 
     /* Variant: default (white background, light border) */
@@ -115,6 +120,11 @@
         box-shadow: 0 2px 4px rgba(48, 149, 222, 0.15);
     }
 
+    button.chip-default:active:not(:disabled) {
+        transform: translateY(1px);
+        box-shadow: none;
+    }
+
     /* Variant: filled (gray background) */
     .chip-filled {
         background-color: var(--pg-strong-background);
@@ -127,6 +137,10 @@
         color: var(--pg-input-error);
     }
 
+    button.chip-filled:active:not(:disabled) {
+        transform: translateY(1px);
+    }
+
     /* Variant: dark (black border, for close buttons) */
     .chip-dark {
         background-color: transparent;
@@ -137,5 +151,10 @@
         background-color: var(--pg-soft-background);
         transform: translateY(-1px);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    button.chip-dark:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow: none;
     }
 </style>

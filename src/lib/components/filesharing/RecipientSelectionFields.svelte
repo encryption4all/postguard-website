@@ -5,8 +5,6 @@
     import closebutton from '$lib/assets/images/google-icons/close.svg'
     import AttributeButton from '$lib/components/filesharing/inputs/AttributeButton.svelte'
     import MultiInput from '$lib/components/filesharing/inputs/MultiInput.svelte'
-    import './shared-styles.css'
-
     interface props {
         recipient: { email: string; extra: AttributeCon };
         remove: () => void;
@@ -30,7 +28,7 @@
                 class:hidden={isConfirming}
                 onclick={remove}
             >
-                <img style="width: 14px; height: 14px;" src={closebutton} alt="close button" />
+                <img class="invert" style="width: 14px; height: 14px;" src={closebutton} alt="close button" />
             </button>
         {/if}
 
@@ -52,17 +50,27 @@
             />
 
             <div class="optionals-container">
-                {#each recipient.extra as attribute, index}
-                    <MultiInput
-                        translation_key={'filesharing.attributes.' + attribute.t}
-                        bind:value={attribute.v}
-                        deleteAction={() => {
-                            recipient.extra.splice(index, 1)
-                        }}
-                        isConfirming={isConfirming}
-                    />
-                {/each}
-                {#if !isConfirming}
+                {#if isConfirming}
+                    {#if recipient.extra.length > 0}
+                        <div class="attributes-list">
+                            {#each recipient.extra as attribute}
+                                <AttributeButton
+                                    type="added"
+                                    translation_key={'filesharing.attributes.' + attribute.t}
+                                />
+                            {/each}
+                        </div>
+                    {/if}
+                {:else}
+                    {#each recipient.extra as attribute, index}
+                        <MultiInput
+                            translation_key={'filesharing.attributes.' + attribute.t}
+                            bind:value={attribute.v}
+                            deleteAction={() => {
+                                recipient.extra.splice(index, 1)
+                            }}
+                        />
+                    {/each}
                     <div class="attributes-list">
                         {#each addableButtons as attribute}
                             <AttributeButton
@@ -84,13 +92,6 @@
         padding: 1rem;
         border-radius: var(--pg-border-radius-lg);
         border: 1px solid var(--pg-strong-background);
-        /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06); */
-        transition: all 0.2s ease;
-    }
-
-    .crypt-recipient:hover {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        border-color: var(--pg-input-normal);
     }
 
     .crypt-recipient:not(:last-child) {
@@ -100,7 +101,7 @@
     .recipient-container {
         display: flex;
         gap: 0.75rem;
-        align-items: flex-start;
+        align-items: center;
     }
 
     .btn-delete {
@@ -119,6 +120,11 @@
         background-color: var(--pg-soft-background);
     }
 
+    .btn-delete:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+    }
+
     .recipient-content {
         flex: 1;
         min-width: 0;
@@ -131,8 +137,8 @@
     }
 
     .field-label {
-        font-size: 0.8rem;
-        font-weight: 800;
+        font-size: var(--pg-font-size-sm);
+        font-weight: var(--pg-font-weight-extrabold);
         color: var(--pg-text);
         font-family: var(--pg-font-family);
     }

@@ -20,5 +20,24 @@
 
 {#if !$isLoading}
     <Header />
-    {@render children()}
+    <main>
+        {@render children()}
+    </main>
 {/if}
+
+<style>
+    :global(html),
+    :global(body),
+    :global(#app) {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    main {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+    }
+</style>

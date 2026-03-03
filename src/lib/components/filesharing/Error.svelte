@@ -46,15 +46,15 @@
     .error-title {
         color: var(--pg-input-error);
         font-family: var(--pg-font-family);
-        font-size: 1.5rem;
-        font-weight: 700;
+        font-size: var(--pg-font-size-xl);
+        font-weight: var(--pg-font-weight-bold);
         margin: 0;
     }
 
     .error-message {
         color: var(--pg-text);
         font-family: var(--pg-font-family);
-        font-size: 1rem;
+        font-size: var(--pg-font-size-base);
         line-height: 1.5;
         margin: 0;
     }
@@ -67,9 +67,9 @@
         border: none;
         border-radius: var(--pg-border-radius-sm);
         cursor: pointer;
-        font-size: 1rem;
+        font-size: var(--pg-font-size-base);
         font-family: var(--pg-font-family);
-        font-weight: 600;
+        font-weight: var(--pg-font-weight-medium);
         transition: all 0.2s ease;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }

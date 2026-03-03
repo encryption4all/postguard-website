@@ -10,8 +10,8 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
-      start_period: 40s
-      start_interval: 5s
+      start_interval: 1s
+      start_period: 30s
     ports:
       - "8000:8000"
     volumes:
@@ -38,18 +38,19 @@ services:
     container_name: postguard-pkg
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8087/health"]
-      interval: 10s
+      interval: 1m30s
       timeout: 5s
-      retries: 5
+      retries: 3
+      start_interval: 1s
       start_period: 30s
-      start_interval: 5s
     ports:
       - "8087:8087"
     volumes:
       - ./postguard:/app
       - postguard-pkg-target:/app/target
     environment:
-      - RUST_LOG=info
+      - RUST_LOG=debug
+      - RUST_BACKTRACE=1
       - IRMA_SERVER=http://irma-server:8088
     networks:
       - postguard
@@ -60,7 +61,7 @@ services:
   irma-server:
     image: ghcr.io/privacybydesign/irma:latest
     container_name: postguard-irma-server
-    command: server --no-auth --url http://localhost:8088 --jwt-privkey-file /etc/irma/jwt_privkey.pem
+    command: server --no-auth -v --url http://localhost:8088 --jwt-privkey-file /etc/irma/jwt_privkey.pem
     ports:
       - "8088:8088"
     volumes:
