@@ -41,10 +41,6 @@ server {
         try_files $uri $uri/ index.html =404;
     }
 
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-
     # these all include hashes, so we can cache them for a long time.
     location ~* \.(?:svg|ttf|js|css|wasm)$ {
         expires 1y;
