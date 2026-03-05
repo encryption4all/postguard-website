@@ -385,7 +385,7 @@ h3 {
     box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     box-sizing: border-box;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
     padding: 0.8rem 1.3rem;
 }
 
@@ -455,7 +455,7 @@ h3 {
     padding: 0.5rem 0;
     text-align: center;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .crypt-btn:hover:not(:disabled):not([disabled]):not(.crypt-btn-disabled) {
@@ -544,5 +544,32 @@ h3 {
             border-radius: 3.5px;
             z-index: -1;
         }
+    }
+}
+
+/* ── Low-density (1×) screen overrides ──────────────────────────────── */
+
+@media (resolution: 1dppx) {
+    html,
+    body {
+        -webkit-font-smoothing: subpixel-antialiased;
+    }
+
+    .primary-btn {
+        box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.25);
+    }
+
+    .primary-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 4px -2px rgba(0, 0, 0, 0.25);
+    }
+
+    .primary-btn:focus-visible {
+        outline: none;
+    }
+
+    .crypt-btn:hover:not(:disabled):not([disabled]):not(.crypt-btn-disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     }
 }
