@@ -29,6 +29,8 @@
     .help-section {
         width: 100%;
         box-sizing: border-box;
+        min-width: 0;
+        overflow: hidden;
     }
 
     .help-section.bordered {
