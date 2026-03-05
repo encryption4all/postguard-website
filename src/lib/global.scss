@@ -23,6 +23,16 @@ body {
     overflow-x: hidden;
     background: var(--pg-general-background);
     z-index: -5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+@media (resolution: 1dppx) {
+    body {
+        -webkit-font-smoothing: subpixel-antialiased;
+        -moz-osx-font-smoothing: auto;
+    }
 }
 
 :root {
@@ -144,10 +154,10 @@ textarea.pg-input {
     font-size: var(--pg-input-font-size);
     height: 2.5rem;
     background-color: var(--pg-general-background);
-    border: 1.5px solid var(--pg-input-normal);
+    border: 1px solid var(--pg-input-normal);
     border-radius: var(--pg-border-radius-md);
     padding: 0 0.85rem;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
     box-sizing: border-box;
     width: 100%;
     color: var(--pg-text)
@@ -178,7 +188,7 @@ input.pg-input:focus,
 select.pg-input:focus,
 textarea.pg-input:focus {
     outline: none;
-    border-color: var(--pg-primary);
+    border-color: var(--pg-primary-contrast);
     box-shadow: 0 0 0 3px rgba(var(--pg-primary-rgb), 0.1);
 }
 
@@ -186,7 +196,22 @@ input.pg-input:focus-visible,
 select.pg-input:focus-visible,
 textarea.pg-input:focus-visible {
     outline: 2px solid var(--pg-primary);
-    outline-offset: 2px;
+    outline-offset: 1px;
+}
+
+/* 1x (non-Retina) displays: thinner border and revert to border-only focus */
+@media (resolution: 1dppx) {
+    input.pg-input,
+    select.pg-input,
+    textarea.pg-input {
+        border-width: 1px;
+    }
+
+    input.pg-input:focus-visible,
+    select.pg-input:focus-visible,
+    textarea.pg-input:focus-visible {
+        outline: none;
+    }
 }
 
 input.pg-input:invalid:not(:focus):not(:placeholder-shown),
