@@ -88,10 +88,11 @@
         justify-content: center;
         align-items: center;
         overflow: hidden;
-        background: var(--pg-general-background);
+        background: #ffffff;
         border: 1.5px solid var(--pg-strong-background);
         border-radius: var(--pg-border-radius-sm);
         padding: 10px;
+        box-sizing: border-box;
     }
 
     .yivi-qr-container.responsive {
