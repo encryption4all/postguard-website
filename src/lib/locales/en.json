@@ -104,7 +104,10 @@
             "verifiedExtra": "The files were signed using",
             "notFoundTitle": "These files no longer exist",
             "notFoundSubtitle": "The link may have expired, or there may be an error in it.",
-            "notFoundMessage": "Ask the sender to send the files <strong>once more</strong>."
+            "notFoundMessage": "Ask the sender to send the files <strong>once more</strong>.",
+            "identityMismatchTitle": "Decryption failed",
+            "identityMismatchSubtitle": "The identity you provided does not match the intended recipient.",
+            "identityMismatchMessage": "Please make sure you are proving the correct email address in Yivi."
         },
         "encryptPanel": {
             "fileBox": {
