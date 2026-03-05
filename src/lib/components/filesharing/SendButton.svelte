@@ -298,6 +298,41 @@
 
     let yiviInfoExpanded = $state(false)
     let buttonRef: HTMLButtonElement | null = $state(null)
+    let modalContainerRef: HTMLDivElement | null = $state(null)
+
+    $effect(() => {
+        if (!browser || !modalContainerRef) return
+        // Move the modal container to document.body so it sits outside <main>,
+        // allowing <main> and <header> to receive the inert attribute safely.
+        document.body.appendChild(modalContainerRef)
+        return () => {
+            if (modalContainerRef && modalContainerRef.parentNode === document.body) {
+                document.body.removeChild(modalContainerRef)
+            }
+        }
+    })
+
+    $effect(() => {
+        if (!browser) return
+        const backgroundElements: (Element | null)[] = [
+            document.querySelector('main'),
+            document.querySelector('header'),
+        ]
+        for (const el of backgroundElements) {
+            if (el) {
+                if (showValidationModal) {
+                    el.setAttribute('inert', '')
+                } else {
+                    el.removeAttribute('inert')
+                }
+            }
+        }
+        return () => {
+            for (const el of backgroundElements) {
+                if (el) el.removeAttribute('inert')
+            }
+        }
+    })
 </script>
 <div class="button-container">
     {#if EncryptState.encryptionState === EncryptionState.Encrypting}
@@ -429,20 +464,22 @@
     {/if}
 </div>
 
-{#if showValidationModal}
-    <button type="button" class="validation-backdrop" tabindex="-1" aria-hidden="true" onclick={() => showValidationModal = false}></button>
-    <div class="validation-modal" role="dialog" aria-modal="true">
-        <h2 class="validation-title">{$_('filesharing.encryptPanel.validation.title')}</h2>
-        <ul class="validation-errors">
-            {#each validationErrors as error}
-                <li>{error}</li>
-            {/each}
-        </ul>
-        <button class="primary-btn" onclick={() => showValidationModal = false}>
-            {$_('filesharing.encryptPanel.validation.continueButton')}
-        </button>
-    </div>
-{/if}
+<div bind:this={modalContainerRef}>
+    {#if showValidationModal}
+        <button type="button" class="validation-backdrop" tabindex="-1" aria-hidden="true" onclick={() => showValidationModal = false}></button>
+        <div class="validation-modal" role="dialog" aria-modal="true">
+            <h2 class="validation-title">{$_('filesharing.encryptPanel.validation.title')}</h2>
+            <ul class="validation-errors">
+                {#each validationErrors as error}
+                    <li>{error}</li>
+                {/each}
+            </ul>
+            <button class="primary-btn" onclick={() => showValidationModal = false}>
+                {$_('filesharing.encryptPanel.validation.continueButton')}
+            </button>
+        </div>
+    {/if}
+</div>
 
 <style lang="scss">
   .send-btn {
