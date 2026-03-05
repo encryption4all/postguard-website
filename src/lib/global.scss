@@ -133,7 +133,7 @@ button {
     color: var(--pg-general-background);
     padding: 6px 14px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .btn-accent:hover {
@@ -417,7 +417,7 @@ h3 {
     box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     box-sizing: border-box;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
     padding: 0.8rem 1.3rem;
 }
 
@@ -487,7 +487,7 @@ h3 {
     padding: 0.5rem 0;
     text-align: center;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .crypt-btn:hover:not(:disabled):not([disabled]):not(.crypt-btn-disabled) {
