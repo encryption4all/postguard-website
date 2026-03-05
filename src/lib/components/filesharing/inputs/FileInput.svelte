@@ -128,6 +128,7 @@
                             icon="+"
                             size="lg"
                             variant="default"
+                            onclick={() => {}}
                         />
                     </div>
                 {/if}

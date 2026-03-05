@@ -99,6 +99,11 @@
         background-color: var(--pg-soft-background);
     }
 
+    .remove-button:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+    }
+
     .remove-button * {
         cursor: pointer;
     }
