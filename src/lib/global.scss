@@ -182,6 +182,13 @@ textarea.pg-input:focus {
     box-shadow: 0 0 0 3px rgba(var(--pg-primary-rgb), 0.1);
 }
 
+input.pg-input:focus-visible,
+select.pg-input:focus-visible,
+textarea.pg-input:focus-visible {
+    outline: 2px solid var(--pg-primary);
+    outline-offset: 2px;
+}
+
 input.pg-input:invalid:not(:focus):not(:placeholder-shown),
 select.pg-input:invalid:not(:focus),
 textarea.pg-input:invalid:not(:focus):not(:placeholder-shown) {
