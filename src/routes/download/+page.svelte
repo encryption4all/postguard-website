@@ -332,6 +332,13 @@
                     </svg>
                     <p class="sender-label">{$_('filesharing.decryptpanel.verifiedEmail')}</p>
                     <strong class="sender-email">{getSenderDisplay(senderIdentity)}</strong>
+                    {#if getSenderExtras(senderIdentity).length > 0}
+                        <div class="attr-chips">
+                            {#each getSenderExtras(senderIdentity) as extra}
+                                <span class="attr-chip">{extra}</span>
+                            {/each}
+                        </div>
+                    {/if}
                 </div>
             {/if}
 

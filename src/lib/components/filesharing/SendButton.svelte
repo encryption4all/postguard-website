@@ -235,6 +235,7 @@
                     EncryptState.message,
                     lang,
                     (n, last) => reportProgress(resolve, n, last),
+                    EncryptState.senderAttributes,
                 )
 
                 EncryptState.sender = sender
