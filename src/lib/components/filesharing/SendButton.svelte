@@ -102,10 +102,7 @@
                 { t: 'pbdf.sidn-pbdf.email.email' },
             ]
 
-            const keys = await RetrieveSignKeys(
-                pubSignId,
-                EncryptState.senderAttributes
-            )
+            const keys = await RetrieveSignKeys(pubSignId)
 
             if (!keys || !keys.pubSignKey) {
                 console.error('Failed to retrieve sign keys')
@@ -170,15 +167,11 @@
             }
         })
 
-        // also encrypt for the sender
-        if (EncryptState.senderConfirm)
-            enc_policy[EncryptState.sender] = {
-                ts,
-                con: [
-                    { t: 'pbdf.sidn-pbdf.email.email', v: EncryptState.sender },
-                    ...EncryptState.senderAttributes,
-                ],
-            }
+        // always encrypt for the sender so they receive a confirmation
+        enc_policy[EncryptState.sender] = {
+            ts,
+            con: [{ t: 'pbdf.sidn-pbdf.email.email', v: EncryptState.sender }],
+        }
 
         if (!EncryptState.pubSignKey) {
             EncryptState.encryptionState = EncryptionState.Error
@@ -230,11 +223,12 @@
                 const [fileStream, sender] = getFileStoreStream(
                     EncryptState.abort,
                     EncryptState.sender,
-                    EncryptState.senderConfirm,
+                    true,
                     EncryptState.recipients.map(({ email }) => email).join(', '),
                     EncryptState.message,
                     lang,
                     (n, last) => reportProgress(resolve, n, last),
+                    EncryptState.privSignKey?.policy?.con as { t: string; v: string }[] | undefined,
                 )
 
                 EncryptState.sender = sender

@@ -38,6 +38,7 @@ async function initFile(
     recipient: string,
     mailContent: string | null,
     lang: Lang,
+    senderAttributes?: { t: string; v: string }[],
 ): Promise<[FileState, string]> {
     const response = await fetch(`${FILEHOST_URL}/fileupload/init`, {
         signal: abortSignal,
@@ -51,6 +52,7 @@ async function initFile(
             recipient: recipient,
             mailContent: mailContent,
             mailLang: lang,
+            senderAttributes: senderAttributes ?? [],
         }),
     });
 
@@ -162,7 +164,8 @@ export function getFileStoreStream(
     recipient: string,
     mailContent: string | null,
     lang: Lang,
-    progressReported: (uploaded: number, last: boolean) => void
+    progressReported: (uploaded: number, last: boolean) => void,
+    senderAttributes?: { t: string; v: string }[],
 ): [WritableStream<Uint8Array>, string] {
     let state: FileState = {
         token: "",
@@ -181,6 +184,7 @@ export function getFileStoreStream(
                 recipient,
                 mailContent,
                 lang,
+                senderAttributes,
             );
             progressReported(processed, false);
             if (abortController.signal.aborted) {

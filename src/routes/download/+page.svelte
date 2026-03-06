@@ -248,12 +248,16 @@
         })
 
         if (dev) console.debug('[download] unsealing for recipient:', key)
-        await unsealer.unseal(key, usk, writable).catch((e: unknown) => {
+        const verificationResult = await unsealer.unseal(key, usk, writable).catch((e: unknown) => {
             if (dev) console.error('[download] unseal failed:', e)
             throw e
         })
-        if (!senderIdentity) {
-            senderIdentity = unsealer.public_identity()
+        // Merge public + private identity so optional sender attributes are visible
+        senderIdentity = {
+            con: [
+                ...(verificationResult?.public?.con ?? []),
+                ...(verificationResult?.private?.con ?? []),
+            ]
         }
 
         const blob = new Blob(chunks, { type: 'application/zip' })
@@ -332,6 +336,13 @@
                     </svg>
                     <p class="sender-label">{$_('filesharing.decryptpanel.verifiedEmail')}</p>
                     <strong class="sender-email">{getSenderDisplay(senderIdentity)}</strong>
+                    {#if getSenderExtras(senderIdentity).length > 0}
+                        <div class="attr-chips">
+                            {#each getSenderExtras(senderIdentity) as extra}
+                                <span class="attr-chip">{extra}</span>
+                            {/each}
+                        </div>
+                    {/if}
                 </div>
             {/if}
 
