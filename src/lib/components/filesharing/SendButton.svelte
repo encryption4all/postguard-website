@@ -680,12 +680,17 @@
     padding: 1.75rem 1.5rem 1.5rem;
     width: 90%;
     max-width: 380px;
-    display: flex;
-    flex-direction: column;
     gap: 1rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     background: var(--pg-general-background);
     color: var(--pg-text);
+  }
+
+  /* Only apply flex layout when the dialog is open.
+     Setting display on dialog directly overrides the UA's display:none for closed dialogs. */
+  dialog.validation-modal[open] {
+    display: flex;
+    flex-direction: column;
   }
 
   dialog.validation-modal::backdrop {
