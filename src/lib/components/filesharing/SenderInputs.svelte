@@ -24,7 +24,7 @@
     }
 </script>
 
-<!-- <div class="crypt-select-protection-input-box">
+<div class="crypt-select-protection-input-box">
     <div class="sender-heading">
         <h3>
             {$_('filesharing.encryptPanel.emailSenderHeading')}
@@ -46,30 +46,34 @@
         {#each senderAttributes as attribute, index}
             <AttributeButton type="added"
                  translation_key={'filesharing.attributes.' + attribute.t}
-                 clickAction={() => removeAttribute(index)}
+                 clickAction={readonly ? undefined : () => removeAttribute(index)}
             />
         {/each}
     </div>
 
-    <div class="attributes-list add-list">
-        {#each addableButtons as attribute}
-            <AttributeButton type="add"
-                 translation_key={'filesharing.attributes.' + attribute}
-                 clickAction={() => addAttribute(attribute)}
-            />
-        {/each}
-    </div>
+    {#if !readonly}
+        <div class="attributes-list add-list">
+            {#each addableButtons as attribute}
+                <AttributeButton type="add"
+                     translation_key={'filesharing.attributes.' + attribute}
+                     clickAction={() => addAttribute(attribute)}
+                />
+            {/each}
+        </div>
+    {/if}
+
     <div class="crypt-sender-receipt">
         <input
             type="checkbox"
             id="receipt"
-            checked={senderConfirm}
+            bind:checked={senderConfirm}
+            disabled={readonly}
         />
         <label for="receipt">
             {$_('filesharing.encryptPanel.emailSenderConfirm')}
         </label>
     </div>
-</div> -->
+</div>
 
 <style lang="scss">
 </style>
