@@ -104,7 +104,10 @@
             "verifiedExtra": "De bestanden zijn ondertekend met",
             "notFoundTitle": "Deze bestanden bestaan niet (meer)",
             "notFoundSubtitle": "Het kan zijn dat de link is verlopen, of dat er een fout in zit.",
-            "notFoundMessage": "Vraag de verzender de bestanden <strong>nog een keer te versturen</strong>."
+            "notFoundMessage": "Vraag de verzender de bestanden <strong>nog een keer te versturen</strong>.",
+            "identityMismatchTitle": "Ontsleutelen mislukt",
+            "identityMismatchSubtitle": "De opgegeven identiteit komt niet overeen met de beoogde ontvanger.",
+            "identityMismatchMessage": "Zorg ervoor dat u het juiste e-mailadres bewijst in Yivi."
         },
         "encryptPanel": {
             "fileBox": {

@@ -12,7 +12,7 @@
     import Chip from '$lib/components/Chip.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
 
-    type DownloadState = 'Downloading' | 'Recipients' | 'Ready' | 'Decrypting' | 'Done' | 'Fail'
+    type DownloadState = 'Downloading' | 'Recipients' | 'Ready' | 'Decrypting' | 'Done' | 'Fail' | 'IdentityMismatch'
 
     // public_identity() returns a Policy: { ts: number, con: [{t: string, v?: string}] }
     function getSenderEmail(identity: any): string {
@@ -235,7 +235,11 @@
         } catch (e) {
             if (dev) console.error('[download] Yivi session error:', e)
             err = String(e)
-            downloadState = 'Fail'
+            if ((e as any)?.isDecryptionFailure) {
+                downloadState = 'IdentityMismatch'
+            } else {
+                downloadState = 'Fail'
+            }
         }
     }
 
@@ -250,7 +254,7 @@
         if (dev) console.debug('[download] unsealing for recipient:', key)
         await unsealer.unseal(key, usk, writable).catch((e: unknown) => {
             if (dev) console.error('[download] unseal failed:', e)
-            throw e
+            throw Object.assign(new Error(String(e)), { isDecryptionFailure: true })
         })
         if (!senderIdentity) {
             senderIdentity = unsealer.public_identity()
@@ -274,7 +278,15 @@
 
 <div class="page-wrapper">
     <div class="content">
-        <h2>{downloadState === 'Fail' ? $_('filesharing.decryptpanel.notFoundTitle') : $_('filesharing.decryptpanel.header')}</h2>
+        <h2>
+            {#if downloadState === 'Fail'}
+                {$_('filesharing.decryptpanel.notFoundTitle')}
+            {:else if downloadState === 'IdentityMismatch'}
+                {$_('filesharing.decryptpanel.identityMismatchTitle')}
+            {:else}
+                {$_('filesharing.decryptpanel.header')}
+            {/if}
+        </h2>
 
         {#if downloadState === 'Downloading'}
             <div class="spinner-wrapper">
@@ -373,6 +385,10 @@
         {:else if downloadState === 'Fail'}
             <p class="error-description">{$_('filesharing.decryptpanel.notFoundSubtitle')}</p>
             <p class="error-description">{@html $_('filesharing.decryptpanel.notFoundMessage')}</p>
+
+        {:else if downloadState === 'IdentityMismatch'}
+            <p class="error-description">{$_('filesharing.decryptpanel.identityMismatchSubtitle')}</p>
+            <p class="error-description">{$_('filesharing.decryptpanel.identityMismatchMessage')}</p>
         {/if}
     </div>
 </div>
