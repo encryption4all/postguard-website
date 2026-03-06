@@ -439,7 +439,7 @@
     {/if}
 </div>
 
-<dialog bind:this={dialogRef} class="validation-modal" oncancel={() => showValidationModal = false}>
+<dialog bind:this={dialogRef} class="validation-modal" tabindex="-1" oncancel={() => showValidationModal = false}>
     <h2 class="validation-title">{$_('filesharing.encryptPanel.validation.title')}</h2>
     <ul class="validation-errors">
         {#each validationErrors as error}
