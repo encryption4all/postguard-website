@@ -1,27 +1,12 @@
 <script lang="ts">
-    import type { AttType } from '$lib/types/filesharing/attributes'
-    import type { AttributeCon } from '@e4a/pg-wasm'
     import { _ } from 'svelte-i18n'
-    import AttributeButton from '$lib/components/filesharing/inputs/AttributeButton.svelte'
 
     interface props {
-        senderAttributes: AttributeCon;
         senderConfirm: boolean;
-        attributes: AttType[];
         readonly?: boolean;
     }
 
-    let { senderAttributes = $bindable(), senderConfirm = $bindable(), attributes, readonly = false }: props = $props()
-
-    let addableButtons: AttType[] = $derived(attributes.filter((att) => !senderAttributes.some(({ t }) => t === att)))
-
-    function addAttribute(att: AttType) {
-        senderAttributes.push({ t: att, v: '' })
-    }
-
-    function removeAttribute(index: number) {
-        senderAttributes.splice(index, 1)
-    }
+    let { senderConfirm = $bindable(), readonly = false }: props = $props()
 </script>
 
 <div class="crypt-select-protection-input-box">
@@ -38,29 +23,6 @@
             </p>
         </details>
     </div>
-
-    <div class="attributes-list">
-        <AttributeButton type="added"
-                         translation_key={'filesharing.encryptPanel.emailSender'}
-        />
-        {#each senderAttributes as attribute, index}
-            <AttributeButton type="added"
-                 translation_key={'filesharing.attributes.' + attribute.t}
-                 clickAction={readonly ? undefined : () => removeAttribute(index)}
-            />
-        {/each}
-    </div>
-
-    {#if !readonly}
-        <div class="attributes-list add-list">
-            {#each addableButtons as attribute}
-                <AttributeButton type="add"
-                     translation_key={'filesharing.attributes.' + attribute}
-                     clickAction={() => addAttribute(attribute)}
-                />
-            {/each}
-        </div>
-    {/if}
 
     <div class="crypt-sender-receipt">
         <input

@@ -28,7 +28,6 @@ export type EncryptState = {
     pkPromise: Promise<any>;
     pubSignKey?: ISigningKey;
     privSignKey?: ISigningKey;
-    senderAttributes: AttributeCon;
     senderConfirm: boolean;
 };
 

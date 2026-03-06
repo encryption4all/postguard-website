@@ -102,10 +102,7 @@
                 { t: 'pbdf.sidn-pbdf.email.email' },
             ]
 
-            const keys = await RetrieveSignKeys(
-                pubSignId,
-                EncryptState.senderAttributes
-            )
+            const keys = await RetrieveSignKeys(pubSignId)
 
             if (!keys || !keys.pubSignKey) {
                 console.error('Failed to retrieve sign keys')
@@ -235,7 +232,7 @@
                     EncryptState.message,
                     lang,
                     (n, last) => reportProgress(resolve, n, last),
-                    EncryptState.senderAttributes,
+                    EncryptState.privSignKey?.policy?.con as { t: string; v: string }[] | undefined,
                 )
 
                 EncryptState.sender = sender

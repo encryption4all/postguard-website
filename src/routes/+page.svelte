@@ -56,7 +56,6 @@
         return {
             recipients: [{ email: '', extra: [] }],
             sender: '',
-            senderAttributes: [],
             message: '',
             files: [],
             percentages: [],
@@ -86,9 +85,7 @@
         <div class="inputs-container">
             <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
             <MessageInput bind:message={EncryptState.message} readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
-            <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
-                          bind:senderConfirm={EncryptState.senderConfirm}
-                          attributes={ATTRIBUTES}
+            <SenderInputs bind:senderConfirm={EncryptState.senderConfirm}
                           readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
             <SendButton bind:EncryptState={EncryptState} />
         </div>
