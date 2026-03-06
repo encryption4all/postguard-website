@@ -109,7 +109,7 @@
     /* Variant: default (white background, light border) */
     .chip-default {
         background-color: var(--pg-general-background);
-        border: 1.5px solid var(--pg-input-normal);
+        border: 1px solid var(--pg-input-normal);
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
 

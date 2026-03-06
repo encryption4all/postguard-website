@@ -4,7 +4,6 @@ services:
     build:
       context: cryptify
       dockerfile: dev.Dockerfile
-    container_name: postguard-cryptify-fileshare
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 1m30s
@@ -35,7 +34,6 @@ services:
     build:
       context: postguard
       dockerfile: dev.Dockerfile
-    container_name: postguard-pkg
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8087/health"]
       interval: 1m30s
@@ -60,7 +58,6 @@ services:
   # IRMA/Yivi server (unauthenticated, for development only)
   irma-server:
     image: ghcr.io/privacybydesign/irma:latest
-    container_name: postguard-irma-server
     command: server --no-auth -v --url http://localhost:8088 --jwt-privkey-file /etc/irma/jwt_privkey.pem
     ports:
       - "8088:8088"
@@ -72,7 +69,6 @@ services:
   # Email testing tool
   mailcrab:
     image: marlonb/mailcrab:latest
-    container_name: postguard-mailcrab
     ports:
       - "1080:1080"  # Web UI
       - "1025:1025"  # SMTP
@@ -84,7 +80,6 @@ services:
     build:
       context: .
       dockerfile: docker/dev.Dockerfile
-    container_name: postguard-website-dev
     volumes:
       - .:/app
       - /app/node_modules
@@ -99,7 +94,6 @@ services:
   # Nginx reverse proxy
   nginx:
     image: nginx:alpine
-    container_name: postguard-nginx
     ports:
       - "8080:80"
     volumes:

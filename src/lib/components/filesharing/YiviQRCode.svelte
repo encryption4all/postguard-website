@@ -89,7 +89,7 @@
         align-items: center;
         overflow: hidden;
         background: var(--pg-general-background);
-        border: 1.5px solid var(--pg-strong-background);
+        border: 1px solid var(--pg-strong-background);
         border-radius: var(--pg-border-radius-sm);
         padding: 10px;
     }
