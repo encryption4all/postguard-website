@@ -73,7 +73,7 @@
     </ul>
     <div class="bottom-bar">
         <ThemeSwitcher />
-        <LocaleSwitcher lang={$locale} />
+        <LocaleSwitcher />
     </div>
 </div>
 

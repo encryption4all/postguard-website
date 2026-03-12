@@ -54,7 +54,7 @@
         "singleQuote": true
     },
     "dependencies": {
-        "@e4a/pg-wasm": "^0.3.0",
+        "@e4a/pg-wasm": "^0.5.1",
         "@iconify/svelte": "^4.0.2",
         "@privacybydesign/yivi-client": "^0.2.1",
         "@privacybydesign/yivi-core": "^0.2.1",
