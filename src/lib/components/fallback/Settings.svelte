@@ -1,5 +1,4 @@
 <script>
-    // stores
     import {
         currSelected,
         emails,
@@ -9,10 +8,10 @@
     } from './stores.js'
 
     import { _, locale } from 'svelte-i18n'
-
     import Icon from '@iconify/svelte'
+    import Chip from '$lib/components/Chip.svelte'
 
-    export let currMode
+    let { currMode = $bindable() } = $props()
 
     function deleteAllMails() {
         if (confirm($_('fallback.settings.delete.emails'))) {
@@ -33,7 +32,6 @@
 
     function parseKr(input) {
         let str = []
-
         for (const e of input) {
             switch (e['t']) {
                 case 'pbdf.gemeente.personalData.surname':
@@ -50,117 +48,205 @@
                     break
             }
         }
-
         return str
     }
 </script>
 
-<div id="settings-container">
-    <h3>{$_('fallback.settings.h3', { default: 'Settings' })}</h3>
-    <div id="block2">
+<div class="settings-container">
+    <div class="settings-header">
+        <button class="back-button" onclick={() => (currMode = 'List')} type="button">
+            <Icon icon="mdi:arrow-left" width="20px" />
+            <span>{$_('fallback.settings.back')}</span>
+        </button>
+    </div>
+
+    <div class="settings-card">
         <h4>{$_('fallback.settings.h4')}</h4>
-        <input id="emailCache" type="checkbox" bind:checked={$boolCacheEmail} />
-        <label for="emailCache">{$_('fallback.settings.storeEmails')}</label>
-        <br />
-        <input id="irmaCache" type="checkbox" bind:checked={$boolCacheYivi} />
-        <label for="irmaCache">{$_('fallback.settings.storeCreds')}</label>
+        <label class="checkbox-row">
+            <input type="checkbox" bind:checked={$boolCacheEmail} />
+            <span>{$_('fallback.settings.storeEmails')}</span>
+        </label>
+        <label class="checkbox-row">
+            <input type="checkbox" bind:checked={$boolCacheYivi} />
+            <span>{$_('fallback.settings.storeCreds')}</span>
+        </label>
     </div>
 
     {#if $krCache.length > 0}
-        <div id="block2">
+        <div class="settings-card">
             <h4>{$_('fallback.settings.creds')}</h4>
-            <table id="creds">
-                <thead>
-                <tr>
-                    <th>{$_('fallback.settings.creds')}</th>
-                    <th>{$_('fallback.settings.exp')} </th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
+            <div class="credential-list">
                 {#each $krCache as kr}
-                    <tr>
-                        <td
-                        >{kr.key}<br />
+                    <div class="credential-item">
+                        <div class="credential-info">
+                            <span class="credential-key">{kr.key}</span>
                             {#each parseKr(kr.krCon) as cred}
-                                {cred}<br />
+                                <span class="credential-detail">{cred}</span>
                             {/each}
-                        </td>
-                        <td
-                        >{new Date(kr.jwtValid * 1000).toLocaleDateString(
-                            $locale ?? undefined
-                        )}</td
-                        >
-                        <td
-                        ><button
-                            id="deletebutton"
-                            class="material-icons"
-                            on:click|preventDefault={() => deleteJwt(kr)}
+                            <span class="credential-exp">
+                                {$_('fallback.settings.exp')}: {new Date(kr.jwtValid * 1000).toLocaleDateString($locale ?? undefined)}
+                            </span>
+                        </div>
+                        <button
+                            class="delete-button"
+                            onclick={(e) => { e.preventDefault(); deleteJwt(kr); }}
                             type="button"
-                        ><Icon icon="mdi:trash-can-outline" width="26px" /></button
-                        ></td
                         >
-                    </tr>
+                            <Icon icon="mdi:trash-can-outline" width="20px" />
+                        </button>
+                    </div>
                 {/each}
-                </tbody>
-            </table>
-
-            <button class="button" on:click={deleteAllYivi}>
-                {$_('fallback.settings.delete.credsBtn')}
-            </button>
+            </div>
+            <Chip
+                text={$_('fallback.settings.delete.credsBtn')}
+                onclick={deleteAllYivi}
+                size="md"
+                variant="filled"
+            />
         </div>
     {/if}
 
     {#if $emails.length > 0}
-        <div id="block2">
+        <div class="settings-card">
             <h4>Email History</h4>
-            <button class="button" on:click={deleteAllMails}>
-                {$_('fallback.settings.delete.emailBtn')}
-            </button>
+            <Chip
+                text={$_('fallback.settings.delete.emailBtn')}
+                onclick={deleteAllMails}
+                size="md"
+                variant="filled"
+            />
         </div>
     {/if}
-    <button
-        on:click|preventDefault={() => (currMode = 'List')}
-        style="float:right; margin-right: 1rem"
-    >{$_('fallback.settings.back')}</button
-    >
 </div>
 
 <style lang="scss">
-  #settings-container {
-    padding: 0 1rem 1rem 1rem;
-    width: 100%;
-  }
+    .settings-container {
+        padding: 1rem;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
 
-  #creds {
-    border-collapse: collapse;
-    margin-bottom: 0.5rem;
-  }
+    .settings-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
 
-  #creds td,
-  #creds th {
-    border: 1px solid var(--pg-strong-background);
-    padding: 7px;
-  }
+    .back-button {
+        all: unset;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        transition: color 0.2s ease;
 
-  #creds tr:hover {
-    background-color: var(--pg-strong-background);
-  }
+        &:hover {
+            color: var(--pg-primary);
+        }
 
-  #creds th {
-    padding: 7px;
-    text-align: left;
-    background-color: var(--pg-strong-background);
-  }
+        &:focus-visible {
+            outline: 2px solid var(--pg-primary);
+            outline-offset: 2px;
+            border-radius: var(--pg-border-radius-sm);
+        }
+    }
 
-  #deletebutton {
-    all: unset;
-    cursor: pointer;
-  }
+    .settings-card {
+        background: var(--pg-soft-background);
+        border: 1px solid var(--pg-strong-background);
+        border-radius: var(--pg-border-radius-lg);
+        padding: 1rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
 
-  #deletebutton:focus-visible {
-    outline: 2px solid var(--pg-primary);
-    outline-offset: 2px;
-    border-radius: var(--pg-border-radius-sm);
-  }
+        h4 {
+            margin: 0;
+            font-size: var(--pg-font-size-md);
+            font-weight: var(--pg-font-weight-bold);
+        }
+    }
+
+    .checkbox-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-size: var(--pg-font-size-sm);
+
+        input[type='checkbox'] {
+            accent-color: var(--pg-primary);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+    }
+
+    .credential-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .credential-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background: var(--pg-general-background);
+        border: 1px solid var(--pg-strong-background);
+        border-radius: var(--pg-border-radius-md);
+    }
+
+    .credential-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        min-width: 0;
+    }
+
+    .credential-key {
+        font-size: var(--pg-font-size-sm);
+        font-weight: var(--pg-font-weight-medium);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .credential-detail {
+        font-size: var(--pg-font-size-xs);
+        color: var(--pg-text-secondary);
+    }
+
+    .credential-exp {
+        font-size: var(--pg-font-size-xs);
+        color: var(--pg-text-secondary);
+    }
+
+    .delete-button {
+        all: unset;
+        cursor: pointer;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.25rem;
+        border-radius: var(--pg-border-radius-sm);
+        color: var(--pg-text-secondary);
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: var(--pg-input-error);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--pg-primary);
+            outline-offset: 2px;
+        }
+    }
 </style>

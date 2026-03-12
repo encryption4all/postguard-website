@@ -1,10 +1,6 @@
 <script>
-    import { preventDefault, createBubbler } from 'svelte/legacy';
-
-    const bubble = createBubbler();
     import { emails, currSelected } from './../fallback/stores.js'
     import { _, locale } from 'svelte-i18n'
-
 
     /** @type {{rightMode: any, searchTerm: any}} */
     let { rightMode = $bindable(), searchTerm = $bindable() } = $props();
@@ -24,86 +20,114 @@
 </script>
 
 {#if sortedFiltered.length > 0}
-    <ol>
+    <div class="email-list">
         {#each sortedFiltered as email}
-            <li>
-                <button
-                    onclick={preventDefault(() => {
-                        currSelected.set(email.id)
-                        rightMode = 'MailView'
-                    })}
-                    type="button"
-                >
-                    <div class:selected={$currSelected === email.id}>
-                        <b>{email.subject}</b> <br />
-                        {#if email.from.name}
-                            {email.from.name}
-                        {:else}
-                            {email.from.address}
-                        {/if} <br />
-
-                        {new Date(email.date).toLocaleString($locale ?? undefined)}
-                    </div>
-                </button>
-                <!-- <TrashCanOutline /> -->
-            </li>
+            <button
+                class="email-item"
+                class:selected={$currSelected === email.id}
+                onclick={(e) => {
+                    e.preventDefault()
+                    currSelected.set(email.id)
+                    rightMode = 'MailView'
+                }}
+                type="button"
+            >
+                <span class="email-subject">{email.subject}</span>
+                <span class="email-sender">
+                    {#if email.from.name}
+                        {email.from.name}
+                    {:else}
+                        {email.from.address}
+                    {/if}
+                </span>
+                <span class="email-date">
+                    {new Date(email.date).toLocaleString($locale ?? undefined)}
+                </span>
+            </button>
         {/each}
-    </ol>
+    </div>
 {:else}
-    <div style="margin: auto 3rem; text-align: center;">
-        <h4>
-            {$_('fallback.list.nothing')}
-        </h4>
-        <p>
-            {$_('fallback.list.nothing2')}
-        </p>
+    <div class="empty-state">
+        <h4>{$_('fallback.list.nothing')}</h4>
+        <p>{$_('fallback.list.nothing2')}</p>
     </div>
 {/if}
 
 <style lang="scss">
-    ol {
-        margin-top: 0;
-        list-style-type: none;
+    .email-list {
         width: 100%;
-        height: 100%;
-        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+    }
 
-        scrollbar-width: 10px;
-        ::-webkit-scrollbar {
-            width: 10px;
+    .email-item {
+        all: unset;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--pg-input-normal);
+        border-left: 3px solid transparent;
+        text-align: left;
+        transition: background 0.15s ease;
+
+        &:hover {
+            background: var(--pg-soft-background);
+        }
+
+        &.selected {
+            background: var(--pg-general-background);
+            border-left-color: var(--pg-primary);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--pg-primary);
+            outline-offset: -2px;
+            border-radius: var(--pg-border-radius-sm);
         }
     }
 
-    li {
+    .email-subject {
+        font-weight: var(--pg-font-weight-bold);
+        font-size: var(--pg-font-size-sm);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .email-sender {
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .email-date {
+        font-size: var(--pg-font-size-xs);
+        color: var(--pg-text-secondary);
+    }
+
+    .empty-state {
         display: flex;
         flex-direction: column;
+        align-items: center;
         justify-content: center;
-        height: 4.5rem;
-        border-bottom: 1px solid var(--pg-text);
-        padding-left: 0.5rem;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        flex: 1;
 
-        button {
-            all: unset;
-            cursor: pointer;
-            width: 100%;
-            text-align: left;
+        h4 {
+            margin: 0 0 0.5rem;
+            font-size: var(--pg-font-size-md);
+            font-weight: var(--pg-font-weight-bold);
+        }
 
-            &:focus-visible div {
-                background: var(--pg-strong-background);
-                outline: 2px solid var(--pg-primary);
-                outline-offset: 2px;
-            }
-
-            div {
-                border-radius: 10px;
-                margin: 1rem 0.5rem 1rem 0rem;
-                padding-left: 0.25rem;
-
-                &.selected,
-                &:hover {
-                    background: var(--pg-strong-background);
-                }
-            }
+        p {
+            margin: 0;
+            font-size: var(--pg-font-size-sm);
+            color: var(--pg-text-secondary);
         }
     }
 </style>

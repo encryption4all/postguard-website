@@ -3,7 +3,7 @@
         "fs": "File Sharing",
         "home": "Home",
         "addons": "Emailing",
-        "fallback": "Decrypt Emails",
+        "decrypt": "Decrypt Emails",
         "about": "About PostGuard",
         "pol": "Privacy Policy"
     },
