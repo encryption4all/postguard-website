@@ -26,9 +26,12 @@
         Decrypt: 'Decrypt',
     }
 
+    let hashMode = $state(false)
     let currRight = $state();
     $effect(() => {
-        currRight = $currSelected >= 0 ? RIGHTMODES.MailView : RIGHTMODES.Nothing
+        if (!hashMode) {
+            currRight = $currSelected >= 0 ? RIGHTMODES.MailView : RIGHTMODES.Nothing
+        }
     });
 
     let searchTerm = $state()
@@ -42,8 +45,42 @@
         currRight = RIGHTMODES.Decrypt
     }
 
+    function fromUrlSafeBase64(urlSafe) {
+        let base64 = urlSafe.replace(/-/g, '+').replace(/_/g, '/')
+        const pad = base64.length % 4
+        if (pad === 2) base64 += '=='
+        else if (pad === 3) base64 += '='
+        return base64
+    }
+
     onMount(async () => {
         mod = await import('@e4a/pg-wasm')
+
+        const hash = window.location.hash
+        if (hash && hash.length > 1) {
+            try {
+                const urlSafeBase64 = hash.substring(1)
+                const base64 = fromUrlSafeBase64(urlSafeBase64)
+                const binaryString = atob(base64)
+                const bytes = new Uint8Array(binaryString.length)
+                for (let i = 0; i < binaryString.length; i++) {
+                    bytes[i] = binaryString.charCodeAt(i)
+                }
+                console.log('[PostGuard] URL hash decoded, bytes:', bytes.length)
+                readable = new ReadableStream({
+                    start(c) {
+                        c.enqueue(bytes)
+                        c.close()
+                    },
+                })
+
+                hashMode = true
+                unique = {}
+                currRight = RIGHTMODES.Decrypt
+            } catch (e) {
+                console.error('[PostGuard] Failed to decode URL hash:', e)
+            }
+        }
     })
 </script>
 

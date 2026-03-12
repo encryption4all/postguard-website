@@ -251,6 +251,20 @@
         return usk
     }
 
+    function retry() {
+        err = undefined
+        usk = undefined
+        showHints = false
+        hints = []
+        state = STATES.Qr
+        tick().then(() => {
+            getUsk().then((retrieved) => (usk = retrieved))
+        }).catch((e) => {
+            err = e
+            state = STATES.Fail
+        })
+    }
+
     async function decryptFile() {
         const ret = await unsealer.unseal(key, usk, unsealerWritable)
         console.log('signed using: ', ret)
@@ -368,7 +382,10 @@
 {:else if state === STATES.Decryping}
     <p>Decrypting...</p>
 {:else if state === STATES.Fail}
-    <p>Failure: {err}</p>
+    <div id="block">
+        <p>Failure: {err}</p>
+        <button onclick={retry}>{$_('fallback.decrypt.retry')}</button>
+    </div>
 {/if}
 
 <style lang="scss">

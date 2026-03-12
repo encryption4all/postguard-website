@@ -44,7 +44,8 @@
         "drop": "Selecteer \"postguard.encrypted\" attachment hier",
         "search": "Zoek in ontsleutelde mails...",
         "decrypt": {
-            "helper": "Ontsleutel deze email door te laten zien wie je bent met <i class=\"yivi-web-logo\">Yivi</i>"
+            "helper": "Ontsleutel deze email door te laten zien wie je bent met <i class=\"yivi-web-logo\">Yivi</i>",
+            "retry": "Probeer opnieuw"
         },
         "settings": {
             "h4": "Lokale opslag",

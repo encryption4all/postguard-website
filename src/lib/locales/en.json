@@ -44,7 +44,8 @@
         "drop": "Drop the \"postguard.encrypted\" attachment here",
         "search": "Search decrypted mails...",
         "decrypt": {
-            "helper": "Decrypt this mail by showing who you are with <i class=\"yivi-web-logo\">Yivi</i>"
+            "helper": "Decrypt this mail by showing who you are with <i class=\"yivi-web-logo\">Yivi</i>",
+            "retry": "Try again"
         },
         "settings": {
             "h4": "Local storage",
