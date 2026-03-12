@@ -88,7 +88,7 @@
                         </td>
                         <td
                         >{new Date(kr.jwtValid * 1000).toLocaleDateString(
-                            $locale
+                            $locale ?? undefined
                         )}</td
                         >
                         <td

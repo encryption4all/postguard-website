@@ -7,7 +7,7 @@
 
 
     /** @type {{rightMode: any, searchTerm: any}} */
-    let { rightMode = $bindable(), searchTerm } = $props();
+    let { rightMode = $bindable(), searchTerm = $bindable() } = $props();
 
     let sorted =
         $derived($emails &&
@@ -42,7 +42,7 @@
                             {email.from.address}
                         {/if} <br />
 
-                        {new Date(email.date).toLocaleString($locale)}
+                        {new Date(email.date).toLocaleString($locale ?? undefined)}
                     </div>
                 </button>
                 <!-- <TrashCanOutline /> -->

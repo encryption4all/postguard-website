@@ -66,7 +66,7 @@
                 id="myIframe"
                 srcdoc={parsed.html}
                 title="Mail message"
-                sandbox
+                sandbox=""
 ></iframe>
         </div>
 

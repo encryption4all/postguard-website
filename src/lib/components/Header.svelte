@@ -36,9 +36,7 @@
                 </li>
             {/each}
         </ul>
-        <LocaleSwitcher
-            lang={$locale}
-        />
+        <LocaleSwitcher />
         <ThemeSwitcher />
     </div>
     <Hamburger

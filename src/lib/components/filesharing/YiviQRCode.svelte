@@ -77,7 +77,7 @@
         background: transparent !important;
     }
 
-    .yivi-web-content {
+    .yivi-qr-container :global(.yivi-web-content) {
         min-width: 0px !important;
     }
 

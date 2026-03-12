@@ -5,10 +5,15 @@
     const OUTLOOK_PKG = 'https://postguard-main.cs.ru.nl/pkg'
 
     let status = $state('Loading...')
+    /** @type {any} */
     let hashInfo = $state(null)
+    /** @type {any} */
     let wasmInfo = $state(null)
+    /** @type {any} */
     let vkInfo = $state(null)
+    /** @type {any[]} */
     let unsealerResults = $state([])
+    /** @type {any} */
     let bodyCompare = $state(null)
     let pastedArmor = $state('')
 
@@ -20,8 +25,11 @@
         return base64
     }
 
+    /** @type {string | null} */
     let decodedBase64 = $state(null)
+    /** @type {Uint8Array | null} */
     let decodedBytes = $state(null)
+    /** @type {any} */
     let mod = $state(null)
 
     function compareWithArmor() {
@@ -82,7 +90,7 @@
             result.success = true
             result.recipients = [...policies.keys()]
         } catch (e) {
-            result.error = `${e.name}: ${e.message}`
+            result.error = e instanceof Error ? `${e.name}: ${e.message}` : String(e)
         }
         return result
     }
@@ -91,7 +99,7 @@
         // Step 1: Read URL hash
         const hash = window.location.hash
         if (!hash || hash.length <= 1) {
-            status = 'No URL hash found. Navigate to /debug#<base64data>'
+            status = 'No URL hash found. Navigate to /debug/url#<base64data>'
             return
         }
 
@@ -125,7 +133,7 @@
                 hasDefault: typeof mod.default,
             }
         } catch (e) {
-            status = `Failed to load pg-wasm: ${e.message}`
+            status = `Failed to load pg-wasm: ${e instanceof Error ? e.message : String(e)}`
             return
         }
 

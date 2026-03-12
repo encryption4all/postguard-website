@@ -44,7 +44,7 @@
 
     import { PKG_URL } from '$lib/env'
     
-    let state = $state(STATES.Uninit)
+    let decryptState = $state(STATES.Uninit)
 
     let outStream = ''
     let decoder = new TextDecoder()
@@ -67,7 +67,7 @@
     let timestamp
 
     let showHints = $state(false)
-    let hints = []
+    let hints = $state([])
 
     let boolRecipientCached = $state()
     let jwtCached // cached jwt, if it exists
@@ -108,7 +108,7 @@
             console.log(policies.keys())
             keylist = policies.keys()
             console.log(keylist)
-            state = STATES.Recipients
+            decryptState = STATES.Recipients
         }
     }
 
@@ -157,7 +157,7 @@
 
     // cache the current credentials if user has chosen to
     function cacheCredentials() {
-        let jwtdecoded = jwt_decode(krCacheTemp.jwt)
+        let jwtdecoded = /** @type {any} */ (jwt_decode(krCacheTemp.jwt))
         krCacheTemp.jwtValid = jwtdecoded.exp
         $krCache = [...$krCache, krCacheTemp]
     }
@@ -256,12 +256,12 @@
         usk = undefined
         showHints = false
         hints = []
-        state = STATES.Qr
+        decryptState = STATES.Qr
         tick().then(() => {
             getUsk().then((retrieved) => (usk = retrieved))
         }).catch((e) => {
             err = e
-            state = STATES.Fail
+            decryptState = STATES.Fail
         })
     }
 
@@ -301,10 +301,10 @@
         rightMode = 'MailView'
     }
     run(() => {
-        if (state === STATES.Uninit && vk) {
+        if (decryptState === STATES.Uninit && vk) {
             mod.StreamUnsealer.new(readable, vk)
                 .then((u) => {
-                    state = STATES.Init
+                    decryptState = STATES.Init
                     unsealer = u
                     policies = unsealer.inspect_header()
                     console.log(policies)
@@ -312,12 +312,12 @@
                 })
                 .catch((e) => {
                     err = e
-                    state = STATES.Fail
+                    decryptState = STATES.Fail
                 })
         }
     });
     run(() => {
-        if ((state == STATES.Init || state == STATES.Recipients) && key) {
+        if ((decryptState == STATES.Init || decryptState == STATES.Recipients) && key) {
             processPolicy()
             processCredentials()
 
@@ -328,41 +328,41 @@
                     .then((retrieved) => (usk = retrieved))
                     .catch((e) => {
                         err = e
-                        state = STATES.Fail
+                        decryptState = STATES.Fail
                     })
             } else {
                 // we have to do a session
                 stripCredentials()
                 createKr()
-                state = STATES.Qr
+                decryptState = STATES.Qr
                 tick()
                     .then(() => {
                         getUsk().then((retrieved) => (usk = retrieved))
                     })
                     .catch((e) => {
                         err = e
-                        state = STATES.Fail
+                        decryptState = STATES.Fail
                     })
             }
         }
     });
     run(() => {
         if (usk) {
-            state = STATES.Decrypting
+            decryptState = STATES.Decrypting
 
             decryptFile()
-                .then(() => (state = STATES.Show))
+                .then(() => (decryptState = STATES.Show))
                 .catch((e) => {
                     err = e
-                    state = STATES.Fail
+                    decryptState = STATES.Fail
                 })
         }
     });
 </script>
 
-{#if state === STATES.Init}
+{#if decryptState === STATES.Init}
     <h2>Decrypt E-mail</h2>
-{:else if state === STATES.Recipients}
+{:else if decryptState === STATES.Recipients}
     <div id="block">
         <p><b>Please select which email belongs to you:</b></p>
         <select bind:value={key}
@@ -374,14 +374,14 @@
             {/each}
         </select>
     </div>
-{:else if state === STATES.Qr}
+{:else if decryptState === STATES.Qr}
     {#if showHints}
         <p>Hints: {hints}</p>
     {/if}
     <div id="yivi-web">QR</div>
-{:else if state === STATES.Decryping}
+{:else if decryptState === STATES.Decryping}
     <p>Decrypting...</p>
-{:else if state === STATES.Fail}
+{:else if decryptState === STATES.Fail}
     <div id="block">
         <p>Failure: {err}</p>
         <button onclick={retry}>{$_('fallback.decrypt.retry')}</button>
