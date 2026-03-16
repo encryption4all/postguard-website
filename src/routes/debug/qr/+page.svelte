@@ -1,14 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { dev } from '$app/environment'
-    import { goto } from '$app/navigation'
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
     import { RetrieveSignKeys } from '$lib/yivi-tools'
-
-    // Redirect to home if not in development mode
-    if (!dev) {
-        goto('/')
-    }
 
     onMount(async () => {
         // Initialize Yivi session for testing

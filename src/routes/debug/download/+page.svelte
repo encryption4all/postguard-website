@@ -1,13 +1,7 @@
 <script lang="ts">
-    import { dev } from '$app/environment'
-    import { goto } from '$app/navigation'
     import { _ } from 'svelte-i18n'
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
-
-    if (!dev) {
-        goto('/')
-    }
 
     const mockSenderIdentity = {
         con: [

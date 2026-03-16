@@ -3,7 +3,7 @@
         "fs": "File Sharing",
         "home": "Home",
         "addons": "Emailing",
-        "fallback": "Decrypt Emails",
+        "decrypt": "Decrypt Emails",
         "about": "About PostGuard",
         "pol": "Privacy Policy"
     },
@@ -44,7 +44,8 @@
         "drop": "Drop the \"postguard.encrypted\" attachment here",
         "search": "Search decrypted mails...",
         "decrypt": {
-            "helper": "Decrypt this mail by showing who you are with <i class=\"yivi-web-logo\">Yivi</i>"
+            "helper": "Decrypt this mail by showing who you are with <i class=\"yivi-web-logo\">Yivi</i>",
+            "retry": "Try again"
         },
         "settings": {
             "h4": "Local storage",
