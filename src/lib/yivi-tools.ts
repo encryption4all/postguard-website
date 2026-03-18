@@ -70,6 +70,7 @@ async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise
     // Always use YiviWeb: it handles QR rendering on desktop
     // and deep link generation on mobile.
     yiviConfig.element = '#crypt-irma-qr'
+    yiviConfig.minimal = true
 
     const yivi = new YiviCore(yiviConfig)
 
