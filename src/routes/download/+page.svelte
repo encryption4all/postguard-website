@@ -2,9 +2,9 @@
     import { onMount, tick } from 'svelte'
     import { browser, dev } from '$app/environment'
     import { _ } from 'svelte-i18n'
-    import YiviCore from '@privacybydesign/yivi-core'
-    import YiviClient from '@privacybydesign/yivi-client'
-    import YiviWeb from '@privacybydesign/yivi-web'
+    import { YiviCore } from '@privacybydesign/yivi-core'
+    import { YiviClient } from '@privacybydesign/yivi-client'
+    import { YiviWeb } from '@privacybydesign/yivi-web'
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
     import FileList from '$lib/components/filesharing/FileList.svelte'
     import { isMobile } from '$lib/browser-detect'
@@ -159,15 +159,25 @@
 
         recipientStripped = JSON.parse(JSON.stringify(recipientAndCreds))
         for (const c of recipientStripped) {
-            delete c.v
+            if (c.t?.includes('.email.')) {
+                // Email is the public map key — restore the value so Yivi enforces it
+                c.v = key
+            } else {
+                // Private/hint attributes: don't reveal their value to the PKG
+                delete c.v
+            }
         }
-
         keyRequest = {
             con: recipientStripped,
             validity: secondsTill4AM(),
         }
         if (dev) console.debug('[download] key request:', JSON.stringify(keyRequest))
 
+        downloadState = 'Ready'
+        tick().then(() => startYiviSession())
+    }
+
+    function retry() {
         downloadState = 'Ready'
         tick().then(() => startYiviSession())
     }
@@ -212,6 +222,7 @@
                 debugging: false,
                 session,
                 element: '#yivi-download',
+                minimal: true,
                 language: selectedLang.toLowerCase(),
                 state: {
                     serverSentEvents: false,
@@ -389,6 +400,14 @@
         {:else if downloadState === 'IdentityMismatch'}
             <p class="error-description">{$_('filesharing.decryptpanel.identityMismatchSubtitle')}</p>
             <p class="error-description">{$_('filesharing.decryptpanel.identityMismatchMessage')}</p>
+            <div class="retry-wrapper">
+                <Chip
+                    text={$_('filesharing.decryptpanel.tryAgain')}
+                    onclick={retry}
+                    size="lg"
+                    variant="dark"
+                />
+            </div>
         {/if}
     </div>
 </div>
@@ -562,6 +581,11 @@
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
         background: var(--pg-general-background);
+    }
+
+    .retry-wrapper {
+        display: flex;
+        justify-content: center;
     }
 
     .error-description {

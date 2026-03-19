@@ -108,7 +108,8 @@
             "notFoundMessage": "Ask the sender to send the files <strong>once more</strong>.",
             "identityMismatchTitle": "Decryption failed",
             "identityMismatchSubtitle": "The identity you provided does not match the intended recipient.",
-            "identityMismatchMessage": "Please make sure you are proving the correct email address in Yivi."
+            "identityMismatchMessage": "Please make sure you are proving the correct email address in Yivi.",
+            "tryAgain": "Try again"
         },
         "encryptPanel": {
             "fileBox": {
