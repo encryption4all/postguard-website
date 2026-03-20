@@ -12,7 +12,7 @@
     import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
     import SendButton from '$lib/components/filesharing/SendButton.svelte'
     import FileInput from '$lib/components/filesharing/inputs/FileInput.svelte'
-    import Dropzone from 'dropzone'
+    import Dropzone from '@deltablot/dropzone'
 
     // janky way to conditionally import pg-wasm to avoid issues with SSR
     let modPromise: Promise<any>
