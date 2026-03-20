@@ -4,9 +4,9 @@
     import { tick, onMount } from 'svelte'
 
     // Yivi
-    import YiviCore from '@privacybydesign/yivi-core'
-    import YiviClient from '@privacybydesign/yivi-client'
-    import YiviWeb from '@privacybydesign/yivi-web'
+    import { YiviCore } from '@privacybydesign/yivi-core'
+    import { YiviClient } from '@privacybydesign/yivi-client'
+    import { YiviWeb } from '@privacybydesign/yivi-web'
     import '@privacybydesign/yivi-css'
 
     import jwt_decode from 'jwt-decode'

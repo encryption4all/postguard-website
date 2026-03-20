@@ -1,7 +1,7 @@
 import type { AttributeCon } from '@e4a/pg-wasm'
-import YiviCore from '@privacybydesign/yivi-core'
-import YiviWeb from '@privacybydesign/yivi-web'
-import YiviClient from '@privacybydesign/yivi-client'
+import { YiviCore } from '@privacybydesign/yivi-core'
+import { YiviWeb } from '@privacybydesign/yivi-web'
+import { YiviClient } from '@privacybydesign/yivi-client'
 import { browser } from '$app/environment'
 
 async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise<any> {
