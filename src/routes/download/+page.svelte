@@ -147,7 +147,7 @@
             key = policies.keys().next().value!
             processPolicy()
         } else {
-            keylist = [...policies.keys()]
+            keylist = [...policies.keys()].filter((k) => k)
             downloadState = 'Recipients'
         }
     }
