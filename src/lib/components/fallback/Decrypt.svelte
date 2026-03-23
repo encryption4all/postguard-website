@@ -95,7 +95,7 @@
             key = policies.keys().next().value
             krCacheTemp.key = key
         } else {
-            keylist = policies.keys()
+            keylist = [...policies.keys()].filter((k) => k)
             decryptState = STATES.Recipients
         }
     }
