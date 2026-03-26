@@ -23,6 +23,7 @@ export type EncryptState = {
     encryptionState: EncryptionState;
     abort: AbortController;
     selfAborted: boolean;
+    serverError: boolean;
     encryptStartTime: number;
     modPromise: Promise<any>;
     pkPromise: Promise<any>;

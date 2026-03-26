@@ -12,7 +12,7 @@
     import Chip from '$lib/components/Chip.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
 
-    type DownloadState = 'Downloading' | 'Recipients' | 'Ready' | 'Decrypting' | 'Done' | 'Fail' | 'IdentityMismatch'
+    type DownloadState = 'Downloading' | 'Recipients' | 'Ready' | 'Decrypting' | 'Done' | 'Fail' | 'ServerError' | 'IdentityMismatch'
 
     // public_identity() returns a Policy: { ts: number, con: [{t: string, v?: string}] }
     function getSenderEmail(identity: any): string {
@@ -110,12 +110,24 @@
         try {
             const { FILEHOST_URL, PKG_URL } = await import('$lib/env')
 
-            const vk = await fetch(`${PKG_URL}/v2/sign/parameters`)
-                .then((r) => r.json())
-                .then((j) => j.publicKey)
+            const vkResp = await fetch(`${PKG_URL}/v2/sign/parameters`)
+            if (!vkResp.ok) {
+                if (vkResp.status >= 500) {
+                    downloadState = 'ServerError'
+                    return
+                }
+                throw new Error(`Failed to fetch parameters: ${vkResp.status}`)
+            }
+            const vk = (await vkResp.json()).publicKey
 
             const response = await fetch(`${FILEHOST_URL}/filedownload/${uuid}`)
-            if (!response.ok) throw new Error(`Failed to download file: ${response.status}`)
+            if (!response.ok) {
+                if (response.status >= 500) {
+                    downloadState = 'ServerError'
+                    return
+                }
+                throw new Error(`Failed to download file: ${response.status}`)
+            }
 
             if (!response.body) throw new Error('Response body is null')
             const { StreamUnsealer } = await import('@e4a/pg-wasm')
@@ -253,6 +265,8 @@
             err = String(e)
             if ((e as any)?.isDecryptionFailure) {
                 downloadState = 'IdentityMismatch'
+            } else if (/status: 5\d\d/.test(err) || /status(?:Code)?\s*[=:]\s*5\d\d/.test(err)) {
+                downloadState = 'ServerError'
             } else {
                 downloadState = 'Fail'
             }
@@ -297,6 +311,8 @@
         <h2>
             {#if downloadState === 'Fail'}
                 {$_('filesharing.decryptpanel.notFoundTitle')}
+            {:else if downloadState === 'ServerError'}
+                {$_('filesharing.decryptpanel.serverErrorTitle')}
             {:else if downloadState === 'IdentityMismatch'}
                 {$_('filesharing.decryptpanel.identityMismatchTitle')}
             {:else}
@@ -397,6 +413,10 @@
                     {/if}
                 </div>
             {/if}
+
+        {:else if downloadState === 'ServerError'}
+            <p class="error-description">{$_('filesharing.decryptpanel.serverErrorSubtitle')}</p>
+            <p class="error-description">{@html $_('filesharing.decryptpanel.serverErrorMessage')}</p>
 
         {:else if downloadState === 'Fail'}
             <p class="error-description">{$_('filesharing.decryptpanel.notFoundSubtitle')}</p>
