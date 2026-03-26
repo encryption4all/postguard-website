@@ -159,9 +159,14 @@
 
         recipientStripped = JSON.parse(JSON.stringify(recipientAndCreds))
         for (const c of recipientStripped) {
-            if (c.t?.includes('.email.')) {
-                // Email is the public map key — restore the value so Yivi enforces it
+            if (c.t === 'pbdf.sidn-pbdf.email.email') {
+                // Exact email match — restore the value so Yivi enforces it
                 c.v = key
+            } else if (c.t === 'pbdf.sidn-pbdf.email.domain') {
+                // Domain match — derive domain from email key if not present
+                if (!c.v && key.includes('@')) {
+                    c.v = key.split('@')[1]
+                }
             } else {
                 // Private/hint attributes: don't reveal their value to the PKG
                 delete c.v
