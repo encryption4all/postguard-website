@@ -78,6 +78,8 @@
         "subpar1": "With PostGuard you can securely send files in a privacy-friendly manner. Every file is encrypted specifically for the receiver. Only that person can decrypt that file. To do that, the email address must be shown. For this, the identification app Yivi is used. <a href=\"https://yivi.app/\">Learn more about the Yivi-app.</a>",
         "errorTitle": "Error occurred",
         "error": "Oops... We are really sorry but something went wrong. Please try again or contact us",
+        "serverErrorTitle": "Server error",
+        "serverError": "Our server encountered an error while processing your request. Please try again later. If the problem persists, please <a href=\"mailto:info@postguard.eu\">contact us</a>.",
         "tryAgain": "Try again",
         "cancel": "Cancel",
         "sign": {
@@ -106,6 +108,9 @@
             "notFoundTitle": "These files no longer exist",
             "notFoundSubtitle": "The link may have expired, or there may be an error in it.",
             "notFoundMessage": "Ask the sender to send the files <strong>once more</strong>.",
+            "serverErrorTitle": "Server error",
+            "serverErrorSubtitle": "Our server encountered an error while processing your request.",
+            "serverErrorMessage": "Please try again later. If the problem persists, please <a href=\"mailto:info@postguard.eu\">contact us</a>.",
             "identityMismatchTitle": "Decryption failed",
             "identityMismatchSubtitle": "The identity you provided does not match the intended recipient.",
             "identityMismatchMessage": "Please make sure you are proving the correct email address in Yivi.",
