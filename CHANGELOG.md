@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/encryption4all/postguard-website/compare/v1.1.0...v1.1.1) (2026-04-03)
+
+
+### Bug Fixes
+
+* add no-cache header to index.html to ensure new deployments are loaded ([#66](https://github.com/encryption4all/postguard-website/issues/66)) ([5ddaf9e](https://github.com/encryption4all/postguard-website/commit/5ddaf9e2acfcf21b55059941397ab99e08f4598f))
+
 ## [1.1.0](https://github.com/encryption4all/postguard-website/compare/v1.0.0...v1.1.0) (2026-04-03)
 
 
