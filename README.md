@@ -16,7 +16,7 @@ docker-compose up
 # Connect phone with USB debugging enabled, Yivi app in developer mode, then:
 adb reverse tcp:8088 tcp:8088 
 
-# Postguard website at http://localhost:5173
+# Postguard website at http://localhost:8080
 # Mailcrab UI at http://localhost:1080
 
 
