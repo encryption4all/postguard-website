@@ -193,6 +193,13 @@
             "pbdf.gemeente.personalData.dateofbirth.placeholder": "15-01-1990"
         }
     },
+    "error": {
+        "title": "Pagina niet gevonden",
+        "message": "De pagina die je zoekt bestaat niet of is verplaatst.",
+        "back": "Ga naar de homepagina",
+        "serverTitle": "Er is iets misgegaan",
+        "serverMessage": "Onze server heeft een onverwachte fout ondervonden. Probeer het later opnieuw."
+    },
     "yivi": {
         "iosHref": "https://apps.apple.com/nl/app/yivi/id1294092994",
         "androidHref": "https://play.google.com/store/apps/details?id=org.irmacard.cardemu&hl=nl"

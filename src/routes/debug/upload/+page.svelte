@@ -65,6 +65,7 @@
         encryptionState: EncryptionState.Encrypting, // Set to Encrypting state
         abort: new AbortController(),
         selfAborted: false,
+        serverError: false,
         encryptStartTime: Date.now(),
         modPromise: modPromise,
         pkPromise: Promise.resolve('mock-public-key'),
