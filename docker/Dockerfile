@@ -1,11 +1,23 @@
-# Compiles ngx_brotli from source as a dynamic module, then copies the
-# .so files into the official nginx image (which keeps envsubst template
-# support and the standard entrypoint).
+# Multi-stage build: compile SvelteKit frontend, build Brotli modules,
+# then assemble the final Nginx image with envsubst template support.
 
 ARG NGINX_VERSION=1.27.4
 
 # ============================================================
-# Stage 1 — Build brotli dynamic modules
+# Stage 1 — Build SvelteKit frontend
+# ============================================================
+FROM node:20-slim AS frontend
+
+WORKDIR /app
+COPY package.json yarn.lock .env ./
+RUN corepack enable && yarn install --frozen-lockfile
+COPY src/ src/
+COPY static/ static/
+COPY svelte.config.js vite.config.ts tsconfig.json ./
+RUN npx svelte-kit sync && yarn build
+
+# ============================================================
+# Stage 2 — Build brotli dynamic modules
 # ============================================================
 FROM debian:bookworm-slim AS builder
 
@@ -62,7 +74,7 @@ COPY docker/default.conf.template /etc/nginx/templates/default.conf.template
 COPY docker/entrypoint.sh /docker-entrypoint.d/40-substitute-env-vars.sh
 RUN chmod +x /docker-entrypoint.d/40-substitute-env-vars.sh
 
-# Copy pre-built frontend
-COPY build /usr/share/nginx/html/postguard
+# Copy frontend built in Stage 1
+COPY --from=frontend /app/build /usr/share/nginx/html/postguard
 
 EXPOSE 80

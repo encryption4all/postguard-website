@@ -33,6 +33,11 @@
     let validationErrors: string[] = $state([])
 
     import { MAX_UPLOAD_SIZE, UPLOAD_CHUNK_SIZE } from '$lib/env'
+    function isServerError(e: unknown): boolean {
+        const msg = String(e)
+        return /status: 5\d\d/.test(msg)
+    }
+
     let SMOOTH_TIME = 2
 
     const emailRegex =
@@ -121,6 +126,7 @@
             mobilePopupMode = 'none'
         } catch (e) {
             console.error('Error occurred during signing: ', e)
+            EncryptState.serverError = isServerError(e)
             EncryptState.encryptionState = EncryptionState.Error
             mobilePopupMode = 'none'
         }
@@ -142,6 +148,7 @@
         } catch (e) {
             console.error('Error occured during encryption: ', e)
             if (EncryptState.selfAborted === false) {
+                EncryptState.serverError = isServerError(e)
                 EncryptState.encryptionState = EncryptionState.Error
             } else {
                 EncryptState.percentages = EncryptState.files.map(() => 0)

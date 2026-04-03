@@ -4,20 +4,15 @@
         EncryptionState,
         type EncryptState,
     } from '$lib/types/filesharing/attributes'
-    import { browser, dev } from '$app/environment'
-    import { goto } from '$app/navigation'
+    import { browser } from '$app/environment'
     import { onMount } from 'svelte'
 
-    // Redirect to home if not in development mode
-    if (!dev) {
-        goto('/')
-    }
     import RecipientSelection from '$lib/components/filesharing/RecipientSelection.svelte'
     import MessageInput from '$lib/components/filesharing/inputs/MessageInput.svelte'
     import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
     import SendButton from '$lib/components/filesharing/SendButton.svelte'
     import FileInput from '$lib/components/filesharing/inputs/FileInput.svelte'
-    import Dropzone from 'dropzone'
+    import Dropzone from '@deltablot/dropzone'
 
     // janky way to conditionally import pg-wasm to avoid issues with SSR
     let modPromise: Promise<any>
@@ -63,14 +58,14 @@
         ],
         sender: 'sender@example.com',
         senderAttributes: [],
-        message: 'This is a test message that shows during encryption.',
+        message: 'This is a test message to be sent with the encrypted files.',
         files: [],
         percentages: [],
         done: [],
-        encryptionState: EncryptionState.Encrypting, // Set to Encrypting state
+        encryptionState: EncryptionState.FileSelection, // Set to FileSelection state (ready to send)
         abort: new AbortController(),
         selfAborted: false,
-        encryptStartTime: Date.now(),
+        encryptStartTime: 0,
         modPromise: modPromise,
         pkPromise: Promise.resolve('mock-public-key'),
         senderConfirm: true,
@@ -84,47 +79,18 @@
             const dropzoneElement = document.querySelector('#my-form') as any
             if (dropzoneElement && dropzoneElement.dropzone) {
                 const dz = dropzoneElement.dropzone as Dropzone
-                mockFiles.forEach((file, index) => {
+                mockFiles.forEach((file) => {
                     dz.emit('addedfile', file)
                     dz.emit('complete', file)
-                    // Initialize all files at 0% progress
-                    testEncryptState.percentages[index] = 0
-                    testEncryptState.done[index] = false
                 })
-
-                // Simulate progress animation from 0 to 100%
-                let currentProgress = 0
-                const progressInterval = setInterval(() => {
-                    currentProgress += 1
-
-                    // Update all file percentages with some variation
-                    testEncryptState.percentages = mockFiles.map((_, index) => {
-                        if (currentProgress >= 100) {
-                            // Ensure all files reach exactly 100% at the end
-                            return 100
-                        }
-                        // Add some randomness to make it look more realistic
-                        const variation = Math.sin(index * 2) * 8
-                        const progress = Math.min(100, Math.max(0, currentProgress + variation))
-                        return Math.round(progress)
-                    })
-
-                    // Mark files as done when they reach 100%
-                    testEncryptState.done = testEncryptState.percentages.map(p => p >= 100)
-
-                    // Stop when all files reach 100%
-                    if (currentProgress >= 105) {
-                        clearInterval(progressInterval)
-                    }
-                }, 50) // Update every 50ms for smooth animation
             }
         }, 100)
     })
 </script>
 
 <div class="test-header">
-    <h1>Test Upload/Encryption State</h1>
-    <p>This page shows what the UI looks like during file encryption/upload</p>
+    <h1>Test Before Send State</h1>
+    <p>This page shows what the UI looks like right before clicking "Sign and send"</p>
 </div>
 
 <div class:container={testEncryptState.encryptionState === EncryptionState.FileSelection || testEncryptState.encryptionState === EncryptionState.Sign || testEncryptState.encryptionState === EncryptionState.Encrypting || testEncryptState.encryptionState === EncryptionState.Error}>
@@ -146,23 +112,24 @@
 </div>
 
 <style lang="scss">
+
   .test-header {
     padding: 1rem;
-    background-color: var(--pg-soft-background);
-    border-bottom: 2px solid var(--pg-primary);
+    background-color: var(--pg-strong-background);
+    border-bottom: 2px solid var(--pg-primary-contrast);
     text-align: center;
   }
 
   .test-header h1 {
     margin: 0 0 0.5rem 0;
     font-size: var(--pg-font-size-xl);
-    color: var(--pg-text-secondary);
+    color: var(--pg-primary-contrast);
   }
 
   .test-header p {
     margin: 0;
     font-size: var(--pg-font-size-sm);
-    color: var(--pg-text-secondary);
+    color: var(--pg-primary-contrast);
   }
 
   * {

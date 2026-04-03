@@ -11,7 +11,7 @@
     let items = [
         { name: 'fs', route: '/' },
         { name: 'addons', route: '/addons' },
-        { name: 'fallback', route: '/fallback' },
+        { name: 'decrypt', route: '/decrypt' },
         { name: 'about', route: '/about' },
         { name: 'pol', route: '/privacy' },
     ]
@@ -36,9 +36,7 @@
                 </li>
             {/each}
         </ul>
-        <LocaleSwitcher
-            lang={$locale}
-        />
+        <LocaleSwitcher />
         <ThemeSwitcher />
     </div>
     <Hamburger

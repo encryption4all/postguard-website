@@ -23,6 +23,16 @@ body {
     overflow-x: hidden;
     background: var(--pg-general-background);
     z-index: -5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+@media (resolution: 1dppx) {
+    body {
+        -webkit-font-smoothing: subpixel-antialiased;
+        -moz-osx-font-smoothing: auto;
+    }
 }
 
 :root {
@@ -123,7 +133,7 @@ button {
     color: var(--pg-general-background);
     padding: 6px 14px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .btn-accent:hover {
@@ -144,10 +154,10 @@ textarea.pg-input {
     font-size: var(--pg-input-font-size);
     height: 2.5rem;
     background-color: var(--pg-general-background);
-    border: 1.5px solid var(--pg-input-normal);
+    border: 1px solid var(--pg-input-normal);
     border-radius: var(--pg-border-radius-md);
     padding: 0 0.85rem;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
     box-sizing: border-box;
     width: 100%;
     color: var(--pg-text)
@@ -178,8 +188,30 @@ input.pg-input:focus,
 select.pg-input:focus,
 textarea.pg-input:focus {
     outline: none;
-    border-color: var(--pg-primary);
+    border-color: var(--pg-primary-contrast);
     box-shadow: 0 0 0 3px rgba(var(--pg-primary-rgb), 0.1);
+}
+
+input.pg-input:focus-visible,
+select.pg-input:focus-visible,
+textarea.pg-input:focus-visible {
+    outline: 2px solid var(--pg-primary);
+    outline-offset: 1px;
+}
+
+/* 1x (non-Retina) displays: thinner border and revert to border-only focus */
+@media (resolution: 1dppx) {
+    input.pg-input,
+    select.pg-input,
+    textarea.pg-input {
+        border-width: 1px;
+    }
+
+    input.pg-input:focus-visible,
+    select.pg-input:focus-visible,
+    textarea.pg-input:focus-visible {
+        outline: none;
+    }
 }
 
 input.pg-input:invalid:not(:focus):not(:placeholder-shown),
@@ -321,14 +353,7 @@ h3 {
     }
 }
 
-.yivi-web-content,
-.yivi-web-form {
-    min-width: 0 !important;
-}
 
-#crypt-irma-qr {
-    min-height: 0;
-}
 
 
 /* ── Utility classes (from shared-styles.css) ───────────────────────── */
@@ -385,7 +410,7 @@ h3 {
     box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     box-sizing: border-box;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
     padding: 0.8rem 1.3rem;
 }
 
@@ -455,7 +480,7 @@ h3 {
     padding: 0.5rem 0;
     text-align: center;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .crypt-btn:hover:not(:disabled):not([disabled]):not(.crypt-btn-disabled) {

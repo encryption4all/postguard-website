@@ -41,6 +41,9 @@
             let resp = await fetch(`${PKG_URL}/v2/parameters`, {
                 headers: METRICS_HEADER,
             })
+            if (!resp.ok) {
+                throw new Error(`Failed to fetch parameters: status: ${resp.status}`)
+            }
             let params = await resp.json()
             return params.publicKey
         }
@@ -64,6 +67,7 @@
             encryptionState: EncryptionState.FileSelection,
             abort: new AbortController(),
             selfAborted: false,
+            serverError: false,
             encryptStartTime: 0,
             modPromise: modPromise,
             pkPromise: getParameters(),
@@ -94,7 +98,7 @@
         </div>
     {:else if EncryptState.encryptionState === EncryptionState.Error}
         <div class="inputs-container">
-            <Error bind:encryptionState={EncryptState.encryptionState} />
+            <Error bind:encryptionState={EncryptState.encryptionState} serverError={EncryptState.serverError} />
         </div>
     {:else if EncryptState.encryptionState === EncryptionState.Done}
         <Done bind:EncryptState={EncryptState} {createDefaultEncryptState} />
@@ -130,6 +134,8 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
   }
 
   @media only screen and (min-width: 768px) {

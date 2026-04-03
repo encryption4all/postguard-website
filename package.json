@@ -1,6 +1,6 @@
 {
     "name": "postguard-website",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "private": true,
     "scripts": {
         "dev": "vite dev",
@@ -54,16 +54,15 @@
         "singleQuote": true
     },
     "dependencies": {
-        "@e4a/pg-wasm": "^0.3.0",
+        "@deltablot/dropzone": "^7.4.3",
+        "@e4a/pg-wasm": "^0.5.5",
         "@iconify/svelte": "^4.0.2",
-        "@privacybydesign/yivi-client": "^0.2.1",
-        "@privacybydesign/yivi-core": "^0.2.1",
-        "@privacybydesign/yivi-css": "^0.2.1",
-        "@privacybydesign/yivi-web": "^0.2.1",
+        "@privacybydesign/yivi-client": "^1.0.0-beta.1",
+        "@privacybydesign/yivi-core": "^1.0.0-beta.1",
+        "@privacybydesign/yivi-css": "^1.0.0-beta.1",
+        "@privacybydesign/yivi-web": "^1.0.0-beta.1",
         "@transcend-io/conflux": "^6.1.1",
-        "@types/dropzone": "^5.7.9",
         "country-flag-icons": "^1.6.4",
-        "dropzone": "^6.0.0-beta.2",
         "jwt-decode": "^3.1.2",
         "libphonenumber-js": "^1.12.31",
         "postal-mime": "^1.0.16",

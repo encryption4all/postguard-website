@@ -1,17 +1,18 @@
 <script lang="ts">
-    import { dev } from '$app/environment'
-    import { goto } from '$app/navigation'
+    import { browser } from '$app/environment'
     import Done from '$lib/components/filesharing/Done.svelte'
-    import { EncryptionState } from '$lib/types/filesharing/attributes'
+    import { EncryptionState, type EncryptState } from '$lib/types/filesharing/attributes'
 
-    // Redirect to home if not in development mode
-    if (!dev) {
-        goto('/')
+    let modPromise: Promise<any>
+    if (browser) {
+        modPromise = import('@e4a/pg-wasm')
+    } else {
+        modPromise = Promise.resolve(null)
     }
 
     // Hardcoded test data
-    let testEncryptState = $state({
-        stage: EncryptionState.Done,
+    let testEncryptState: EncryptState = $state({
+        encryptionState: EncryptionState.Done,
         files: [
             new File([''], 'presentation.pdf', { type: 'application/pdf', lastModified: Date.now() }),
             new File([''], 'budget_2024_final_version_v3.xlsx', { type: 'application/vnd.ms-excel', lastModified: Date.now() }),
@@ -43,23 +44,35 @@
                 ]
             }
         ],
-        sender: [],
+        sender: '',
+        senderAttributes: [],
         senderConfirm: false,
         message: 'Test message',
         done: [],
-        percentages: []
+        percentages: [],
+        abort: new AbortController(),
+        selfAborted: false,
+        encryptStartTime: Date.now(),
+        modPromise: modPromise,
+        pkPromise: Promise.resolve('mock-public-key'),
     })
 
-    function createDefaultEncryptState() {
+    function createDefaultEncryptState(): EncryptState {
         return {
-            stage: EncryptionState.FileSelection,
+            encryptionState: EncryptionState.FileSelection,
             files: [],
             recipients: [{ email: '', extra: [] }],
-            sender: [],
+            sender: '',
+            senderAttributes: [],
             senderConfirm: false,
             message: '',
             done: [],
-            percentages: []
+            percentages: [],
+            abort: new AbortController(),
+            selfAborted: false,
+            encryptStartTime: 0,
+            modPromise: modPromise,
+            pkPromise: Promise.resolve('mock-public-key'),
         }
     }
 </script>
