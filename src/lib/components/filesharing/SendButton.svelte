@@ -305,6 +305,16 @@
 
     let yiviInfoExpanded = $state(false)
     let buttonRef: HTMLButtonElement | null = $state(null)
+    let dialogRef: HTMLDialogElement | null = $state(null)
+
+    $effect(() => {
+        if (!browser || !dialogRef) return
+        if (showValidationModal) {
+            dialogRef.showModal()
+        } else if (dialogRef.open) {
+            dialogRef.close()
+        }
+    })
 </script>
 <div class="button-container">
     {#if EncryptState.encryptionState === EncryptionState.Encrypting}
@@ -436,20 +446,17 @@
     {/if}
 </div>
 
-{#if showValidationModal}
-    <button type="button" class="validation-backdrop" tabindex="-1" aria-hidden="true" onclick={() => showValidationModal = false}></button>
-    <div class="validation-modal" role="dialog" aria-modal="true">
-        <h2 class="validation-title">{$_('filesharing.encryptPanel.validation.title')}</h2>
-        <ul class="validation-errors">
-            {#each validationErrors as error}
-                <li>{error}</li>
-            {/each}
-        </ul>
-        <button class="primary-btn" onclick={() => showValidationModal = false}>
-            {$_('filesharing.encryptPanel.validation.continueButton')}
-        </button>
-    </div>
-{/if}
+<dialog bind:this={dialogRef} class="validation-modal" tabindex="-1" oncancel={() => showValidationModal = false}>
+    <h2 class="validation-title">{$_('filesharing.encryptPanel.validation.title')}</h2>
+    <ul class="validation-errors">
+        {#each validationErrors as error}
+            <li>{error}</li>
+        {/each}
+    </ul>
+    <button class="primary-btn" onclick={() => showValidationModal = false}>
+        {$_('filesharing.encryptPanel.validation.continueButton')}
+    </button>
+</dialog>
 
 <style lang="scss">
   .send-btn {
@@ -674,29 +681,27 @@
   }
 
   /* Validation modal */
-  .validation-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: 10;
-    cursor: pointer;
-  }
-
-  .validation-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--pg-general-background);
+  dialog.validation-modal {
+    border: none;
     border-radius: var(--pg-border-radius-lg);
     padding: 1.75rem 1.5rem 1.5rem;
-    z-index: 11;
     width: 90%;
     max-width: 380px;
-    display: flex;
-    flex-direction: column;
     gap: 1rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    background: var(--pg-general-background);
+    color: var(--pg-text);
+  }
+
+  /* Only apply flex layout when the dialog is open.
+     Setting display on dialog directly overrides the UA's display:none for closed dialogs. */
+  dialog.validation-modal[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  dialog.validation-modal::backdrop {
+    background: rgba(0, 0, 0, 0.45);
   }
 
   .validation-title {
