@@ -4,15 +4,24 @@
 
     interface props {
         encryptionState: EncryptionState;
+        serverError?: boolean;
     }
 
-    let { encryptionState = $bindable() }: props = $props()
+    let { encryptionState = $bindable(), serverError = false }: props = $props()
 </script>
 
 <div class="error-container">
     <div class="error-content">
-        <h3 class="error-title">{$_('filesharing.errorTitle')}</h3>
-        <p class="error-message">{$_('filesharing.error')}</p>
+        <h3 class="error-title">
+            {serverError ? $_('filesharing.serverErrorTitle') : $_('filesharing.errorTitle')}
+        </h3>
+        <p class="error-message">
+            {#if serverError}
+                {@html $_('filesharing.serverError')}
+            {:else}
+                {$_('filesharing.error')}
+            {/if}
+        </p>
         <button
             class="error-btn"
             onclick={() => encryptionState = EncryptionState.FileSelection}

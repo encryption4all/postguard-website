@@ -4,22 +4,26 @@
     import sun from '$lib/assets/images/google-icons/sun.svg'
     import moon from '$lib/assets/images/google-icons/moon.svg'
 
-    let theme: 'light' | 'dark' = 'light'
-    let userPreference: 'light' | 'dark' | null = null
-
-    if (browser) {
+    function getInitialTheme(): { theme: 'light' | 'dark'; pref: 'light' | 'dark' | null } {
+        if (!browser) return { theme: 'light', pref: null }
         const stored = localStorage.getItem('preferredtheme')
         if (stored === 'light' || stored === 'dark') {
-            theme = stored
-            userPreference = stored
-        } else {
-            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+            return { theme: stored, pref: stored }
         }
-        document.documentElement.classList.toggle('dark', theme === 'dark')
+        return {
+            theme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+            pref: null,
+        }
+    }
+
+    const initial = getInitialTheme()
+    let userPreference: 'light' | 'dark' | null = $state(initial.pref)
+
+    if (browser) {
+        document.documentElement.classList.toggle('dark', initial.theme === 'dark')
     }
 
     function setTheme(newTheme: 'light' | 'dark') {
-        theme = newTheme
         userPreference = newTheme
         if (!browser) return
         document.documentElement.classList.toggle('dark', newTheme === 'dark')
@@ -31,8 +35,8 @@
 
         function handleSystemChange(e: MediaQueryListEvent) {
             if (!localStorage.getItem('preferredtheme')) {
-                theme = e.matches ? 'dark' : 'light'
-                document.documentElement.classList.toggle('dark', theme === 'dark')
+                const newTheme = e.matches ? 'dark' : 'light'
+                document.documentElement.classList.toggle('dark', newTheme === 'dark')
             }
         }
 
@@ -40,8 +44,8 @@
         return () => mediaQuery.removeEventListener('change', handleSystemChange)
     })
 
-    $: isLight = userPreference === 'light'
-    $: isDark = userPreference === 'dark'
+    let isLight = $derived(userPreference === 'light')
+    let isDark = $derived(userPreference === 'dark')
 </script>
 
 <div

@@ -53,12 +53,12 @@
 
     $effect(() => {
         if (translation_key === 'filesharing.attributes.pbdf.sidn-pbdf.mobilenumber.mobilenumber') {
-            // so the prefix doesn't get added accidentally
-            if (showingValue.startsWith(selectedCountryPrefix)) {
-                showingValue.replace(selectedCountryPrefix, '')
-            }
+            // strip the prefix before prepending it, so it doesn't get added twice
+            const stripped = showingValue.startsWith(selectedCountryPrefix)
+                ? showingValue.slice(selectedCountryPrefix.length)
+                : showingValue
 
-            value = showingValue.length > 0 ? selectedCountryPrefix + showingValue : ''
+            value = stripped.length > 0 ? selectedCountryPrefix + stripped : ''
         }
     })
 

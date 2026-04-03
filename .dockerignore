@@ -14,6 +14,7 @@ coverage
 .nyc_output
 
 # Production build
+build
 dist
 
 # Misc

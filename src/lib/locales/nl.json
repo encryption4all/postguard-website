@@ -3,7 +3,7 @@
         "fs": "Bestanden Delen",
         "home": "Home",
         "addons": "E-mailen",
-        "fallback": "Ontsleutel E-mails",
+        "decrypt": "Ontsleutel E-mails",
         "about": "Over PostGuard",
         "pol": "Privacybeleid"
     },
@@ -44,7 +44,8 @@
         "drop": "Selecteer \"postguard.encrypted\" attachment hier",
         "search": "Zoek in ontsleutelde mails...",
         "decrypt": {
-            "helper": "Ontsleutel deze email door te laten zien wie je bent met <i class=\"yivi-web-logo\">Yivi</i>"
+            "helper": "Ontsleutel deze email door te laten zien wie je bent met <i class=\"yivi-web-logo\">Yivi</i>",
+            "retry": "Probeer opnieuw"
         },
         "settings": {
             "h4": "Lokale opslag",
@@ -77,6 +78,8 @@
         "subpar1": "Met PostGuard kan je op een privacyvriendelijke manier veilig bestanden versturen. Elk bestand wordt speciaal voor de ontvanger versleuteld. Alleen die persoon kan dat bestand ontsleutelen. Daarvoor moet het e-mailadres getoond worden. Hiervoor wordt de identificatie-app Yivi gebruikt. <a href=\"https://yivi.app/\">Leer meer over de Yivi-app.</a>",
         "errorTitle": "Er is een fout opgetreden",
         "error": "Oeps... Excuses, er is iets fout gegaan. Probeer het nog een keer of neem contact op met ons",
+        "serverErrorTitle": "Serverfout",
+        "serverError": "Onze server heeft een fout ondervonden bij het verwerken van je verzoek. Probeer het later opnieuw. Als het probleem aanhoudt, <a href=\"mailto:info@postguard.eu\">neem dan contact met ons op</a>.",
         "tryAgain": "Probeer opnieuw",
         "cancel": "Annuleer",
         "sign": {
@@ -104,7 +107,14 @@
             "verifiedExtra": "De bestanden zijn ondertekend met",
             "notFoundTitle": "Deze bestanden bestaan niet (meer)",
             "notFoundSubtitle": "Het kan zijn dat de link is verlopen, of dat er een fout in zit.",
-            "notFoundMessage": "Vraag de verzender de bestanden <strong>nog een keer te versturen</strong>."
+            "notFoundMessage": "Vraag de verzender de bestanden <strong>nog een keer te versturen</strong>.",
+            "serverErrorTitle": "Serverfout",
+            "serverErrorSubtitle": "Onze server heeft een fout ondervonden bij het verwerken van je verzoek.",
+            "serverErrorMessage": "Probeer het later opnieuw. Als het probleem aanhoudt, <a href=\"mailto:info@postguard.eu\">neem dan contact met ons op</a>.",
+            "identityMismatchTitle": "Ontsleutelen mislukt",
+            "identityMismatchSubtitle": "De opgegeven identiteit komt niet overeen met de beoogde ontvanger.",
+            "identityMismatchMessage": "Zorg ervoor dat u het juiste e-mailadres bewijst in Yivi.",
+            "tryAgain": "Opnieuw proberen"
         },
         "encryptPanel": {
             "fileBox": {

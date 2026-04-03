@@ -1,7 +1,7 @@
 import type { AttributeCon } from '@e4a/pg-wasm'
-import YiviCore from '@privacybydesign/yivi-core'
-import YiviWeb from '@privacybydesign/yivi-web'
-import YiviClient from '@privacybydesign/yivi-client'
+import { YiviCore } from '@privacybydesign/yivi-core'
+import { YiviWeb } from '@privacybydesign/yivi-web'
+import { YiviClient } from '@privacybydesign/yivi-client'
 import { browser } from '$app/environment'
 
 async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise<any> {
@@ -70,6 +70,7 @@ async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise
     // Always use YiviWeb: it handles QR rendering on desktop
     // and deep link generation on mobile.
     yiviConfig.element = '#crypt-irma-qr'
+    yiviConfig.minimal = true
 
     const yivi = new YiviCore(yiviConfig)
 

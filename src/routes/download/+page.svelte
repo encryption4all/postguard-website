@@ -2,9 +2,9 @@
     import { onMount, tick } from 'svelte'
     import { browser, dev } from '$app/environment'
     import { _ } from 'svelte-i18n'
-    import YiviCore from '@privacybydesign/yivi-core'
-    import YiviClient from '@privacybydesign/yivi-client'
-    import YiviWeb from '@privacybydesign/yivi-web'
+    import { YiviCore } from '@privacybydesign/yivi-core'
+    import { YiviClient } from '@privacybydesign/yivi-client'
+    import { YiviWeb } from '@privacybydesign/yivi-web'
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
     import FileList from '$lib/components/filesharing/FileList.svelte'
     import { isMobile } from '$lib/browser-detect'
@@ -12,7 +12,7 @@
     import Chip from '$lib/components/Chip.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
 
-    type DownloadState = 'Downloading' | 'Recipients' | 'Ready' | 'Decrypting' | 'Done' | 'Fail'
+    type DownloadState = 'Downloading' | 'Recipients' | 'Ready' | 'Decrypting' | 'Done' | 'Fail' | 'ServerError' | 'IdentityMismatch'
 
     // public_identity() returns a Policy: { ts: number, con: [{t: string, v?: string}] }
     function getSenderEmail(identity: any): string {
@@ -110,12 +110,24 @@
         try {
             const { FILEHOST_URL, PKG_URL } = await import('$lib/env')
 
-            const vk = await fetch(`${PKG_URL}/v2/sign/parameters`)
-                .then((r) => r.json())
-                .then((j) => j.publicKey)
+            const vkResp = await fetch(`${PKG_URL}/v2/sign/parameters`)
+            if (!vkResp.ok) {
+                if (vkResp.status >= 500) {
+                    downloadState = 'ServerError'
+                    return
+                }
+                throw new Error(`Failed to fetch parameters: ${vkResp.status}`)
+            }
+            const vk = (await vkResp.json()).publicKey
 
             const response = await fetch(`${FILEHOST_URL}/filedownload/${uuid}`)
-            if (!response.ok) throw new Error(`Failed to download file: ${response.status}`)
+            if (!response.ok) {
+                if (response.status >= 500) {
+                    downloadState = 'ServerError'
+                    return
+                }
+                throw new Error(`Failed to download file: ${response.status}`)
+            }
 
             if (!response.body) throw new Error('Response body is null')
             const { StreamUnsealer } = await import('@e4a/pg-wasm')
@@ -147,7 +159,7 @@
             key = policies.keys().next().value!
             processPolicy()
         } else {
-            keylist = [...policies.keys()]
+            keylist = [...policies.keys()].filter((k) => k)
             downloadState = 'Recipients'
         }
     }
@@ -159,15 +171,30 @@
 
         recipientStripped = JSON.parse(JSON.stringify(recipientAndCreds))
         for (const c of recipientStripped) {
-            delete c.v
+            if (c.t === 'pbdf.sidn-pbdf.email.email') {
+                // Exact email match — restore the value so Yivi enforces it
+                c.v = key
+            } else if (c.t === 'pbdf.sidn-pbdf.email.domain') {
+                // Domain match — derive domain from email key if not present
+                if (!c.v && key.includes('@')) {
+                    c.v = key.split('@')[1]
+                }
+            } else {
+                // Private/hint attributes: don't reveal their value to the PKG
+                delete c.v
+            }
         }
-
         keyRequest = {
             con: recipientStripped,
             validity: secondsTill4AM(),
         }
         if (dev) console.debug('[download] key request:', JSON.stringify(keyRequest))
 
+        downloadState = 'Ready'
+        tick().then(() => startYiviSession())
+    }
+
+    function retry() {
         downloadState = 'Ready'
         tick().then(() => startYiviSession())
     }
@@ -212,6 +239,7 @@
                 debugging: false,
                 session,
                 element: '#yivi-download',
+                minimal: true,
                 language: selectedLang.toLowerCase(),
                 state: {
                     serverSentEvents: false,
@@ -235,7 +263,13 @@
         } catch (e) {
             if (dev) console.error('[download] Yivi session error:', e)
             err = String(e)
-            downloadState = 'Fail'
+            if ((e as any)?.isDecryptionFailure) {
+                downloadState = 'IdentityMismatch'
+            } else if (/status: 5\d\d/.test(err) || /status(?:Code)?\s*[=:]\s*5\d\d/.test(err)) {
+                downloadState = 'ServerError'
+            } else {
+                downloadState = 'Fail'
+            }
         }
     }
 
@@ -250,7 +284,7 @@
         if (dev) console.debug('[download] unsealing for recipient:', key)
         await unsealer.unseal(key, usk, writable).catch((e: unknown) => {
             if (dev) console.error('[download] unseal failed:', e)
-            throw e
+            throw Object.assign(new Error(String(e)), { isDecryptionFailure: true })
         })
         if (!senderIdentity) {
             senderIdentity = unsealer.public_identity()
@@ -274,7 +308,17 @@
 
 <div class="page-wrapper">
     <div class="content">
-        <h2>{downloadState === 'Fail' ? $_('filesharing.decryptpanel.notFoundTitle') : $_('filesharing.decryptpanel.header')}</h2>
+        <h2>
+            {#if downloadState === 'Fail'}
+                {$_('filesharing.decryptpanel.notFoundTitle')}
+            {:else if downloadState === 'ServerError'}
+                {$_('filesharing.decryptpanel.serverErrorTitle')}
+            {:else if downloadState === 'IdentityMismatch'}
+                {$_('filesharing.decryptpanel.identityMismatchTitle')}
+            {:else}
+                {$_('filesharing.decryptpanel.header')}
+            {/if}
+        </h2>
 
         {#if downloadState === 'Downloading'}
             <div class="spinner-wrapper">
@@ -370,9 +414,25 @@
                 </div>
             {/if}
 
+        {:else if downloadState === 'ServerError'}
+            <p class="error-description">{$_('filesharing.decryptpanel.serverErrorSubtitle')}</p>
+            <p class="error-description">{@html $_('filesharing.decryptpanel.serverErrorMessage')}</p>
+
         {:else if downloadState === 'Fail'}
             <p class="error-description">{$_('filesharing.decryptpanel.notFoundSubtitle')}</p>
             <p class="error-description">{@html $_('filesharing.decryptpanel.notFoundMessage')}</p>
+
+        {:else if downloadState === 'IdentityMismatch'}
+            <p class="error-description">{$_('filesharing.decryptpanel.identityMismatchSubtitle')}</p>
+            <p class="error-description">{$_('filesharing.decryptpanel.identityMismatchMessage')}</p>
+            <div class="retry-wrapper">
+                <Chip
+                    text={$_('filesharing.decryptpanel.tryAgain')}
+                    onclick={retry}
+                    size="lg"
+                    variant="dark"
+                />
+            </div>
         {/if}
     </div>
 </div>
@@ -546,6 +606,11 @@
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
         background: var(--pg-general-background);
+    }
+
+    .retry-wrapper {
+        display: flex;
+        justify-content: center;
     }
 
     .error-description {

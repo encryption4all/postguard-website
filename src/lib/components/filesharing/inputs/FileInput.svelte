@@ -1,10 +1,10 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
     import { onMount } from 'svelte'
-    import Dropzone from 'dropzone'
-    import 'dropzone/dist/dropzone.css'
+    import Dropzone from '@deltablot/dropzone'
+    import '@deltablot/dropzone/dist/dropzone.css'
     import BasketDrawing from '$lib/assets/images/basket_no_plane.svg'
-    import UploadedFileTemplate from '$lib/components/filesharing/inputs/UploadedFileTemplate.svelte'
+    import closeIcon from '$lib/assets/images/google-icons/close.svg'
     import Chip from '$lib/components/Chip.svelte'
     import { EncryptionState } from '$lib/types/filesharing/attributes'
 
@@ -37,11 +37,22 @@
     let remainingSize = $derived(MAX_UPLOAD_SIZE - totalSize)
     let remainingSizeGB = $derived((remainingSize / (1024 * 1024 * 1024)).toFixed(2))
 
+    const previewTemplate = `
+        <div class="dz-preview dz-file-preview files">
+            <div>
+                <div><p class="file-title" data-dz-name></p></div>
+            </div>
+            <div>
+                <p data-dz-size></p>
+                <button class="remove-button" data-dz-remove type="button">
+                    <img class="invert" src="${closeIcon}" alt="remove button" />
+                </button>
+                <div class="dz-error-message"><span data-dz-errormessage></span></div>
+            </div>
+        </div>`
+
     // handle all the Dropzone setup in onMount to ensure it only runs in the browser
     onMount(() => {
-        // @ts-ignore, it's always set if UploadedFileTemplate is set because it's SSR'd
-        let previewTemplate = document.querySelector('#template-container').innerHTML
-
         myDropzone = new Dropzone('#my-form', {
             url: '#', // Dummy URL, can't be empty
             autoProcessQueue: false, // Prevent automatic upload
@@ -83,10 +94,6 @@
       class:dropzone-with-files={files.length > 0}
       class:hidden={stage === EncryptionState.Done || stage === EncryptionState.Error}
 >
-    <!-- so dropzone can get the template but its invisible -->
-    <div class="hidden" id="template-container">
-        <UploadedFileTemplate />
-    </div>
     <div class="dz-message">
         <h1 class="file-tagline">
             {$_('filesharing.encryptPanel.fileBox.tagline')}
@@ -342,6 +349,102 @@
 
     .dz-previews.encrypting :global(.remove-button) {
         display: none !important;
+    }
+
+    /* Override Dropzone's default .dz-preview styles */
+    .dz-previews :global(.dz-preview) {
+        display: block;
+        margin: 0;
+        min-height: 0;
+        position: relative;
+    }
+
+    /* Preview template styles (injected by Dropzone, so must be :global) */
+    .dz-previews :global(.files) {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        width: 100%;
+        margin-bottom: 0;
+        padding: 8px 0;
+        border-bottom: 2px solid var(--pg-input-normal-light);
+    }
+
+    .dz-previews :global(.files > div:first-child) {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .dz-previews :global(.files > div:first-child > div) {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .dz-previews :global(.files > div:last-child) {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .dz-previews :global(.file-title) {
+        overflow: hidden;
+        white-space: nowrap;
+        font-family: var(--pg-font-family);
+        font-weight: var(--pg-font-weight-regular);
+        margin: 0;
+        color: var(--pg-text);
+        min-width: 0;
+        font-size: var(--pg-font-size-sm);
+        direction: rtl;
+        text-align: left;
+        text-overflow: ellipsis;
+    }
+
+    .dz-previews :global(.files > div:last-child p) {
+        font-family: var(--pg-font-family);
+        font-weight: var(--pg-font-weight-regular);
+        margin: 0;
+        color: var(--pg-text-secondary);
+        font-size: var(--pg-font-size-sm);
+    }
+
+    .dz-previews :global(.remove-button) {
+        cursor: pointer;
+        height: 100%;
+        padding: 4px 0 4px 4px;
+        border-radius: var(--pg-border-radius-md);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: auto;
+    }
+
+    .dz-previews :global(.remove-button:hover) {
+        background-color: var(--pg-soft-background);
+    }
+
+    .dz-previews :global(.remove-button *) {
+        cursor: pointer;
+    }
+
+    .dz-previews :global(.remove-button img) {
+        width: 18px;
+        height: 18px;
+    }
+
+    .dz-previews :global(.dz-error-message) {
+        display: none;
+    }
+
+    .dz-previews :global(.dz-error .dz-error-message) {
+        display: block;
     }
 
     .add-more-chip-container {

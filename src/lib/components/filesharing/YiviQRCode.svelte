@@ -58,29 +58,6 @@
 </div>
 
 <style>
-    /*
-     * Reset all Yivi plugin CSS, but preserve the styles of Yivi's animation elements.
-     * Animation elements (phone, checkmark, etc.) rely on their Yivi CSS rules for
-     * colour, size, and keyframe animations — stripping them would break the visuals.
-     */
-    .yivi-qr-container :global(*:not(
-        .yivi-web-waiting-for-user-animation,
-        .yivi-web-checkmark-animation,
-        .yivi-web-forbidden-animation,
-        .yivi-web-clock-animation
-    )) {
-        all: revert !important;
-        box-shadow: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
-        background: transparent !important;
-    }
-
-    .yivi-web-content {
-        min-width: 0px !important;
-    }
-
     .yivi-qr-container {
         width: 250px;
         height: 250px;
@@ -89,13 +66,12 @@
         align-items: center;
         overflow: hidden;
         background: var(--pg-general-background);
-        border: 1.5px solid var(--pg-strong-background);
+        border: 1px solid var(--pg-strong-background);
         border-radius: var(--pg-border-radius-sm);
         padding: 10px;
     }
 
     .yivi-qr-container.responsive {
-        /* width: 100%; */
         height: auto;
         min-height: 200px;
     }
@@ -104,40 +80,6 @@
     .yivi-qr-container.responsive :global(svg) {
         width: 100% !important;
         height: auto !important;
-    }
-
-    /*
-     * Hide everything except the QR canvas/svg and Yivi's post-scan animation states
-     * (waiting-for-user, success, cancelled, timeout/error).
-     * The :has() selectors ensure ancestor divs of visible content are also shown.
-     */
-    .yivi-qr-container :global(:not(
-        canvas, svg,
-        div:has(canvas), div:has(svg),
-        .yivi-web-waiting-for-user-animation,
-        .yivi-web-checkmark-animation,
-        .yivi-web-forbidden-animation,
-        .yivi-web-clock-animation,
-        div:has(.yivi-web-waiting-for-user-animation),
-        div:has(.yivi-web-checkmark-animation),
-        div:has(.yivi-web-forbidden-animation),
-        div:has(.yivi-web-clock-animation)
-    )) {
-        display: none !important;
-    }
-
-    .yivi-qr-container :global(div:has(> canvas)),
-    .yivi-qr-container :global(div:has(> svg)) {
-        display: flex !important;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .yivi-qr-container :global(canvas),
-    .yivi-qr-container :global(svg) {
-        display: block !important;
-        image-rendering: pixelated !important;
-        image-rendering: crisp-edges !important;
     }
 
     .spinner {

@@ -39,6 +39,7 @@
         {#each $emails as email}
             <div
                 id="sb-th"
+                role="button"
                 tabindex="-1"
                 onclick={preventDefault(() => showMail(email.id, email.raw))}
                 onkeypress={bubble('keypress')}
@@ -87,7 +88,7 @@
                 </div>
             </div>
 
-            <EmailView decryptedMail={currentParsed} />
+            <EmailView />
         {/if}
     </div>
 </div>

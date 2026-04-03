@@ -68,9 +68,12 @@
         align-items: center;
         gap: 1.5rem;
         padding: 2rem 2rem 0 2rem;
+        width: 100%;
         max-width: 600px;
         margin: 0 auto;
+        box-sizing: border-box;
         flex: 1; /* fill the .done wrapper in +page.svelte */
+        min-width: 0;
     }
 
     h2 {
