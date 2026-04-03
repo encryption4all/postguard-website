@@ -7,7 +7,6 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 
 import nodePolyfills from 'rollup-plugin-node-polyfills'
-import path from 'path'
 
 const config: UserConfig = {
   resolve: {
@@ -59,8 +58,8 @@ const config: UserConfig = {
         NodeGlobalsPolyfillPlugin({
           process: true,
           buffer: true,
-        }),
-        NodeModulesPolyfillPlugin(),
+        }) as any,
+        NodeModulesPolyfillPlugin() as any,
       ],
     },
   },
@@ -72,7 +71,7 @@ const config: UserConfig = {
   },
   server: {
     fs: {
-      allow: [path.resolve(__dirname, '..')]
+      allow: ['..']
     },
     // Polling mode so Claude Code file changes are picked up by the HMR watcher
     watch: {

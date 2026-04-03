@@ -17,7 +17,7 @@
         disabled = false
     }: props = $props()
 
-    const isInteractive = onclick !== undefined
+    let isInteractive = $derived(onclick !== undefined)
 </script>
 
 {#if isInteractive}

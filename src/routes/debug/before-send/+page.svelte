@@ -65,6 +65,7 @@
         encryptionState: EncryptionState.FileSelection, // Set to FileSelection state (ready to send)
         abort: new AbortController(),
         selfAborted: false,
+        serverError: false,
         encryptStartTime: 0,
         modPromise: modPromise,
         pkPromise: Promise.resolve('mock-public-key'),

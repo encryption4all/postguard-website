@@ -26,7 +26,7 @@
         abort,
     }: props = $props()
 
-    const to = recipients.map(({ email }) => email).join(', ')
+    let to = $derived(recipients.map(({ email }) => email).join(', '))
     let timeEstimateRepr = $derived(() => {
         const deltaT = Date.now() - encryptStartTime
         const totalSize = files

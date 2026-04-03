@@ -194,6 +194,13 @@
             "pbdf.gemeente.personalData.dateofbirth.placeholder": "15-01-1990"
         }
     },
+    "error": {
+        "title": "Page not found",
+        "message": "The page you are looking for does not exist or has been moved.",
+        "back": "Go to home page",
+        "serverTitle": "Something went wrong",
+        "serverMessage": "Our server encountered an unexpected error. Please try again later."
+    },
     "yivi": {
         "iosHref": "https://apps.apple.com/us/app/yivi/id1294092994",
         "androidHref": "https://play.google.com/store/apps/details?id=org.irmacard.cardemu&hl=en"

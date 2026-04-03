@@ -240,7 +240,7 @@
                 session,
                 element: '#yivi-download',
                 minimal: true,
-                language: selectedLang.toLowerCase(),
+                language: selectedLang.toLowerCase() as 'nl' | 'en',
                 state: {
                     serverSentEvents: false,
                     polling: {

@@ -17,6 +17,19 @@ on:
 
 jobs:
 
+  # Run svelte-check for type errors and warnings.
+  svelte-check:
+    name: Svelte Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx svelte-check --threshold warning
+
   # Create a GitHub release (and tag) when conventional commits warrant one.
   release-please:
     name: Release Please

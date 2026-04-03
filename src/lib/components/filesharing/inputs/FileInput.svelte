@@ -9,7 +9,7 @@
     import { EncryptionState } from '$lib/types/filesharing/attributes'
 
     // Disable auto-discover to prevent Dropzone from automatically attaching to all .dropzone elements
-    Dropzone.autoDiscover = false
+    Dropzone.discover = () => []
 
     let myDropzone: Dropzone | null = null
     let isDragging = $state(false)

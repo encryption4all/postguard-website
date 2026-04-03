@@ -179,7 +179,7 @@
                 body: JSON.stringify(keyRequest),
             },
             result: {
-                url: (o, { sessionToken }) =>
+                url: (o, /** @type {any} */ { sessionToken }) =>
                     `${o.url}/v2/request/jwt/${sessionToken}`,
                 parseResponse: (r) => {
                     return r
