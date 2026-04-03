@@ -30,7 +30,8 @@
         width: 100%;
         box-sizing: border-box;
         min-width: 0;
-        overflow: hidden;
+        overflow: clip;
+        overflow-clip-margin: 4px;
     }
 
     .help-section.bordered {
@@ -56,6 +57,8 @@
         outline: 2px solid var(--pg-primary);
         outline-offset: 2px;
         border-radius: var(--pg-border-radius-sm);
+        position: relative;
+        z-index: 1;
     }
 
     .help-section.bordered .help-toggle {

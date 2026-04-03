@@ -135,6 +135,7 @@
                             icon="+"
                             size="lg"
                             variant="default"
+                            onclick={() => {}}
                         />
                     </div>
                 {/if}
@@ -343,7 +344,10 @@
         gap: 0.5rem;
         max-height: 300px;
         overflow-y: auto;
+        overflow-x: clip;
+        overflow-clip-margin: 4px;
         pointer-events: auto;
+        padding-right: 4px;
     }
 
     .dz-previews.encrypting :global(.remove-button) {
@@ -356,6 +360,7 @@
         margin: 0;
         min-height: 0;
         position: relative;
+        background: transparent;
     }
 
     /* Preview template styles (injected by Dropzone, so must be :global) */
@@ -416,7 +421,7 @@
     .dz-previews :global(.remove-button) {
         cursor: pointer;
         height: 100%;
-        padding: 4px 0 4px 4px;
+        padding: 4px 4px 4px 4px;
         border-radius: var(--pg-border-radius-md);
         transition: all 0.2s ease;
         display: flex;
@@ -427,6 +432,12 @@
 
     .dz-previews :global(.remove-button:hover) {
         background-color: var(--pg-soft-background);
+    }
+
+    .dz-previews :global(.remove-button:focus-visible) {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+        z-index: 1;
     }
 
     .dz-previews :global(.remove-button *) {

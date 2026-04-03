@@ -594,7 +594,8 @@ h3 {
     }
 
     .primary-btn:focus-visible {
-        outline: none;
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
     }
 
     .crypt-btn:hover:not(:disabled):not([disabled]):not(.crypt-btn-disabled) {
