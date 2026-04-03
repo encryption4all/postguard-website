@@ -16,8 +16,8 @@ services:
     volumes:
       - cryptify-data:/app/data
       - ./cryptify/conf/config.dev.toml:/app/config.toml:ro
-      - ./cryptify/cryptify/src:/app/src
-      - ./cryptify/cryptify/templates:/app/templates
+      - ./cryptify/src:/app/src
+      - ./cryptify/templates:/app/templates
       - cryptify-target:/app/target
     environment:
       - RUST_LOG=info
