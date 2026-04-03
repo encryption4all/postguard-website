@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/encryption4all/postguard-website/compare/v1.1.1...v1.1.2) (2026-04-03)
+
+
+### Bug Fixes
+
+* add high-res PostGuard logo PNG for email template ([#69](https://github.com/encryption4all/postguard-website/issues/69)) ([897eb88](https://github.com/encryption4all/postguard-website/commit/897eb884793d0487f0d4661587902e7b9cfa4743))
+
 ## [1.1.1](https://github.com/encryption4all/postguard-website/compare/v1.1.0...v1.1.1) (2026-04-03)
 
 
