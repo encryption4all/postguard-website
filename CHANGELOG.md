@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.1.0](https://github.com/encryption4all/postguard-website/compare/v1.0.0...v1.1.0) (2026-04-03)
+
+
+### Features
+
+* add styled error pages, fix type errors, add svelte-check CI ([#65](https://github.com/encryption4all/postguard-website/issues/65)) ([784166f](https://github.com/encryption4all/postguard-website/commit/784166f385c01c4ca618811f8a6f7367cf2fe07a))
+
+
+### Bug Fixes
+
+* add inert attribute to background content when popup is shown ([#34](https://github.com/encryption4all/postguard-website/issues/34)) ([062cdc3](https://github.com/encryption4all/postguard-website/commit/062cdc32dc0358186897cd4d29f852be24aee9ef))
+* auto-reload page when stale JS chunks cause blank screen ([#63](https://github.com/encryption4all/postguard-website/issues/63)) ([6be8792](https://github.com/encryption4all/postguard-website/commit/6be8792eeebc85645a42676ec8c8a000d18f289f)), closes [#62](https://github.com/encryption4all/postguard-website/issues/62)
+* dropzone focus state and add-more-files button semantics ([#32](https://github.com/encryption4all/postguard-website/issues/32)) ([f27eb77](https://github.com/encryption4all/postguard-website/commit/f27eb77c5ccbc61c8e9d197baf9a840645d44592))
+* improve design rendering on 1dppx low-density screens ([#40](https://github.com/encryption4all/postguard-website/issues/40)) ([caf6f42](https://github.com/encryption4all/postguard-website/commit/caf6f42c10e362ddcb440cf8374173a363444423))
+
 ## 1.0.0 (2026-03-31)
 
 
