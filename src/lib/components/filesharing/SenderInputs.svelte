@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { AttType } from '$lib/types/filesharing/attributes'
-    import type { AttributeCon } from '@e4a/pg-wasm'
+    import type { AttributeCon } from '$lib/types/filesharing/attributes'
     import { _ } from 'svelte-i18n'
     import AttributeButton from '$lib/components/filesharing/inputs/AttributeButton.svelte'
 

@@ -1,29 +1,22 @@
 <script>
     import { run } from 'svelte/legacy';
 
-    import { tick, onMount } from 'svelte'
-
-    // Yivi
-    import { YiviCore } from '@privacybydesign/yivi-core'
-    import { YiviClient } from '@privacybydesign/yivi-client'
-    import { YiviWeb } from '@privacybydesign/yivi-web'
-    import '@privacybydesign/yivi-css'
-
-    import jwt_decode from 'jwt-decode'
+    import { tick } from 'svelte'
 
     import {
         currSelected,
         currentId,
         nextId,
-        boolCacheYivi,
         emails,
-        krCache,
     } from './stores'
 
     import * as decrypt from './decrypt.js'
     import * as email from './email'
 
     import { locale, _ } from 'svelte-i18n'
+
+    import { pg } from '$lib/postguard'
+    import { IdentityMismatchError } from '@e4a/pg-js'
 
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
     import Chip from '$lib/components/Chip.svelte'
@@ -38,214 +31,72 @@
         Fail: 'Fail',
     }
 
-    import { PKG_URL } from '$lib/env'
-
     let decryptState = $state(STATES.Uninit)
 
-    let outStream = ''
-    let decoder = new TextDecoder()
-    const unsealerWritable = new WritableStream({
-        write: (chunk) => {
-            outStream += decoder.decode(chunk, { stream: true })
-        },
-        close: () => {
-            outStream += decoder.decode()
-        },
-    })
-
     let policies = $state()
-    let usk = $state()
     let keylist = $state()
     let key = $state()
-    let keyRequest
-    let recipientAndCreds
-    let recipientStripped
-    let timestamp
 
     let showHints = $state(false)
     let hints = $state([])
 
-    let boolRecipientCached = $state()
-    let jwtCached
-
-    let krCacheTemp = {
-        jwt: '',
-        jwtValid: '',
-        key: '',
-        krCon: {},
-    }
-
     let decryptedMail
     let err = $state()
 
-    /** @type {{rightMode: any, mod: any, readable: any}} */
-    let { rightMode = $bindable(), mod, readable } = $props();
+    /** @type {{rightMode: any, readable: any}} */
+    let { rightMode = $bindable(), readable } = $props();
 
-    let unsealer = $state()
-    let vk = $state()
-
-    onMount(async () => {
-        vk = await fetch(`${PKG_URL}/v2/sign/parameters`)
-            .then((r) => r.json())
-            .then((j) => j.publicKey)
-    })
+    let opened = $state()
 
     function checkRecipients() {
-        if (policies.size == 1) {
-            key = policies.keys().next().value
-            krCacheTemp.key = key
+        const recipients = [...policies.keys()].filter((k) => k)
+        if (recipients.length === 1) {
+            key = recipients[0]
         } else {
-            keylist = [...policies.keys()].filter((k) => k)
+            keylist = recipients
             decryptState = STATES.Recipients
         }
     }
 
-    function processPolicy() {
-        timestamp = policies.get(key).ts
-        recipientAndCreds = decrypt.sortPolicies(policies.get(key)['con'])
-        boolRecipientCached = checkKrCached()
-    }
-
-    function checkKrCached() {
-        for (const kr of $krCache) {
-            if (
-                kr.key === key &&
-                JSON.stringify(kr.krCon) === JSON.stringify(recipientAndCreds)
-            ) {
-                if (Date.now() / 1000 < kr.jwtValid) {
-                    jwtCached = kr.jwt
-                    return true
-                } else {
-                    $krCache = $krCache.filter((x) => x.exp != kr.exp)
-                    break
-                }
-            }
-        }
-        return false
-    }
-
     function processCredentials() {
-        let pol = policies.get(key)['con']
-        for (var i = 0; i < pol.length; i++) {
-            if (pol[i]['t'] == 'pbdf.sidn-pbdf.mobilenumber.mobilenumber') {
+        const policy = policies.get(key)
+        if (!policy?.con) return
+        for (const c of policy.con) {
+            if (c.t === 'pbdf.sidn-pbdf.mobilenumber.mobilenumber' && c.v) {
                 showHints = true
-                hints.push('Mobile number: ' + pol[i]['v'])
-            } else if (pol[i]['t'] == 'pbdf.pbdf.surfnet-2.id') {
+                hints.push('Mobile number: ' + c.v)
+            } else if (c.t === 'pbdf.pbdf.surfnet-2.id' && c.v) {
                 showHints = true
-                hints.push('Student ID: ' + pol[i]['v'])
+                hints.push('Student ID: ' + c.v)
             }
         }
-    }
-
-    function cacheCredentials() {
-        let jwtdecoded = /** @type {any} */ (jwt_decode(krCacheTemp.jwt))
-        krCacheTemp.jwtValid = jwtdecoded.exp
-        $krCache = [...$krCache, krCacheTemp]
-    }
-
-    function stripCredentials() {
-        krCacheTemp.krCon = recipientAndCreds
-        recipientStripped = JSON.parse(JSON.stringify(recipientAndCreds))
-        for (const c of recipientStripped) {
-            delete c.v
-        }
-    }
-
-    function createKr() {
-        keyRequest = {
-            con: recipientStripped,
-            validity: decrypt.secondsTill4AM(),
-        }
-    }
-
-    async function getUskCachedJWT() {
-        usk = await fetch(`${PKG_URL}/v2/request/key/${timestamp.toString()}`, {
-            headers: {
-                Authorization: `Bearer ${jwtCached}`,
-            },
-        }).then((r) => r.json().then((o) => o.key))
-        return usk
-    }
-
-    async function getUsk() {
-        const session = {
-            url: PKG_URL,
-            start: {
-                url: (o) => `${o.url}/v2/request/start`,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(keyRequest),
-            },
-            result: {
-                url: (o, /** @type {any} */ { sessionToken }) =>
-                    `${o.url}/v2/request/jwt/${sessionToken}`,
-                parseResponse: (r) => {
-                    return r
-                        .text()
-                        .then((jwt) => {
-                            krCacheTemp.jwt = jwt
-                            return fetch(
-                                `${PKG_URL}/v2/request/key/${timestamp.toString()}`,
-                                {
-                                    headers: {
-                                        Authorization: `Bearer ${jwt}`,
-                                    },
-                                }
-                            )
-                        })
-                        .then((r) => r.json())
-                        .then((json) => {
-                            if (
-                                json.status !== 'DONE' ||
-                                json.proofStatus !== 'VALID'
-                            )
-                                throw new Error('not done and valid')
-                            return json.key
-                        })
-                        .catch((e) => console.log('error: ', e))
-                },
-            },
-        }
-
-        const yivi = new YiviCore({
-            language: $locale === 'nl-NL' ? 'nl' : 'en',
-            debugging: true,
-            session,
-            element: '#yivi-fallback',
-            translations: {
-                header: $_('fallback.decrypt.helper'),
-            },
-        })
-
-        yivi.use(YiviWeb)
-        yivi.use(YiviClient)
-        usk = await yivi.start()
-
-        if ($boolCacheYivi) cacheCredentials()
-
-        return usk
     }
 
     function retry() {
         err = undefined
-        usk = undefined
         showHints = false
         hints = []
         decryptState = STATES.Qr
-        tick().then(() => {
-            getUsk().then((retrieved) => (usk = retrieved))
-        }).catch((e) => {
-            err = e
-            decryptState = STATES.Fail
-        })
+        tick().then(() => startDecryption())
     }
 
-    async function decryptFile() {
-        const ret = await unsealer.unseal(key, usk, unsealerWritable)
-        decryptedMail = await email.parseMail(outStream)
-        await storeMail(outStream)
+    async function startDecryption() {
+        try {
+            const result = await opened.decrypt({
+                element: '#yivi-fallback',
+                recipient: key,
+                enableCache: true,
+            })
+
+            decryptState = STATES.Decrypting
+
+            const outStream = new TextDecoder().decode(result.plaintext)
+            decryptedMail = await email.parseMail(outStream)
+            await storeMail(outStream)
+        } catch (e) {
+            err = e
+            decryptState = STATES.Fail
+        }
     }
 
     async function storeMail(unparsed) {
@@ -277,12 +128,13 @@
     }
 
     run(() => {
-        if (decryptState === STATES.Uninit && vk) {
-            mod.StreamUnsealer.new(readable, vk)
-                .then((u) => {
+        if (decryptState === STATES.Uninit && readable) {
+            const o = pg.open({ data: readable })
+            opened = o
+            o.inspect()
+                .then((info) => {
                     decryptState = STATES.Init
-                    unsealer = u
-                    policies = unsealer.inspect_header()
+                    policies = info.policies
                     checkRecipients()
                 })
                 .catch((e) => {
@@ -292,42 +144,10 @@
         }
     });
     run(() => {
-        if ((decryptState == STATES.Init || decryptState == STATES.Recipients) && key) {
-            processPolicy()
+        if ((decryptState === STATES.Init || decryptState === STATES.Recipients) && key) {
             processCredentials()
-
-            if (boolRecipientCached) {
-                getUskCachedJWT()
-                    .then((retrieved) => (usk = retrieved))
-                    .catch((e) => {
-                        err = e
-                        decryptState = STATES.Fail
-                    })
-            } else {
-                stripCredentials()
-                createKr()
-                decryptState = STATES.Qr
-                tick()
-                    .then(() => {
-                        getUsk().then((retrieved) => (usk = retrieved))
-                    })
-                    .catch((e) => {
-                        err = e
-                        decryptState = STATES.Fail
-                    })
-            }
-        }
-    });
-    run(() => {
-        if (usk) {
-            decryptState = STATES.Decrypting
-
-            decryptFile()
-                .then(() => (decryptState = STATES.Show))
-                .catch((e) => {
-                    err = e
-                    decryptState = STATES.Fail
-                })
+            decryptState = STATES.Qr
+            tick().then(() => startDecryption())
         }
     });
 </script>

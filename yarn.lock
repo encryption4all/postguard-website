@@ -9,6 +9,15 @@
   dependencies:
     "@swc/helpers" "^0.5.18"
 
+"@e4a/pg-js@file:../postguard-js":
+  version "0.0.0-managed-by-semantic-release"
+  dependencies:
+    "@e4a/pg-wasm" "^0.5.5"
+    "@privacybydesign/yivi-client" "^1.0.0-beta.4"
+    "@privacybydesign/yivi-core" "^1.0.0-beta.4"
+    "@privacybydesign/yivi-web" "^1.0.0-beta.4"
+    "@transcend-io/conflux" "^6.1.3"
+
 "@e4a/pg-wasm@^0.5.5":
   version "0.5.5"
   resolved "https://registry.yarnpkg.com/@e4a/pg-wasm/-/pg-wasm-0.5.5.tgz#3d1b255bea2ee3c4547f43dd3c87c601e22830c2"
@@ -532,28 +541,27 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.29.tgz#5a40109a1ab5f84d6fd8fc928b19f367cbe7e7b1"
   integrity sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==
 
-"@privacybydesign/yivi-client@^1.0.0-beta.1":
-  version "1.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@privacybydesign/yivi-client/-/yivi-client-1.0.0-beta.1.tgz#021e97afced5537f1ac19deca1253e0b6eab28db"
-  integrity sha512-d48K0x9NH/mQvB/t0QcDaeNv5H+jiE5oCk8aUQV5Ln/ekjJTO6E4qrINK2q+aNWUm0htL1bDE2/j0Tp0Epcr3Q==
+"@privacybydesign/yivi-client@^1.0.0-beta.4":
+  version "1.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@privacybydesign/yivi-client/-/yivi-client-1.0.0-beta.4.tgz#87111117e146bffd4788fcd5b6ffcb79f7e4c320"
+  integrity sha512-1B0NryDau4rkv6w6Y2eLesoynuVvKNEKC/6MZPdPMDo8ecnN02bZM+gpogqO0Th94NKK+iXtRREqKWaopXJhIQ==
   dependencies:
     deepmerge "^4.2.2"
-    eventsource "^1.0.7"
 
-"@privacybydesign/yivi-core@^1.0.0-beta.1":
-  version "1.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@privacybydesign/yivi-core/-/yivi-core-1.0.0-beta.1.tgz#d5b1a8f49411c91dcfbc7250608fe85654b76ea2"
-  integrity sha512-bG0nvCVsslPMvagP5UTPJueBM8uH4Q4Uwb+a5hZgwlPa5QGf6T42zQGcntXBCYs+Ax3BPJ08g8vf+OE0icBPmg==
+"@privacybydesign/yivi-core@^1.0.0-beta.4":
+  version "1.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@privacybydesign/yivi-core/-/yivi-core-1.0.0-beta.4.tgz#c84b45b0b47f7226041b7b8155cb60df13a68675"
+  integrity sha512-xkwTLfVRnGW7RTLjPMvLYbnvYz/ULpZZnzKJwXP9zNdHup0Ol2JGN83dIvq979CtG2vdJUeh8hOoQfPsFaiqnQ==
 
-"@privacybydesign/yivi-css@^1.0.0-beta.1":
-  version "1.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@privacybydesign/yivi-css/-/yivi-css-1.0.0-beta.1.tgz#a7e62a4d3d158ed2ba6ac3db9ba3cb216ec77aa4"
-  integrity sha512-T4wGOe2089dcv3IC8TV8clwXLgQdGbzAORQ7bhPEjnuh2o5DJjd4SYHHYCKnEgMNgjGjrYEsE1iBcf1IhrY1Sw==
+"@privacybydesign/yivi-css@^1.0.0-beta.4":
+  version "1.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@privacybydesign/yivi-css/-/yivi-css-1.0.0-beta.4.tgz#d9029e1fad4fe3e4cd79e6505734cd8dea2f4d0b"
+  integrity sha512-ccV8Wb39gChj9t6nYugYrd5QVvsC9AmQhonsEkBVUX3JQavZVeowTX4Y+VBonJVDfPAvPLaqUdlnVhIDnRLPvA==
 
-"@privacybydesign/yivi-web@^1.0.0-beta.1":
-  version "1.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@privacybydesign/yivi-web/-/yivi-web-1.0.0-beta.1.tgz#1799382162ca80901db572e789f2d7ea3d75321e"
-  integrity sha512-F6FnykHvTlKcX+oyZcMei3dVUICCuAbL5cQRen8Ec/5IoHxBkGZwWVJLNGRkI9uL5FBAcxLaUhupx3MBZa8EmA==
+"@privacybydesign/yivi-web@^1.0.0-beta.4":
+  version "1.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@privacybydesign/yivi-web/-/yivi-web-1.0.0-beta.4.tgz#ac38c169bb68c6ba3122be017c81c157bb289702"
+  integrity sha512-+TMKX1NlHHAD3Lk8MFDcATzDK4muc/1zmyKD3Nwfk8WRb4p2RNNeqwCvztVmZ6V8OVGFFJOT2gMPRv/Z/e2egA==
   dependencies:
     deepmerge "^4.2.2"
     qrcode "^1.4.2"
@@ -832,7 +840,7 @@
   resolved "https://registry.yarnpkg.com/@swc/wasm/-/wasm-1.15.18.tgz#c1d87f977a7f3bc6e2ffef71b5e15cc153634523"
   integrity sha512-zeSORFArxqUwfVMTRHu8AN9k9LlfSn0CKDSzLhJDITpgLoS0xpnocxsgMjQjUcVYDgO47r9zLP49HEjH/iGsFg==
 
-"@transcend-io/conflux@^6.1.1":
+"@transcend-io/conflux@^6.1.3":
   version "6.1.3"
   resolved "https://registry.yarnpkg.com/@transcend-io/conflux/-/conflux-6.1.3.tgz#6d4439ca2d6ce891a9bd85d12517054a510c57e8"
   integrity sha512-MaRZC8qfW1ffkBPNwDqj1UWx3v/cA9qOBOZIuNiej5fHOGsqx6/0kBetq0BeaLoz+G7DfO9YGNapwEZ37BK8vg==
@@ -1471,11 +1479,6 @@ event-emitter@^0.3.5:
     d "1"
     es5-ext "~0.10.14"
 
-eventsource@^1.0.7:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/eventsource/-/eventsource-1.1.2.tgz#bc75ae1c60209e7cb1541231980460343eaea7c2"
-  integrity sha512-xAH3zWhgO2/3KIniEKYPr8plNSzlGINOUqYj0m0u7AB81iRw8b/3E73W6AuU+6klLbaSFmZnaETQ2lXPfAydrA==
-
 ext@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/ext/-/ext-1.7.0.tgz#0ea4383c0103d60e70be99e9a7f11027a33c4f5f"
@@ -1761,11 +1764,6 @@ json-stable-stringify-without-jsonify@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
   integrity sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==
-
-jwt-decode@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-3.1.2.tgz#3fb319f3675a2df0c2895c8f5e9fa4b67b04ed59"
-  integrity sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==
 
 keyv@^4.5.3:
   version "4.5.4"

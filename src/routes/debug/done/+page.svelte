@@ -1,14 +1,6 @@
 <script lang="ts">
-    import { browser } from '$app/environment'
     import Done from '$lib/components/filesharing/Done.svelte'
     import { EncryptionState, type EncryptState } from '$lib/types/filesharing/attributes'
-
-    let modPromise: Promise<any>
-    if (browser) {
-        modPromise = import('@e4a/pg-wasm')
-    } else {
-        modPromise = Promise.resolve(null)
-    }
 
     // Hardcoded test data
     let testEncryptState: EncryptState = $state({
@@ -45,8 +37,6 @@
             }
         ],
         sender: '',
-        senderAttributes: [],
-        senderConfirm: false,
         message: 'Test message',
         done: [],
         percentages: [],
@@ -54,8 +44,6 @@
         selfAborted: false,
         serverError: false,
         encryptStartTime: Date.now(),
-        modPromise: modPromise,
-        pkPromise: Promise.resolve('mock-public-key'),
     })
 
     function createDefaultEncryptState(): EncryptState {
@@ -64,8 +52,6 @@
             files: [],
             recipients: [{ email: '', extra: [] }],
             sender: '',
-            senderAttributes: [],
-            senderConfirm: false,
             message: '',
             done: [],
             percentages: [],
@@ -73,8 +59,6 @@
             selfAborted: false,
             serverError: false,
             encryptStartTime: 0,
-            modPromise: modPromise,
-            pkPromise: Promise.resolve('mock-public-key'),
         }
     }
 </script>

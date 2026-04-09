@@ -1,19 +1,13 @@
 <script lang="ts">
     import { onMount } from 'svelte'
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
-    import { RetrieveSignKeys } from '$lib/yivi-tools'
+    import { pg } from '$lib/postguard'
 
     onMount(async () => {
         // Initialize Yivi session for testing
-        try {
-            const pubSignId = [
-                { t: 'pbdf.sidn-pbdf.email.email' },
-            ]
-
-            await RetrieveSignKeys(pubSignId)
-        } catch (error) {
-            console.error('Failed to load QR code:', error)
-        }
+        // Note: this page just displays a QR code component for visual testing.
+        // The actual Yivi session is handled by pg-js when sign.yivi() is called.
+        console.log('QR test page loaded. PostGuard instance:', pg)
     })
 </script>
 
