@@ -8,7 +8,6 @@
     import RecipientSelection from '$lib/components/filesharing/RecipientSelection.svelte'
     import { isMobile, GetBrowserInfo } from '$lib/browser-detect'
     import MessageInput from '$lib/components/filesharing/inputs/MessageInput.svelte'
-    import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
     import SendButton from '$lib/components/filesharing/SendButton.svelte'
     import FileInput from '$lib/components/filesharing/inputs/FileInput.svelte'
     import ErrorPanel from '$lib/components/filesharing/Error.svelte'
@@ -59,7 +58,6 @@
         return {
             recipients: [{ email: '', extra: [] }],
             sender: '',
-            senderAttributes: [],
             message: '',
             files: [],
             percentages: [],
@@ -71,7 +69,6 @@
             encryptStartTime: 0,
             modPromise: modPromise,
             pkPromise: getParameters(),
-            senderConfirm: true,
             privSignKey: undefined,
             pubSignKey: undefined,
         }
@@ -90,10 +87,6 @@
         <div class="inputs-container">
             <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
             <MessageInput bind:message={EncryptState.message} readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
-            <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
-                          bind:senderConfirm={EncryptState.senderConfirm}
-                          attributes={ATTRIBUTES}
-                          readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
             <SendButton bind:EncryptState={EncryptState} />
         </div>
     {:else if EncryptState.encryptionState === EncryptionState.Error}

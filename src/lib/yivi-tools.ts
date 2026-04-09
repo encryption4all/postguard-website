@@ -4,7 +4,22 @@ import { YiviWeb } from '@privacybydesign/yivi-web'
 import { YiviClient } from '@privacybydesign/yivi-client'
 import { browser } from '$app/environment'
 
-async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise<any> {
+// All optional attribute types the PKG requests during signing.
+// The user can choose to disclose any of them; the PKG filters to those actually disclosed.
+const OPTIONAL_SIGN_ATTRS: AttributeCon = [
+    { t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber', v: '' },
+    { t: 'pbdf.pbdf.drivinglicence.firstName', v: '' },
+    { t: 'pbdf.pbdf.drivinglicence.lastName', v: '' },
+    { t: 'pbdf.pbdf.idcard.firstName', v: '' },
+    { t: 'pbdf.pbdf.idcard.lastName', v: '' },
+    { t: 'pbdf.pbdf.passport.firstName', v: '' },
+    { t: 'pbdf.pbdf.passport.lastName', v: '' },
+    { t: 'pbdf.pbdf.drivinglicence.dateOfBirth', v: '' },
+    { t: 'pbdf.pbdf.idcard.dateOfBirth', v: '' },
+    { t: 'pbdf.pbdf.passport.dateOfBirth', v: '' },
+]
+
+async function RetrieveSignKeys(pub: AttributeCon): Promise<any> {
     if (!browser) return
     const { PKG_URL } = await import('$lib/env')
 
@@ -13,7 +28,7 @@ async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise
             url:() => `${PKG_URL}/v2/request/start`,
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ con: [...pub, ...(priv ? priv : [])] }),
+            body: JSON.stringify({ con: pub }),
         },
         result: {
             url: (o,{ sessionToken }) => `${PKG_URL}/v2/request/jwt/${sessionToken}`,            parseResponse: (r) => {
@@ -28,7 +43,7 @@ async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise
                             },
                             body: JSON.stringify({
                                 pubSignId: pub,
-                                ...(priv && { privSignId: priv }),
+                                privSignId: OPTIONAL_SIGN_ATTRS,
                             }),
                         }),
                     )
@@ -38,9 +53,7 @@ async function RetrieveSignKeys(pub: AttributeCon, priv?: AttributeCon): Promise
                             throw new Error('not done and valid')
                         return {
                             pubSignKey: json.pubSignKey,
-                            ...(priv && {
-                                privSignKey: json.privSignKey,
-                            }),
+                            privSignKey: json.privSignKey,
                         }
                     })
                     .catch((e: Error) => console.log('error: ', e))
