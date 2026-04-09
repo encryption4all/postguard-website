@@ -15,7 +15,8 @@
 
     import { locale, _ } from 'svelte-i18n'
 
-    import { getPostGuard } from '$lib/postguard'
+    import { pg } from '$lib/postguard'
+    import { IdentityMismatchError } from '@e4a/pg-js'
 
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
     import Chip from '$lib/components/Chip.svelte'
@@ -128,11 +129,9 @@
 
     run(() => {
         if (decryptState === STATES.Uninit && readable) {
-            getPostGuard().then((pg) => {
             const o = pg.open({ data: readable })
             opened = o
-            return o.inspect()
-            })
+            o.inspect()
                 .then((info) => {
                     decryptState = STATES.Init
                     policies = info.policies

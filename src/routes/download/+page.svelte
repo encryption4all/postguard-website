@@ -2,7 +2,8 @@
     import { onMount, tick } from 'svelte'
     import { browser, dev } from '$app/environment'
     import { _ } from 'svelte-i18n'
-    import { getPostGuard } from '$lib/postguard'
+    import { pg } from '$lib/postguard'
+    import { IdentityMismatchError, NetworkError } from '@e4a/pg-js'
     import type { DecryptFileResult, FriendlySender, InspectResult } from '@e4a/pg-js'
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
     import FileList from '$lib/components/filesharing/FileList.svelte'
@@ -45,7 +46,6 @@
     async function startDownload() {
         downloadState = 'Downloading'
         try {
-            const pg = await getPostGuard()
             opened = pg.open({ uuid })
             const info: InspectResult = await opened.inspect()
 
@@ -55,7 +55,6 @@
 
             checkRecipients(info.recipients)
         } catch (e) {
-            const { NetworkError } = await import('@e4a/pg-js')
             if (e instanceof NetworkError && e.status >= 500) {
                 downloadState = 'ServerError'
             } else {
@@ -108,7 +107,6 @@
         } catch (e) {
             if (dev) console.error('[download] decrypt error:', e)
             err = String(e)
-            const { IdentityMismatchError, NetworkError } = await import('@e4a/pg-js')
             if (e instanceof IdentityMismatchError) {
                 downloadState = 'IdentityMismatch'
             } else if (e instanceof NetworkError && e.status >= 500) {

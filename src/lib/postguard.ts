@@ -1,15 +1,7 @@
-import type { PostGuard as PostGuardType } from '@e4a/pg-js'
+import { PostGuard } from '@e4a/pg-js'
+import { PKG_URL, FILEHOST_URL } from '$lib/env'
 
-let instance: PostGuardType | null = null
-
-export async function getPostGuard(): Promise<PostGuardType> {
-    if (!instance) {
-        const { PostGuard } = await import('@e4a/pg-js')
-        const { PKG_URL, FILEHOST_URL } = await import('$lib/env')
-        instance = new PostGuard({
-            pkgUrl: PKG_URL,
-            cryptifyUrl: FILEHOST_URL,
-        })
-    }
-    return instance
-}
+export const pg = new PostGuard({
+    pkgUrl: PKG_URL,
+    cryptifyUrl: FILEHOST_URL,
+})

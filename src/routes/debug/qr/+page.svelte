@@ -1,13 +1,12 @@
 <script lang="ts">
     import { onMount } from 'svelte'
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
-    import { getPostGuard } from '$lib/postguard'
+    import { pg } from '$lib/postguard'
 
     onMount(async () => {
         // Initialize Yivi session for testing
         // Note: this page just displays a QR code component for visual testing.
         // The actual Yivi session is handled by pg-js when sign.yivi() is called.
-        const pg = await getPostGuard()
         console.log('QR test page loaded. PostGuard instance:', pg)
     })
 </script>
