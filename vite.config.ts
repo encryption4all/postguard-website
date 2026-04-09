@@ -1,8 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite'
 import type { UserConfig } from 'vite'
-import wasm from 'vite-plugin-wasm'
-import topLevelAwait from 'vite-plugin-top-level-await'
-
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 
@@ -79,7 +76,7 @@ const config: UserConfig = {
       interval: 300,
     },
   },
-  plugins: [sveltekit(), wasm(), topLevelAwait()],
+  plugins: [sveltekit()],
 }
 
 export default config

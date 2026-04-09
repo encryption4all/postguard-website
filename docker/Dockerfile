@@ -9,12 +9,12 @@ ARG NGINX_VERSION=1.27.4
 FROM node:20-slim AS frontend
 
 WORKDIR /app
-COPY package.json yarn.lock .env ./
-RUN corepack enable && yarn install --frozen-lockfile
+COPY package.json package-lock.json .env ./
+RUN npm ci
 COPY src/ src/
 COPY static/ static/
 COPY svelte.config.js vite.config.ts tsconfig.json ./
-RUN npx svelte-kit sync && yarn build
+RUN npx svelte-kit sync && npm run build
 
 # ============================================================
 # Stage 2 — Build brotli dynamic modules
