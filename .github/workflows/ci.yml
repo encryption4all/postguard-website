@@ -26,10 +26,10 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: yarn
-      - run: yarn install --frozen-lockfile
-      - run: yarn svelte-kit sync
-      - run: yarn svelte-check --threshold warning
+          cache: npm
+      - run: npm ci
+      - run: npx svelte-kit sync
+      - run: npx svelte-check --threshold warning
 
   # Create a GitHub release (and tag) when conventional commits warrant one.
   release-please:
