@@ -2,6 +2,7 @@
     import { _, locale } from 'svelte-i18n'
     import { isValidPhoneNumber } from 'libphonenumber-js/mobile'
     import { NetworkError } from '@e4a/pg-js'
+    import { tick } from 'svelte'
 
     import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
     import { EncryptionState, type EncryptState } from '$lib/types/filesharing/attributes'
@@ -89,6 +90,9 @@
     async function startEncryption(): Promise<void> {
         EncryptState.encryptionState = EncryptionState.Sign
 
+        // Wait for Svelte to render the Yivi QR element into the DOM
+        await tick()
+
         try {
             if (!canEncrypt()) return
 
@@ -132,6 +136,7 @@
                 notify: {
                     message: EncryptState.message,
                     language: lang as 'EN' | 'NL',
+                    confirmToSender: true,
                 },
             })
 
