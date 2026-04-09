@@ -9,8 +9,10 @@
   dependencies:
     "@swc/helpers" "^0.5.18"
 
-"@e4a/pg-js@file:../postguard-js":
-  version "0.0.0-managed-by-semantic-release"
+"@e4a/pg-js@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@e4a/pg-js/-/pg-js-0.4.0.tgz#3fe7af1f544f38f6a56217c35c3d02ca8d474c0a"
+  integrity sha512-0AO+HeuvdvgB7uDQI3zYc46iN9nEFq8EEl1kxEmdglVUr8khxbaTSnhBuGVOTKnIDCtTZabQbt2u0cm6PSE9LQ==
   dependencies:
     "@e4a/pg-wasm" "^0.5.5"
     "@privacybydesign/yivi-client" "^1.0.0-beta.4"
