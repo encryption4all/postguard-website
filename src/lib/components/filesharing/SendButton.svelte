@@ -1,11 +1,10 @@
 <script lang="ts">
     import { _, locale } from 'svelte-i18n'
     import { isValidPhoneNumber } from 'libphonenumber-js/mobile'
-    import { NetworkError } from '@e4a/pg-js'
 
     import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
     import { EncryptionState, type EncryptState } from '$lib/types/filesharing/attributes'
-    import { pg } from '$lib/postguard'
+    import { getPostGuard } from '$lib/postguard'
     import { browser } from '$app/environment'
     import { isMobile } from '$lib/browser-detect'
     import YiviQRCode from './YiviQRCode.svelte'
@@ -92,6 +91,8 @@
         try {
             if (!canEncrypt()) return
 
+            const pg = await getPostGuard()
+
             // Build recipients
             const recipients = EncryptState.recipients.map(({ email, extra }) => {
                 if (extra.length > 0) {
@@ -146,6 +147,7 @@
                 EncryptState.selfAborted = false
                 EncryptState.encryptStartTime = 0
             } else {
+                const { NetworkError } = await import('@e4a/pg-js')
                 EncryptState.serverError = e instanceof NetworkError && e.status >= 500
                 EncryptState.encryptionState = EncryptionState.Error
             }
