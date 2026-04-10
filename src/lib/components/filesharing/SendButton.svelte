@@ -110,7 +110,12 @@
             // Build sign method — email always included, name optional (user chooses in Yivi app)
             const sign = pg.sign.yivi({
                 element: '#crypt-irma-qr',
-                attributes: [{ t: 'pbdf.gemeente.personalData.fullname' }],
+                attributes: [
+                    { t: 'pbdf.gemeente.personalData.fullname' },
+                    { t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber' },
+                    { t: 'pbdf.gemeente.personalData.dateofbirth' },
+                ],
+                includeSender: true,
             })
 
             let selectedLang: string = localStorage.getItem('preferredLanguage') ?? 'en-US'
