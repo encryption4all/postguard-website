@@ -6,7 +6,7 @@ ARG NGINX_VERSION=1.27.4
 # ============================================================
 # Stage 1 — Build SvelteKit frontend
 # ============================================================
-FROM node:20-slim AS frontend
+FROM node:24-slim AS frontend
 
 WORKDIR /app
 COPY package.json package-lock.json .env ./
