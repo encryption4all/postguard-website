@@ -2,72 +2,16 @@
     import { onMount, tick } from 'svelte'
     import { browser, dev } from '$app/environment'
     import { _ } from 'svelte-i18n'
-    import { YiviCore } from '@privacybydesign/yivi-core'
-    import { YiviClient } from '@privacybydesign/yivi-client'
-    import { YiviWeb } from '@privacybydesign/yivi-web'
+    import { pg } from '$lib/postguard'
+    import { IdentityMismatchError, NetworkError } from '@e4a/pg-js'
+    import type { DecryptFileResult, FriendlySender, InspectResult } from '@e4a/pg-js'
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
     import FileList from '$lib/components/filesharing/FileList.svelte'
     import { isMobile } from '$lib/browser-detect'
-    import { secondsTill4AM, sortPolicies } from '$lib/components/fallback/decrypt.js'
     import Chip from '$lib/components/Chip.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
 
     type DownloadState = 'Downloading' | 'Recipients' | 'Ready' | 'Decrypting' | 'Done' | 'Fail' | 'ServerError' | 'IdentityMismatch'
-
-    // public_identity() returns a Policy: { ts: number, con: [{t: string, v?: string}] }
-    function getSenderEmail(identity: any): string {
-        if (!identity?.con?.length) return ''
-        return (
-            identity.con.find((a: any) => a.t?.includes('email') && a.v)?.v ??
-            identity.con.find((a: any) => a.v)?.v ??
-            ''
-        ) 
-    }
-
-    function getSenderDisplay(identity: any): string {
-        return getSenderEmail(identity)
-    }
-
-    function getSenderExtras(identity: any): string[] {
-        if (!identity?.con?.length) return []
-        return identity.con
-            .filter((a: any) => !a.t?.includes('email') && a.v)
-            .map((a: any) => a.v as string)
-    }
-
-    // Reads filenames from a ZIP file's central directory (no decompression needed)
-    async function readZipFilenames(blob: Blob): Promise<string[]> {
-        const buf = await blob.arrayBuffer()
-        const view = new DataView(buf)
-        const bytes = new Uint8Array(buf)
-
-        // Find End of Central Directory signature (PK\x05\x06)
-        let eocdOffset = -1
-        for (let i = bytes.length - 22; i >= 0; i--) {
-            if (view.getUint32(i, true) === 0x06054b50) {
-                eocdOffset = i
-                break
-            }
-        }
-        if (eocdOffset === -1) return []
-
-        const cdOffset = view.getUint32(eocdOffset + 16, true)
-        const numEntries = view.getUint16(eocdOffset + 10, true)
-        const decoder = new TextDecoder('utf-8')
-        const filenames: string[] = []
-        let pos = cdOffset
-
-        for (let i = 0; i < numEntries; i++) {
-            if (view.getUint32(pos, true) !== 0x02014b50) break
-            const filenameLen = view.getUint16(pos + 28, true)
-            const extraLen = view.getUint16(pos + 30, true)
-            const commentLen = view.getUint16(pos + 32, true)
-            const filename = decoder.decode(bytes.slice(pos + 46, pos + 46 + filenameLen))
-            if (!filename.endsWith('/')) filenames.push(filename)
-            pos += 46 + filenameLen + extraLen + commentLen
-        }
-        return filenames
-    }
 
     let downloadState: DownloadState = $state('Downloading')
     let err = $state('')
@@ -75,19 +19,13 @@
     let uuid = ''
     let recipientParam = ''
 
-    let policies: Map<string, any>
     let keylist: string[] = $state([])
     let key = $state('')
-    let timestamp: number
-    let recipientAndCreds: any[]
-    let recipientStripped: any[]
-    let keyRequest: any
-    let usk: any
-    let unsealer: any
-
-    let decryptedBlobUrl = $state('')
-    let senderIdentity: any = $state(null)
+    let senderIdentity: FriendlySender | null = $state(null)
     let fileList: string[] = $state([])
+    let decryptedBlobUrl = $state('')
+
+    let opened: Awaited<ReturnType<typeof pg.open>> | null = null
 
     let isMobileDevice = isMobile()
 
@@ -108,164 +46,70 @@
     async function startDownload() {
         downloadState = 'Downloading'
         try {
-            const { FILEHOST_URL, PKG_URL } = await import('$lib/env')
+            opened = pg.open({ uuid })
+            const info: InspectResult = await opened.inspect()
 
-            const vkResp = await fetch(`${PKG_URL}/v2/sign/parameters`)
-            if (!vkResp.ok) {
-                if (vkResp.status >= 500) {
-                    downloadState = 'ServerError'
-                    return
-                }
-                throw new Error(`Failed to fetch parameters: ${vkResp.status}`)
-            }
-            const vk = (await vkResp.json()).publicKey
+            if (dev) console.debug('[download] header recipients:', info.recipients)
 
-            const response = await fetch(`${FILEHOST_URL}/filedownload/${uuid}`)
-            if (!response.ok) {
-                if (response.status >= 500) {
-                    downloadState = 'ServerError'
-                    return
-                }
-                throw new Error(`Failed to download file: ${response.status}`)
-            }
+            senderIdentity = info.sender
 
-            if (!response.body) throw new Error('Response body is null')
-            const { StreamUnsealer } = await import('@e4a/pg-wasm')
-            unsealer = await StreamUnsealer.new(response.body, vk)
-            policies = unsealer.inspect_header()
-            if (dev) console.debug('[download] header policies:', Object.fromEntries(policies))
-
-            try {
-                senderIdentity = unsealer.public_identity()
-            } catch {
-                // public_identity may not be available before unsealing
-            }
-
-            checkRecipients()
+            checkRecipients(info.recipients)
         } catch (e) {
-            err = String(e)
-            downloadState = 'Fail'
+            if (e instanceof NetworkError && e.status >= 500) {
+                downloadState = 'ServerError'
+            } else {
+                err = String(e)
+                downloadState = 'Fail'
+            }
         }
     }
 
-    function checkRecipients() {
-        if (recipientParam && policies.has(recipientParam)) {
+    function checkRecipients(recipients: string[]) {
+        if (recipientParam && recipients.includes(recipientParam)) {
             key = recipientParam
-            processPolicy()
+            startDecryption()
             return
         }
 
-        if (policies.size === 1) {
-            key = policies.keys().next().value!
-            processPolicy()
+        if (recipients.length === 1) {
+            key = recipients[0]
+            startDecryption()
         } else {
-            keylist = [...policies.keys()].filter((k) => k)
+            keylist = recipients.filter((k) => k)
             downloadState = 'Recipients'
         }
     }
 
-    function processPolicy() {
-        const policy = policies.get(key)
-        timestamp = policy.ts
-        recipientAndCreds = sortPolicies(policy.con)
-
-        recipientStripped = JSON.parse(JSON.stringify(recipientAndCreds))
-        for (const c of recipientStripped) {
-            if (c.t === 'pbdf.sidn-pbdf.email.email') {
-                // Exact email match — restore the value so Yivi enforces it
-                c.v = key
-            } else if (c.t === 'pbdf.sidn-pbdf.email.domain') {
-                // Domain match — derive domain from email key if not present
-                if (!c.v && key.includes('@')) {
-                    c.v = key.split('@')[1]
-                }
-            } else {
-                // Private/hint attributes: don't reveal their value to the PKG
-                delete c.v
-            }
-        }
-        keyRequest = {
-            con: recipientStripped,
-            validity: secondsTill4AM(),
-        }
-        if (dev) console.debug('[download] key request:', JSON.stringify(keyRequest))
-
-        downloadState = 'Ready'
-        tick().then(() => startYiviSession())
+    function onRecipientSelected() {
+        startDecryption()
     }
 
-    function retry() {
+    async function startDecryption() {
         downloadState = 'Ready'
-        tick().then(() => startYiviSession())
-    }
+        await tick()
 
-    async function startYiviSession() {
         try {
-            const { PKG_URL } = await import('$lib/env')
+            if (!opened) throw new Error('No opened instance')
 
-            const session = {
-                url: PKG_URL,
-                start: {
-                    url: (o: any) => `${o.url}/v2/request/start`,
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(keyRequest),
-                },
-                result: {
-                    url: (o: any, { sessionToken }: any) =>
-                        `${o.url}/v2/request/jwt/${sessionToken}`,
-                    parseResponse: (r: Response) => {
-                        return r
-                            .text()
-                            .then((jwt) =>
-                                fetch(`${PKG_URL}/v2/request/key/${timestamp.toString()}`, {
-                                    headers: { Authorization: `Bearer ${jwt}` },
-                                }),
-                            )
-                            .then((r) => r.json())
-                            .then((json) => {
-                                if (json.status !== 'DONE' || json.proofStatus !== 'VALID')
-                                    throw new Error('not done and valid')
-                                return json.key
-                            })
-                    },
-                },
-            }
-
-            let selectedLang = localStorage.getItem('preferredLanguage') ?? 'en'
-            if (selectedLang.includes('-')) selectedLang = selectedLang.split('-')[0]
-
-            const yivi = new YiviCore({
-                debugging: false,
-                session,
+            const result = await opened.decrypt({
                 element: '#yivi-download',
-                minimal: true,
-                language: selectedLang.toLowerCase() as 'nl' | 'en',
-                state: {
-                    serverSentEvents: false,
-                    polling: {
-                        endpoint: 'status',
-                        interval: 500,
-                        startState: 'INITIALIZED',
-                    },
-                },
-            })
+                recipient: key,
+                enableCache: true,
+            }) as DecryptFileResult
 
-            // Wait for the DOM to be ready before YiviWeb queries the element
-            await new Promise((resolve) => setTimeout(resolve, 500))
+            senderIdentity = result.sender
+            fileList = result.files
 
-            yivi.use(YiviWeb)
-            yivi.use(YiviClient)
+            // Trigger automatic download
+            result.download('files.zip')
 
-            usk = await yivi.start()
-            downloadState = 'Decrypting'
-            await decryptFiles()
+            downloadState = 'Done'
         } catch (e) {
-            if (dev) console.error('[download] Yivi session error:', e)
+            if (dev) console.error('[download] decrypt error:', e)
             err = String(e)
-            if ((e as any)?.isDecryptionFailure) {
+            if (e instanceof IdentityMismatchError) {
                 downloadState = 'IdentityMismatch'
-            } else if (/status: 5\d\d/.test(err) || /status(?:Code)?\s*[=:]\s*5\d\d/.test(err)) {
+            } else if (e instanceof NetworkError && e.status >= 500) {
                 downloadState = 'ServerError'
             } else {
                 downloadState = 'Fail'
@@ -273,36 +117,8 @@
         }
     }
 
-    async function decryptFiles() {
-        const chunks: BlobPart[] = []
-        const writable = new WritableStream({
-            write: (chunk) => {
-                chunks.push(chunk as BlobPart)
-            },
-        })
-
-        if (dev) console.debug('[download] unsealing for recipient:', key)
-        await unsealer.unseal(key, usk, writable).catch((e: unknown) => {
-            if (dev) console.error('[download] unseal failed:', e)
-            throw Object.assign(new Error(String(e)), { isDecryptionFailure: true })
-        })
-        if (!senderIdentity) {
-            senderIdentity = unsealer.public_identity()
-        }
-
-        const blob = new Blob(chunks, { type: 'application/zip' })
-        decryptedBlobUrl = URL.createObjectURL(blob)
-        fileList = await readZipFilenames(blob)
-
-        // Trigger automatic download
-        const a = document.createElement('a')
-        a.href = decryptedBlobUrl
-        a.download = 'files.zip'
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
-
-        downloadState = 'Done'
+    function retry() {
+        startDecryption()
     }
 </script>
 
@@ -327,7 +143,7 @@
                 </svg>
             </div>
 
-        {:else if downloadState === 'Recipients'} 
+        {:else if downloadState === 'Recipients'}
             <p class="description">{$_('filesharing.decryptpanel.pageDescription')}</p>
             <div class="decrypt-card">
                 <h3>{$_('filesharing.decryptpanel.irmaInstructionHeaderQr')}</h3>
@@ -340,7 +156,7 @@
                 </select>
                 <Chip
                     text={$_('filesharing.decryptpanel.askDownload')}
-                    onclick={processPolicy}
+                    onclick={onRecipientSelected}
                     size="lg"
                     variant="dark"
                     disabled={!key}
@@ -369,13 +185,13 @@
                 linkUrl="https://yivi.app"
                 bordered
             />
-            {#if getSenderDisplay(senderIdentity)}
+            {#if senderIdentity?.email}
                 <div class="sender-section">
                     <svg class="checkmark" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 5L4.5 8.5L11 1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     <p class="sender-label">{$_('filesharing.decryptpanel.verifiedEmail')}</p>
-                    <strong class="sender-email">{getSenderDisplay(senderIdentity)}</strong>
+                    <strong class="sender-email">{senderIdentity.email}</strong>
                 </div>
             {/if}
 
@@ -393,21 +209,21 @@
                     <path d="M1 5L4.5 8.5L11 1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 <p>{$_('filesharing.decryptpanel.doneMessage')}</p>
-            </div> 
+            </div>
 
             <FileList files={fileList} />
 
-            {#if getSenderEmail(senderIdentity)}
-                <div class="sender-section"> 
+            {#if senderIdentity?.email}
+                <div class="sender-section">
                     <svg class="checkmark" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 5L4.5 8.5L11 1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     <p class="sender-label">{$_('filesharing.decryptpanel.verifiedEmail')}</p>
-                    <strong class="sender-email">{getSenderEmail(senderIdentity)}</strong>
-                    {#if getSenderExtras(senderIdentity).length > 0}
+                    <strong class="sender-email">{senderIdentity.email}</strong>
+                    {#if senderIdentity.attributes.filter(a => !a.type.includes('email') && a.value).length > 0}
                         <div class="attr-chips">
-                            {#each getSenderExtras(senderIdentity) as extra}
-                                <span class="attr-chip">{extra}</span>
+                            {#each senderIdentity.attributes.filter(a => !a.type.includes('email') && a.value) as attr}
+                                <span class="attr-chip">{attr.value}</span>
                             {/each}
                         </div>
                     {/if}
@@ -566,7 +382,7 @@
 
     .success-banner {
         display: flex;
-        align-items: center; 
+        align-items: center;
         gap: 0.75rem;
         background: var(--pg-strong-background);
         border-radius: var(--pg-border-radius-lg);

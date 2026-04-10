@@ -4,51 +4,12 @@
         EncryptionState,
         type EncryptState,
     } from '$lib/types/filesharing/attributes'
-    import { browser } from '$app/environment'
     import RecipientSelection from '$lib/components/filesharing/RecipientSelection.svelte'
-    import { isMobile, GetBrowserInfo } from '$lib/browser-detect'
     import MessageInput from '$lib/components/filesharing/inputs/MessageInput.svelte'
-    import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
     import SendButton from '$lib/components/filesharing/SendButton.svelte'
     import FileInput from '$lib/components/filesharing/inputs/FileInput.svelte'
     import ErrorPanel from '$lib/components/filesharing/Error.svelte'
     import Done from '$lib/components/filesharing/Done.svelte'
-
-    // janky way to conditionally import pg-wasm to avoid issues with SSR
-    let modPromise: Promise<any>
-    if (browser) {
-        modPromise = import('@e4a/pg-wasm')
-    } else {
-        modPromise = Promise.resolve(null)
-    }
-
-    let isMobileDevice = isMobile()
-
-    async function getParameters(): Promise<String> {
-        let { name: browsername, version: browserversion } = GetBrowserInfo()
-
-        const { PKG_URL, APP_NAME, APP_VERSION } = await import('$lib/env')
-
-        const METRICS_HEADER = {
-            'X-PostGuard-Client-Version': `${browsername}${
-                isMobileDevice ? '(mobile)' : ''
-            },${browserversion},${APP_NAME},${
-                APP_VERSION
-            }`,
-        }
-
-        if (browser) {
-            let resp = await fetch(`${PKG_URL}/v2/parameters`, {
-                headers: METRICS_HEADER,
-            })
-            if (!resp.ok) {
-                throw new Error(`Failed to fetch parameters: status: ${resp.status}`)
-            }
-            let params = await resp.json()
-            return params.publicKey
-        }
-        return ''
-    }
 
     const ATTRIBUTES: Array<AttType> = [
         'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
@@ -59,7 +20,6 @@
         return {
             recipients: [{ email: '', extra: [] }],
             sender: '',
-            senderAttributes: [],
             message: '',
             files: [],
             percentages: [],
@@ -69,11 +29,6 @@
             selfAborted: false,
             serverError: false,
             encryptStartTime: 0,
-            modPromise: modPromise,
-            pkPromise: getParameters(),
-            senderConfirm: true,
-            privSignKey: undefined,
-            pubSignKey: undefined,
         }
     }
 
@@ -90,10 +45,6 @@
         <div class="inputs-container">
             <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
             <MessageInput bind:message={EncryptState.message} readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
-            <SenderInputs bind:senderAttributes={EncryptState.senderAttributes}
-                          bind:senderConfirm={EncryptState.senderConfirm}
-                          attributes={ATTRIBUTES}
-                          readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
             <SendButton bind:EncryptState={EncryptState} />
         </div>
     {:else if EncryptState.encryptionState === EncryptionState.Error}

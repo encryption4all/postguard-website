@@ -3,7 +3,7 @@
     import RecipientSelectionFields from '$lib/components/filesharing/RecipientSelectionFields.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
     import Chip from '$lib/components/Chip.svelte'
-    import type { AttributeCon } from '@e4a/pg-wasm'
+    import type { AttributeCon } from '$lib/types/filesharing/attributes'
     import type { AttType } from '$lib/types/filesharing/attributes'
 
 

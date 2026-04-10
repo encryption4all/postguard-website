@@ -4,23 +4,13 @@
         EncryptionState,
         type EncryptState,
     } from '$lib/types/filesharing/attributes'
-    import { browser } from '$app/environment'
     import { onMount } from 'svelte'
 
     import RecipientSelection from '$lib/components/filesharing/RecipientSelection.svelte'
     import MessageInput from '$lib/components/filesharing/inputs/MessageInput.svelte'
-    import SenderInputs from '$lib/components/filesharing/SenderInputs.svelte'
     import SendButton from '$lib/components/filesharing/SendButton.svelte'
     import FileInput from '$lib/components/filesharing/inputs/FileInput.svelte'
     import Dropzone from '@deltablot/dropzone'
-
-    // janky way to conditionally import pg-wasm to avoid issues with SSR
-    let modPromise: Promise<any>
-    if (browser) {
-        modPromise = import('@e4a/pg-wasm')
-    } else {
-        modPromise = Promise.resolve(null)
-    }
 
     const ATTRIBUTES: Array<AttType> = [
         'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
@@ -57,7 +47,6 @@
             }
         ],
         sender: 'sender@example.com',
-        senderAttributes: [],
         message: 'This is a test message that shows during encryption.',
         files: [],
         percentages: [],
@@ -67,11 +56,6 @@
         selfAborted: false,
         serverError: false,
         encryptStartTime: Date.now(),
-        modPromise: modPromise,
-        pkPromise: Promise.resolve('mock-public-key'),
-        senderConfirm: true,
-        privSignKey: undefined,
-        pubSignKey: undefined,
     })
 
     // Add files to Dropzone after it initializes
@@ -131,10 +115,6 @@
             {#if testEncryptState.encryptionState === EncryptionState.FileSelection || testEncryptState.encryptionState === EncryptionState.Encrypting}
                 <RecipientSelection bind:recipients={testEncryptState.recipients} attributes={ATTRIBUTES} readonly={testEncryptState.encryptionState === EncryptionState.Encrypting} />
                 <MessageInput bind:message={testEncryptState.message} readonly={testEncryptState.encryptionState === EncryptionState.Encrypting} />
-                <SenderInputs bind:senderAttributes={testEncryptState.senderAttributes}
-                              bind:senderConfirm={testEncryptState.senderConfirm}
-                              attributes={ATTRIBUTES}
-                              readonly={testEncryptState.encryptionState === EncryptionState.Encrypting} />
                 <SendButton bind:EncryptState={testEncryptState} />
             {/if}
         </div>

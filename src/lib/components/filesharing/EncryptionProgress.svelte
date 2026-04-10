@@ -1,6 +1,6 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
-    import type { AttributeCon } from '@e4a/pg-wasm'
+    import type { AttributeCon } from '$lib/types/filesharing/attributes'
     import { EncryptionState } from '$lib/types/filesharing/attributes'
     import { browser } from '$app/environment'
 

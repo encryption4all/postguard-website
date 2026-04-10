@@ -124,16 +124,16 @@
         }
 
         // Step 2: Load WASM
-        status = 'Loading pg-wasm...'
+        status = 'Loading pg-js...'
         try {
-            mod = await import('@e4a/pg-wasm')
+            mod = await import('@e4a/pg-js')
             wasmInfo = {
                 hasStreamUnsealer: !!mod.StreamUnsealer,
                 hasSealStream: !!mod.sealStream,
                 hasDefault: typeof mod.default,
             }
         } catch (e) {
-            status = `Failed to load pg-wasm: ${e instanceof Error ? e.message : String(e)}`
+            status = `Failed to load pg-js: ${e instanceof Error ? e.message : String(e)}`
             return
         }
 
@@ -160,7 +160,7 @@
 {/if}
 
 {#if wasmInfo}
-<h3>2. pg-wasm Module</h3>
+<h3>2. pg-js Module</h3>
 <pre>{JSON.stringify(wasmInfo, null, 2)}</pre>
 {/if}
 

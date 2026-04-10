@@ -1,4 +1,5 @@
-import type { AttributeCon, ISigningKey } from '@e4a/pg-wasm'
+import type { AttributeCon } from '@e4a/pg-js'
+export type { AttributeCon }
 
 export enum EncryptionState {
     FileSelection = 1,
@@ -25,12 +26,6 @@ export type EncryptState = {
     selfAborted: boolean;
     serverError: boolean;
     encryptStartTime: number;
-    modPromise: Promise<any>;
-    pkPromise: Promise<any>;
-    pubSignKey?: ISigningKey;
-    privSignKey?: ISigningKey;
-    senderAttributes: AttributeCon;
-    senderConfirm: boolean;
 };
 
 export type AttType =

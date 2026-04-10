@@ -32,7 +32,7 @@
     });
 
     let searchTerm = $state()
-    let mod = $state(), readable = $state()
+    let readable = $state()
 
     let unique = $state({})
     const onFile = async (event) => {
@@ -51,8 +51,6 @@
     }
 
     onMount(async () => {
-        mod = await import('@e4a/pg-wasm')
-
         const hash = window.location.hash
         if (hash && hash.length > 1) {
             try {
@@ -136,7 +134,7 @@
                 </div>
             {:else}
                 {#key unique}
-                    <Decrypt {mod} {readable} bind:rightMode={currRight} />
+                    <Decrypt {readable} bind:rightMode={currRight} />
                 {/key}
             {/if}
         </div>

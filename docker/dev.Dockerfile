@@ -1,16 +1,16 @@
-FROM node:20-alpine
+FROM node:24-alpine
 
 WORKDIR /app
 
 # Copy package files
-COPY package.json yarn.lock ./
+COPY package.json ./
 
 # Install dependencies
-RUN yarn install --frozen-lockfile
+RUN npm i
 
 # The source code will be mounted as a volume
 # This allows hot reloading during development
 
 EXPOSE 5173
 
-CMD ["yarn", "dev", "--host"]
+CMD ["npm", "run", "dev", "--", "--host"]

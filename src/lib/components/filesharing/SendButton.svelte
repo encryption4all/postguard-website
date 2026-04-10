@@ -1,25 +1,19 @@
 <script lang="ts">
     import { _, locale } from 'svelte-i18n'
     import { isValidPhoneNumber } from 'libphonenumber-js/mobile'
-    import type { ISealOptions } from '@e4a/pg-wasm'
+    import { NetworkError } from '@e4a/pg-js'
+    import { tick } from 'svelte'
 
     import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
-    import { EncryptionState, type EncryptState, Lang } from '$lib/types/filesharing/attributes'
-    import { RetrieveSignKeys } from '$lib/yivi-tools'
-    import Chunker, { withTransform } from '$lib/filesharing/utils'
-    import { createFileReadable, getFileStoreStream } from '$lib/filesharing/FileProvider'
+    import { EncryptionState, type EncryptState } from '$lib/types/filesharing/attributes'
+    import { pg } from '$lib/postguard'
     import { browser } from '$app/environment'
     import { isMobile } from '$lib/browser-detect'
     import YiviQRCode from './YiviQRCode.svelte'
     import HelpToggle from '../HelpToggle.svelte'
     import Chip from '../Chip.svelte'
 
-    let Writer: Promise<any>
-    if (browser) {
-        Writer = import('@transcend-io/conflux')
-    } else {
-        Writer = Promise.resolve(null)
-    }
+    import { MAX_UPLOAD_SIZE } from '$lib/env'
 
     interface props {
         EncryptState: EncryptState;
@@ -31,12 +25,6 @@
     let mobilePopupMode: 'none' | 'direct' | 'qr' = $state('none')
     let showValidationModal = $state(false)
     let validationErrors: string[] = $state([])
-
-    import { MAX_UPLOAD_SIZE, UPLOAD_CHUNK_SIZE } from '$lib/env'
-    function isServerError(e: unknown): boolean {
-        const msg = String(e)
-        return /status: 5\d\d/.test(msg)
-    }
 
     let SMOOTH_TIME = 2
 
@@ -96,206 +84,108 @@
         if (isMobileDevice && mobilePopupMode === 'none') {
             mobilePopupMode = 'direct'
         }
-        await startSigning()
+        await startEncryption()
     }
 
-    async function startSigning(): Promise<void> {
+    async function startEncryption(): Promise<void> {
         EncryptState.encryptionState = EncryptionState.Sign
 
-        try {
-            const pubSignId = [
-                { t: 'pbdf.sidn-pbdf.email.email' },
-            ]
-
-            const keys = await RetrieveSignKeys(
-                pubSignId,
-                EncryptState.senderAttributes
-            )
-
-            if (!keys || !keys.pubSignKey) {
-                console.error('Failed to retrieve sign keys')
-                EncryptState.encryptionState = EncryptionState.Error
-                return
-            }
-
-            if (keys.privSignKey) EncryptState.privSignKey = keys.privSignKey
-
-            EncryptState.pubSignKey = keys.pubSignKey
-
-            await onEncrypt()
-            mobilePopupMode = 'none'
-        } catch (e) {
-            console.error('Error occurred during signing: ', e)
-            EncryptState.serverError = isServerError(e)
-            EncryptState.encryptionState = EncryptionState.Error
-            mobilePopupMode = 'none'
-        }
-    }
-
-    async function onEncrypt() {
-        // TODO: Simplify this error handling logic.
-        // For some reason stream errors are not caught
-        // Which means when the user aborts
-        // exceptions spill into the console...
-
-        EncryptState.encryptionState = EncryptionState.Encrypting
-        EncryptState.encryptStartTime = Date.now()
+        // Wait for Svelte to render the Yivi QR element into the DOM
+        await tick()
 
         try {
-            await applyEncryption()
+            if (!canEncrypt()) return
+
+            // Build recipients
+            const recipients = EncryptState.recipients.map(({ email, extra }) => {
+                const r = pg.recipient.email(email)
+                for (const a of extra) {
+                    r.extraAttribute(a.t, a.v ?? '')
+                }
+                return r
+            })
+
+            // Build sign method — email always included, other attributes optional
+            const sign = pg.sign.yivi({
+                element: '#crypt-irma-qr',
+                attributes: [
+                    { t: 'pbdf.gemeente.personalData.fullname', optional: true },
+                    { t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber', optional: true },
+                    { t: 'pbdf.gemeente.personalData.dateofbirth', optional: true },
+                ],
+                includeSender: true,
+            })
+
+            let selectedLang: string = localStorage.getItem('preferredLanguage') ?? 'en-US'
+            const lang = (selectedLang === 'nl-NL') ? 'NL' : 'EN'
+
+            const sealed = pg.encrypt({
+                files: EncryptState.files,
+                recipients,
+                sign,
+                onProgress: (pct) => {
+                    // First progress callback means signing is done
+                    if (EncryptState.encryptionState === EncryptionState.Sign) {
+                        EncryptState.encryptionState = EncryptionState.Encrypting
+                        EncryptState.encryptStartTime = Date.now()
+                        mobilePopupMode = 'none'
+                    }
+                    updateProgress(pct)
+                },
+                signal: EncryptState.abort.signal,
+            })
+
+            await sealed.upload({
+                notify: {
+                    message: EncryptState.message,
+                    language: lang as 'EN' | 'NL',
+                    confirmToSender: true,
+                },
+            })
+
             EncryptState.encryptionState = EncryptionState.Done
             EncryptState.selfAborted = false
         } catch (e) {
-            console.error('Error occured during encryption: ', e)
-            if (EncryptState.selfAborted === false) {
-                EncryptState.serverError = isServerError(e)
-                EncryptState.encryptionState = EncryptionState.Error
-            } else {
+            console.error('Error occurred during encryption:', e)
+            if (EncryptState.selfAborted) {
                 EncryptState.percentages = EncryptState.files.map(() => 0)
                 EncryptState.done = EncryptState.files.map(() => false)
                 EncryptState.encryptionState = EncryptionState.FileSelection
                 EncryptState.selfAborted = false
                 EncryptState.encryptStartTime = 0
-            }
-        }
-    }
-
-    async function applyEncryption() {
-        if (!canEncrypt()) return
-
-        // make sure these are fulfilled
-        const pk = await EncryptState.pkPromise
-        const { sealStream } = await EncryptState.modPromise
-
-        const ts = Math.round(Date.now() / 1000)
-        const enc_policy = {}
-
-        EncryptState.recipients.forEach(({ email, extra }) => {
-            enc_policy[email] = {
-                ts,
-                con: [{ t: 'pbdf.sidn-pbdf.email.email', v: email }, ...extra],
-            }
-        })
-
-        // also encrypt for the sender
-        if (EncryptState.senderConfirm)
-            enc_policy[EncryptState.sender] = {
-                ts,
-                con: [
-                    { t: 'pbdf.sidn-pbdf.email.email', v: EncryptState.sender },
-                    ...EncryptState.senderAttributes,
-                ],
-            }
-
-        if (!EncryptState.pubSignKey) {
-            EncryptState.encryptionState = EncryptionState.Error
-            return
-        }
-
-        const options: ISealOptions = {
-            policy: enc_policy,
-            pubSignKey: EncryptState.pubSignKey,
-            ...(EncryptState.privSignKey && { privSignKey: EncryptState.privSignKey }),
-        }
-
-        const uploadChunker = new Chunker(UPLOAD_CHUNK_SIZE)
-
-
-        // extremely jank way import the Conflux module and instantiate its Writer export because SSR is sometimes annoying
-        const ConfluxModule = await Writer
-        const { Writer: ConfluxWriter } = ConfluxModule ?? {}
-        if (!ConfluxWriter) {
-            throw new Error('Conflux Writer is not available')
-        }
-        // Create streams that takes all input files and zips them into an output stream.
-
-        const zipTf = new ConfluxWriter()
-        const readable = zipTf.readable as ReadableStream
-        const writeable = zipTf.writable
-
-        const writer = writeable.getWriter()
-
-        EncryptState.files.forEach((f) => {
-            const s = createFileReadable(f)
-
-            writer.write({
-                name: f.name,
-                lastModified: f.lastModified,
-                stream: () => s,
-            })
-        })
-
-        writer.close()
-
-        let selectedLang: String = localStorage.getItem('preferredLanguage') ?? 'en-US'
-        const lang: Lang = (selectedLang === 'nl-NL') ? Lang.NL : Lang.EN
-
-        // This is not 100% accurate due to zip and irmaseal
-        // header but it's close enough for the UI.
-        const finished = new Promise<void>(async (resolve, reject) => {
-            try {
-                const [fileStream, sender] = getFileStoreStream(
-                    EncryptState.abort,
-                    EncryptState.sender,
-                    EncryptState.senderConfirm,
-                    EncryptState.recipients.map(({ email }) => email).join(', '),
-                    EncryptState.message,
-                    lang,
-                    (n, last) => reportProgress(resolve, n, last),
-                )
-
-                EncryptState.sender = sender
-
-                await sealStream(
-                    pk,
-                    options,
-                    readable,
-                    withTransform(fileStream, uploadChunker, EncryptState.abort.signal),
-                )
-            } catch (err) {
-                reject(err)
-            }
-        })
-
-        await finished
-    }
-
-    function reportProgress(resolve: () => void, uploaded: number, done: boolean) {
-        let offset = 0
-        let percentages = EncryptState.percentages.map((p) => p)
-        let timeouts: (number | undefined)[] = EncryptState.percentages.map(
-            (_) => undefined,
-        )
-
-        EncryptState.files.forEach((f, i) => {
-            const startFile = offset
-            const endFile = offset + f.size
-            if (uploaded < startFile) {
-                percentages[i] = 0
-            } else if (uploaded >= endFile) {
-                // We update to done after some time
-                // To allow smoothing of progress.
-                if (timeouts[i] === undefined) {
-                    timeouts[i] = window.setTimeout(() => {
-                        const dones = EncryptState.done.map((d) => d)
-                        dones[i] = true
-                        EncryptState.done = dones
-                    }, 1000 * SMOOTH_TIME)
-                }
-                percentages[i] = 100
             } else {
-                const uploadedOfFile = (uploaded - startFile) / f.size
-                percentages[i] = Math.round(100 * uploadedOfFile)
+                EncryptState.serverError = e instanceof NetworkError && e.status >= 500
+                EncryptState.encryptionState = EncryptionState.Error
             }
+            mobilePopupMode = 'none'
+        }
+    }
 
-            offset = endFile
+    function updateProgress(pct: number) {
+        const totalSize = EncryptState.files.reduce((a, f) => a + f.size, 0)
+        if (totalSize === 0) return
+
+        let offset = 0
+        const percentages = EncryptState.files.map((f) => {
+            const fileStart = (offset / totalSize) * 100
+            const fileEnd = ((offset + f.size) / totalSize) * 100
+            offset += f.size
+            if (pct >= fileEnd) return 100
+            if (pct <= fileStart) return 0
+            return Math.round(((pct - fileStart) / (fileEnd - fileStart)) * 100)
         })
-
         EncryptState.percentages = percentages
 
-        if (done) {
-            window.setTimeout(() => resolve(), 1000 * SMOOTH_TIME)
-        }
+        // Delay done status for smooth animation
+        percentages.forEach((p, i) => {
+            if (p >= 100 && !EncryptState.done[i]) {
+                window.setTimeout(() => {
+                    const dones = EncryptState.done.map((d) => d)
+                    dones[i] = true
+                    EncryptState.done = dones
+                }, 1000 * SMOOTH_TIME)
+            }
+        })
     }
 
     let lang = $state('nl')

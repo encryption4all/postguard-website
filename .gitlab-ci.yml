@@ -17,8 +17,8 @@ build-root:
     tags: [docker]
     image: node:18-alpine3.15
     script:
-        - yarn
-        - yarn build
+        - npm ci
+        - npm run build
     artifacts:
         paths:
             - build

@@ -92,7 +92,7 @@
 </script>
 <form id="my-form" class="dropzone"
       class:dropzone-with-files={files.length > 0}
-      class:hidden={stage === EncryptionState.Done || stage === EncryptionState.Error}
+      class:hidden={stage === EncryptionState.Done}
 >
     <div class="dz-message">
         <h1 class="file-tagline">
@@ -103,6 +103,7 @@
              class:has-files={files.length > 0}
              class:encrypting={stage === EncryptionState.Encrypting}
              class:signing={stage === EncryptionState.Sign}
+             class:error={stage === EncryptionState.Error}
              class:dragging={isDragging}>
             <div class="upload-butt middle-block-size" class:hidden={files.length > 0}>
                 <img class="drawing invert" src={BasketDrawing} alt="Add files" />
@@ -126,7 +127,8 @@
             <div class="files-container" class:hidden={files.length <= 0}>
                 <div id="previews" class="dz-previews"
                      class:signing={stage === EncryptionState.Sign}
-                     class:encrypting={stage === EncryptionState.Encrypting}></div>
+                     class:encrypting={stage === EncryptionState.Encrypting}
+                     class:error={stage === EncryptionState.Error}></div>
 
                 {#if stage !== EncryptionState.Encrypting}
                     <div class="add-more-chip-container">
@@ -247,7 +249,8 @@
     }
 
     .dropzone-box.encrypting,
-    .dropzone-box.signing {
+    .dropzone-box.signing,
+    .dropzone-box.error {
         cursor: default;
         pointer-events: none !important;
     }
@@ -331,7 +334,8 @@
     }
 
     .dropzone-box.encrypting .add-more-chip-container,
-    .dropzone-box.signing .add-more-chip-container {
+    .dropzone-box.signing .add-more-chip-container,
+    .dropzone-box.error .add-more-chip-container {
         pointer-events: none;
         display: none;
     }
@@ -350,7 +354,8 @@
         padding-right: 4px;
     }
 
-    .dz-previews.encrypting :global(.remove-button) {
+    .dz-previews.encrypting :global(.remove-button),
+    .dz-previews.error :global(.remove-button) {
         display: none !important;
     }
 
