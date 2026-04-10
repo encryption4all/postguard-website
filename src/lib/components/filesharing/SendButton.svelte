@@ -101,19 +101,19 @@
                 if (extra.length > 0) {
                     return pg.recipient.withPolicy(email, [
                         { t: 'pbdf.sidn-pbdf.email.email', v: email },
-                        ...extra,
+                        ...extra.map(a => ({ t: a.t, v: a.v ?? '' })),
                     ])
                 }
                 return pg.recipient.email(email)
             })
 
-            // Build sign method — email always included, name optional (user chooses in Yivi app)
+            // Build sign method — email always included, other attributes optional
             const sign = pg.sign.yivi({
                 element: '#crypt-irma-qr',
                 attributes: [
-                    { t: 'pbdf.gemeente.personalData.fullname' },
-                    { t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber' },
-                    { t: 'pbdf.gemeente.personalData.dateofbirth' },
+                    { t: 'pbdf.gemeente.personalData.fullname', optional: true },
+                    { t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber', optional: true },
+                    { t: 'pbdf.gemeente.personalData.dateofbirth', optional: true },
                 ],
                 includeSender: true,
             })
