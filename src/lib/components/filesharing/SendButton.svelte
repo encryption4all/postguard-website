@@ -98,13 +98,11 @@
 
             // Build recipients
             const recipients = EncryptState.recipients.map(({ email, extra }) => {
-                if (extra.length > 0) {
-                    return pg.recipient.withPolicy(email, [
-                        { t: 'pbdf.sidn-pbdf.email.email', v: email },
-                        ...extra.map(a => ({ t: a.t, v: a.v ?? '' })),
-                    ])
+                const r = pg.recipient.email(email)
+                for (const a of extra) {
+                    r.extraAttribute(a.t, a.v ?? '')
                 }
-                return pg.recipient.email(email)
+                return r
             })
 
             // Build sign method — email always included, other attributes optional
