@@ -50,7 +50,7 @@
     },
     "dependencies": {
         "@deltablot/dropzone": "^7.4.3",
-        "@e4a/pg-js": "^0.5.0",
+        "@e4a/pg-js": "^0.6.0",
         "@iconify/svelte": "^4.0.2",
         "@privacybydesign/yivi-css": "^1.0.0-beta.4",
         "country-flag-icons": "^1.6.4",
