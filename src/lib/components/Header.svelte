@@ -98,7 +98,7 @@
 
     &.selected a {
       text-decoration: 2px underline;
-      text-decoration-color: --pg-text;
+      text-decoration-color: var(--pg-text);
       text-underline-offset: 4px;
     }
 
@@ -113,7 +113,7 @@
         height: 2px;
         bottom: 0;
         left: 0;
-        background-color: --pg-text;
+        background-color: var(--pg-text);
         transform-origin: bottom right;
         transition: transform 0.25s ease-out;
       }

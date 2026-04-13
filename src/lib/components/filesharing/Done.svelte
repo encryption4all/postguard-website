@@ -79,7 +79,7 @@
     h2 {
         font-size: var(--pg-font-size-2xl);
         font-weight: var(--pg-font-weight-bold);
-        color: --pg-text;
+        color: var(--pg-text);
         margin: 0 0 1rem 0;
         text-align: center;
     }

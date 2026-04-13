@@ -130,7 +130,7 @@
 
   .selected .language-label {
     text-decoration: 2px underline;
-    text-decoration-color: --pg-text;
+    text-decoration-color: var(--pg-text);
     text-underline-offset: 4px;
   }
 
