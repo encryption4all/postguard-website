@@ -155,7 +155,7 @@
     h1 {
         font-size: var(--pg-font-size-2xl);
         font-weight: var(--pg-font-weight-bold);
-        color: --pg-text;
+        color: var(--pg-text);
         margin: 0;
     }
 
@@ -295,7 +295,7 @@
         margin: 1rem 0 0rem 0;
         font-size: clamp(var(--pg-font-size-xl), 2.5vw, var(--pg-font-size-lg));
         font-weight: var(--pg-font-weight-extrabold);
-        color: --pg-text;
+        color: var(--pg-text);
         text-align: center;
     }
 

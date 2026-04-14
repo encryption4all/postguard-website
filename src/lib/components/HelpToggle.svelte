@@ -35,7 +35,7 @@
     }
 
     .help-section.bordered {
-        background: transparant;
+        background: transparent;
         border: 1px solid var(--pg-strong-background);
         border-radius: var(--pg-border-radius-lg);
         box-shadow: 0 2px 8px rgba(48, 149, 222, 0.08);
