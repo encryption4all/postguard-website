@@ -132,17 +132,18 @@
         border-bottom: 2px solid var(--pg-text-secondary);
         transform: rotate(45deg);
         animation: bounce 2s ease infinite;
+        will-change: translate;
     }
 
     @keyframes bounce {
         0%, 20%, 50%, 80%, 100% {
-            transform: rotate(45deg) translateY(0);
+            translate: 0 0;
         }
         40% {
-            transform: rotate(45deg) translateY(8px);
+            translate: 0 8px;
         }
         60% {
-            transform: rotate(45deg) translateY(4px);
+            translate: 0 4px;
         }
     }
 
