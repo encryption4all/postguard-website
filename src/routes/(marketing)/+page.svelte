@@ -175,7 +175,7 @@
     }
 
     .features {
-        padding: 3rem 0;
+        padding: 1.5rem 0 3rem;
 
         h2 {
             text-align: center;
