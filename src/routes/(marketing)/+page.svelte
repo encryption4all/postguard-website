@@ -143,7 +143,6 @@
 
     .scroll-indicator {
         margin-top: auto;
-        padding-bottom: 2rem;
     }
 
     .scroll-arrow {
