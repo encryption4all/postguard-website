@@ -4,8 +4,14 @@
     import { _ } from 'svelte-i18n'
     import SEO from '$lib/components/SEO.svelte'
 
+    let contactEl
+
     onMount(() => {
         localStorage.setItem('pg_visited', 'true')
+        if (contactEl) {
+            const addr = `${contactEl.dataset.name}@${contactEl.dataset.domain}`
+            contactEl.href = `mailto:${addr}`
+        }
     })
 </script>
 
@@ -67,7 +73,7 @@
                     <p>{$_('landing.business3Desc')}</p>
                 </div>
             </div>
-            <a href="mailto:info@postguard.eu" class="business-cta">{$_('landing.businessCta')}</a>
+            <a bind:this={contactEl} data-name="info" data-domain="postguard.eu" class="business-cta">{$_('landing.businessCta')}</a>
         </div>
     </section>
 </div>
