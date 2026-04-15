@@ -5,6 +5,7 @@
         "addons": "Emailing",
         "decrypt": "Decrypt Emails",
         "about": "About PostGuard",
+        "docs": "Docs",
         "pol": "Privacy Policy"
     },
     "footer": {

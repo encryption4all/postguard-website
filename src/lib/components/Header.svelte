@@ -12,6 +12,7 @@
         { name: 'fs', route: '/fileshare' },
         { name: 'addons', route: '/addons' },
         { name: 'decrypt', route: '/decrypt' },
+        { name: 'docs', route: 'https://docs.postguard.eu' },
         { name: 'about', route: '/about' },
         { name: 'pol', route: '/privacy' },
     ]
