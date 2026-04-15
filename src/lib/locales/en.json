@@ -30,7 +30,16 @@
         "feature2Title": "Identity-based",
         "feature2Desc": "No key exchange needed. Recipients prove their identity with the Yivi app to decrypt files.",
         "feature3Title": "Free & open source",
-        "feature3Desc": "PostGuard is developed by Radboud University and freely available for everyone."
+        "feature3Desc": "PostGuard is developed by Radboud University and freely available for everyone.",
+        "businessTitle": "PostGuard for Business",
+        "businessDesc": "Need secure file sharing and email encryption for your organisation? PostGuard can be tailored to fit your business needs.",
+        "business1Title": "Self-hosted deployment",
+        "business1Desc": "Run PostGuard on your own infrastructure for full control over your data and encryption keys.",
+        "business2Title": "Custom attribute policies",
+        "business2Desc": "Define which identity attributes recipients must prove — email, phone number, name, or organisation-specific attributes.",
+        "business3Title": "Integration support",
+        "business3Desc": "Integrate PostGuard into your existing workflows with our API and dedicated support from the team.",
+        "businessCta": "Contact us"
     },
     "about": {
         "title": "About PostGuard",

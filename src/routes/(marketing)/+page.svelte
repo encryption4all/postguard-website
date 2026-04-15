@@ -48,6 +48,28 @@
             </div>
         </div>
     </section>
+
+    <section class="business">
+        <div class="business-content">
+            <h2>{$_('landing.businessTitle')}</h2>
+            <p>{$_('landing.businessDesc')}</p>
+            <div class="business-features">
+                <div class="business-feature">
+                    <h3>{$_('landing.business1Title')}</h3>
+                    <p>{$_('landing.business1Desc')}</p>
+                </div>
+                <div class="business-feature">
+                    <h3>{$_('landing.business2Title')}</h3>
+                    <p>{$_('landing.business2Desc')}</p>
+                </div>
+                <div class="business-feature">
+                    <h3>{$_('landing.business3Title')}</h3>
+                    <p>{$_('landing.business3Desc')}</p>
+                </div>
+            </div>
+            <a href="mailto:info@postguard.eu" class="business-cta">{$_('landing.businessCta')}</a>
+        </div>
+    </section>
 </div>
 
 <style lang="scss">
@@ -196,8 +218,74 @@
         }
     }
 
+    .business {
+        padding: 3rem 0;
+        margin-top: 1rem;
+        border-top: 1px solid var(--pg-strong-background);
+    }
+
+    .business-content {
+        text-align: center;
+
+        h2 {
+            margin-bottom: 1rem;
+        }
+
+        > p {
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.6;
+            color: var(--pg-text-secondary);
+        }
+    }
+
+    .business-features {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .business-feature {
+        padding: 1.5rem;
+        background: var(--pg-soft-background);
+        border-radius: var(--pg-border-radius-md);
+        border: 1px solid var(--pg-strong-background);
+        text-align: left;
+
+        h3 {
+            margin: 0 0 0.75rem;
+            font-size: var(--pg-font-size-base);
+            font-weight: var(--pg-font-weight-semibold);
+        }
+
+        p {
+            margin: 0;
+            font-size: var(--pg-font-size-sm);
+            line-height: 1.5;
+            color: var(--pg-text-secondary);
+        }
+    }
+
+    .business-cta {
+        display: inline-block;
+        padding: 0.875rem 2rem;
+        background: var(--pg-text);
+        color: var(--pg-general-background);
+        border-radius: var(--pg-border-radius-sm);
+        text-decoration: none;
+        font-weight: var(--pg-font-weight-semibold);
+        font-size: var(--pg-font-size-base);
+        transition: opacity 0.2s ease;
+
+        &:hover {
+            opacity: 0.85;
+        }
+    }
+
     @media only screen and (max-width: 768px) {
-        .feature-grid {
+        .feature-grid,
+        .business-features {
             grid-template-columns: 1fr;
         }
     }

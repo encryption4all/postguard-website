@@ -30,7 +30,16 @@
         "feature2Title": "Identiteitsgebaseerd",
         "feature2Desc": "Geen sleuteluitwisseling nodig. Ontvangers bewijzen hun identiteit met de Yivi-app om bestanden te ontsleutelen.",
         "feature3Title": "Gratis & open source",
-        "feature3Desc": "PostGuard wordt ontwikkeld door de Radboud Universiteit en is gratis beschikbaar voor iedereen."
+        "feature3Desc": "PostGuard wordt ontwikkeld door de Radboud Universiteit en is gratis beschikbaar voor iedereen.",
+        "businessTitle": "PostGuard voor bedrijven",
+        "businessDesc": "Heeft uw organisatie behoefte aan veilig bestanden delen en e-mailversleuteling? PostGuard kan worden aangepast aan uw zakelijke behoeften.",
+        "business1Title": "Self-hosted implementatie",
+        "business1Desc": "Draai PostGuard op uw eigen infrastructuur voor volledige controle over uw gegevens en versleutelingssleutels.",
+        "business2Title": "Aangepast attribuutbeleid",
+        "business2Desc": "Bepaal welke identiteitsattributen ontvangers moeten aantonen — e-mail, telefoonnummer, naam of organisatie-specifieke attributen.",
+        "business3Title": "Integratie-ondersteuning",
+        "business3Desc": "Integreer PostGuard in uw bestaande werkprocessen met onze API en persoonlijke ondersteuning van het team.",
+        "businessCta": "Neem contact op"
     },
     "about": {
         "title": "Over PostGuard",
