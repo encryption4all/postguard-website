@@ -14,6 +14,7 @@
         { name: 'decrypt', route: '/decrypt' },
         { name: 'about', route: '/about' },
         { name: 'pol', route: '/privacy' },
+        { name: 'docs', route: 'https://docs.postguard.eu' },
     ]
 
     function isSelected(route: String) {
@@ -38,10 +39,9 @@
         </ul>
         <LocaleSwitcher />
         <ThemeSwitcher />
-        <a href="https://docs.postguard.eu" class="docs-link">{$_('header.docs')}</a>
     </div>
     <Hamburger
-        items={[...items, { name: 'docs', route: 'https://docs.postguard.eu' }]}
+        {items}
     />
 </div>
 
@@ -80,11 +80,6 @@
     gap: 1rem;
   }
 
-  .docs-link {
-    text-decoration: none;
-    padding-left: 0.5rem;
-    border-left: 1px solid var(--pg-text);
-  }
 
   @media only screen and (min-width: 768px) {
     .pg-desktop-menu {
