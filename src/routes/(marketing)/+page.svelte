@@ -73,6 +73,21 @@
                     <p>{$_('landing.business3Desc')}</p>
                 </div>
             </div>
+            <h3 class="coming-soon-heading">{$_('landing.comingSoonTitle')}</h3>
+            <div class="business-features">
+                <div class="business-feature">
+                    <h3>{$_('landing.business4Title')}</h3>
+                    <p>{$_('landing.business4Desc')}</p>
+                </div>
+                <div class="business-feature">
+                    <h3>{$_('landing.business5Title')}</h3>
+                    <p>{$_('landing.business5Desc')}</p>
+                </div>
+                <div class="business-feature">
+                    <h3>{$_('landing.business6Title')}</h3>
+                    <p>{$_('landing.business6Desc')}</p>
+                </div>
+            </div>
             <a bind:this={contactEl} data-name="info" data-domain="postguard.eu" class="business-cta">{$_('landing.businessCta')}</a>
         </div>
     </section>
@@ -271,6 +286,13 @@
             line-height: 1.5;
             color: var(--pg-text-secondary);
         }
+    }
+
+    .coming-soon-heading {
+        font-size: var(--pg-font-size-base);
+        font-weight: var(--pg-font-weight-semibold);
+        color: var(--pg-primary);
+        margin-bottom: 1.5rem;
     }
 
     .business-cta {
