@@ -14,16 +14,21 @@
     description="PostGuard offers free, easy-to-use end-to-end encryption for emails and files. Your data never leaves your browser unencrypted."
 />
 
-<div class="landing">
-    <section class="hero">
+<section class="hero">
+    <div class="hero-content">
         <h1>{$_('home.title')}</h1>
         <p class="hero-text">{$_('home.par')}</p>
         <div class="cta-buttons">
             <a href="/fileshare" class="cta-primary">{$_('landing.cta')}</a>
             <a href="/about" class="cta-secondary">{$_('landing.learnMore')}</a>
         </div>
-    </section>
+    </div>
+    <div class="scroll-indicator">
+        <span class="scroll-arrow"></span>
+    </div>
+</section>
 
+<div class="landing">
     <section class="features">
         <h2>{$_('home.subtitle1')}</h2>
         <p>{$_('home.subpar1')}</p>
@@ -46,15 +51,18 @@
 </div>
 
 <style lang="scss">
-    .landing {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 2rem 1rem;
+    .hero {
+        height: calc(100vh - 86px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0 1rem;
     }
 
-    .hero {
-        text-align: center;
-        padding: 4rem 0 3rem;
+    .hero-content {
+        max-width: 700px;
 
         h1 {
             font-size: var(--pg-font-size-2xl);
@@ -66,7 +74,6 @@
     .hero-text {
         font-size: var(--pg-font-size-lg);
         line-height: 1.6;
-        max-width: 700px;
         margin: 0 auto 2rem;
         color: var(--pg-text-secondary);
     }
@@ -109,6 +116,39 @@
         &:hover {
             background: var(--pg-soft-background);
         }
+    }
+
+    .scroll-indicator {
+        margin-top: auto;
+        padding-bottom: 2rem;
+    }
+
+    .scroll-arrow {
+        display: block;
+        width: 24px;
+        height: 24px;
+        border-right: 2px solid var(--pg-text-secondary);
+        border-bottom: 2px solid var(--pg-text-secondary);
+        transform: rotate(45deg);
+        animation: bounce 2s ease infinite;
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: rotate(45deg) translateY(0);
+        }
+        40% {
+            transform: rotate(45deg) translateY(8px);
+        }
+        60% {
+            transform: rotate(45deg) translateY(4px);
+        }
+    }
+
+    .landing {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
     }
 
     .features {
@@ -155,10 +195,6 @@
     }
 
     @media only screen and (max-width: 768px) {
-        .hero {
-            padding: 2rem 0;
-        }
-
         .feature-grid {
             grid-template-columns: 1fr;
         }
