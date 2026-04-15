@@ -83,6 +83,7 @@
         padding: 0.875rem 2rem;
         background: var(--pg-primary);
         color: white;
+        border: 2px solid var(--pg-primary);
         border-radius: var(--pg-border-radius-sm);
         text-decoration: none;
         font-weight: var(--pg-font-weight-semibold);
