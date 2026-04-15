@@ -12,7 +12,6 @@
         { name: 'fs', route: '/fileshare' },
         { name: 'addons', route: '/addons' },
         { name: 'decrypt', route: '/decrypt' },
-        { name: 'docs', route: 'https://docs.postguard.eu' },
         { name: 'about', route: '/about' },
         { name: 'pol', route: '/privacy' },
     ]
@@ -39,9 +38,10 @@
         </ul>
         <LocaleSwitcher />
         <ThemeSwitcher />
+        <a href="https://docs.postguard.eu" class="docs-link">{$_('header.docs')}</a>
     </div>
     <Hamburger
-        {items}
+        items={[...items, { name: 'docs', route: 'https://docs.postguard.eu' }]}
     />
 </div>
 
@@ -78,6 +78,12 @@
     flex-direction: row;
     align-items: center;
     gap: 1rem;
+  }
+
+  .docs-link {
+    text-decoration: none;
+    padding-left: 0.5rem;
+    border-left: 1px solid var(--pg-text);
   }
 
   @media only screen and (min-width: 768px) {
