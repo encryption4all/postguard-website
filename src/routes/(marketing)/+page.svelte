@@ -63,6 +63,7 @@
 
     .hero-content {
         max-width: 700px;
+        margin: auto 0;
 
         h1 {
             font-size: var(--pg-font-size-2xl);
