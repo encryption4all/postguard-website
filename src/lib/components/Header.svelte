@@ -9,7 +9,6 @@
     import ThemeSwitcher from './ThemeSwitcher.svelte'
 
     let items = [
-        { name: 'home', route: '/' },
         { name: 'fs', route: '/fileshare' },
         { name: 'addons', route: '/addons' },
         { name: 'decrypt', route: '/decrypt' },
