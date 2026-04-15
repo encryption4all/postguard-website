@@ -21,6 +21,16 @@
         "subtitle1": "Why PostGuard?",
         "subpar1": "Most email applications (like Apple Mail, Gmail and Outlook) and file sharing applications do not apply end-to-end encryption by default. This means that unauthorized parties could access and tamper with your emails and files. This is not appropriate for emails and files containing sensitive information."
     },
+    "landing": {
+        "cta": "Start sharing files",
+        "learnMore": "Learn more",
+        "feature1Title": "End-to-end encrypted",
+        "feature1Desc": "Your files are encrypted in your browser before they leave your device. We never see your unencrypted data.",
+        "feature2Title": "Identity-based",
+        "feature2Desc": "No key exchange needed. Recipients prove their identity with the Yivi app to decrypt files.",
+        "feature3Title": "Free & open source",
+        "feature3Desc": "PostGuard is developed by Radboud University and freely available for everyone."
+    },
     "about": {
         "title": "About PostGuard",
         "subtitle1": "End-to-end encryption",

@@ -1,6 +1,12 @@
 <script>
     import { _ } from 'svelte-i18n'
+    import SEO from '$lib/components/SEO.svelte'
 </script>
+
+<SEO
+    title="Privacy Policy"
+    description="PostGuard's privacy policy. Learn how we handle your data when you use our end-to-end encryption services for email and file sharing."
+/>
 
 <div class="privacy-container">
     <div class="privacy-content">

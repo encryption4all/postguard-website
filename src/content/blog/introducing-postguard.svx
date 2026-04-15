@@ -1,0 +1,28 @@
+---
+title: "Introducing PostGuard: Easy End-to-End Encryption for Everyone"
+description: "PostGuard makes end-to-end encryption accessible. Learn how identity-based encryption simplifies secure email and file sharing."
+date: "2026-04-15"
+author: "PostGuard Team"
+---
+
+# Introducing PostGuard
+
+PostGuard offers free and easy-to-use end-to-end encryption for emails and files. Only the intended recipients can decrypt and read what you send.
+
+## Why PostGuard?
+
+Most email applications and file sharing tools do not apply end-to-end encryption by default. This means unauthorized parties could access and tamper with your emails and files — not appropriate for sensitive information.
+
+PostGuard solves this with **Identity-Based Encryption (IBE)**, making encryption as simple as knowing someone's email address. No need to exchange public keys or manage certificates.
+
+## How it works
+
+1. **Select recipients** — just use their email address
+2. **Choose your files** — drag and drop or browse
+3. **Send** — PostGuard encrypts everything locally in your browser before it leaves your device
+
+Your files are never sent unencrypted. The encryption happens entirely in your browser, so we never see your data.
+
+## Get started
+
+Head over to [postguard.eu/fileshare](/fileshare) to try it out, or install the [Thunderbird add-on](/addons) for seamless email encryption.

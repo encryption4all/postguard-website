@@ -21,6 +21,16 @@
         "subtitle1": "Waarom PostGuard?",
         "subpar1": "De meeste e-mailtoepassingen (zoals Apple Mail, Gmail en Outlook) en toepassingen voor het delen van bestanden passen standaard geen end-to-end-versleuteling toe. Dit betekent dat onbevoegde partijen toegang kunnen krijgen tot en knoeien met uw e-mails en bestanden. Dit is niet geschikt voor e-mails en bestanden die gevoelige informatie bevatten."
     },
+    "landing": {
+        "cta": "Begin met bestanden delen",
+        "learnMore": "Meer informatie",
+        "feature1Title": "End-to-end versleuteld",
+        "feature1Desc": "Je bestanden worden in je browser versleuteld voordat ze je apparaat verlaten. Wij zien nooit je onversleutelde gegevens.",
+        "feature2Title": "Identiteitsgebaseerd",
+        "feature2Desc": "Geen sleuteluitwisseling nodig. Ontvangers bewijzen hun identiteit met de Yivi-app om bestanden te ontsleutelen.",
+        "feature3Title": "Gratis & open source",
+        "feature3Desc": "PostGuard wordt ontwikkeld door de Radboud Universiteit en is gratis beschikbaar voor iedereen."
+    },
     "about": {
         "title": "Over PostGuard",
         "subtitle1": "End-to-end versleuteling",
