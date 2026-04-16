@@ -66,6 +66,7 @@
 
     footer {
         border-top: 1px solid var(--pg-strong-background);
+        margin-top: 4rem;
         padding: 3rem 1rem 1.5rem;
         font-size: var(--pg-font-size-sm);
         color: var(--pg-text-secondary);
