@@ -91,7 +91,7 @@
   }
 
   .inbox-btn {
-    padding: 0.5rem 1.25rem;
+    padding: 0.25rem 1rem;
     background: var(--pg-primary);
     color: white;
     border-radius: var(--pg-border-radius-sm);
