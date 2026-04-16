@@ -21,7 +21,8 @@
             })}
         </time>
         {#if data.metadata.author}
-            <span class="author">by {data.metadata.author}</span>
+            <span class="separator">&middot;</span>
+            <span class="author">{data.metadata.author}</span>
         {/if}
     </header>
     <data.content />
@@ -38,7 +39,8 @@
             color: var(--pg-text-secondary);
             font-size: var(--pg-font-size-sm);
             display: flex;
-            gap: 0.75rem;
+            align-items: center;
+            gap: 0.35rem;
         }
     }
 
