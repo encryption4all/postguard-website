@@ -73,6 +73,14 @@
     "fallback": {
         "extensionPrompt": "Wil je e-mails direct ontsleutelen in Thunderbird of Outlook?",
         "extensionLink": "Installeer de extensie",
+        "welcome": {
+            "title": "Welkom in je Inbox",
+            "description": "Dit is je persoonlijke plek om versleutelde PostGuard e-mails te lezen. Alles gebeurt hier in je browser — je e-mails worden nooit naar een server gestuurd.",
+            "step1": "Upload het \"postguard.encrypted\" bestand dat je als e-mailbijlage hebt ontvangen",
+            "step2": "Bewijs je identiteit met de Yivi-app",
+            "step3": "Lees je ontsleutelde e-mail — deze wordt bewaard voor de volgende keer",
+            "privacy": "Je e-mails worden alleen in je browser opgeslagen. Verwijder ze op elk moment via instellingen."
+        },
         "drop": "Selecteer \"postguard.encrypted\" attachment hier",
         "search": "Zoek in ontsleutelde mails...",
         "decrypt": {

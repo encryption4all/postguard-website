@@ -73,6 +73,14 @@
     "fallback": {
         "extensionPrompt": "Want to decrypt emails directly in Thunderbird or Outlook?",
         "extensionLink": "Install the extension",
+        "welcome": {
+            "title": "Welcome to your Inbox",
+            "description": "This is your personal space to read encrypted PostGuard emails. Everything happens right here in your browser — your emails are never sent to a server.",
+            "step1": "Upload the \"postguard.encrypted\" file you received as an email attachment",
+            "step2": "Verify your identity with the Yivi app",
+            "step3": "Read your decrypted email — it's saved here for next time",
+            "privacy": "Your emails are stored only in your browser. Clear them anytime in settings."
+        },
         "drop": "Drop the \"postguard.encrypted\" attachment here",
         "search": "Search decrypted mails...",
         "decrypt": {
