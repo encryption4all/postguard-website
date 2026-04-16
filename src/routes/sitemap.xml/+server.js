@@ -5,7 +5,7 @@ export function GET() {
 
     const postFiles = import.meta.glob('/src/content/blog/*.svx', { eager: true })
     const blogSlugs = Object.keys(postFiles).map(
-        (path) => `/blog/${path.split('/').pop().replace('.svx', '')}`
+        (path) => `/blog/${/** @type {string} */ (path.split('/').pop()).replace('.svx', '')}`
     )
 
     const pages = [...staticPages, ...blogSlugs]
