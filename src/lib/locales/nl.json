@@ -12,12 +12,18 @@
         "pol": "Privacybeleid"
     },
     "footer": {
+        "productTitle": "Product",
         "fs": "Bestanden delen",
-        "home": "Home",
-        "addons": "Add-on downloaden",
-        "fallback": "Ontsleutel e-mails",
+        "inbox": "Inbox",
+        "addons": "Extensies",
+        "resourcesTitle": "Informatie",
         "about": "Over PostGuard",
-        "pol": "Privacybeleid"
+        "blog": "Blog",
+        "docs": "Documentatie",
+        "pol": "Privacybeleid",
+        "connectTitle": "Contact",
+        "contact": "Contact",
+        "builtBy": "Gebouwd door"
     },
     "home": {
         "title": "PostGuard",

@@ -12,12 +12,18 @@
         "pol": "Privacy Policy"
     },
     "footer": {
-        "fs": "Send & Encrypt",
-        "home": "Back to home",
-        "addons": "Download add-on",
-        "fallback": "Decrypt emails",
-        "about": "About",
-        "pol": "Privacy Policy"
+        "productTitle": "Product",
+        "fs": "File Sharing",
+        "inbox": "Inbox",
+        "addons": "Extensions",
+        "resourcesTitle": "Resources",
+        "about": "About PostGuard",
+        "blog": "Blog",
+        "docs": "Documentation",
+        "pol": "Privacy Policy",
+        "connectTitle": "Connect",
+        "contact": "Contact",
+        "builtBy": "Built by"
     },
     "home": {
         "title": "PostGuard",
