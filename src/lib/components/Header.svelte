@@ -13,6 +13,7 @@
         { name: 'addons', route: '/addons' },
         { name: 'decrypt', route: '/decrypt' },
         { name: 'about', route: '/about' },
+        { name: 'blog', route: '/blog' },
         { name: 'pol', route: '/privacy' },
         { name: 'docs', route: 'https://docs.postguard.eu' },
     ]
