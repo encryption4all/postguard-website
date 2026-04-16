@@ -1,7 +1,13 @@
 <script>
     import { _ } from 'svelte-i18n'
     import aboutImg from '$lib/assets/images/about.svg'
+    import SEO from '$lib/components/SEO.svelte'
 </script>
+
+<SEO
+    title="About PostGuard"
+    description="Learn how PostGuard uses identity-based encryption and the Yivi app to provide free, easy-to-use end-to-end encryption for emails and files."
+/>
 
 <div class="page-wrapper">
     <div class="grid-container">

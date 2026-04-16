@@ -5,21 +5,57 @@
         "addons": "E-mailen",
         "decrypt": "Ontsleutel E-mails",
         "about": "Over PostGuard",
+        "blog": "Blog",
+        "business": "PostGuard for Business",
+        "inbox": "Inbox",
+        "docs": "Documentatie",
         "pol": "Privacybeleid"
     },
     "footer": {
+        "productTitle": "Product",
         "fs": "Bestanden delen",
-        "home": "Home",
-        "addons": "Add-on downloaden",
-        "fallback": "Ontsleutel e-mails",
+        "inbox": "Inbox",
+        "addons": "Extensies",
+        "resourcesTitle": "Informatie",
         "about": "Over PostGuard",
-        "pol": "Privacybeleid"
+        "blog": "Blog",
+        "docs": "Documentatie",
+        "pol": "Privacybeleid",
+        "connectTitle": "Contact",
+        "contact": "Contact",
+        "builtBy": "Gebouwd door"
     },
     "home": {
         "title": "PostGuard",
         "par": "PostGuard biedt gratis en gebruiksvriendelijke end-to-end encryptie voor e-mails en bestanden. Alleen de beoogde ontvangers kunnen de e-mails en bestanden die je met PostGuard verzendt, ontsleutelen en lezen.",
         "subtitle1": "Waarom PostGuard?",
         "subpar1": "De meeste e-mailtoepassingen (zoals Apple Mail, Gmail en Outlook) en toepassingen voor het delen van bestanden passen standaard geen end-to-end-versleuteling toe. Dit betekent dat onbevoegde partijen toegang kunnen krijgen tot en knoeien met uw e-mails en bestanden. Dit is niet geschikt voor e-mails en bestanden die gevoelige informatie bevatten."
+    },
+    "landing": {
+        "cta": "Begin met bestanden delen",
+        "learnMore": "Meer informatie",
+        "feature1Title": "End-to-end versleuteld",
+        "feature1Desc": "Je bestanden worden in je browser versleuteld voordat ze je apparaat verlaten. Wij zien nooit je onversleutelde gegevens.",
+        "feature2Title": "Identiteitsgebaseerd",
+        "feature2Desc": "Geen sleuteluitwisseling nodig. Ontvangers bewijzen hun identiteit met de Yivi-app om bestanden te ontsleutelen.",
+        "feature3Title": "Gratis & open source",
+        "feature3Desc": "PostGuard wordt ontwikkeld door de Radboud Universiteit en is gratis beschikbaar voor iedereen.",
+        "businessTitle": "PostGuard for Business",
+        "businessDesc": "Verstuur versleutelde e-mails en bestanden programmatisch via de PostGuard API, of gebruik uw eigen e-maildomein. Gebouwd voor organisaties die veilige communicatie op schaal nodig hebben.",
+        "business1Title": "API-gestuurde versleuteling",
+        "business1Desc": "Integreer versleutelde e-mail en bestandsdeling rechtstreeks in uw applicaties met API-sleutels. Verstuur end-to-end versleutelde berichten programmatisch.",
+        "business2Title": "Eigen e-maildomein",
+        "business2Desc": "Verstuur versleutelde e-mails vanaf uw eigen domein. Ontvangers zien uw merk, terwijl PostGuard de versleuteling verzorgt.",
+        "business3Title": "Self-hosted implementatie",
+        "business3Desc": "Draai PostGuard op uw eigen infrastructuur voor volledige controle over uw gegevens, versleutelingssleutels en compliance-vereisten.",
+        "comingSoonTitle": "Binnenkort beschikbaar",
+        "business4Title": "E-mail intrekken & leesbevestigingen",
+        "business4Desc": "Trek toegang tot verzonden e-mails op elk moment in en volg wanneer ontvangers uw berichten hebben ontsleuteld.",
+        "business5Title": "Whitelabeling & audit logging",
+        "business5Desc": "Geef de versleutelingservaring uw eigen huisstijl en houd een compleet auditlogboek bij van alle versleutelde communicatie.",
+        "business6Title": "Eigen opslag & DNS-verificatie",
+        "business6Desc": "Sla versleutelde bestanden op uw eigen infrastructuur op en verifieer uw domein met DNS-records, vergelijkbaar met de domeinauthenticatie van Mailchimp.",
+        "businessCta": "Neem contact op"
     },
     "about": {
         "title": "Over PostGuard",
@@ -30,17 +66,27 @@
         "subtitle3": "Yivi",
         "subpar3": "Om versleutelde e-mails en bestanden te ontsleutelen en te lezen, hoeven ontvangers alleen maar te bewijzen dat ze echt de beoogde ontvanger zijn. Dit gebeurt met de authenticatie-app Yivi. PostGuard gebruikt Yivi omdat het een gratis, gebruiksvriendelijke en privacyvriendelijke authenticatie-app is. Bovendien biedt Yivi attribuutgebaseerde authenticatie. Dit betekent dat ontvangers selectief specifieke attributen (zoals het hebben van een e-mailadres, telefoonnummer of achternaam) van een e-mail of bestand kunnen onthullen.",
         "team.header": "Over het team achter PostGuard",
-        "team.par": "PostGuard wordt ontwikkeld door een multidisciplinair team van <a href=\"https://ihub.ru.nl\">iHub aan de Radboud Universiteit</a>, in Nederland, gefinancierd door het NWO. Het doel is veilige communicatie te bevorderen door gratis e-mailversleuteling aan te bieden op basis van geavanceerde versleutelingstechnieken. Het team richt zich op de bruikbaarheid en toegankelijkheid van versleutelingstechnologie door expertise op het gebied van informatica, cyber security en user experience design te combineren. Dit project werkt samen met verschillende publieke en private gezondheidsinstellingen in Nederland, waaronder <a href=\"https://nedap-healthcare.com/\">Nedap Healthcare</a>, <a href=\"https://www.vgz.nl/\">VGZ</a>, <a href=\"https://www.surf.nl/en\">SURFnet</a>, <a href=\"https://www.nijmegen.nl/\">de gemeente Nijmegen</a> and <a href=\"https://www.compumatica.com/\">Compumatica</a>. Voor vragen of andere verzoeken kunt je contact met ons opnemen via <a href=\"mailto:info@postguard.eu\">ons contact adres</a>."
+        "team.par": "PostGuard is oorspronkelijk ontwikkeld door een multidisciplinair team van <a href=\"https://ihub.ru.nl\">iHub aan de Radboud Universiteit</a>, in Nederland, gefinancierd door het NWO. Het doel is veilige communicatie te bevorderen door gratis e-mailversleuteling aan te bieden op basis van geavanceerde versleutelingstechnieken. Het team richt zich op de bruikbaarheid en toegankelijkheid van versleutelingstechnologie door expertise op het gebied van informatica, cyber security en user experience design te combineren. PostGuard wordt momenteel doorontwikkeld door <a href=\"https://yivi.app\">Yivi</a> bij de <a href=\"https://caesar.nl\">Caesar Groep</a>. Dit project werkt samen met verschillende publieke en private organisaties in Nederland, waaronder <a href=\"https://nedap-healthcare.com/\">Nedap Healthcare</a>, <a href=\"https://www.vgz.nl/\">VGZ</a>, <a href=\"https://www.surf.nl/en\">SURFnet</a>, <a href=\"https://www.nijmegen.nl/\">de gemeente Nijmegen</a> en <a href=\"https://www.compumatica.com/\">Compumatica</a>. Voor vragen of andere verzoeken kun je contact met ons opnemen via <a href=\"mailto:info@postguard.eu\">ons contactadres</a>."
     },
     "addons": {
         "title": "Voeg PostGuard toe aan uw e-mailclient",
         "par": "Met de PostGuard add-on voor Thunderbird of Outlook kunt je in een handomdraai versleutelde e-mails verzenden!",
-        "Thunderbird": "<ol><li>Download en bewaar het bestand <a href=\"/downloads/postguard-tb-addon.xpi\" ><q>postguard-tb-addon.xpi</q></a> ergens op uw computer, waar je het gemakkelijk terug kunt vinden. </li><li><p>Binnen Thunderbird:</p><ul><li>ga onder het menu <q>Tools</q> naar <q>Add-ons en thema's</q>, </li><li> klik op <q>Uw extensies beheren</q> en selecteer <q>Add-on installeren vanuit bestand...</q>, </li><li> een venster voor bestandsselectie wordt geopend; ga naar de map waar je het bestand <q>postguard-tb-addon.xpi</q> hebt opgeslagen en selecteer het, </li><li> Thunderbird vertelt je wat een add-on kan doen; als je wilt doorgaan, klikt je op de knop <q>Toevoegen</q>. </li></ul></li><li> Als je nu een nieuw mailbericht opstelt, wordt er een nieuwe balk getoond met een knop om PostGuard aan of uit te zetten. Indien ingeschakeld, wordt het bericht voor alle ontvangers versleuteld. Elke ontvanger moet de Yivi-app gebruiken om te bewijzen dat hij/zij echt in het bezit is van het e-mailadres dat je hebt gebruikt. </li></ol>",
+        "Thunderbird": "<ol><li>Download en bewaar het bestand <a href=\"https://github.com/encryption4all/postguard-tb-addon/releases/latest\" ><q>postguard-tb-addon.xpi</q></a> ergens op uw computer, waar je het gemakkelijk terug kunt vinden. </li><li><p>Binnen Thunderbird:</p><ul><li>ga onder het menu <q>Tools</q> naar <q>Add-ons en thema's</q>, </li><li> klik op <q>Uw extensies beheren</q> en selecteer <q>Add-on installeren vanuit bestand...</q>, </li><li> een venster voor bestandsselectie wordt geopend; ga naar de map waar je het bestand <q>postguard-tb-addon.xpi</q> hebt opgeslagen en selecteer het, </li><li> Thunderbird vertelt je wat een add-on kan doen; als je wilt doorgaan, klikt je op de knop <q>Toevoegen</q>. </li></ul></li><li> Als je nu een nieuw mailbericht opstelt, wordt er een nieuwe balk getoond met een knop om PostGuard aan of uit te zetten. Indien ingeschakeld, wordt het bericht voor alle ontvangers versleuteld. Elke ontvanger moet de Yivi-app gebruiken om te bewijzen dat hij/zij echt in het bezit is van het e-mailadres dat je hebt gebruikt. </li></ol>",
         "Outlook": "<ol><li><p>De add-on toevoegen:</p><ul><li>Open Outlook</li><li> Onder het menu <q>Home</q> of menu-item <q >Tools</q>, klik op <q>Add-ins ophalen</q>, </li><li>Klik links op <q>Mijn add-ins</q>,</li><li> Scrol omlaag naar het gedeelte <q>Aangepaste add-ins</q>. <i>Als je deze optie niet ziet, staat uw organisatie waarschijnlijk niet toe dat aangepaste add-ons worden geïnstalleerd. Neem contact op met uw beheerder.</i>,</li><li> Klik op <q>Een aangepaste Addon toevoegen</q> en vervolgens op <q>Toevoegen vanaf URL...</q>,</li><li> Voer <q>https://irmaseal.z6.web.core.windows.net/manifest.prod.xml</q> in en klik op <q>OK</q> en <q>Installeren</q>, </li><li>Nu wordt de add-in geïnstalleerd.</li></ul></li><li> Als je nu een nieuw e-mailbericht opstelt, is er een nieuwe groep zichtbaar in het menu <q>Message</q> met de naam <q>PostGuard Add- in</q>. Het bevat slechts één knop, genaamd <q>Gecodeerde e-mail verzenden</q>. Wanneer je erop klikt, wordt het bericht gecodeerd en naar alle ontvangers verzonden. Elke ontvanger moet de Yivi-app gebruiken om te bewijzen dat hij/zij echt over het door je gebruikte e-mailadres beschikt. Ook wordt een kopie van de verzonden e-mail opgeslagen in de map <q>PostGuard Sent Items</q> als concept-e-mail (momenteel staat Microsoft alleen toe om berichten als concept te maken). </li><li>Na ontvangst van een met PostGuard versleutelde e-mail, kan de e-mail worden ontsleuteld door te klikken op de knop <q>E-mail ontsleutelen</q> in de groep <q>PostGuard-Addon</q> onder de <q>Start</q>-menu. </li></ol>",
         "instruction.header": "Installatie instructies",
         "instruction.download": "Downloaden voor:"
     },
     "fallback": {
+        "extensionPrompt": "Wil je e-mails direct ontsleutelen in Thunderbird of Outlook?",
+        "extensionLink": "Installeer de extensie",
+        "welcome": {
+            "title": "Welkom in je Inbox",
+            "description": "Dit is je persoonlijke plek om versleutelde PostGuard e-mails te lezen. Alles gebeurt hier in je browser — je e-mails worden nooit naar een server gestuurd.",
+            "step1": "Upload het \"postguard.encrypted\" bestand dat je als e-mailbijlage hebt ontvangen",
+            "step2": "Bewijs je identiteit met de Yivi-app",
+            "step3": "Lees je ontsleutelde e-mail — deze wordt bewaard voor de volgende keer",
+            "privacy": "Je e-mails worden alleen in je browser opgeslagen. Verwijder ze op elk moment via instellingen."
+        },
         "drop": "Selecteer \"postguard.encrypted\" attachment hier",
         "search": "Zoek in ontsleutelde mails...",
         "decrypt": {
@@ -68,8 +114,8 @@
             "date": "Datum"
         },
         "list": {
-            "nothing": "Oeps! Er lijkt hier niks te zijn.",
-            "nothing2": "Ontsleutel een email door een \"postguard.encrypted\" bestand te selecteren in het bovenste venster."
+            "nothing": "Nog geen e-mails",
+            "nothing2": "Upload een \"postguard.encrypted\" bestand hierboven om je eerste e-mail te ontsleutelen en te lezen."
         }
     },
     "filesharing": {
