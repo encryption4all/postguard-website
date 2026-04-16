@@ -65,9 +65,8 @@
     }
 
     footer {
-        border-top: 1px solid var(--pg-strong-background);
         margin-top: 4rem;
-        padding: 3rem 1rem 1.5rem;
+        padding: 0 1rem 1.5rem;
         font-size: var(--pg-font-size-sm);
         color: var(--pg-text-secondary);
     }
@@ -75,6 +74,8 @@
     .footer-content {
         max-width: 1100px;
         margin: 0 auto;
+        border-top: 1px solid var(--pg-strong-background);
+        padding-top: 3rem;
     }
 
     .footer-grid {
