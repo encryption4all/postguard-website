@@ -7,6 +7,8 @@ author: "Ruben Hensen"
 
 # Looking ahead with PostGuard
 
+![PostGuard cover](/blog/postguard_cover.png)
+
 The Yivi team is working hard on Yivi itself to become EUDI compliant, but besides Yivi we're also working hard on other projects like PostGuard. In this blog we'll tell you about PostGuard and what PostGuard's plans are for the coming year. We hope to get you just as excited about PostGuard as we are. And that when you want to send files, you'll do it with PostGuard of course!
 
 Let me first introduce myself. I'm Ruben and last February I started at Yivi as an open source developer. I don't have a fixed role at Yivi, but I've been busy working on PostGuard. PostGuard is an identity-based, end-to-end encrypted file sharing service that originated from the [iHub](https://ihub.ru.nl/) at Radboud University. It was originally started as an NWO project under the name Encryption4All and co-funded by [NLNet](https://nlnet.nl/). The encryption is handled using Yivi, which we call identity-based encryption. The "Post" in PostGuard refers to the focus on e-mail, which for many people remains the default way to send a file to someone. Think of it as an alternative to Zivver or WeTransfer, but European, open source and with a full embrace of [Privacy by Design](https://www.sfu.ca/~palys/Cavoukian-2011-PrivacyByDesign-7FoundationalPrinciples.pdf). We could explain it at length, but the easiest thing is to just try it out at [PostGuard.eu](https://postguard.eu). Once you're done, we'll take you through PostGuard's roadmap.
