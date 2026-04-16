@@ -10,8 +10,6 @@
 
     let items = [
         { name: 'fs', route: '/fileshare' },
-        { name: 'addons', route: '/addons' },
-        { name: 'decrypt', route: '/decrypt' },
         { name: 'about', route: '/about' },
         { name: 'blog', route: '/blog' },
         { name: 'pol', route: '/privacy' },
@@ -41,9 +39,12 @@
         </ul>
         <LocaleSwitcher />
         <ThemeSwitcher />
+        <a href="/decrypt" class="inbox-btn" class:selected={isSelected('/decrypt')}>
+            {$_('header.inbox')}
+        </a>
     </div>
     <Hamburger
-        {items}
+        items={[...items, { name: 'inbox', route: '/decrypt' }]}
     />
 </div>
 
@@ -86,6 +87,29 @@
   @media only screen and (min-width: 768px) {
     .pg-desktop-menu {
       display: flex;
+    }
+  }
+
+  .inbox-btn {
+    padding: 0.5rem 1.25rem;
+    background: var(--pg-primary);
+    color: white;
+    border-radius: var(--pg-border-radius-sm);
+    text-decoration: none;
+    font-weight: var(--pg-font-weight-semibold);
+    font-size: var(--pg-font-size-sm);
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &.selected {
+      opacity: 0.85;
+      box-shadow: 0 0 0 2px var(--pg-primary);
+      background: transparent;
+      color: var(--pg-primary);
     }
   }
 

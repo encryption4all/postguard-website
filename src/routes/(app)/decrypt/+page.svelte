@@ -79,6 +79,10 @@
 </script>
 
 <div class="fallback-page">
+    <div class="extension-banner">
+        <span>{$_('fallback.extensionPrompt')}</span>
+        <a href="/addons">{$_('fallback.extensionLink')}</a>
+    </div>
     <div class="fallback-container">
         <div class="left-panel">
             <label class="upload-area">
@@ -144,10 +148,34 @@
 <style lang="scss">
     .fallback-page {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        align-items: center;
         padding: 1.5rem;
         height: calc(100vh - 52px);
         box-sizing: border-box;
+    }
+
+    .extension-banner {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        margin-bottom: 1rem;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        background: var(--pg-soft-background);
+        border: 1px solid var(--pg-strong-background);
+        border-radius: var(--pg-border-radius-sm);
+
+        a {
+            color: var(--pg-primary);
+            font-weight: var(--pg-font-weight-semibold);
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
 
     .fallback-container {
