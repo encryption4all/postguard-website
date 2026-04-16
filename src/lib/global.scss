@@ -22,6 +22,8 @@ body {
     margin: 0;
     overflow-x: hidden;
     background: var(--pg-general-background);
+    font-family: var(--pg-font-family);
+    color: var(--pg-text);
     z-index: -5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
