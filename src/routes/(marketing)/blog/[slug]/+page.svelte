@@ -57,6 +57,13 @@
         margin-bottom: 1rem;
     }
 
+    .blog-post :global(img) {
+        max-width: 100%;
+        height: auto;
+        border-radius: var(--pg-border-radius-md);
+        margin-bottom: 1rem;
+    }
+
     .blog-post :global(a) {
         color: var(--pg-primary);
     }
