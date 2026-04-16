@@ -108,8 +108,8 @@
             "date": "Datum"
         },
         "list": {
-            "nothing": "Oeps! Er lijkt hier niks te zijn.",
-            "nothing2": "Ontsleutel een email door een \"postguard.encrypted\" bestand te selecteren in het bovenste venster."
+            "nothing": "Nog geen e-mails",
+            "nothing2": "Upload een \"postguard.encrypted\" bestand hierboven om je eerste e-mail te ontsleutelen en te lezen."
         }
     },
     "filesharing": {
