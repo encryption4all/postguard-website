@@ -34,7 +34,7 @@
         padding: 2rem 1rem;
 
         header {
-            margin-bottom: 2rem;
+            margin-bottom: 0.5rem;
             color: var(--pg-text-secondary);
             font-size: var(--pg-font-size-sm);
             display: flex;
