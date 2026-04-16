@@ -15,6 +15,7 @@
         { name: 'about', route: '/about' },
         { name: 'blog', route: '/blog' },
         { name: 'pol', route: '/privacy' },
+        { name: 'business', route: 'https://business.postguard.eu' },
         { name: 'docs', route: 'https://docs.postguard.eu' },
     ]
 
