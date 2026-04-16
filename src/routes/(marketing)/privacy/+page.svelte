@@ -23,8 +23,6 @@
         justify-content: center;
         align-items: flex-start;
         width: 100%;
-        height: calc(100vh - 52px - 0.5rem - 1rem);
-        overflow-y: auto;
         padding: 2rem 1rem;
     }
 
