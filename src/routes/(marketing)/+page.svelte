@@ -87,7 +87,7 @@
                     <p>{$_('landing.business6Desc')}</p>
                 </div>
             </div>
-            <a href="#contact" bind:this={contactEl} data-name="info" data-domain="postguard.eu" class="business-cta">{$_('landing.businessCta')}</a>
+            <a href="mailto:" bind:this={contactEl} data-name="info" data-domain="postguard.eu" class="business-cta">{$_('landing.businessCta')}</a>
         </div>
     </section>
 </div>
