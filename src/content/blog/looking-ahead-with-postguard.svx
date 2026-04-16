@@ -3,6 +3,7 @@ title: "Looking ahead with PostGuard"
 description: "The Yivi team shares PostGuard's roadmap for 2026 — free personal use, business features, and exciting proof of concepts with NotifyNL and Bereken Je Recht."
 date: "2026-04-16"
 author: "Ruben Hensen"
+image: "/blog/postguard_cover.png"
 ---
 
 # Looking ahead with PostGuard
