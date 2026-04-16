@@ -2,7 +2,7 @@ const posts = import.meta.glob('/src/content/blog/*.svx', { eager: true })
 
 export function load({ params }) {
     const path = `/src/content/blog/${params.slug}.svx`
-    const post = posts[path]
+    const post = /** @type {{ default: any, metadata: Record<string, any> }} */ (posts[path])
 
     if (!post) {
         throw new Error(`Post not found: ${params.slug}`)
@@ -16,6 +16,6 @@ export function load({ params }) {
 
 export function entries() {
     return Object.keys(posts).map((path) => ({
-        slug: path.split('/').pop().replace('.svx', ''),
+        slug: /** @type {string} */ (path.split('/').pop()).replace('.svx', ''),
     }))
 }

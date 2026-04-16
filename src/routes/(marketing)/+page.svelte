@@ -1,10 +1,9 @@
 <script lang="ts">
-    import { browser } from '$app/environment'
     import { onMount } from 'svelte'
     import { _ } from 'svelte-i18n'
     import SEO from '$lib/components/SEO.svelte'
 
-    let contactEl
+    let contactEl: HTMLAnchorElement
 
     onMount(() => {
         localStorage.setItem('pg_visited', 'true')
@@ -88,7 +87,7 @@
                     <p>{$_('landing.business6Desc')}</p>
                 </div>
             </div>
-            <a bind:this={contactEl} data-name="info" data-domain="postguard.eu" class="business-cta">{$_('landing.businessCta')}</a>
+            <a href="#contact" bind:this={contactEl} data-name="info" data-domain="postguard.eu" class="business-cta">{$_('landing.businessCta')}</a>
         </div>
     </section>
 </div>

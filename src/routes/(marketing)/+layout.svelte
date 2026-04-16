@@ -5,7 +5,7 @@
     import { onMount } from 'svelte'
 
     let { children } = $props()
-    let contactEl
+    let contactEl = $state<HTMLAnchorElement>()
 
     onMount(() => {
         if (contactEl) {
@@ -44,7 +44,7 @@
                 <div class="footer-col">
                     <h4>{$_('footer.connectTitle')}</h4>
                     <ul>
-                        <li><a bind:this={contactEl} data-name="info" data-domain="postguard.eu">{$_('footer.contact')}</a></li>
+                        <li><a href="#contact" bind:this={contactEl} data-name="info" data-domain="postguard.eu">{$_('footer.contact')}</a></li>
                         <li><a href="https://github.com/encryption4all">GitHub</a></li>
                         <li><a href="https://business.postguard.eu">PostGuard for Business</a></li>
                     </ul>
