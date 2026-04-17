@@ -7,8 +7,9 @@
     import Hamburger from '$lib/components/header/Hamburger.svelte'
     import { page } from '$app/state';
     import ThemeSwitcher from './ThemeSwitcher.svelte'
+    import { FF_BUSINESS } from '$lib/env'
 
-    let items = [
+    const allItems = [
         { name: 'fs', route: '/fileshare' },
         { name: 'about', route: '/about' },
         { name: 'blog', route: '/blog' },
@@ -16,6 +17,8 @@
         { name: 'business', route: 'https://business.postguard.eu' },
         { name: 'docs', route: 'https://docs.postguard.eu' },
     ]
+
+    let items = FF_BUSINESS ? allItems : allItems.filter(i => i.name !== 'business')
 
     function isSelected(route: String) {
         return page.url.pathname === route;

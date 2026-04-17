@@ -2,6 +2,7 @@
     import { onMount } from 'svelte'
     import { _ } from 'svelte-i18n'
     import SEO from '$lib/components/SEO.svelte'
+    import { FF_BUSINESS } from '$lib/env'
 
     let contactEl: HTMLAnchorElement
 
@@ -54,6 +55,7 @@
         </div>
     </section>
 
+    {#if FF_BUSINESS}
     <section class="business">
         <div class="business-content">
             <h2>{$_('landing.businessTitle')}</h2>
@@ -90,6 +92,7 @@
             <a href="mailto:" bind:this={contactEl} data-name="info" data-domain="postguard.eu" class="business-cta">{$_('landing.businessCta')}</a>
         </div>
     </section>
+    {/if}
 </div>
 
 <style lang="scss">

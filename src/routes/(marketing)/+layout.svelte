@@ -3,6 +3,7 @@
     import { isLoading } from 'svelte-i18n'
     import { _ } from 'svelte-i18n'
     import { onMount } from 'svelte'
+    import { FF_BUSINESS } from '$lib/env'
 
     let { children } = $props()
     let contactEl = $state<HTMLAnchorElement>()
@@ -46,7 +47,7 @@
                     <ul>
                         <li><a href="mailto:" bind:this={contactEl} data-name="info" data-domain="postguard.eu">{$_('footer.contact')}</a></li>
                         <li><a href="https://github.com/encryption4all">GitHub</a></li>
-                        <li><a href="https://business.postguard.eu">PostGuard for Business</a></li>
+                        {#if FF_BUSINESS}<li><a href="https://business.postguard.eu">PostGuard for Business</a></li>{/if}
                     </ul>
                 </div>
             </div>
