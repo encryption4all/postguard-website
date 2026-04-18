@@ -20,3 +20,4 @@ function runtimeConfig(): Record<string, unknown> {
 }
 
 export const FF_BUSINESS = runtimeConfig().FF_BUSINESS === true;
+export const BUSINESS_URL = (runtimeConfig().BUSINESS_URL as string) ?? 'https://business.postguard.eu';
