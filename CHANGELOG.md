@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.0](https://github.com/encryption4all/postguard-website/compare/v1.1.2...v1.2.0) (2026-04-18)
+
+
+### Features
+
+* add FF_BUSINESS feature flag for PostGuard for Business ([#81](https://github.com/encryption4all/postguard-website/issues/81)) ([d3f2ce8](https://github.com/encryption4all/postguard-website/commit/d3f2ce8dcc9292de6af1136a7ea8c4ed53ad515d))
+* migrate from @e4a/pg-wasm to @e4a/pg-js SDK ([#72](https://github.com/encryption4all/postguard-website/issues/72)) ([0a29c8d](https://github.com/encryption4all/postguard-website/commit/0a29c8d51b06b5b933b3a591696800baf8f4efb9))
+* SEO landing page, blog, and prerendered marketing pages ([#77](https://github.com/encryption4all/postguard-website/issues/77)) ([10aa7b6](https://github.com/encryption4all/postguard-website/commit/10aa7b60be76b282a70a110e5adc5d173b7db259))
+
+
+### Bug Fixes
+
+* email case normalization and environment-dependent business URL ([#83](https://github.com/encryption4all/postguard-website/issues/83)) ([0e01079](https://github.com/encryption4all/postguard-website/commit/0e010793ccea59b49e0e3dd1df13d947482f8068))
+* resolve all svelte-check errors and warnings ([#79](https://github.com/encryption4all/postguard-website/issues/79)) ([9434f72](https://github.com/encryption4all/postguard-website/commit/9434f72753fd335a56216c4e6c7f9df2d2073450))
+* use mailto: placeholder for obfuscated contact links ([#80](https://github.com/encryption4all/postguard-website/issues/80)) ([b9a2f80](https://github.com/encryption4all/postguard-website/commit/b9a2f808c578ad9defd3bf9f186d50997cdd8de2))
+
 ## [1.1.2](https://github.com/encryption4all/postguard-website/compare/v1.1.1...v1.1.2) (2026-04-03)
 
 
