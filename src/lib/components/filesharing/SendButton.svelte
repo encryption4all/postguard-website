@@ -98,7 +98,7 @@
 
             // Build recipients
             const recipients = EncryptState.recipients.map(({ email, extra }) => {
-                const r = pg.recipient.email(email)
+                const r = pg.recipient.email(email.toLowerCase())
                 for (const a of extra) {
                     r.extraAttribute(a.t, a.v ?? '')
                 }
