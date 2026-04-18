@@ -7,14 +7,14 @@
     import Hamburger from '$lib/components/header/Hamburger.svelte'
     import { page } from '$app/state';
     import ThemeSwitcher from './ThemeSwitcher.svelte'
-    import { FF_BUSINESS } from '$lib/env'
+    import { FF_BUSINESS, BUSINESS_URL } from '$lib/env'
 
     const allItems = [
         { name: 'fs', route: '/fileshare' },
         { name: 'about', route: '/about' },
         { name: 'blog', route: '/blog' },
         { name: 'pol', route: '/privacy' },
-        { name: 'business', route: 'https://business.postguard.eu' },
+        { name: 'business', route: BUSINESS_URL },
         { name: 'docs', route: 'https://docs.postguard.eu' },
     ]
 
