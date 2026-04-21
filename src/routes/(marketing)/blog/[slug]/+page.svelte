@@ -1,7 +1,40 @@
 <script lang="ts">
     import SEO from '$lib/components/SEO.svelte'
+    import { page } from '$app/state'
 
     let { data } = $props()
+
+    const siteUrl = 'https://postguard.eu'
+    const articleJsonLd = $derived({
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: data.metadata.title,
+        description: data.metadata.description,
+        datePublished: data.metadata.date,
+        ...(data.metadata.image
+            ? {
+                  image: data.metadata.image.startsWith('http')
+                      ? data.metadata.image
+                      : `${siteUrl}${data.metadata.image}`,
+              }
+            : {}),
+        author: {
+            '@type': data.metadata.author === 'PostGuard Team' ? 'Organization' : 'Person',
+            name: data.metadata.author || 'PostGuard Team',
+        },
+        publisher: {
+            '@type': 'Organization',
+            name: 'PostGuard',
+            logo: {
+                '@type': 'ImageObject',
+                url: `${siteUrl}/pg_logo.png`,
+            },
+        },
+        mainEntityOfPage: {
+            '@type': 'WebPage',
+            '@id': `${siteUrl}${page.url.pathname}`,
+        },
+    })
 </script>
 
 <SEO
@@ -9,6 +42,7 @@
     description={data.metadata.description}
     ogType="article"
     ogImage={data.metadata.image || ''}
+    jsonLd={articleJsonLd}
 />
 
 <article class="blog-post">

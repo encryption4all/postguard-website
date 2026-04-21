@@ -13,11 +13,52 @@
             contactEl.href = `mailto:${addr}`
         }
     })
+
+    const homepageJsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            {
+                '@type': 'SoftwareApplication',
+                name: 'PostGuard',
+                description:
+                    'Free, open-source identity-based encryption for emails and files using Yivi identity attributes.',
+                applicationCategory: 'SecurityApplication',
+                operatingSystem: 'Web Browser',
+                offers: {
+                    '@type': 'Offer',
+                    price: '0',
+                    priceCurrency: 'EUR',
+                },
+                url: 'https://postguard.eu',
+                license: 'https://opensource.org/licenses/MIT',
+                softwareRequirements: 'Yivi (IRMA) app',
+                sameAs: ['https://github.com/encryption4all'],
+                author: {
+                    '@type': 'Organization',
+                    name: 'Radboud University',
+                    url: 'https://www.ru.nl',
+                },
+            },
+            {
+                '@type': 'Organization',
+                name: 'PostGuard',
+                url: 'https://postguard.eu',
+                logo: 'https://postguard.eu/pg_logo.png',
+                sameAs: ['https://github.com/encryption4all'],
+                parentOrganization: {
+                    '@type': 'CollegeOrUniversity',
+                    name: 'Radboud University',
+                    url: 'https://www.ru.nl',
+                },
+            },
+        ],
+    }
 </script>
 
 <SEO
     title="Secure File Sharing & Email Encryption"
     description="PostGuard offers free, easy-to-use end-to-end encryption for emails and files. Your data never leaves your browser unencrypted."
+    jsonLd={homepageJsonLd}
 />
 
 <section class="hero">

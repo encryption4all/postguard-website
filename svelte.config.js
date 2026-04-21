@@ -14,7 +14,7 @@ const config = {
     kit: {
         adapter: adapter({ fallback: '200.html', precompress: false }),
         prerender: {
-            entries: ['/', '/about', '/privacy', '/blog', '/sitemap.xml']
+            entries: ['/', '/about', '/addons', '/privacy', '/blog', '/sitemap.xml']
         }
     },
 }
