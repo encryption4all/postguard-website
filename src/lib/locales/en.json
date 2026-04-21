@@ -55,7 +55,16 @@
         "business5Desc": "Brand the encryption experience as your own and maintain a complete audit trail of all encrypted communications.",
         "business6Title": "Bring your own storage & DNS verification",
         "business6Desc": "Store encrypted files on your own infrastructure and verify your domain with DNS records, similar to Mailchimp's domain authentication.",
-        "businessCta": "Contact us"
+        "businessCta": "Contact us",
+        "limits": {
+            "sectionTitle": "Send large files. Without limits that get in the way.",
+            "intro": "Most encrypted file-sharing services cap free transfers at just a few hundred megabytes. PostGuard lets you share much more — completely free.",
+            "uploadSuffix": "per upload",
+            "uploadDesc": "Send a single file or a whole batch — up to 5 GB in one encrypted transfer.",
+            "rollingSuffix": "every 2 weeks",
+            "rollingDesc": "Up to 15 GB of encrypted file sharing per email address, over a rolling 14-day window.",
+            "footnote": "No account. No payment. End-to-end encrypted, always."
+        }
     },
     "about": {
         "title": "About PostGuard",

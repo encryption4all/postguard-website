@@ -55,7 +55,16 @@
         "business5Desc": "Geef de versleutelingservaring uw eigen huisstijl en houd een compleet auditlogboek bij van alle versleutelde communicatie.",
         "business6Title": "Eigen opslag & DNS-verificatie",
         "business6Desc": "Sla versleutelde bestanden op uw eigen infrastructuur op en verifieer uw domein met DNS-records, vergelijkbaar met de domeinauthenticatie van Mailchimp.",
-        "businessCta": "Neem contact op"
+        "businessCta": "Neem contact op",
+        "limits": {
+            "sectionTitle": "Verstuur grote bestanden. Zonder vervelende limieten.",
+            "intro": "De meeste versleutelde bestandsdeeldiensten beperken gratis overdrachten tot slechts enkele honderden megabytes. Met PostGuard deel je veel meer — helemaal gratis.",
+            "uploadSuffix": "per upload",
+            "uploadDesc": "Verstuur één bestand of een hele batch — tot 5 GB in één versleutelde overdracht.",
+            "rollingSuffix": "per 2 weken",
+            "rollingDesc": "Tot 15 GB aan versleutelde bestandsdeling per e-mailadres, binnen een doorlopend venster van 14 dagen.",
+            "footnote": "Geen account. Geen betaling. Altijd end-to-end versleuteld."
+        }
     },
     "about": {
         "title": "Over PostGuard",
