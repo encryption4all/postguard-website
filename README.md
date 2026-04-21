@@ -28,7 +28,8 @@ npm run dev
 | --- | --- | --- |
 | `VITE_FILEHOST_URL` | Filehosting service URL (Cryptify) | `http://localhost:8000` |
 | `VITE_PKG_URL` | PKG service URL | `http://localhost:8087` |
-| `VITE_MAX_UPLOAD_SIZE` | Maximum file upload size in bytes | - |
+| `VITE_MAX_UPLOAD_SIZE` | Maximum file upload size in bytes (default: 5 GB) | - |
+| `VITE_ROLLING_LIMIT` | Rolling upload limit in bytes per email per 2 weeks (default: 15 GB) | - |
 | `VITE_UPLOAD_CHUNK_SIZE` | Upload chunk size in bytes | - |
 | `VITE_FILEREAD_CHUNK_SIZE` | File read chunk size in bytes | - |
 
