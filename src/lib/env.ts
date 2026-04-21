@@ -1,9 +1,9 @@
 function requireEnv(name: string): string {
-    const value = import.meta.env[name];
+    const value = import.meta.env[name]
     if (!value) {
-        throw new Error(`Missing required environment variable: ${name}`);
+        throw new Error(`Missing required environment variable: ${name}`)
     }
-    return value;
+    return value
 }
 
 export const FILEHOST_URL = requireEnv('VITE_FILEHOST_URL');
@@ -17,8 +17,9 @@ export const APP_VERSION = requireEnv('VITE_APP_VERSION');
 
 /** Runtime config injected by config.js (Terraform ConfigMap in deployed environments). */
 function runtimeConfig(): Record<string, unknown> {
-    return (globalThis as any).APP_CONFIG ?? {};
+    return (globalThis as any).APP_CONFIG ?? {}
 }
 
-export const FF_BUSINESS = runtimeConfig().FF_BUSINESS === true;
-export const BUSINESS_URL = (runtimeConfig().BUSINESS_URL as string) ?? 'https://business.postguard.eu';
+export const FF_BUSINESS = runtimeConfig().FF_BUSINESS === true
+export const BUSINESS_URL =
+    (runtimeConfig().BUSINESS_URL as string) ?? 'https://business.postguard.eu'

@@ -175,15 +175,17 @@
             "fileBox": {
                 "tagline": "Verstuur je bestanden veilig",
                 "upperTextDropZone": "Sleep bestanden hierheen <br/> of",
-                "lowerTextDropZone": "klik om te uploaden <br/> (max. 5 GB per 14 dagen)",
+                "lowerTextDropZone": "klik om te uploaden <br/> (max. {max} GB per 14 dagen)",
                 "dragText": "Sleep bestanden hierheen",
                 "dropText": "Loslaten om bestanden toe te voegen",
                 "dropMoreText": "Loslaten om meer bestanden toe te voegen",
                 "orText": "of",
                 "chooseFilesButton": "Kies bestanden",
-                "maxSizeText": "5 GB per 14 dagen",
+                "maxSizeText": "{max} GB per 14 dagen",
                 "addMoreFiles": "Voeg meer bestanden toe",
-                "fileSummary": "{count} {count, plural, one {bestand} other {bestanden}} toegevoegd, nog {size} GB over"
+                "fileSummary": "{count} {count, plural, one {bestand} other {bestanden}} toegevoegd, nog {size} GB over",
+                "overLimitTitle": "Uploadlimiet overschreden ({max} GB)",
+                "overLimitBody": "Je selectie is {total} GB. Verwijder bestanden of verklein het totaal tot {max} GB of minder voordat je verzendt."
             },
             "RecipientsHeading": "Ontvangers",
             "RecipientsHelpToggle": "Wat vul ik hier in?",
@@ -236,6 +238,14 @@
                 "invalidEmail": "Het e-mailadres {email} is niet geldig",
                 "missingAttribute": "{attribute} van {email} ontbreekt",
                 "invalidPhone": "Het telefoonnummer van {email} is niet geldig"
+            },
+            "usage": {
+                "warningTitle": "Je nadert je 2-weken uploadlimiet",
+                "warningBody": "Je hebt {used} GB van je {limit} GB-limiet gebruikt. Nog {remaining} GB beschikbaar tot {resets}.",
+                "blockedTitle": "Uploadlimiet bereikt",
+                "blockedBody": "Je hebt je {limit} GB-uploadlimiet voor deze 2-weken periode bereikt. De limiet reset op {resets}.",
+                "serverBlockedTitle": "Upload geweigerd door de server",
+                "serverBlocked": "De server weigerde deze upload omdat je {used} GB van je {limit} GB-limiet (2 weken) hebt gebruikt. De limiet reset op {resets}."
             }
         },
         "attributes": {

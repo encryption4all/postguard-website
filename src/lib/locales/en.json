@@ -176,15 +176,17 @@
                 "tagline": "Securely send your files",
                 "upperTextDropZone": "Drag & drop files <br/> or",
                 "lowerTextDropZone": "click to upload",
-                "sizeLimitText": "max. 5 GB per 14 days",
+                "sizeLimitText": "max. {max} GB per 14 days",
                 "dragText": "Drag files here",
                 "dropText": "Drop to add files",
                 "dropMoreText": "Drop to add more files",
                 "orText": "or",
                 "chooseFilesButton": "Choose files",
-                "maxSizeText": "5 GB per 14 days",
+                "maxSizeText": "{max} GB per 14 days",
                 "addMoreFiles": "Add more files",
-                "fileSummary": "{count} {count, plural, one {file} other {files}} added, {size} GB remaining"
+                "fileSummary": "{count} {count, plural, one {file} other {files}} added, {size} GB remaining",
+                "overLimitTitle": "Upload limit exceeded ({max} GB)",
+                "overLimitBody": "Your selection is {total} GB. Remove files or reduce the total to {max} GB or less before sending."
             },
             "RecipientsHeading": "Recipients",
             "RecipientsHelpToggle": "What should I fill in here?",
@@ -237,6 +239,14 @@
                 "invalidEmail": "The email address {email} is not valid",
                 "missingAttribute": "{attribute} of {email} is missing",
                 "invalidPhone": "The phone number of {email} is not valid"
+            },
+            "usage": {
+                "warningTitle": "You're approaching your 2-week upload limit",
+                "warningBody": "You have used {used} GB of your {limit} GB limit. You have {remaining} GB remaining until {resets}.",
+                "blockedTitle": "Upload limit reached",
+                "blockedBody": "You have reached your {limit} GB upload limit for this 2-week period. Your limit resets on {resets}.",
+                "serverBlockedTitle": "Upload rejected by server",
+                "serverBlocked": "The server rejected this upload because you have used {used} GB of your {limit} GB 2-week limit. Your limit resets on {resets}."
             }
         },
         "attributes": {
