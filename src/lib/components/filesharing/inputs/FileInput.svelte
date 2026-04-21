@@ -23,7 +23,7 @@
 
     import { MAX_UPLOAD_SIZE } from '$lib/env'
 
-    let maxFileSizeMB = MAX_UPLOAD_SIZE / (1024 * 1024)
+    let maxFileSizeMB = MAX_UPLOAD_SIZE / (1000 * 1000)
 
     let { files = $bindable(), percentages = $bindable(), done = $bindable(), stage = $bindable() }: props = $props()
 
@@ -35,7 +35,7 @@
 
     let totalSize = $derived(files.reduce((acc, file) => acc + file.size, 0))
     let remainingSize = $derived(MAX_UPLOAD_SIZE - totalSize)
-    let remainingSizeGB = $derived((remainingSize / (1024 * 1024 * 1024)).toFixed(2))
+    let remainingSizeGB = $derived((remainingSize / 1e9).toFixed(2))
 
     const previewTemplate = `
         <div class="dz-preview dz-file-preview files">
