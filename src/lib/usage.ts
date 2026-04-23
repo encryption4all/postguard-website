@@ -89,6 +89,6 @@ export function parseLimitExceededBody(body: string): UsageStatus {
     }
 }
 
-export function bytesToGB(bytes: number): string {
+export function bytesToGiB(bytes: number): string {
     return (bytes / 1024 ** 3).toFixed(1)
 }

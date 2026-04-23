@@ -60,9 +60,9 @@
             "sectionTitle": "Send large files. Without limits that get in the way.",
             "intro": "Most encrypted file-sharing services cap free transfers at just a few hundred megabytes. PostGuard lets you share much more — completely free.",
             "uploadSuffix": "per upload",
-            "uploadDesc": "Send a single file or a whole batch — up to 5 GB in one encrypted transfer.",
+            "uploadDesc": "Send a single file or a whole batch — up to 5 GiB in one encrypted transfer.",
             "rollingSuffix": "every 2 weeks",
-            "rollingDesc": "Up to 5 GB of encrypted file sharing per email address, over a rolling 14-day window.",
+            "rollingDesc": "Up to 5 GiB of encrypted file sharing per email address, over a rolling 14-day window.",
             "footnote": "No account. No payment. End-to-end encrypted, always."
         }
     },
@@ -176,17 +176,17 @@
                 "tagline": "Securely send your files",
                 "upperTextDropZone": "Drag & drop files <br/> or",
                 "lowerTextDropZone": "click to upload",
-                "sizeLimitText": "max. {max} GB per 14 days",
+                "sizeLimitText": "max. {max} GiB per 14 days",
                 "dragText": "Drag files here",
                 "dropText": "Drop to add files",
                 "dropMoreText": "Drop to add more files",
                 "orText": "or",
                 "chooseFilesButton": "Choose files",
-                "maxSizeText": "{max} GB per 14 days",
+                "maxSizeText": "{max} GiB per 14 days",
                 "addMoreFiles": "Add more files",
-                "fileSummary": "{count} {count, plural, one {file} other {files}} added, {size} GB remaining",
-                "overLimitTitle": "Upload limit exceeded ({max} GB)",
-                "overLimitBody": "Your selection is {total} GB. Remove files or reduce the total to {max} GB or less before sending."
+                "fileSummary": "{count} {count, plural, one {file} other {files}} added, {size} GiB remaining",
+                "overLimitTitle": "Upload limit exceeded ({max} GiB)",
+                "overLimitBody": "Your selection is {total} GiB. Remove files or reduce the total to {max} GiB or less before sending."
             },
             "RecipientsHeading": "Recipients",
             "RecipientsHelpToggle": "What should I fill in here?",
@@ -234,7 +234,7 @@
                 "title": "Fill in all required fields",
                 "continueButton": "Continue filling in",
                 "noFiles": "You haven't added any files yet",
-                "filesTooLarge": "The files exceed the {max} GB limit (14-day window)",
+                "filesTooLarge": "The files exceed the {max} GiB limit (14-day window)",
                 "noEmail": "You haven't filled in an email address for a recipient",
                 "invalidEmail": "The email address {email} is not valid",
                 "missingAttribute": "{attribute} of {email} is missing",
@@ -242,11 +242,11 @@
             },
             "usage": {
                 "warningTitle": "You're approaching your 2-week upload limit",
-                "warningBody": "You have used {used} GB of your {limit} GB limit. You have {remaining} GB remaining until {resets}.",
+                "warningBody": "You have used {used} GiB of your {limit} GiB limit. You have {remaining} GiB remaining until {resets}.",
                 "blockedTitle": "Upload limit reached",
-                "blockedBody": "You have reached your {limit} GB upload limit for this 2-week period. Your limit resets on {resets}.",
+                "blockedBody": "You have reached your {limit} GiB upload limit for this 2-week period. Your limit resets on {resets}.",
                 "serverBlockedTitle": "Upload rejected by server",
-                "serverBlocked": "The server rejected this upload because you have used {used} GB of your {limit} GB 2-week limit. Your limit resets on {resets}."
+                "serverBlocked": "The server rejected this upload because you have used {used} GiB of your {limit} GiB 2-week limit. Your limit resets on {resets}."
             }
         },
         "attributes": {

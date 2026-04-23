@@ -1,6 +1,6 @@
 <script lang="ts">
     import { _, locale } from 'svelte-i18n'
-    import { fetchUsage, bytesToGB, type UsageStatus } from '$lib/usage'
+    import { fetchUsage, bytesToGiB, type UsageStatus } from '$lib/usage'
 
     interface props {
         email: string
@@ -55,7 +55,7 @@
             <p class="usage-body">
                 {$_('filesharing.encryptPanel.usage.blockedBody', {
                     values: {
-                        limit: bytesToGB(status.limitBytes),
+                        limit: bytesToGiB(status.limitBytes),
                         resets: formatReset(status.resetsAt),
                     },
                 })}
@@ -67,9 +67,9 @@
             <p class="usage-body">
                 {$_('filesharing.encryptPanel.usage.warningBody', {
                     values: {
-                        used: bytesToGB(status.usedBytes),
-                        limit: bytesToGB(status.limitBytes),
-                        remaining: bytesToGB(status.remainingBytes),
+                        used: bytesToGiB(status.usedBytes),
+                        limit: bytesToGiB(status.limitBytes),
+                        remaining: bytesToGiB(status.remainingBytes),
                         resets: formatReset(status.resetsAt),
                     },
                 })}

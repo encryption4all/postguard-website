@@ -18,7 +18,7 @@
 
     import { MAX_UPLOAD_SIZE } from '$lib/env'
     import UsageWarning from './UsageWarning.svelte'
-    import { parseLimitExceededBody, bytesToGB } from '$lib/usage'
+    import { parseLimitExceededBody, bytesToGiB } from '$lib/usage'
 
     interface props {
         EncryptState: EncryptState
@@ -76,7 +76,7 @@
         const totalSize = EncryptState.files.reduce((a, f) => a + f.size, 0)
         if (totalSize >= MAX_UPLOAD_SIZE) {
             errors.push($_('filesharing.encryptPanel.validation.filesTooLarge', {
-                values: { max: (MAX_UPLOAD_SIZE / 1e9).toFixed(0) }
+                values: { max: (MAX_UPLOAD_SIZE / (1024 ** 3)).toFixed(0) }
             }))
         }
         EncryptState.recipients.forEach(({ email, extra }) => {
@@ -224,8 +224,8 @@
                     'filesharing.encryptPanel.usage.serverBlocked',
                     {
                         values: {
-                            used: bytesToGB(status.usedBytes),
-                            limit: bytesToGB(status.limitBytes),
+                            used: bytesToGiB(status.usedBytes),
+                            limit: bytesToGiB(status.limitBytes),
                             resets: resetsAt,
                         },
                     }

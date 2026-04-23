@@ -23,7 +23,7 @@
 
     import { MAX_UPLOAD_SIZE } from '$lib/env'
 
-    let maxFileSizeMB = MAX_UPLOAD_SIZE / (1000 * 1000)
+    let maxFileSizeMB = MAX_UPLOAD_SIZE / (1024 * 1024)
 
     let {
         files = $bindable(),
@@ -40,10 +40,10 @@
 
     let totalSize = $derived(files.reduce((acc, file) => acc + file.size, 0))
     let remainingSize = $derived(MAX_UPLOAD_SIZE - totalSize)
-    let remainingSizeGB = $derived((remainingSize / 1e9).toFixed(2))
-    let maxUploadSizeGB = (MAX_UPLOAD_SIZE / 1e9).toFixed(0)
+    let remainingSizeGiB = $derived((remainingSize / (1024 ** 3)).toFixed(2))
+    let maxUploadSizeGiB = (MAX_UPLOAD_SIZE / (1024 ** 3)).toFixed(0)
     let overLimit = $derived(totalSize > MAX_UPLOAD_SIZE)
-    let totalSizeGB = $derived((totalSize / 1e9).toFixed(2))
+    let totalSizeGiB = $derived((totalSize / (1024 ** 3)).toFixed(2))
 
     const previewTemplate = `
         <div class="dz-preview dz-file-preview files">
@@ -153,7 +153,7 @@
                 >
                 <p class="max-size-text">
                     {$_('filesharing.encryptPanel.fileBox.maxSizeText', {
-                        values: { max: maxUploadSizeGB },
+                        values: { max: maxUploadSizeGiB },
                     })}
                 </p>
             </div>
@@ -199,7 +199,7 @@
                         {$_('filesharing.encryptPanel.fileBox.fileSummary', {
                             values: {
                                 count: files.length,
-                                size: remainingSizeGB,
+                                size: remainingSizeGiB,
                             },
                         })}
                     </p>
@@ -210,7 +210,7 @@
                         <p class="upload-limit-title">
                             {$_(
                                 'filesharing.encryptPanel.fileBox.overLimitTitle',
-                                { values: { max: maxUploadSizeGB } }
+                                { values: { max: maxUploadSizeGiB } }
                             )}
                         </p>
                         <p class="upload-limit-body">
@@ -218,8 +218,8 @@
                                 'filesharing.encryptPanel.fileBox.overLimitBody',
                                 {
                                     values: {
-                                        total: totalSizeGB,
-                                        max: maxUploadSizeGB,
+                                        total: totalSizeGiB,
+                                        max: maxUploadSizeGiB,
                                     },
                                 }
                             )}
