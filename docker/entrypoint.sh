@@ -11,3 +11,12 @@ find "${HTDOCS}" -name '*.js' -not -name 'config.js' -type f -exec sed -i \
     {} +
 
 echo "SPA environment variable substitution complete."
+
+# Block indexing on non-production environments
+if [ "${ROBOTS_NOINDEX}" = "true" ]; then
+    echo "ROBOTS_NOINDEX is set — injecting noindex meta tag into all HTML files"
+    find "${HTDOCS}" -name '*.html' -type f -exec sed -i \
+        's|</head>|<meta name="robots" content="noindex, nofollow" /></head>|' \
+        {} +
+    echo "noindex injection complete."
+fi
