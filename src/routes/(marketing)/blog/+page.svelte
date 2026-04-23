@@ -2,11 +2,30 @@
     import SEO from '$lib/components/SEO.svelte'
 
     let { data } = $props()
+
+    const siteUrl = 'https://postguard.eu'
+    const blogJsonLd = $derived({
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        url: `${siteUrl}/blog`,
+        name: 'PostGuard Blog',
+        description:
+            'News, updates, and insights about PostGuard — secure end-to-end encryption for email and files.',
+        mainEntity: {
+            '@type': 'ItemList',
+            itemListElement: data.posts.map((post, i) => ({
+                '@type': 'ListItem',
+                position: i + 1,
+                url: `${siteUrl}/blog/${post.slug}`,
+            })),
+        },
+    })
 </script>
 
 <SEO
     title="Blog"
     description="News, updates, and insights about PostGuard — secure end-to-end encryption for email and files."
+    jsonLd={blogJsonLd}
 />
 
 <div class="blog-index">

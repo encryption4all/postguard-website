@@ -2,11 +2,25 @@
     import { _ } from 'svelte-i18n'
     import aboutImg from '$lib/assets/images/about.svg'
     import SEO from '$lib/components/SEO.svelte'
+
+    const aboutJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'AboutPage',
+        url: 'https://postguard.eu/about',
+        name: 'About PostGuard',
+        description:
+            'Learn how PostGuard uses identity-based encryption and the Yivi app to provide free, easy-to-use end-to-end encryption for emails and files.',
+        isPartOf: {
+            '@type': 'WebSite',
+            '@id': 'https://postguard.eu/#website',
+        },
+    }
 </script>
 
 <SEO
     title="About PostGuard"
     description="Learn how PostGuard uses identity-based encryption and the Yivi app to provide free, easy-to-use end-to-end encryption for emails and files."
+    jsonLd={aboutJsonLd}
 />
 
 <div class="page-wrapper">

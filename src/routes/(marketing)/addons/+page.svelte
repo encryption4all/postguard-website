@@ -15,6 +15,52 @@
         { item: 'Outlook', logo: olLogo },
     ]
 
+    const addonsJsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            {
+                '@type': 'SoftwareApplication',
+                name: 'PostGuard for Thunderbird',
+                description:
+                    'End-to-end encrypted email directly from Thunderbird using identity-based encryption and Yivi.',
+                applicationCategory: 'CommunicationApplication',
+                operatingSystem: 'Windows, macOS, Linux',
+                offers: {
+                    '@type': 'Offer',
+                    price: '0',
+                    priceCurrency: 'EUR',
+                },
+                url: 'https://postguard.eu/addons',
+                softwareRequirements: 'Mozilla Thunderbird, Yivi app',
+                author: {
+                    '@type': 'Organization',
+                    name: 'PostGuard',
+                    url: 'https://postguard.eu',
+                },
+            },
+            {
+                '@type': 'SoftwareApplication',
+                name: 'PostGuard for Outlook',
+                description:
+                    'End-to-end encrypted email directly from Microsoft Outlook using identity-based encryption and Yivi.',
+                applicationCategory: 'CommunicationApplication',
+                operatingSystem: 'Windows',
+                offers: {
+                    '@type': 'Offer',
+                    price: '0',
+                    priceCurrency: 'EUR',
+                },
+                url: 'https://postguard.eu/addons',
+                softwareRequirements: 'Microsoft Outlook, Yivi app',
+                author: {
+                    '@type': 'Organization',
+                    name: 'PostGuard',
+                    url: 'https://postguard.eu',
+                },
+            },
+        ],
+    }
+
     let activeItem = $state('Thunderbird')
     let containerWidth = $state()
 
@@ -35,6 +81,7 @@
 <SEO
     title="PostGuard Addons"
     description="Install PostGuard for Thunderbird or Outlook to send and receive end-to-end encrypted emails directly from your mail client."
+    jsonLd={addonsJsonLd}
 />
 
 <div class="page-wrapper">
