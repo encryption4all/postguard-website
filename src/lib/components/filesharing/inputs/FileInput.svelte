@@ -65,6 +65,8 @@
             url: '#', // Dummy URL, can't be empty
             autoProcessQueue: false, // Prevent automatic upload
             maxFilesize: maxFileSizeMB,
+            filesizeBase: 1024,
+            dictFileSizeUnits: { tb: 'TiB', gb: 'GiB', mb: 'MiB', kb: 'KiB', b: 'b' },
             previewsContainer: '#previews',
             previewTemplate: previewTemplate,
             clickable: '#my-form .primary-btn, .add-more-chip-container', // Only these elements trigger file selection
