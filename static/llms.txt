@@ -1,0 +1,30 @@
+# PostGuard
+
+> PostGuard is an open-source, identity-based encrypted file sharing and email encryption service developed at Radboud University and funded by NWO. No key exchange is required — recipients are identified by Yivi (IRMA) attributes such as email address, making end-to-end encryption as simple as knowing someone's email address.
+
+PostGuard uses Identity-Based Encryption (IBE) so senders can encrypt messages using only a recipient's attributes (e.g. email). The recipient authenticates with their Yivi (IRMA) wallet to retrieve the decryption key. PostGuard runs entirely in the browser — plaintext never leaves the user's device unencrypted.
+
+## Key Pages
+- [Homepage](https://postguard.eu/): Overview of PostGuard, its core features, and the product family.
+- [About](https://postguard.eu/about/): How PostGuard works, the Radboud University team, and funding from NWO.
+- [File Sharing](https://postguard.eu/fileshare/): Web app for sending end-to-end encrypted files to any email address.
+- [Decrypt](https://postguard.eu/decrypt/): Web app for decrypting PostGuard-encrypted messages and files.
+- [Addons](https://postguard.eu/addons/): Browser and mail-client addons (Thunderbird, Outlook) for encrypted email.
+- [Privacy Policy](https://postguard.eu/privacy/): How PostGuard handles user data and attributes.
+- [Blog](https://postguard.eu/blog/): Posts about PostGuard, identity-based encryption, and secure communication.
+
+## Blog Posts
+- [Introducing PostGuard](https://postguard.eu/blog/introducing-postguard/): Overview of PostGuard's IBE approach and why it matters.
+- [Looking ahead with PostGuard](https://postguard.eu/blog/looking-ahead-with-postguard/): Roadmap and future plans.
+
+## Developer Resources
+- [Developer Documentation](https://docs.postguard.eu/): Architecture, protocols, and integration guides.
+- [GitHub Organization](https://github.com/encryption4all): Source code for PostGuard and its ecosystem libraries.
+
+## Key Facts
+- Free and open source (MIT license).
+- Built by the Digital Security group at Radboud University, Nijmegen, Netherlands.
+- Funded by the Dutch Research Council (NWO).
+- Uses Yivi (formerly IRMA) for identity verification.
+- All encryption happens client-side in the browser — no plaintext is sent to any server.
+- Usage limit is 5 GB per 14 days.

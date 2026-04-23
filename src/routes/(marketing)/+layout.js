@@ -3,6 +3,7 @@ import { locale, waitLocale } from 'svelte-i18n'
 import { browser } from '$app/environment'
 
 export const prerender = true
+export const trailingSlash = 'always'
 
 if (browser) {
     const stored = localStorage.getItem('preferredLanguage')

@@ -1,6 +1,7 @@
 <script>
     import { _ } from 'svelte-i18n'
     import Tabs from '$lib/components/Tabs.svelte'
+    import SEO from '$lib/components/SEO.svelte'
     // import { fade } from 'svelte/transition'
     import { Tween } from 'svelte/motion'
     import { cubicOut } from 'svelte/easing'
@@ -30,6 +31,11 @@
     let sign = $derived(activeItem === 'Thunderbird' ? -1 : 1)
     
 </script>
+
+<SEO
+    title="PostGuard Addons"
+    description="Install PostGuard for Thunderbird or Outlook to send and receive end-to-end encrypted emails directly from your mail client."
+/>
 
 <div class="page-wrapper">
     <div class="grid-container" bind:clientWidth={containerWidth}>
