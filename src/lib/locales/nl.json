@@ -62,7 +62,7 @@
             "uploadSuffix": "per upload",
             "uploadDesc": "Verstuur één bestand of een hele batch — tot 5 GB in één versleutelde overdracht.",
             "rollingSuffix": "per 2 weken",
-            "rollingDesc": "Tot 15 GB aan versleutelde bestandsdeling per e-mailadres, binnen een doorlopend venster van 14 dagen.",
+            "rollingDesc": "Tot 5 GB aan versleutelde bestandsdeling per e-mailadres, binnen een doorlopend venster van 14 dagen.",
             "footnote": "Geen account. Geen betaling. Altijd end-to-end versleuteld."
         }
     },

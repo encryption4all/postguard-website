@@ -17,7 +17,7 @@ export type UsageStatus = {
     limitBytes: number
     remainingBytes: number
     resetsAt: Date | null
-    /** Soft-warn threshold (10 GB / 15 GB = 2/3 of limit) passed. */
+    /** Soft-warn threshold (2/3 of limit) passed. */
     warn: boolean
     /** Hard limit reached — new uploads will be rejected server-side. */
     blocked: boolean

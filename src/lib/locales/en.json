@@ -62,7 +62,7 @@
             "uploadSuffix": "per upload",
             "uploadDesc": "Send a single file or a whole batch — up to 5 GB in one encrypted transfer.",
             "rollingSuffix": "every 2 weeks",
-            "rollingDesc": "Up to 15 GB of encrypted file sharing per email address, over a rolling 14-day window.",
+            "rollingDesc": "Up to 5 GB of encrypted file sharing per email address, over a rolling 14-day window.",
             "footnote": "No account. No payment. End-to-end encrypted, always."
         }
     },

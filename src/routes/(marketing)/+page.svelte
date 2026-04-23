@@ -114,7 +114,7 @@
             </div>
             <div class="limit-stat">
                 <div class="limit-number">
-                    <span class="limit-value">15</span>
+                    <span class="limit-value">5</span>
                     <span class="limit-unit">GB</span>
                 </div>
                 <div class="limit-suffix">{$_('landing.limits.rollingSuffix')}</div>
