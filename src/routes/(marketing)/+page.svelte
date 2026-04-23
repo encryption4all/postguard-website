@@ -35,15 +35,18 @@
                 sameAs: ['https://github.com/encryption4all'],
                 author: {
                     '@type': 'Organization',
-                    name: 'Radboud University',
-                    url: 'https://www.ru.nl',
+                    name: 'Yivi',
+                    url: 'https://yivi.app',
                 },
             },
             {
                 '@type': 'Organization',
                 name: 'PostGuard',
                 url: 'https://postguard.eu',
-                logo: 'https://postguard.eu/pg_logo.png',
+                logo: {
+                    '@type': 'ImageObject',
+                    url: 'https://postguard.eu/pg_logo.png',
+                },
                 sameAs: ['https://github.com/encryption4all'],
                 parentOrganization: {
                     '@type': 'Organization',

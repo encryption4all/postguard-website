@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte'
+    import SEO from '$lib/components/SEO.svelte'
 
     import decryptImg from '$lib/assets/images/decrypt.svg'
     import Decrypt from '$lib/components/fallback/Decrypt.svelte'
@@ -77,6 +78,11 @@
         }
     })
 </script>
+
+<SEO
+    title="Decrypt Emails"
+    description="Decrypt PostGuard-encrypted emails securely in your browser. Upload the encrypted file and verify your identity with the Yivi app."
+/>
 
 <div class="fallback-page">
     <div class="extension-banner">

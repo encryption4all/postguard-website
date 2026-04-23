@@ -4,39 +4,14 @@ export function GET() {
     /**
      * Static pages with their last-modified dates. Bump these when the page
      * content changes meaningfully. Values are ISO-8601 date strings (YYYY-MM-DD).
-     * @type {{ path: string, lastmod: string, changefreq: string, priority: string }[]}
+     * @type {{ path: string, lastmod: string }[]}
      */
     const staticPages = [
-        {
-            path: '',
-            lastmod: '2026-04-21',
-            changefreq: 'monthly',
-            priority: '1.0',
-        },
-        {
-            path: '/about',
-            lastmod: '2026-04-21',
-            changefreq: 'monthly',
-            priority: '0.8',
-        },
-        {
-            path: '/addons',
-            lastmod: '2026-04-21',
-            changefreq: 'monthly',
-            priority: '0.8',
-        },
-        {
-            path: '/privacy',
-            lastmod: '2026-04-21',
-            changefreq: 'yearly',
-            priority: '0.5',
-        },
-        {
-            path: '/blog',
-            lastmod: '2026-04-21',
-            changefreq: 'weekly',
-            priority: '0.7',
-        },
+        { path: '', lastmod: '2026-04-23' },
+        { path: '/about', lastmod: '2026-04-23' },
+        { path: '/addons', lastmod: '2026-04-23' },
+        { path: '/privacy', lastmod: '2026-04-23' },
+        { path: '/blog', lastmod: '2026-04-23' },
     ]
 
     /** @type {Record<string, { metadata?: { date?: string } }>} */
@@ -48,12 +23,10 @@ export function GET() {
             '.svx',
             ''
         )
-        const date = mod?.metadata?.date ?? '2026-04-21'
+        const date = mod?.metadata?.date ?? '2026-04-23'
         return {
             path: `/blog/${slug}`,
             lastmod: String(date).slice(0, 10),
-            changefreq: 'yearly',
-            priority: '0.6',
         }
     })
 
@@ -62,7 +35,7 @@ export function GET() {
     const urls = entries
         .map(
             (e) =>
-                `  <url>\n    <loc>https://postguard.eu${e.path}/</loc>\n    <lastmod>${e.lastmod}</lastmod>\n    <changefreq>${e.changefreq}</changefreq>\n    <priority>${e.priority}</priority>\n  </url>`
+                `  <url>\n    <loc>https://postguard.eu${e.path}/</loc>\n    <lastmod>${e.lastmod}</lastmod>\n  </url>`
         )
         .join('\n')
 
