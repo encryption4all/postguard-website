@@ -15,17 +15,22 @@
     let isDragging = $state(false)
 
     interface props {
-        files: File[];
-        percentages: number[];
-        done: boolean[];
-        stage: EncryptionState;
+        files: File[]
+        percentages: number[]
+        done: boolean[]
+        stage: EncryptionState
     }
 
     import { MAX_UPLOAD_SIZE } from '$lib/env'
 
     let maxFileSizeMB = MAX_UPLOAD_SIZE / (1024 * 1024)
 
-    let { files = $bindable(), percentages = $bindable(), done = $bindable(), stage = $bindable() }: props = $props()
+    let {
+        files = $bindable(),
+        percentages = $bindable(),
+        done = $bindable(),
+        stage = $bindable(),
+    }: props = $props()
 
     $effect(() => {
         if (files.length === 0 && myDropzone && myDropzone.files.length > 0) {
@@ -35,7 +40,10 @@
 
     let totalSize = $derived(files.reduce((acc, file) => acc + file.size, 0))
     let remainingSize = $derived(MAX_UPLOAD_SIZE - totalSize)
-    let remainingSizeGB = $derived((remainingSize / (1024 * 1024 * 1024)).toFixed(2))
+    let remainingSizeGiB = $derived((remainingSize / (1024 ** 3)).toFixed(2))
+    let maxUploadSizeGiB = (MAX_UPLOAD_SIZE / (1024 ** 3)).toFixed(0)
+    let overLimit = $derived(totalSize > MAX_UPLOAD_SIZE)
+    let totalSizeGiB = $derived((totalSize / (1024 ** 3)).toFixed(2))
 
     const previewTemplate = `
         <div class="dz-preview dz-file-preview files">
@@ -62,7 +70,7 @@
             clickable: '#my-form .primary-btn, .add-more-chip-container', // Only these elements trigger file selection
         })
 
-        myDropzone.on('addedfile', file => {
+        myDropzone.on('addedfile', (file) => {
             files = files.concat([file])
             percentages = percentages.concat([0])
             done = done.concat([false])
@@ -70,15 +78,28 @@
             myDropzone!.emit('complete', file)
         })
 
-        myDropzone.on('dragover', () => { isDragging = true })
-        myDropzone.on('dragleave', () => { isDragging = false })
-        myDropzone.on('drop', () => { isDragging = false })
+        myDropzone.on('dragover', () => {
+            isDragging = true
+        })
+        myDropzone.on('dragleave', () => {
+            isDragging = false
+        })
+        myDropzone.on('drop', () => {
+            isDragging = false
+        })
 
-        myDropzone.on('removedfile', file => {
-            const index = files.findIndex(f => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified)
+        myDropzone.on('removedfile', (file) => {
+            const index = files.findIndex(
+                (f) =>
+                    f.name === file.name &&
+                    f.size === file.size &&
+                    f.lastModified === file.lastModified
+            )
             if (index !== -1) {
                 files = files.slice(0, index).concat(files.slice(index + 1))
-                percentages = percentages.slice(0, index).concat(percentages.slice(index + 1))
+                percentages = percentages
+                    .slice(0, index)
+                    .concat(percentages.slice(index + 1))
                 done = done.slice(0, index).concat(done.slice(index + 1))
             }
         })
@@ -90,34 +111,60 @@
         }
     })
 </script>
-<form id="my-form" class="dropzone"
-      class:dropzone-with-files={files.length > 0}
-      class:hidden={stage === EncryptionState.Done}
+
+<form
+    id="my-form"
+    class="dropzone"
+    class:dropzone-with-files={files.length > 0}
+    class:hidden={stage === EncryptionState.Done}
 >
     <div class="dz-message">
         <h1 class="file-tagline">
             {$_('filesharing.encryptPanel.fileBox.tagline')}
         </h1>
 
-        <div class="dropzone-box"
-             class:has-files={files.length > 0}
-             class:encrypting={stage === EncryptionState.Encrypting}
-             class:signing={stage === EncryptionState.Sign}
-             class:error={stage === EncryptionState.Error}
-             class:dragging={isDragging}>
-            <div class="upload-butt middle-block-size" class:hidden={files.length > 0}>
-                <img class="drawing invert" src={BasketDrawing} alt="Add files" />
-                <p class="drag-text">{$_('filesharing.encryptPanel.fileBox.dragText')}</p>
-                <p class="or-text">{$_('filesharing.encryptPanel.fileBox.orText')}</p>
-                <button class="primary-btn" type="button">{$_('filesharing.encryptPanel.fileBox.chooseFilesButton')}</button>
-                <p class="max-size-text">{$_('filesharing.encryptPanel.fileBox.maxSizeText')}</p>
+        <div
+            class="dropzone-box"
+            class:has-files={files.length > 0}
+            class:encrypting={stage === EncryptionState.Encrypting}
+            class:signing={stage === EncryptionState.Sign}
+            class:error={stage === EncryptionState.Error}
+            class:dragging={isDragging}
+        >
+            <div
+                class="upload-butt middle-block-size"
+                class:hidden={files.length > 0}
+            >
+                <img
+                    class="drawing invert"
+                    src={BasketDrawing}
+                    alt="Add files"
+                />
+                <p class="drag-text">
+                    {$_('filesharing.encryptPanel.fileBox.dragText')}
+                </p>
+                <p class="or-text">
+                    {$_('filesharing.encryptPanel.fileBox.orText')}
+                </p>
+                <button class="primary-btn" type="button"
+                    >{$_(
+                        'filesharing.encryptPanel.fileBox.chooseFilesButton'
+                    )}</button
+                >
+                <p class="max-size-text">
+                    {$_('filesharing.encryptPanel.fileBox.maxSizeText', {
+                        values: { max: maxUploadSizeGiB },
+                    })}
+                </p>
             </div>
 
             {#if isDragging}
                 <div class="drop-overlay">
                     <p class="drop-hint-text">
                         {files.length > 0
-                            ? $_('filesharing.encryptPanel.fileBox.dropMoreText')
+                            ? $_(
+                                  'filesharing.encryptPanel.fileBox.dropMoreText'
+                              )
                             : $_('filesharing.encryptPanel.fileBox.dropText')}
                     </p>
                 </div>
@@ -125,15 +172,20 @@
 
             <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
             <div class="files-container" class:hidden={files.length <= 0}>
-                <div id="previews" class="dz-previews"
-                     class:signing={stage === EncryptionState.Sign}
-                     class:encrypting={stage === EncryptionState.Encrypting}
-                     class:error={stage === EncryptionState.Error}></div>
+                <div
+                    id="previews"
+                    class="dz-previews"
+                    class:signing={stage === EncryptionState.Sign}
+                    class:encrypting={stage === EncryptionState.Encrypting}
+                    class:error={stage === EncryptionState.Error}
+                ></div>
 
                 {#if stage !== EncryptionState.Encrypting}
                     <div class="add-more-chip-container">
                         <Chip
-                            text={$_('filesharing.encryptPanel.fileBox.addMoreFiles')}
+                            text={$_(
+                                'filesharing.encryptPanel.fileBox.addMoreFiles'
+                            )}
                             icon="+"
                             size="lg"
                             variant="default"
@@ -143,13 +195,41 @@
                 {/if}
 
                 <div class="file-summary">
-                    <p>{$_('filesharing.encryptPanel.fileBox.fileSummary', { values: { count: files.length, size: remainingSizeGB } })}</p>
+                    <p>
+                        {$_('filesharing.encryptPanel.fileBox.fileSummary', {
+                            values: {
+                                count: files.length,
+                                size: remainingSizeGiB,
+                            },
+                        })}
+                    </p>
                 </div>
+
+                {#if overLimit}
+                    <div class="upload-limit-error" role="alert">
+                        <p class="upload-limit-title">
+                            {$_(
+                                'filesharing.encryptPanel.fileBox.overLimitTitle',
+                                { values: { max: maxUploadSizeGiB } }
+                            )}
+                        </p>
+                        <p class="upload-limit-body">
+                            {$_(
+                                'filesharing.encryptPanel.fileBox.overLimitBody',
+                                {
+                                    values: {
+                                        total: totalSizeGiB,
+                                        max: maxUploadSizeGiB,
+                                    },
+                                }
+                            )}
+                        </p>
+                    </div>
+                {/if}
             </div>
         </div>
     </div>
 </form>
-
 
 <style>
     h1 {
@@ -307,7 +387,6 @@
         color: var(--pg-text-secondary);
         text-align: center;
     }
-
 
     .max-size-text {
         margin: 0.75rem 0 0 0;
@@ -498,12 +577,39 @@
         font-weight: var(--pg-font-weight-medium);
     }
 
+    .upload-limit-error {
+        border-radius: var(--pg-border-radius-md);
+        padding: 0.75rem 1rem;
+        margin-top: 0.5rem;
+        background: color-mix(
+            in srgb,
+            var(--pg-input-error) 8%,
+            var(--pg-general-background)
+        );
+        border-left: 4px solid var(--pg-input-error);
+        font-family: var(--pg-font-family);
+        pointer-events: auto;
+    }
+
+    .upload-limit-title {
+        margin: 0 0 0.25rem 0;
+        color: var(--pg-input-error);
+        font-weight: var(--pg-font-weight-bold);
+        font-size: var(--pg-font-size-sm);
+    }
+
+    .upload-limit-body {
+        margin: 0;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        line-height: 1.4;
+    }
+
     .dropzone-with-files {
         padding: 0;
         justify-content: start;
         height: fit-content;
     }
-
 
     .upload-butt :global(.primary-btn) {
         margin-top: 1.5rem;

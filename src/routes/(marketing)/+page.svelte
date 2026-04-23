@@ -98,6 +98,34 @@
     </div>
 </section>
 
+<section class="limits">
+    <div class="limits-inner">
+        <h2>{$_('landing.limits.sectionTitle')}</h2>
+        <p class="limits-intro">{$_('landing.limits.intro')}</p>
+
+        <div class="limits-grid">
+            <div class="limit-stat">
+                <div class="limit-number">
+                    <span class="limit-value">5</span>
+                    <span class="limit-unit">GiB</span>
+                </div>
+                <div class="limit-suffix">{$_('landing.limits.uploadSuffix')}</div>
+                <p class="limit-desc">{$_('landing.limits.uploadDesc')}</p>
+            </div>
+            <div class="limit-stat">
+                <div class="limit-number">
+                    <span class="limit-value">5</span>
+                    <span class="limit-unit">GiB</span>
+                </div>
+                <div class="limit-suffix">{$_('landing.limits.rollingSuffix')}</div>
+                <p class="limit-desc">{$_('landing.limits.rollingDesc')}</p>
+            </div>
+        </div>
+
+        <p class="limits-footnote">{$_('landing.limits.footnote')}</p>
+    </div>
+</section>
+
 <div class="landing">
     <section class="features">
         <h2>{$_('home.subtitle1')}</h2>
@@ -256,6 +284,86 @@
         }
     }
 
+    .limits {
+        background: var(--pg-soft-background);
+        border-top: 1px solid var(--pg-strong-background);
+        border-bottom: 1px solid var(--pg-strong-background);
+        padding: 4rem 1rem;
+    }
+
+    .limits-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        text-align: center;
+
+        h2 {
+            margin: 0 0 1rem;
+            font-size: var(--pg-font-size-xl);
+            font-weight: var(--pg-font-weight-extrabold);
+        }
+    }
+
+    .limits-intro {
+        max-width: 700px;
+        margin: 0 auto 3rem;
+        line-height: 1.6;
+        color: var(--pg-text-secondary);
+    }
+
+    .limits-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .limit-stat {
+        padding: 2rem 1.5rem;
+        background: var(--pg-general-background);
+        border-radius: var(--pg-border-radius-md);
+        border: 1px solid var(--pg-strong-background);
+    }
+
+    .limit-number {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 0.5rem;
+        color: var(--pg-primary);
+        line-height: 1;
+        margin-bottom: 0.25rem;
+    }
+
+    .limit-value {
+        font-size: 4.5rem;
+        font-weight: var(--pg-font-weight-extrabold);
+    }
+
+    .limit-unit {
+        font-size: var(--pg-font-size-xl);
+        font-weight: var(--pg-font-weight-bold);
+    }
+
+    .limit-suffix {
+        font-size: var(--pg-font-size-base);
+        font-weight: var(--pg-font-weight-semibold);
+        color: var(--pg-text);
+        margin-bottom: 1rem;
+    }
+
+    .limit-desc {
+        margin: 0;
+        line-height: 1.5;
+        color: var(--pg-text-secondary);
+    }
+
+    .limits-footnote {
+        margin: 0;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        font-style: italic;
+    }
+
     .landing {
         max-width: 1100px;
         margin: 0 auto;
@@ -379,8 +487,17 @@
 
     @media only screen and (max-width: 768px) {
         .feature-grid,
-        .business-features {
+        .business-features,
+        .limits-grid {
             grid-template-columns: 1fr;
+        }
+
+        .limits {
+            padding: 3rem 1rem;
+        }
+
+        .limit-value {
+            font-size: 3.5rem;
         }
     }
 </style>

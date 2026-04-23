@@ -55,7 +55,16 @@
         "business5Desc": "Geef de versleutelingservaring uw eigen huisstijl en houd een compleet auditlogboek bij van alle versleutelde communicatie.",
         "business6Title": "Eigen opslag & DNS-verificatie",
         "business6Desc": "Sla versleutelde bestanden op uw eigen infrastructuur op en verifieer uw domein met DNS-records, vergelijkbaar met de domeinauthenticatie van Mailchimp.",
-        "businessCta": "Neem contact op"
+        "businessCta": "Neem contact op",
+        "limits": {
+            "sectionTitle": "Verstuur grote bestanden. Zonder vervelende limieten.",
+            "intro": "De meeste versleutelde bestandsdeeldiensten beperken gratis overdrachten tot slechts enkele honderden megabytes. Met PostGuard deel je veel meer — helemaal gratis.",
+            "uploadSuffix": "per upload",
+            "uploadDesc": "Verstuur één bestand of een hele batch — tot 5 GiB in één versleutelde overdracht.",
+            "rollingSuffix": "per 2 weken",
+            "rollingDesc": "Tot 5 GiB aan versleutelde bestandsdeling per e-mailadres, binnen een doorlopend venster van 14 dagen.",
+            "footnote": "Geen account. Geen betaling. Altijd end-to-end versleuteld."
+        }
     },
     "about": {
         "title": "Over PostGuard",
@@ -166,15 +175,17 @@
             "fileBox": {
                 "tagline": "Verstuur je bestanden veilig",
                 "upperTextDropZone": "Sleep bestanden hierheen <br/> of",
-                "lowerTextDropZone": "klik om te uploaden <br/> (max. 5 GB per 14 dagen)",
+                "lowerTextDropZone": "klik om te uploaden <br/> (max. {max} GiB per 14 dagen)",
                 "dragText": "Sleep bestanden hierheen",
                 "dropText": "Loslaten om bestanden toe te voegen",
                 "dropMoreText": "Loslaten om meer bestanden toe te voegen",
                 "orText": "of",
                 "chooseFilesButton": "Kies bestanden",
-                "maxSizeText": "5 GB per 14 dagen",
+                "maxSizeText": "{max} GiB per 14 dagen",
                 "addMoreFiles": "Voeg meer bestanden toe",
-                "fileSummary": "{count} {count, plural, one {bestand} other {bestanden}} toegevoegd, nog {size} GB over"
+                "fileSummary": "{count} {count, plural, one {bestand} other {bestanden}} toegevoegd, nog {size} GiB over",
+                "overLimitTitle": "Uploadlimiet overschreden ({max} GiB)",
+                "overLimitBody": "Je selectie is {total} GiB. Verwijder bestanden of verklein het totaal tot {max} GiB of minder voordat je verzendt."
             },
             "RecipientsHeading": "Ontvangers",
             "RecipientsHelpToggle": "Wat vul ik hier in?",
@@ -222,11 +233,19 @@
                 "title": "Vul alle verplichte velden in",
                 "continueButton": "Verder met invullen",
                 "noFiles": "Je hebt nog geen bestanden toegevoegd",
-                "filesTooLarge": "De bestanden overschrijden de {max} GB limiet (14 dagen)",
+                "filesTooLarge": "De bestanden overschrijden de {max} GiB limiet (14 dagen)",
                 "noEmail": "Je hebt nog geen e-mailadres voor een ontvanger ingevuld",
                 "invalidEmail": "Het e-mailadres {email} is niet geldig",
                 "missingAttribute": "{attribute} van {email} ontbreekt",
                 "invalidPhone": "Het telefoonnummer van {email} is niet geldig"
+            },
+            "usage": {
+                "warningTitle": "Je nadert je 2-weken uploadlimiet",
+                "warningBody": "Je hebt {used} GiB van je {limit} GiB-limiet gebruikt. Nog {remaining} GiB beschikbaar tot {resets}.",
+                "blockedTitle": "Uploadlimiet bereikt",
+                "blockedBody": "Je hebt je {limit} GiB-uploadlimiet voor deze 2-weken periode bereikt. De limiet reset op {resets}.",
+                "serverBlockedTitle": "Upload geweigerd door de server",
+                "serverBlocked": "De server weigerde deze upload omdat je {used} GiB van je {limit} GiB-limiet (2 weken) hebt gebruikt. De limiet reset op {resets}."
             }
         },
         "attributes": {

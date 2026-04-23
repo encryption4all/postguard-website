@@ -5,7 +5,10 @@
     import { tick } from 'svelte'
 
     import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
-    import { EncryptionState, type EncryptState } from '$lib/types/filesharing/attributes'
+    import {
+        EncryptionState,
+        type EncryptState,
+    } from '$lib/types/filesharing/attributes'
     import { pg } from '$lib/postguard'
     import { browser } from '$app/environment'
     import { isMobile } from '$lib/browser-detect'
@@ -14,9 +17,11 @@
     import Chip from '../Chip.svelte'
 
     import { MAX_UPLOAD_SIZE } from '$lib/env'
+    import UsageWarning from './UsageWarning.svelte'
+    import { parseLimitExceededBody, bytesToGiB } from '$lib/usage'
 
     interface props {
-        EncryptState: EncryptState;
+        EncryptState: EncryptState
     }
 
     let { EncryptState = $bindable() }: props = $props()
@@ -25,6 +30,11 @@
     let mobilePopupMode: 'none' | 'direct' | 'qr' = $state('none')
     let showValidationModal = $state(false)
     let validationErrors: string[] = $state([])
+    let limitExceededMessage: string | null = $state(null)
+
+    let primaryRecipientEmail = $derived(
+        EncryptState.recipients[0]?.email ?? ''
+    )
 
     let SMOOTH_TIME = 2
 
@@ -35,12 +45,26 @@
         if (EncryptState.files.length === 0) return false
         const totalSize = EncryptState.files.reduce((a, f) => a + f.size, 0)
         if (totalSize >= MAX_UPLOAD_SIZE) return false
-        if (!EncryptState.recipients.every(({ email }) => emailRegex.test(email))) return false
-        if (!EncryptState.recipients.every(({ extra }) => extra.every((att) => {
-            if (!att.v || att.v.length === 0) return false
-            if (att.t === 'pbdf.sidn-pbdf.mobilenumber.mobilenumber' && !isValidPhoneNumber(att.v)) return false
-            return true
-        }))) return false
+        if (
+            !EncryptState.recipients.every(({ email }) =>
+                emailRegex.test(email)
+            )
+        )
+            return false
+        if (
+            !EncryptState.recipients.every(({ extra }) =>
+                extra.every((att) => {
+                    if (!att.v || att.v.length === 0) return false
+                    if (
+                        att.t === 'pbdf.sidn-pbdf.mobilenumber.mobilenumber' &&
+                        !isValidPhoneNumber(att.v)
+                    )
+                        return false
+                    return true
+                })
+            )
+        )
+            return false
         return true
     })
 
@@ -59,14 +83,31 @@
             if (!email || email.trim() === '') {
                 errors.push($_('filesharing.encryptPanel.validation.noEmail'))
             } else if (!emailRegex.test(email)) {
-                errors.push($_('filesharing.encryptPanel.validation.invalidEmail', { values: { email } }))
+                errors.push(
+                    $_('filesharing.encryptPanel.validation.invalidEmail', {
+                        values: { email },
+                    })
+                )
             } else {
                 extra.forEach(({ t, v }) => {
                     if (!v || v.length === 0) {
                         const attrName = $_(`filesharing.attributes.${t}`)
-                        errors.push($_('filesharing.encryptPanel.validation.missingAttribute', { values: { attribute: attrName, email } }))
-                    } else if (t === 'pbdf.sidn-pbdf.mobilenumber.mobilenumber' && !isValidPhoneNumber(v)) {
-                        errors.push($_('filesharing.encryptPanel.validation.invalidPhone', { values: { email } }))
+                        errors.push(
+                            $_(
+                                'filesharing.encryptPanel.validation.missingAttribute',
+                                { values: { attribute: attrName, email } }
+                            )
+                        )
+                    } else if (
+                        t === 'pbdf.sidn-pbdf.mobilenumber.mobilenumber' &&
+                        !isValidPhoneNumber(v)
+                    ) {
+                        errors.push(
+                            $_(
+                                'filesharing.encryptPanel.validation.invalidPhone',
+                                { values: { email } }
+                            )
+                        )
                     }
                 })
             }
@@ -97,27 +138,39 @@
             if (!canEncrypt()) return
 
             // Build recipients
-            const recipients = EncryptState.recipients.map(({ email, extra }) => {
-                const r = pg.recipient.email(email.toLowerCase())
-                for (const a of extra) {
-                    r.extraAttribute(a.t, a.v ?? '')
+            const recipients = EncryptState.recipients.map(
+                ({ email, extra }) => {
+                    const r = pg.recipient.email(email.toLowerCase())
+                    for (const a of extra) {
+                        r.extraAttribute(a.t, a.v ?? '')
+                    }
+                    return r
                 }
-                return r
-            })
+            )
 
             // Build sign method — email always included, other attributes optional
             const sign = pg.sign.yivi({
                 element: '#crypt-irma-qr',
                 attributes: [
-                    { t: 'pbdf.gemeente.personalData.fullname', optional: true },
-                    { t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber', optional: true },
-                    { t: 'pbdf.gemeente.personalData.dateofbirth', optional: true },
+                    {
+                        t: 'pbdf.gemeente.personalData.fullname',
+                        optional: true,
+                    },
+                    {
+                        t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
+                        optional: true,
+                    },
+                    {
+                        t: 'pbdf.gemeente.personalData.dateofbirth',
+                        optional: true,
+                    },
                 ],
                 includeSender: true,
             })
 
-            let selectedLang: string = localStorage.getItem('preferredLanguage') ?? 'en-US'
-            const lang = (selectedLang === 'nl-NL') ? 'NL' : 'EN'
+            let selectedLang: string =
+                localStorage.getItem('preferredLanguage') ?? 'en-US'
+            const lang = selectedLang === 'nl-NL' ? 'NL' : 'EN'
 
             const sealed = pg.encrypt({
                 files: EncryptState.files,
@@ -126,7 +179,8 @@
                 onProgress: (pct) => {
                     // First progress callback means signing is done
                     if (EncryptState.encryptionState === EncryptionState.Sign) {
-                        EncryptState.encryptionState = EncryptionState.Encrypting
+                        EncryptState.encryptionState =
+                            EncryptionState.Encrypting
                         EncryptState.encryptStartTime = Date.now()
                         mobilePopupMode = 'none'
                     }
@@ -153,8 +207,36 @@
                 EncryptState.encryptionState = EncryptionState.FileSelection
                 EncryptState.selfAborted = false
                 EncryptState.encryptStartTime = 0
+            } else if (e instanceof NetworkError && e.status === 413) {
+                // cryptify#100: 413 Payload Too Large — either per-upload or rolling limit.
+                const status = parseLimitExceededBody(e.body ?? '')
+                const resetsAt = status.resetsAt
+                    ? status.resetsAt.toLocaleDateString(
+                          $locale === 'nl-NL' ? 'nl-NL' : 'en-US',
+                          {
+                              day: 'numeric',
+                              month: 'long',
+                              year: 'numeric',
+                          }
+                      )
+                    : ''
+                limitExceededMessage = $_(
+                    'filesharing.encryptPanel.usage.serverBlocked',
+                    {
+                        values: {
+                            used: bytesToGiB(status.usedBytes),
+                            limit: bytesToGiB(status.limitBytes),
+                            resets: resetsAt,
+                        },
+                    }
+                )
+                EncryptState.percentages = EncryptState.files.map(() => 0)
+                EncryptState.done = EncryptState.files.map(() => false)
+                EncryptState.encryptionState = EncryptionState.FileSelection
+                EncryptState.encryptStartTime = 0
             } else {
-                EncryptState.serverError = e instanceof NetworkError && e.status >= 500
+                EncryptState.serverError =
+                    e instanceof NetworkError && e.status >= 500
                 EncryptState.encryptionState = EncryptionState.Error
             }
             mobilePopupMode = 'none'
@@ -190,7 +272,10 @@
 
     let lang = $state('nl')
     if (browser) {
-        lang = (localStorage.getItem('preferredLanguage') ?? 'nl-NL').substring(0, 2)
+        lang = (localStorage.getItem('preferredLanguage') ?? 'nl-NL').substring(
+            0,
+            2
+        )
     }
 
     let yiviInfoExpanded = $state(false)
@@ -206,17 +291,55 @@
         }
     })
 </script>
+
 <div class="button-container">
+    {#if primaryRecipientEmail}
+        <UsageWarning email={primaryRecipientEmail} />
+    {/if}
+    {#if limitExceededMessage}
+        <div class="limit-exceeded-banner" role="alert">
+            <p class="limit-exceeded-title">
+                {$_('filesharing.encryptPanel.usage.serverBlockedTitle')}
+            </p>
+            <p class="limit-exceeded-body">{limitExceededMessage}</p>
+            <button
+                type="button"
+                class="limit-exceeded-dismiss"
+                aria-label={$_(
+                    'filesharing.encryptPanel.validation.continueButton'
+                )}
+                onclick={() => (limitExceededMessage = null)}>×</button
+            >
+        </div>
+    {/if}
     {#if EncryptState.encryptionState === EncryptionState.Encrypting}
         <!-- Loading info box during upload -->
-        {@const totalProgress = EncryptState.percentages.length > 0
-            ? Math.round(EncryptState.percentages.reduce((a, b) => a + b, 0) / EncryptState.percentages.length)
-            : 0}
+        {@const totalProgress =
+            EncryptState.percentages.length > 0
+                ? Math.round(
+                      EncryptState.percentages.reduce((a, b) => a + b, 0) /
+                          EncryptState.percentages.length
+                  )
+                : 0}
         <div class="upload-info-box">
-            <div class="progress-bar" class:complete={totalProgress >= 100} style="width: {totalProgress >= 100 ? '100%' : totalProgress + '%'}"></div>
+            <div
+                class="progress-bar"
+                class:complete={totalProgress >= 100}
+                style="width: {totalProgress >= 100
+                    ? '100%'
+                    : totalProgress + '%'}"
+            ></div>
             <div class="upload-info-content">
                 <svg class="spinner" viewBox="0 0 24 24" width="24" height="24">
-                    <circle class="spinner-circle" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3"></circle>
+                    <circle
+                        class="spinner-circle"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                    ></circle>
                 </svg>
                 {$_('filesharing.encryptPanel.sending')}
             </div>
@@ -250,7 +373,6 @@
         {$_('filesharing.encryptPanel.yiviTip')}
     </p>
 
-
     <HelpToggle
         title={$_('filesharing.encryptPanel.yiviInfo')}
         content={$_('filesharing.encryptPanel.yiviInfoText')}
@@ -261,23 +383,33 @@
 
     <!-- Desktop Yivi popup above the button -->
     {#if !isMobileDevice && EncryptState.encryptionState === EncryptionState.Sign && buttonRef}
-        <button type="button" class="desktop-backdrop" tabindex="-1" aria-hidden="true" onclick={() => {
-            EncryptState.encryptionState = EncryptionState.FileSelection
-        }}></button>
+        <button
+            type="button"
+            class="desktop-backdrop"
+            tabindex="-1"
+            aria-hidden="true"
+            onclick={() => {
+                EncryptState.encryptionState = EncryptionState.FileSelection
+            }}
+        ></button>
         <div
             class="desktop-yivi-popup"
             style="
-                left: {buttonRef.getBoundingClientRect().left + buttonRef.offsetWidth / 2}px;
+                left: {buttonRef.getBoundingClientRect().left +
+                buttonRef.offsetWidth / 2}px;
                 top: {buttonRef.getBoundingClientRect().top - 15}px;
             "
         >
             <div class="popup-content">
                 <div class="popup-header">
-                    <h2 class="popup-title">{$_('filesharing.encryptPanel.encryptSend')}</h2>
+                    <h2 class="popup-title">
+                        {$_('filesharing.encryptPanel.encryptSend')}
+                    </h2>
                     <Chip
                         text={$_('filesharing.sign.close')}
                         onclick={() => {
-                            EncryptState.encryptionState = EncryptionState.FileSelection
+                            EncryptState.encryptionState =
+                                EncryptionState.FileSelection
                         }}
                         icon="×"
                         size="md"
@@ -297,20 +429,31 @@
 
     <!-- Mobile bottom sheet -->
     {#if isMobileDevice && mobilePopupMode !== 'none' && EncryptState.encryptionState === EncryptionState.Sign}
-        <button type="button" class="mobile-backdrop" tabindex="-1" aria-hidden="true" onclick={() => {
-            EncryptState.encryptionState = EncryptionState.FileSelection
-            mobilePopupMode = 'none'
-        }}></button>
+        <button
+            type="button"
+            class="mobile-backdrop"
+            tabindex="-1"
+            aria-hidden="true"
+            onclick={() => {
+                EncryptState.encryptionState = EncryptionState.FileSelection
+                mobilePopupMode = 'none'
+            }}
+        ></button>
         <div class="mobile-bottom-sheet">
             <div class="bottom-sheet-content">
                 {#if mobilePopupMode === 'qr'}
-                    <h2 class="bottom-sheet-title">{$_('filesharing.encryptPanel.encryptSend')}</h2>
-                    <p class="bottom-sheet-instruction">{$_('filesharing.sign.scanQR')}</p>
+                    <h2 class="bottom-sheet-title">
+                        {$_('filesharing.encryptPanel.encryptSend')}
+                    </h2>
+                    <p class="bottom-sheet-instruction">
+                        {$_('filesharing.sign.scanQR')}
+                    </p>
                     <div class="qr-code-wrapper"><YiviQRCode /></div>
                     <Chip
                         text={$_('filesharing.sign.close')}
                         onclick={() => {
-                            EncryptState.encryptionState = EncryptionState.FileSelection
+                            EncryptState.encryptionState =
+                                EncryptionState.FileSelection
                             mobilePopupMode = 'none'
                         }}
                         icon="×"
@@ -318,12 +461,17 @@
                         variant="dark"
                     />
                 {:else}
-                    <p class="bottom-sheet-instruction">{$_('filesharing.sign.followSteps')}</p>
-                    <div style="display: none;"><YiviQRCode mode="deeplink" /></div>
+                    <p class="bottom-sheet-instruction">
+                        {$_('filesharing.sign.followSteps')}
+                    </p>
+                    <div style="display: none;">
+                        <YiviQRCode mode="deeplink" />
+                    </div>
                     <Chip
                         text={$_('filesharing.sign.cancel')}
                         onclick={() => {
-                            EncryptState.encryptionState = EncryptionState.FileSelection
+                            EncryptState.encryptionState =
+                                EncryptionState.FileSelection
                             mobilePopupMode = 'none'
                         }}
                         icon="×"
@@ -336,289 +484,342 @@
     {/if}
 </div>
 
-<dialog bind:this={dialogRef} class="validation-modal" tabindex="-1" oncancel={() => showValidationModal = false}>
-    <h2 class="validation-title">{$_('filesharing.encryptPanel.validation.title')}</h2>
+<dialog
+    bind:this={dialogRef}
+    class="validation-modal"
+    tabindex="-1"
+    oncancel={() => (showValidationModal = false)}
+>
+    <h2 class="validation-title">
+        {$_('filesharing.encryptPanel.validation.title')}
+    </h2>
     <ul class="validation-errors">
         {#each validationErrors as error}
             <li>{error}</li>
         {/each}
     </ul>
-    <button class="primary-btn" onclick={() => showValidationModal = false}>
+    <button class="primary-btn" onclick={() => (showValidationModal = false)}>
         {$_('filesharing.encryptPanel.validation.continueButton')}
     </button>
 </dialog>
 
 <style lang="scss">
-  .send-btn {
-    margin: 1.5rem 0 0.8rem 0;
-  }
-  /* Fade the Yivi logo when the button is disabled */
-  .primary-btn:disabled img {
-    opacity: 0.5;
-  }
+    .send-btn {
+        margin: 1.5rem 0 0.8rem 0;
+    }
 
-  .button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    position: relative;
-  }
+    .limit-exceeded-banner {
+        position: relative;
+        width: 100%;
+        padding: 0.75rem 2.5rem 0.75rem 1rem;
+        margin: 0.5rem 0;
+        border-radius: var(--pg-border-radius-md);
+        border-left: 4px solid var(--pg-input-error);
+        background: color-mix(
+            in srgb,
+            var(--pg-input-error) 8%,
+            var(--pg-general-background)
+        );
+        font-family: var(--pg-font-family);
+        box-sizing: border-box;
+    }
 
-  @media only screen and (min-width: 768px) {
+    .limit-exceeded-title {
+        margin: 0 0 0.25rem 0;
+        font-weight: var(--pg-font-weight-bold);
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-input-error);
+    }
+
+    .limit-exceeded-body {
+        margin: 0;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        line-height: 1.4;
+    }
+
+    .limit-exceeded-dismiss {
+        position: absolute;
+        top: 0.25rem;
+        right: 0.5rem;
+        background: transparent;
+        border: none;
+        color: var(--pg-text-secondary);
+        font-size: 1.25rem;
+        line-height: 1;
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .limit-exceeded-dismiss:hover {
+        color: var(--pg-text);
+    }
+    /* Fade the Yivi logo when the button is disabled */
+    .primary-btn:disabled img {
+        opacity: 0.5;
+    }
+
     .button-container {
-      padding-left: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        position: relative;
     }
-  }
 
-  .upload-info-box {
-    position: relative;
-    width: 100%;
-    border-radius: var(--pg-border-radius-sm);
-    background: var(--pg-strong-background);
-    margin-bottom: 0.75rem;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-
-  .progress-bar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 4px;
-    background: var(--pg-primary-contrast);
-    transition: width 0.3s ease;
-  }
-
-  .upload-info-content {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.75rem;
-    padding: 1rem 1rem;
-    font-size: var(--pg-font-size-base);
-    font-weight: var(--pg-font-weight-regular);
-    font-family: var(--pg-font-family);
-    color: var(--pg-text);
-    z-index: 1;
-  }
-
-  .upload-info-box .spinner-circle {
-    stroke: var(--pg-text);
-  }
-
-  .spinner {
-    animation: spin 1s linear infinite;
-    margin-right: 0.5rem;
-  }
-
-  .spinner-circle {
-    stroke-dasharray: 60;
-    stroke-dashoffset: 0;
-    animation: dash 1.5s ease-in-out infinite;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
+    @media only screen and (min-width: 768px) {
+        .button-container {
+            padding-left: 1.25rem;
+        }
     }
-  }
 
-  @keyframes dash {
-    0% {
-      stroke-dashoffset: 60;
+    .upload-info-box {
+        position: relative;
+        width: 100%;
+        border-radius: var(--pg-border-radius-sm);
+        background: var(--pg-strong-background);
+        margin-bottom: 0.75rem;
+        box-sizing: border-box;
+        overflow: hidden;
     }
-    50% {
-      stroke-dashoffset: 15;
+
+    .progress-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        background: var(--pg-primary-contrast);
+        transition: width 0.3s ease;
     }
-    100% {
-      stroke-dashoffset: 60;
+
+    .upload-info-content {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.75rem;
+        padding: 1rem 1rem;
+        font-size: var(--pg-font-size-base);
+        font-weight: var(--pg-font-weight-regular);
+        font-family: var(--pg-font-family);
+        color: var(--pg-text);
+        z-index: 1;
     }
-  }
 
-  .yivi-tip {
-    font-size: var(--pg-font-size-sm);
-    color: var(--pg-text-secondary);
-    font-family: var(--pg-font-family);
-    margin: 0;
-    line-height: 1.4;
-  }
+    .upload-info-box .spinner-circle {
+        stroke: var(--pg-text);
+    }
 
-  /* Desktop Yivi popup styles */
-  .desktop-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(3, 14, 23, 0.09);
-    z-index: 3;
-    cursor: pointer;
-  }
+    .spinner {
+        animation: spin 1s linear infinite;
+        margin-right: 0.5rem;
+    }
 
-  .desktop-yivi-popup {
-    position: fixed;
-    transform: translate(-50%, -100%);
-    background: var(--pg-soft-background);
-    border-radius: var(--pg-border-radius-md);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    padding: 1rem 1.5rem 1.5rem 1.5rem;
-    width: var(--popup-width);
-    z-index: 4;
-  }
+    .spinner-circle {
+        stroke-dasharray: 60;
+        stroke-dashoffset: 0;
+        animation: dash 1.5s ease-in-out infinite;
+    }
 
-  .popup-content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
 
-  .popup-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    gap: 0.5rem;
-  }
+    @keyframes dash {
+        0% {
+            stroke-dashoffset: 60;
+        }
+        50% {
+            stroke-dashoffset: 15;
+        }
+        100% {
+            stroke-dashoffset: 60;
+        }
+    }
 
-  .popup-title {
-    font-size: var(--pg-font-size-sm);
-    font-weight: var(--pg-font-weight-bold);
-    margin: 0;
-    text-align: left;
-    color: var(--pg-text);
-    font-family: var(--pg-font-family);
-    flex: 1;
-  }
+    .yivi-tip {
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
+        margin: 0;
+        line-height: 1.4;
+    }
 
-  .popup-instruction {
-    font-size: var(--pg-font-size-sm);
-    font-weight: var(--pg-font-weight-bold);
-    margin: 0 0 0.5rem 0;
-    text-align: left;
-    color: var(--pg-text);
-    font-family: var(--pg-font-family);
-    width: 100%;
-  }
+    /* Desktop Yivi popup styles */
+    .desktop-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(3, 14, 23, 0.09);
+        z-index: 3;
+        cursor: pointer;
+    }
 
-  .qr-code-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+    .desktop-yivi-popup {
+        position: fixed;
+        transform: translate(-50%, -100%);
+        background: var(--pg-soft-background);
+        border-radius: var(--pg-border-radius-md);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        padding: 1rem 1.5rem 1.5rem 1.5rem;
+        width: var(--popup-width);
+        z-index: 4;
+    }
 
+    .popup-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
 
-  .popup-arrow {
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid var(--pg-soft-background);
-  }
+    .popup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 0.5rem;
+    }
 
-  /* Mobile bottom sheet styles */
-  .mobile-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 3;
-  }
+    .popup-title {
+        font-size: var(--pg-font-size-sm);
+        font-weight: var(--pg-font-weight-bold);
+        margin: 0;
+        text-align: left;
+        color: var(--pg-text);
+        font-family: var(--pg-font-family);
+        flex: 1;
+    }
 
-  .mobile-bottom-sheet {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--pg-soft-background);
-    border-radius: var(--pg-border-radius-lg) var(--pg-border-radius-lg) 0 0;
-    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.15);
-    padding: 1.5rem;
-    z-index: 4;
-  }
+    .popup-instruction {
+        font-size: var(--pg-font-size-sm);
+        font-weight: var(--pg-font-weight-bold);
+        margin: 0 0 0.5rem 0;
+        text-align: left;
+        color: var(--pg-text);
+        font-family: var(--pg-font-family);
+        width: 100%;
+    }
 
-  .bottom-sheet-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
+    .qr-code-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-  .bottom-sheet-title {
-    font-size: var(--pg-font-size-sm);
-    font-weight: var(--pg-font-weight-bold);
-    margin: 0;
-    text-align: center;
-    color: var(--pg-text);
-    font-family: var(--pg-font-family);
-  }
+    .popup-arrow {
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid var(--pg-soft-background);
+    }
 
-  .bottom-sheet-instruction {
-    font-size: var(--pg-font-size-sm);
-    font-weight: var(--pg-font-weight-bold);
-    margin: 0;
-    text-align: center;
-    color: var(--pg-text);
-    font-family: var(--pg-font-family);
-  }
+    /* Mobile bottom sheet styles */
+    .mobile-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 3;
+    }
 
-  /* Validation modal */
-  dialog.validation-modal {
-    border: none;
-    border-radius: var(--pg-border-radius-lg);
-    padding: 1.75rem 1.5rem 1.5rem;
-    width: 90%;
-    max-width: 380px;
-    gap: 1rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    background: var(--pg-general-background);
-    color: var(--pg-text);
-  }
+    .mobile-bottom-sheet {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--pg-soft-background);
+        border-radius: var(--pg-border-radius-lg) var(--pg-border-radius-lg) 0 0;
+        box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.15);
+        padding: 1.5rem;
+        z-index: 4;
+    }
 
-  /* Only apply flex layout when the dialog is open.
+    .bottom-sheet-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .bottom-sheet-title {
+        font-size: var(--pg-font-size-sm);
+        font-weight: var(--pg-font-weight-bold);
+        margin: 0;
+        text-align: center;
+        color: var(--pg-text);
+        font-family: var(--pg-font-family);
+    }
+
+    .bottom-sheet-instruction {
+        font-size: var(--pg-font-size-sm);
+        font-weight: var(--pg-font-weight-bold);
+        margin: 0;
+        text-align: center;
+        color: var(--pg-text);
+        font-family: var(--pg-font-family);
+    }
+
+    /* Validation modal */
+    dialog.validation-modal {
+        border: none;
+        border-radius: var(--pg-border-radius-lg);
+        padding: 1.75rem 1.5rem 1.5rem;
+        width: 90%;
+        max-width: 380px;
+        gap: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        background: var(--pg-general-background);
+        color: var(--pg-text);
+    }
+
+    /* Only apply flex layout when the dialog is open.
      Setting display on dialog directly overrides the UA's display:none for closed dialogs. */
-  dialog.validation-modal[open] {
-    display: flex;
-    flex-direction: column;
-  }
+    dialog.validation-modal[open] {
+        display: flex;
+        flex-direction: column;
+    }
 
-  dialog.validation-modal::backdrop {
-    background: rgba(0, 0, 0, 0.45);
-  }
+    dialog.validation-modal::backdrop {
+        background: rgba(0, 0, 0, 0.45);
+    }
 
-  .validation-title {
-    font-size: var(--pg-font-size-lg);
-    font-weight: var(--pg-font-weight-bold);
-    margin: 0;
-    color: var(--pg-text);
-    font-family: var(--pg-font-family);
-  }
+    .validation-title {
+        font-size: var(--pg-font-size-lg);
+        font-weight: var(--pg-font-weight-bold);
+        margin: 0;
+        color: var(--pg-text);
+        font-family: var(--pg-font-family);
+    }
 
-  .validation-errors {
-    margin: 0;
-    padding-left: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
+    .validation-errors {
+        margin: 0;
+        padding-left: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
 
-  .validation-errors li {
-    font-size: var(--pg-font-size-sm);
-    color: var(--pg-text-secondary);
-    font-family: var(--pg-font-family);
-    line-height: 1.4;
-  }
+    .validation-errors li {
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
+        line-height: 1.4;
+    }
 
-  .validation-modal .primary-btn {
-    align-self: stretch;
-    justify-content: center;
-  }
+    .validation-modal .primary-btn {
+        align-self: stretch;
+        justify-content: center;
+    }
 </style>
