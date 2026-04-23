@@ -19,6 +19,7 @@
     import { MAX_UPLOAD_SIZE } from '$lib/env'
     import UsageWarning from './UsageWarning.svelte'
     import { parseLimitExceededBody, bytesToGiB } from '$lib/usage'
+    import { recordUpload } from '$lib/localUsage'
 
     interface props {
         EncryptState: EncryptState
@@ -32,9 +33,6 @@
     let validationErrors: string[] = $state([])
     let limitExceededMessage: string | null = $state(null)
 
-    let primaryRecipientEmail = $derived(
-        EncryptState.recipients[0]?.email ?? ''
-    )
 
     let SMOOTH_TIME = 2
 
@@ -197,6 +195,9 @@
                 },
             })
 
+            const totalBytes = EncryptState.files.reduce((a, f) => a + f.size, 0)
+            recordUpload(totalBytes)
+
             EncryptState.encryptionState = EncryptionState.Done
             EncryptState.selfAborted = false
         } catch (e) {
@@ -293,9 +294,7 @@
 </script>
 
 <div class="button-container">
-    {#if primaryRecipientEmail}
-        <UsageWarning email={primaryRecipientEmail} />
-    {/if}
+    <UsageWarning pendingBytes={EncryptState.files.reduce((a, f) => a + f.size, 0)} />
     {#if limitExceededMessage}
         <div class="limit-exceeded-banner" role="alert">
             <p class="limit-exceeded-title">

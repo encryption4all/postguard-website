@@ -1,35 +1,25 @@
 <script lang="ts">
     import { _, locale } from 'svelte-i18n'
-    import { fetchUsage, bytesToGiB, type UsageStatus } from '$lib/usage'
+    import { ROLLING_LIMIT } from '$lib/env'
+    import { bytesToGiB } from '$lib/usage'
+    import {
+        getLocalUsedBytes,
+        getLocalRemainingBytes,
+        getLocalResetsAt,
+    } from '$lib/localUsage'
 
     interface props {
-        email: string
+        /** Total size of files currently selected for upload. */
+        pendingBytes: number
     }
 
-    let { email }: props = $props()
+    let { pendingBytes }: props = $props()
 
-    const emailRegex =
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-
-    let status: UsageStatus | null = $state(null)
-
-    // Debounce lookups: re-query at most once the email has been idle for 500 ms.
-    $effect(() => {
-        status = null
-        const trimmed = email.trim().toLowerCase()
-        if (!emailRegex.test(trimmed)) return
-
-        const controller = new AbortController()
-        const timer = window.setTimeout(async () => {
-            const result = await fetchUsage(trimmed, controller.signal)
-            if (!controller.signal.aborted) status = result
-        }, 500)
-
-        return () => {
-            window.clearTimeout(timer)
-            controller.abort()
-        }
-    })
+    let usedBytes = $derived(getLocalUsedBytes())
+    let remainingBytes = $derived(getLocalRemainingBytes())
+    let resetsAt = $derived(getLocalResetsAt())
+    let wouldExceed = $derived(usedBytes + pendingBytes > ROLLING_LIMIT)
+    let warn = $derived(usedBytes >= ROLLING_LIMIT * (2 / 3))
 
     function formatReset(d: Date | null): string {
         if (!d) return ''
@@ -42,21 +32,24 @@
     }
 </script>
 
-{#if status && (status.warn || status.blocked)}
+{#if wouldExceed || warn}
     <div
         class="usage-banner"
-        class:blocked={status.blocked}
-        role={status.blocked ? 'alert' : 'status'}
+        class:blocked={wouldExceed}
+        role={wouldExceed ? 'alert' : 'status'}
     >
-        {#if status.blocked}
+        {#if wouldExceed}
             <p class="usage-title">
-                {$_('filesharing.encryptPanel.usage.blockedTitle')}
+                {$_('filesharing.encryptPanel.usage.preCheckBlockedTitle')}
             </p>
             <p class="usage-body">
-                {$_('filesharing.encryptPanel.usage.blockedBody', {
+                {$_('filesharing.encryptPanel.usage.preCheckBlockedBody', {
                     values: {
-                        limit: bytesToGiB(status.limitBytes),
-                        resets: formatReset(status.resetsAt),
+                        used: bytesToGiB(usedBytes),
+                        limit: bytesToGiB(ROLLING_LIMIT),
+                        remaining: bytesToGiB(remainingBytes),
+                        pending: bytesToGiB(pendingBytes),
+                        resets: formatReset(resetsAt),
                     },
                 })}
             </p>
@@ -67,10 +60,10 @@
             <p class="usage-body">
                 {$_('filesharing.encryptPanel.usage.warningBody', {
                     values: {
-                        used: bytesToGiB(status.usedBytes),
-                        limit: bytesToGiB(status.limitBytes),
-                        remaining: bytesToGiB(status.remainingBytes),
-                        resets: formatReset(status.resetsAt),
+                        used: bytesToGiB(usedBytes),
+                        limit: bytesToGiB(ROLLING_LIMIT),
+                        remaining: bytesToGiB(remainingBytes),
+                        resets: formatReset(resetsAt),
                     },
                 })}
             </p>

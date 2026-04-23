@@ -242,6 +242,8 @@
             "usage": {
                 "warningTitle": "Je nadert je 2-weken uploadlimiet",
                 "warningBody": "Je hebt {used} GiB van je {limit} GiB-limiet gebruikt. Nog {remaining} GiB beschikbaar tot {resets}.",
+                "preCheckBlockedTitle": "Deze upload overschrijdt je 2-weken limiet",
+                "preCheckBlockedBody": "Je hebt {used} GiB van je {limit} GiB-limiet gebruikt. Deze upload ({pending} GiB) overschrijdt je resterende {remaining} GiB. Er komt ruimte vrij op {resets}.",
                 "blockedTitle": "Uploadlimiet bereikt",
                 "blockedBody": "Je hebt je {limit} GiB-uploadlimiet voor deze 2-weken periode bereikt. De limiet reset op {resets}.",
                 "serverBlockedTitle": "Upload geweigerd door de server",
