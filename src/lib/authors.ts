@@ -18,7 +18,7 @@ export const authors: Record<string, Author> = {
     'Ruben Hensen': {
         name: 'Ruben Hensen',
         role: 'Open Source Developer at Yivi',
-        image: 'https://media.licdn.com/dms/image/v2/D4E03AQGz3wVarBBXEQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1707298851498?e=2147483647&v=beta&t=gf-c66wBZk6aKnNfQ5ZS6fwRoKRKt1pASyADcK5VaCk',
+        image: 'https://github.com/rubenhensen.png',
         github: 'https://github.com/rubenhensen',
         linkedin: 'https://linkedin.com/in/rubenhensen',
         url: 'https://postguard.eu/about',
