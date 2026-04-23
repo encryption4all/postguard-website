@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /fileshare
-Disallow: /decrypt
-Disallow: /download
-Disallow: /debug
-
-Sitemap: https://postguard.eu/sitemap.xml
