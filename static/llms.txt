@@ -1,8 +1,8 @@
 # PostGuard
 
-> PostGuard is an open-source, identity-based encrypted file sharing and email encryption service developed at Radboud University and funded by NWO. No key exchange is required — recipients are identified by Yivi (IRMA) attributes such as email address, making end-to-end encryption as simple as knowing someone's email address.
+> PostGuard is a free, open-source end-to-end encryption service for emails and files, originally developed at Radboud University with NWO funding and now maintained by Yivi at Caesar Groep. It uses Identity-Based Encryption (IBE) so senders can encrypt messages using only a recipient's email address — no key exchange, no certificates, no setup required.
 
-PostGuard uses Identity-Based Encryption (IBE) so senders can encrypt messages using only a recipient's attributes (e.g. email). The recipient authenticates with their Yivi (IRMA) wallet to retrieve the decryption key. PostGuard runs entirely in the browser — plaintext never leaves the user's device unencrypted.
+PostGuard eliminates the complexity of traditional public-key encryption. Instead of managing key pairs, senders encrypt directly to a recipient's identity attributes (such as an email address or phone number). The recipient authenticates with the free Yivi identity wallet to retrieve their decryption key from PostGuard's Key Generation Service. All encryption and decryption happens entirely in the user's browser — plaintext data never leaves the device unencrypted, and PostGuard's servers never see the content. PostGuard is available as a web application for file sharing, a browser-based email decryption inbox, and as native addons for Thunderbird and Outlook.
 
 ## Key Pages
 - [Homepage](https://postguard.eu/): Overview of PostGuard, its core features, and the product family.

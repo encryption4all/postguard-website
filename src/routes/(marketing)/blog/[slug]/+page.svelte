@@ -7,20 +7,20 @@
     const siteUrl = 'https://postguard.eu'
     const articleJsonLd = $derived({
         '@context': 'https://schema.org',
-        '@type': 'Article',
+        '@type': 'BlogPosting',
         headline: data.metadata.title,
         description: data.metadata.description,
         datePublished: data.metadata.date,
-        ...(data.metadata.image
-            ? {
-                  image: data.metadata.image.startsWith('http')
-                      ? data.metadata.image
-                      : `${siteUrl}${data.metadata.image}`,
-              }
-            : {}),
+        dateModified: data.metadata.modified || data.metadata.date,
+        image: data.metadata.image
+            ? (data.metadata.image.startsWith('http')
+                ? data.metadata.image
+                : `${siteUrl}${data.metadata.image}`)
+            : `${siteUrl}/pg_logo.png`,
         author: {
             '@type': data.metadata.author === 'PostGuard Team' ? 'Organization' : 'Person',
             name: data.metadata.author || 'PostGuard Team',
+            ...(data.metadata.author !== 'PostGuard Team' ? {} : { url: 'https://postguard.eu' }),
         },
         publisher: {
             '@type': 'Organization',

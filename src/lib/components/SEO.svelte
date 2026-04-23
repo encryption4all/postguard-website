@@ -39,7 +39,6 @@
         <meta property="og:url" content={canonicalUrl} />
         <link rel="canonical" href={canonicalUrl} />
         <link rel="alternate" hreflang="en" href={canonicalUrl} />
-        <link rel="alternate" hreflang="nl" href={canonicalUrl} />
         <link rel="alternate" hreflang="x-default" href={canonicalUrl} />
     {/if}
     <meta name="twitter:card" content="summary_large_image" />

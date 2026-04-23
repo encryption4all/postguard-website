@@ -11,8 +11,9 @@
 <div class="privacy-container">
     <div class="privacy-content">
         <h2><span>{$_('privacypolicy.title')}</span></h2>
+        <p class="last-updated">Last updated: April 21, 2026</p>
         <div class="privacy-text">
-            <p>{@html $_('privacypolicy.full')}</p>
+            {@html $_('privacypolicy.full')}
         </div>
     </div>
 </div>
@@ -32,6 +33,12 @@
     }
 
     h2 {
+        margin-bottom: 0.5rem;
+    }
+
+    .last-updated {
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
         margin-bottom: 2rem;
     }
 
