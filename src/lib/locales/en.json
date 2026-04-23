@@ -182,11 +182,10 @@
                 "dropMoreText": "Drop to add more files",
                 "orText": "or",
                 "chooseFilesButton": "Choose files",
-                "maxSizeText": "{max} GiB per 14 days",
+                "maxSizeText": "{max} GiB remaining",
                 "addMoreFiles": "Add more files",
                 "fileSummary": "{count} {count, plural, one {file} other {files}} added, {size} GiB remaining",
-                "overLimitTitle": "Upload limit exceeded ({max} GiB)",
-                "overLimitBody": "Your selection is {total} GiB. Remove files or reduce the total to {max} GiB or less before sending."
+                "overLimitText": "{over} GiB over the limit — remove some files"
             },
             "RecipientsHeading": "Recipients",
             "RecipientsHelpToggle": "What should I fill in here?",
@@ -234,7 +233,6 @@
                 "title": "Fill in all required fields",
                 "continueButton": "Continue filling in",
                 "noFiles": "You haven't added any files yet",
-                "filesTooLarge": "The files exceed the {max} GiB limit (14-day window)",
                 "noEmail": "You haven't filled in an email address for a recipient",
                 "invalidEmail": "The email address {email} is not valid",
                 "missingAttribute": "{attribute} of {email} is missing",

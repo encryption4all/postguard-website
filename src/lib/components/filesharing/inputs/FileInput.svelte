@@ -21,7 +21,8 @@
         stage: EncryptionState
     }
 
-    import { MAX_UPLOAD_SIZE } from '$lib/env'
+    import { MAX_UPLOAD_SIZE, ROLLING_LIMIT } from '$lib/env'
+    import { getLocalUsedBytes } from '$lib/localUsage'
 
     let maxFileSizeMB = MAX_UPLOAD_SIZE / (1024 * 1024)
 
@@ -39,10 +40,12 @@
     })
 
     let totalSize = $derived(files.reduce((acc, file) => acc + file.size, 0))
-    let remainingSize = $derived(MAX_UPLOAD_SIZE - totalSize)
-    let remainingSizeGiB = $derived((remainingSize / (1024 ** 3)).toFixed(2))
-    let maxUploadSizeGiB = (MAX_UPLOAD_SIZE / (1024 ** 3)).toFixed(0)
-    let overLimit = $derived(totalSize > MAX_UPLOAD_SIZE)
+    let usedBytes = $derived(getLocalUsedBytes())
+    let effectiveLimit = $derived(Math.min(MAX_UPLOAD_SIZE, ROLLING_LIMIT - usedBytes))
+    let remainingSize = $derived(effectiveLimit - totalSize)
+    let remainingSizeGiB = $derived((Math.max(0, remainingSize) / (1024 ** 3)).toFixed(2))
+    let effectiveLimitGiB = $derived((Math.max(0, effectiveLimit) / (1024 ** 3)).toFixed(1))
+    let overLimit = $derived(totalSize > effectiveLimit)
     let totalSizeGiB = $derived((totalSize / (1024 ** 3)).toFixed(2))
 
     const previewTemplate = `
@@ -155,7 +158,7 @@
                 >
                 <p class="max-size-text">
                     {$_('filesharing.encryptPanel.fileBox.maxSizeText', {
-                        values: { max: maxUploadSizeGiB },
+                        values: { max: effectiveLimitGiB },
                     })}
                 </p>
             </div>
@@ -191,43 +194,26 @@
                             icon="+"
                             size="lg"
                             variant="default"
-                            onclick={() => {}}
                         />
                     </div>
                 {/if}
 
-                <div class="file-summary">
+                <div class="file-summary" class:over-limit={overLimit}>
                     <p>
-                        {$_('filesharing.encryptPanel.fileBox.fileSummary', {
-                            values: {
-                                count: files.length,
-                                size: remainingSizeGiB,
-                            },
-                        })}
+                        {#if overLimit}
+                            {$_('filesharing.encryptPanel.fileBox.overLimitText', {
+                                values: { over: ((totalSize - effectiveLimit) / (1024 ** 3)).toFixed(2) },
+                            })}
+                        {:else}
+                            {$_('filesharing.encryptPanel.fileBox.fileSummary', {
+                                values: {
+                                    count: files.length,
+                                    size: remainingSizeGiB,
+                                },
+                            })}
+                        {/if}
                     </p>
                 </div>
-
-                {#if overLimit}
-                    <div class="upload-limit-error" role="alert">
-                        <p class="upload-limit-title">
-                            {$_(
-                                'filesharing.encryptPanel.fileBox.overLimitTitle',
-                                { values: { max: maxUploadSizeGiB } }
-                            )}
-                        </p>
-                        <p class="upload-limit-body">
-                            {$_(
-                                'filesharing.encryptPanel.fileBox.overLimitBody',
-                                {
-                                    values: {
-                                        total: totalSizeGiB,
-                                        max: maxUploadSizeGiB,
-                                    },
-                                }
-                            )}
-                        </p>
-                    </div>
-                {/if}
             </div>
         </div>
     </div>
@@ -458,7 +444,7 @@
         gap: 0.5rem;
         width: 100%;
         margin-bottom: 0;
-        padding: 8px 0;
+        padding: 0;
         border-bottom: 2px solid var(--pg-input-normal-light);
     }
 
@@ -579,32 +565,9 @@
         font-weight: var(--pg-font-weight-medium);
     }
 
-    .upload-limit-error {
-        border-radius: var(--pg-border-radius-md);
-        padding: 0.75rem 1rem;
-        margin-top: 0.5rem;
-        background: color-mix(
-            in srgb,
-            var(--pg-input-error) 8%,
-            var(--pg-general-background)
-        );
-        border-left: 4px solid var(--pg-input-error);
-        font-family: var(--pg-font-family);
-        pointer-events: auto;
-    }
-
-    .upload-limit-title {
-        margin: 0 0 0.25rem 0;
+    .file-summary.over-limit p {
         color: var(--pg-input-error);
         font-weight: var(--pg-font-weight-bold);
-        font-size: var(--pg-font-size-sm);
-    }
-
-    .upload-limit-body {
-        margin: 0;
-        font-size: var(--pg-font-size-sm);
-        color: var(--pg-text-secondary);
-        line-height: 1.4;
     }
 
     .dropzone-with-files {

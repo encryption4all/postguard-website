@@ -16,10 +16,9 @@
     import HelpToggle from '../HelpToggle.svelte'
     import Chip from '../Chip.svelte'
 
-    import { MAX_UPLOAD_SIZE } from '$lib/env'
-    import UsageWarning from './UsageWarning.svelte'
+    import { MAX_UPLOAD_SIZE, ROLLING_LIMIT } from '$lib/env'
     import { parseLimitExceededBody, bytesToGiB } from '$lib/usage'
-    import { recordUpload } from '$lib/localUsage'
+    import { recordUpload, getLocalUsedBytes } from '$lib/localUsage'
 
     interface props {
         EncryptState: EncryptState
@@ -72,9 +71,11 @@
             errors.push($_('filesharing.encryptPanel.validation.noFiles'))
         }
         const totalSize = EncryptState.files.reduce((a, f) => a + f.size, 0)
-        if (totalSize >= MAX_UPLOAD_SIZE) {
-            errors.push($_('filesharing.encryptPanel.validation.filesTooLarge', {
-                values: { max: (MAX_UPLOAD_SIZE / (1024 ** 3)).toFixed(0) }
+        const effectiveLimit = Math.min(MAX_UPLOAD_SIZE, ROLLING_LIMIT - getLocalUsedBytes())
+        if (totalSize > effectiveLimit) {
+            const over = ((totalSize - effectiveLimit) / (1024 ** 3)).toFixed(2)
+            errors.push($_('filesharing.encryptPanel.fileBox.overLimitText', {
+                values: { over }
             }))
         }
         EncryptState.recipients.forEach(({ email, extra }) => {
@@ -294,7 +295,6 @@
 </script>
 
 <div class="button-container">
-    <UsageWarning pendingBytes={EncryptState.files.reduce((a, f) => a + f.size, 0)} />
     {#if limitExceededMessage}
         <div class="limit-exceeded-banner" role="alert">
             <p class="limit-exceeded-title">
@@ -513,7 +513,6 @@
         padding: 0.75rem 2.5rem 0.75rem 1rem;
         margin: 0.5rem 0;
         border-radius: var(--pg-border-radius-md);
-        border-left: 4px solid var(--pg-input-error);
         background: color-mix(
             in srgb,
             var(--pg-input-error) 8%,
