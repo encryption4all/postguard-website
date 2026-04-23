@@ -9,7 +9,7 @@
     const author = $derived(getAuthor(data.metadata.author))
 
     const authorJsonLd = $derived(() => {
-        const isOrg = data.metadata.author === 'PostGuard Team'
+        const isOrg = !author.github && !author.linkedin
         const base: Record<string, unknown> = {
             '@type': isOrg ? 'Organization' : 'Person',
             name: author.name,

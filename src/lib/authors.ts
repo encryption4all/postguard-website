@@ -23,15 +23,10 @@ export const authors: Record<string, Author> = {
         linkedin: 'https://linkedin.com/in/rubenhensen',
         url: 'https://postguard.eu/about',
     },
-    'PostGuard Team': {
-        name: 'PostGuard Team',
-        image: 'https://postguard.eu/pg_logo.png',
-        url: 'https://postguard.eu',
-    },
 }
 
 /** Look up an author by name, falling back to a generic entry. */
 export function getAuthor(name: string | undefined): Author {
-    if (!name) return authors['PostGuard Team']
+    if (!name) return { name: 'PostGuard', url: 'https://postguard.eu' }
     return authors[name] ?? { name, url: 'https://postguard.eu/about' }
 }
