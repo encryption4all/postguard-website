@@ -62,7 +62,6 @@
                 },
                 sameAs: [
                     'https://github.com/encryption4all',
-                    'https://www.linkedin.com/company/postguard',
                 ],
                 parentOrganization: {
                     '@type': 'Organization',
