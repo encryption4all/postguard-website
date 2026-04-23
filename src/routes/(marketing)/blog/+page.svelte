@@ -6,19 +6,34 @@
     const siteUrl = 'https://postguard.eu'
     const blogJsonLd = $derived({
         '@context': 'https://schema.org',
-        '@type': 'CollectionPage',
-        url: `${siteUrl}/blog`,
-        name: 'PostGuard Blog',
-        description:
-            'News, updates, and insights about PostGuard — secure end-to-end encryption for email and files.',
-        mainEntity: {
-            '@type': 'ItemList',
-            itemListElement: data.posts.map((post, i) => ({
-                '@type': 'ListItem',
-                position: i + 1,
-                url: `${siteUrl}/blog/${post.slug}`,
-            })),
-        },
+        '@graph': [
+            {
+                '@type': 'CollectionPage',
+                url: `${siteUrl}/blog`,
+                name: 'PostGuard Blog',
+                description:
+                    'News, updates, and insights about PostGuard — secure end-to-end encryption for email and files.',
+                isPartOf: {
+                    '@id': `${siteUrl}/#website`,
+                },
+                mainEntity: {
+                    '@type': 'ItemList',
+                    itemListElement: data.posts.map((post, i) => ({
+                        '@type': 'ListItem',
+                        position: i + 1,
+                        name: post.title,
+                        url: `${siteUrl}/blog/${post.slug}`,
+                    })),
+                },
+            },
+            {
+                '@type': 'BreadcrumbList',
+                itemListElement: [
+                    { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+                    { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteUrl}/blog` },
+                ],
+            },
+        ],
     })
 </script>
 
