@@ -46,9 +46,9 @@
                 logo: 'https://postguard.eu/pg_logo.png',
                 sameAs: ['https://github.com/encryption4all'],
                 parentOrganization: {
-                    '@type': 'CollegeOrUniversity',
-                    name: 'Radboud University',
-                    url: 'https://www.ru.nl',
+                    '@type': 'Organization',
+                    name: 'Yivi',
+                    url: 'https://yivi.app',
                 },
             },
         ],
