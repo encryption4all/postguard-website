@@ -45,7 +45,7 @@
     .privacy-text {
         text-align: left;
 
-        p {
+        :global(p) {
             line-height: 1.6;
             font-size: var(--pg-font-size-base);
         }
