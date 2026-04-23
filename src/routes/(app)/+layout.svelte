@@ -25,9 +25,11 @@
         flex-direction: column;
         flex: 1;
         min-height: 0;
+        overflow-y: auto;
     }
 
     .app-footer {
+        flex-shrink: 0;
         display: flex;
         align-items: center;
         justify-content: center;
