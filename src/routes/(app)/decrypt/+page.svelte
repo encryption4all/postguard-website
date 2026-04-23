@@ -82,6 +82,16 @@
 <SEO
     title="Decrypt Emails"
     description="Decrypt PostGuard-encrypted emails securely in your browser. Upload the encrypted file and verify your identity with the Yivi app."
+    jsonLd={{
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        name: 'PostGuard Email Decryption',
+        url: 'https://postguard.eu/decrypt',
+        description: 'Decrypt PostGuard-encrypted emails securely in your browser using the Yivi identity wallet.',
+        applicationCategory: 'SecurityApplication',
+        operatingSystem: 'Any',
+        isPartOf: { '@id': 'https://postguard.eu/#website' },
+    }}
 />
 
 <div class="fallback-page">

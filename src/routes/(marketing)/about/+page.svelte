@@ -5,15 +5,25 @@
 
     const aboutJsonLd = {
         '@context': 'https://schema.org',
-        '@type': 'AboutPage',
-        url: 'https://postguard.eu/about',
-        name: 'About PostGuard',
-        description:
-            'Learn how PostGuard uses identity-based encryption and the Yivi app to provide free, easy-to-use end-to-end encryption for emails and files.',
-        isPartOf: {
-            '@type': 'WebSite',
-            '@id': 'https://postguard.eu/#website',
-        },
+        '@graph': [
+            {
+                '@type': 'AboutPage',
+                url: 'https://postguard.eu/about',
+                name: 'About PostGuard',
+                description:
+                    'Learn how PostGuard uses identity-based encryption and the Yivi app to provide free, easy-to-use end-to-end encryption for emails and files.',
+                isPartOf: {
+                    '@id': 'https://postguard.eu/#website',
+                },
+            },
+            {
+                '@type': 'BreadcrumbList',
+                itemListElement: [
+                    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://postguard.eu' },
+                    { '@type': 'ListItem', position: 2, name: 'About PostGuard', item: 'https://postguard.eu/about' },
+                ],
+            },
+        ],
     }
 </script>
 

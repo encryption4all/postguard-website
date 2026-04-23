@@ -1,10 +1,27 @@
 <script lang="ts">
     import SEO from '$lib/components/SEO.svelte'
     import { page } from '$app/state'
+    import { getAuthor } from '$lib/authors'
 
     let { data } = $props()
 
     const siteUrl = 'https://postguard.eu'
+    const author = $derived(getAuthor(data.metadata.author))
+
+    const authorJsonLd = $derived(() => {
+        const isOrg = data.metadata.author === 'PostGuard Team'
+        const base: Record<string, unknown> = {
+            '@type': isOrg ? 'Organization' : 'Person',
+            name: author.name,
+        }
+        if (author.url) base.url = author.url
+        if (author.image) base.image = author.image
+        if (!isOrg && (author.github || author.linkedin)) {
+            base.sameAs = [author.github, author.linkedin].filter(Boolean)
+        }
+        return base
+    })
+
     const articleJsonLd = $derived({
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
@@ -17,22 +34,24 @@
                 ? data.metadata.image
                 : `${siteUrl}${data.metadata.image}`)
             : `${siteUrl}/pg_logo.png`,
-        author: {
-            '@type': data.metadata.author === 'PostGuard Team' ? 'Organization' : 'Person',
-            name: data.metadata.author || 'PostGuard Team',
-            ...(data.metadata.author !== 'PostGuard Team' ? {} : { url: 'https://postguard.eu' }),
-        },
+        author: authorJsonLd(),
         publisher: {
             '@type': 'Organization',
+            '@id': `${siteUrl}/#organization`,
             name: 'PostGuard',
             logo: {
                 '@type': 'ImageObject',
                 url: `${siteUrl}/pg_logo.png`,
+                width: 512,
+                height: 512,
             },
         },
         mainEntityOfPage: {
             '@type': 'WebPage',
             '@id': `${siteUrl}${page.url.pathname}`,
+        },
+        isPartOf: {
+            '@id': `${siteUrl}/#website`,
         },
     })
 </script>
@@ -47,16 +66,39 @@
 
 <article class="blog-post">
     <header>
-        <time datetime={data.metadata.date}>
-            {new Date(data.metadata.date).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-            })}
-        </time>
-        {#if data.metadata.author}
-            <span class="separator">&middot;</span>
-            <span class="author">{data.metadata.author}</span>
+        <div class="meta">
+            <time datetime={data.metadata.date}>
+                {new Date(data.metadata.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                })}
+            </time>
+        </div>
+        {#if author}
+            <div class="author-info">
+                {#if author.image}
+                    <img
+                        src={author.image}
+                        alt={author.name}
+                        class="author-avatar"
+                        width="36"
+                        height="36"
+                    />
+                {/if}
+                <div class="author-details">
+                    <span class="author-name">
+                        {#if author.linkedin}
+                            <a href={author.linkedin} target="_blank" rel="noopener">{author.name}</a>
+                        {:else}
+                            {author.name}
+                        {/if}
+                    </span>
+                    {#if author.role}
+                        <span class="author-role">{author.role}</span>
+                    {/if}
+                </div>
+            </div>
         {/if}
     </header>
     <data.content />
@@ -69,13 +111,49 @@
         padding: 2rem 1rem;
 
         header {
-            margin-bottom: 0.5rem;
-            color: var(--pg-text-secondary);
-            font-size: var(--pg-font-size-sm);
-            display: flex;
-            align-items: center;
-            gap: 0.35rem;
+            margin-bottom: 1.5rem;
         }
+    }
+
+    .meta {
+        color: var(--pg-text-secondary);
+        font-size: var(--pg-font-size-sm);
+        margin-bottom: 0.75rem;
+    }
+
+    .author-info {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .author-avatar {
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .author-details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .author-name {
+        font-weight: var(--pg-font-weight-semibold);
+        font-size: var(--pg-font-size-sm);
+
+        a {
+            color: inherit;
+            text-decoration: none;
+
+            &:hover {
+                color: var(--pg-primary);
+            }
+        }
+    }
+
+    .author-role {
+        font-size: var(--pg-font-size-xs);
+        color: var(--pg-text-secondary);
     }
 
     .blog-post :global(h1) {

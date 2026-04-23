@@ -18,12 +18,23 @@
         '@context': 'https://schema.org',
         '@graph': [
             {
+                '@type': 'WebSite',
+                '@id': 'https://postguard.eu/#website',
+                url: 'https://postguard.eu',
+                name: 'PostGuard',
+                description:
+                    'Free, open-source end-to-end encryption for emails and files.',
+                publisher: {
+                    '@id': 'https://postguard.eu/#organization',
+                },
+            },
+            {
                 '@type': 'SoftwareApplication',
                 name: 'PostGuard',
                 description:
                     'Free, open-source identity-based encryption for emails and files using Yivi identity attributes.',
                 applicationCategory: 'SecurityApplication',
-                operatingSystem: 'Web Browser',
+                operatingSystem: 'Any',
                 offers: {
                     '@type': 'Offer',
                     price: '0',
@@ -32,26 +43,36 @@
                 url: 'https://postguard.eu',
                 license: 'https://opensource.org/licenses/MIT',
                 softwareRequirements: 'Yivi (IRMA) app',
-                sameAs: ['https://github.com/encryption4all'],
                 author: {
-                    '@type': 'Organization',
-                    name: 'Yivi',
-                    url: 'https://yivi.app',
+                    '@id': 'https://postguard.eu/#organization',
                 },
             },
             {
                 '@type': 'Organization',
+                '@id': 'https://postguard.eu/#organization',
                 name: 'PostGuard',
                 url: 'https://postguard.eu',
+                description:
+                    'Free, open-source identity-based encryption for emails and files.',
                 logo: {
                     '@type': 'ImageObject',
                     url: 'https://postguard.eu/pg_logo.png',
+                    width: 512,
+                    height: 512,
                 },
-                sameAs: ['https://github.com/encryption4all'],
+                sameAs: [
+                    'https://github.com/encryption4all',
+                    'https://www.linkedin.com/company/postguard',
+                ],
                 parentOrganization: {
                     '@type': 'Organization',
                     name: 'Yivi',
                     url: 'https://yivi.app',
+                },
+                contactPoint: {
+                    '@type': 'ContactPoint',
+                    email: 'info@postguard.eu',
+                    contactType: 'customer support',
                 },
             },
         ],

@@ -4,6 +4,7 @@
         EncryptionState,
         type EncryptState,
     } from '$lib/types/filesharing/attributes'
+    import SEO from '$lib/components/SEO.svelte'
     import RecipientSelection from '$lib/components/filesharing/RecipientSelection.svelte'
     import MessageInput from '$lib/components/filesharing/inputs/MessageInput.svelte'
     import SendButton from '$lib/components/filesharing/SendButton.svelte'
@@ -33,7 +34,32 @@
     }
 
     let EncryptState: EncryptState = $state(createDefaultEncryptState())
+
+    const fileshareJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        name: 'PostGuard Secure File Sharing',
+        url: 'https://postguard.eu/fileshare',
+        description:
+            'Send end-to-end encrypted files to anyone using their email address. Encryption happens entirely in your browser.',
+        applicationCategory: 'SecurityApplication',
+        operatingSystem: 'Any',
+        offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'EUR',
+        },
+        isPartOf: {
+            '@id': 'https://postguard.eu/#website',
+        },
+    }
 </script>
+
+<SEO
+    title="Secure File Sharing"
+    description="Send end-to-end encrypted files to anyone using their email address. Your files are encrypted in your browser before they leave your device."
+    jsonLd={fileshareJsonLd}
+/>
 
 <div
     class:container={EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Encrypting || EncryptState.encryptionState === EncryptionState.Error}

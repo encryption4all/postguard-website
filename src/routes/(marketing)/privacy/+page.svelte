@@ -1,11 +1,39 @@
 <script>
     import { _ } from 'svelte-i18n'
     import SEO from '$lib/components/SEO.svelte'
+
+    const privacyJsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            {
+                '@type': 'WebPage',
+                name: 'Privacy Policy',
+                url: 'https://postguard.eu/privacy',
+                description:
+                    "PostGuard's privacy policy. Learn how we handle your data when you use our end-to-end encryption services.",
+                dateModified: '2026-04-21',
+                isPartOf: {
+                    '@id': 'https://postguard.eu/#website',
+                },
+                about: {
+                    '@id': 'https://postguard.eu/#organization',
+                },
+            },
+            {
+                '@type': 'BreadcrumbList',
+                itemListElement: [
+                    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://postguard.eu' },
+                    { '@type': 'ListItem', position: 2, name: 'Privacy Policy', item: 'https://postguard.eu/privacy' },
+                ],
+            },
+        ],
+    }
 </script>
 
 <SEO
     title="Privacy Policy"
     description="PostGuard's privacy policy. Learn how we handle your data when you use our end-to-end encryption services for email and file sharing."
+    jsonLd={privacyJsonLd}
 />
 
 <div class="privacy-container">
