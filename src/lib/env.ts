@@ -10,10 +10,11 @@ export const FILEHOST_URL = requireEnv('VITE_FILEHOST_URL');
 export const PKG_URL = '/pkg';
 export const MAX_UPLOAD_SIZE = Number(requireEnv('VITE_MAX_UPLOAD_SIZE'));
 export const ROLLING_LIMIT = Number(requireEnv('VITE_ROLLING_LIMIT'));
-export const UPLOAD_CHUNK_SIZE = Number(requireEnv('VITE_UPLOAD_CHUNK_SIZE'));
-export const FILEREAD_CHUNK_SIZE = Number(requireEnv('VITE_FILEREAD_CHUNK_SIZE'));
 export const APP_NAME = requireEnv('VITE_APP_NAME');
 export const APP_VERSION = requireEnv('VITE_APP_VERSION');
+
+const chunkSizeRaw = import.meta.env.VITE_CHUNK_SIZE as string | undefined;
+export const CHUNK_SIZE: number | undefined = chunkSizeRaw ? Number(chunkSizeRaw) : undefined;
 
 /** Runtime config injected by config.js (Terraform ConfigMap in deployed environments). */
 function runtimeConfig(): Record<string, unknown> {
