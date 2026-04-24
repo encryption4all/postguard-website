@@ -60,9 +60,9 @@
             "sectionTitle": "Verstuur grote bestanden. Zonder vervelende limieten.",
             "intro": "De meeste versleutelde bestandsdeeldiensten beperken gratis overdrachten tot slechts enkele honderden megabytes. Met PostGuard deel je veel meer — helemaal gratis.",
             "uploadSuffix": "per upload",
-            "uploadDesc": "Verstuur één bestand of een hele batch — tot 5 GiB in één versleutelde overdracht.",
+            "uploadDesc": "Verstuur één bestand of een hele batch — tot 5 GB in één versleutelde overdracht.",
             "rollingSuffix": "per 2 weken",
-            "rollingDesc": "Tot 5 GiB aan versleutelde bestandsdeling per e-mailadres, binnen een doorlopend venster van 14 dagen.",
+            "rollingDesc": "Tot 5 GB aan versleutelde bestandsdeling per e-mailadres, binnen een doorlopend venster van 14 dagen.",
             "footnote": "Geen account. Geen betaling. Altijd end-to-end versleuteld."
         }
     },
@@ -175,16 +175,16 @@
             "fileBox": {
                 "tagline": "Verstuur je bestanden veilig",
                 "upperTextDropZone": "Sleep bestanden hierheen <br/> of",
-                "lowerTextDropZone": "klik om te uploaden <br/> (nog {max} GiB beschikbaar)",
+                "lowerTextDropZone": "klik om te uploaden <br/> (nog {max} GB beschikbaar)",
                 "dragText": "Sleep bestanden hierheen",
                 "dropText": "Loslaten om bestanden toe te voegen",
                 "dropMoreText": "Loslaten om meer bestanden toe te voegen",
                 "orText": "of",
                 "chooseFilesButton": "Kies bestanden",
-                "maxSizeText": "nog {max} GiB beschikbaar",
+                "maxSizeText": "nog {max} GB beschikbaar",
                 "addMoreFiles": "Voeg meer bestanden toe",
-                "fileSummary": "{count} {count, plural, one {bestand} other {bestanden}} toegevoegd, nog {size} GiB over",
-                "overLimitText": "{over} GiB over de limiet — verwijder bestanden"
+                "fileSummary": "{count} {count, plural, one {bestand} other {bestanden}} toegevoegd, nog {size} GB over",
+                "overLimitText": "{over} GB over de limiet — verwijder bestanden"
             },
             "RecipientsHeading": "Ontvangers",
             "RecipientsHelpToggle": "Wat vul ik hier in?",
@@ -239,13 +239,13 @@
             },
             "usage": {
                 "warningTitle": "Je nadert je 2-weken uploadlimiet",
-                "warningBody": "Je hebt {used} GiB van je {limit} GiB-limiet gebruikt. Nog {remaining} GiB beschikbaar tot {resets}.",
+                "warningBody": "Je hebt {used} GB van je {limit} GB-limiet gebruikt. Nog {remaining} GB beschikbaar tot {resets}.",
                 "preCheckBlockedTitle": "Deze upload overschrijdt je 2-weken limiet",
-                "preCheckBlockedBody": "Je hebt {used} GiB van je {limit} GiB-limiet gebruikt. Deze upload ({pending} GiB) overschrijdt je resterende {remaining} GiB. Er komt ruimte vrij op {resets}.",
+                "preCheckBlockedBody": "Je hebt {used} GB van je {limit} GB-limiet gebruikt. Deze upload ({pending} GB) overschrijdt je resterende {remaining} GB. Er komt ruimte vrij op {resets}.",
                 "blockedTitle": "Uploadlimiet bereikt",
-                "blockedBody": "Je hebt je {limit} GiB-uploadlimiet voor deze 2-weken periode bereikt. De limiet reset op {resets}.",
+                "blockedBody": "Je hebt je {limit} GB-uploadlimiet voor deze 2-weken periode bereikt. De limiet reset op {resets}.",
                 "serverBlockedTitle": "Upload geweigerd door de server",
-                "serverBlocked": "De server weigerde deze upload omdat je {used} GiB van je {limit} GiB-limiet (2 weken) hebt gebruikt. De limiet reset op {resets}."
+                "serverBlocked": "De server weigerde deze upload omdat je {used} GB van je {limit} GB-limiet (2 weken) hebt gebruikt. De limiet reset op {resets}."
             }
         },
         "attributes": {

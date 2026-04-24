@@ -43,10 +43,10 @@
     let usedBytes = $derived(getLocalUsedBytes())
     let effectiveLimit = $derived(Math.min(MAX_UPLOAD_SIZE, ROLLING_LIMIT - usedBytes))
     let remainingSize = $derived(effectiveLimit - totalSize)
-    let remainingSizeGiB = $derived((Math.max(0, remainingSize) / (1024 ** 3)).toFixed(2))
-    let effectiveLimitGiB = $derived((Math.max(0, effectiveLimit) / (1024 ** 3)).toFixed(1))
+    let remainingSizeGB = $derived((Math.max(0, remainingSize) / 1e9).toFixed(2))
+    let effectiveLimitGB = $derived((Math.max(0, effectiveLimit) / 1e9).toFixed(1))
     let overLimit = $derived(totalSize > effectiveLimit)
-    let totalSizeGiB = $derived((totalSize / (1024 ** 3)).toFixed(2))
+    let totalSizeGB = $derived((totalSize / 1e9).toFixed(2))
 
     const previewTemplate = `
         <div class="dz-preview dz-file-preview files">
@@ -68,8 +68,8 @@
             url: '#', // Dummy URL, can't be empty
             autoProcessQueue: false, // Prevent automatic upload
             maxFilesize: maxFileSizeMB,
-            filesizeBase: 1024,
-            dictFileSizeUnits: { tb: 'TiB', gb: 'GiB', mb: 'MiB', kb: 'KiB', b: 'b' },
+            filesizeBase: 1000,
+            dictFileSizeUnits: { tb: 'TB', gb: 'GB', mb: 'MB', kb: 'KB', b: 'b' },
             previewsContainer: '#previews',
             previewTemplate: previewTemplate,
             clickable: '#my-form .primary-btn, .add-more-chip-container', // Only these elements trigger file selection
@@ -158,7 +158,7 @@
                 >
                 <p class="max-size-text">
                     {$_('filesharing.encryptPanel.fileBox.maxSizeText', {
-                        values: { max: effectiveLimitGiB },
+                        values: { max: effectiveLimitGB },
                     })}
                 </p>
             </div>
@@ -208,7 +208,7 @@
                             {$_('filesharing.encryptPanel.fileBox.fileSummary', {
                                 values: {
                                     count: files.length,
-                                    size: remainingSizeGiB,
+                                    size: remainingSizeGB,
                                 },
                             })}
                         {/if}

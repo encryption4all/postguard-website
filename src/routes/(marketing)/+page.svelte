@@ -107,7 +107,7 @@
             <div class="limit-stat">
                 <div class="limit-number">
                     <span class="limit-value">5</span>
-                    <span class="limit-unit">GiB</span>
+                    <span class="limit-unit">GB</span>
                 </div>
                 <div class="limit-suffix">{$_('landing.limits.uploadSuffix')}</div>
                 <p class="limit-desc">{$_('landing.limits.uploadDesc')}</p>
@@ -115,7 +115,7 @@
             <div class="limit-stat">
                 <div class="limit-number">
                     <span class="limit-value">5</span>
-                    <span class="limit-unit">GiB</span>
+                    <span class="limit-unit">GB</span>
                 </div>
                 <div class="limit-suffix">{$_('landing.limits.rollingSuffix')}</div>
                 <p class="limit-desc">{$_('landing.limits.rollingDesc')}</p>

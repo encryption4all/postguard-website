@@ -27,4 +27,4 @@ PostGuard eliminates the complexity of traditional public-key encryption. Instea
 - Funded by the Dutch Research Council (NWO).
 - Uses Yivi (formerly IRMA) for identity verification.
 - All encryption happens client-side in the browser — no plaintext is sent to any server.
-- Usage limit is 5 GiB per 14 days.
+- Usage limit is 5 GB per 14 days.
