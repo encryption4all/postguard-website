@@ -16,7 +16,6 @@
     const randomId = Math.random().toString(36).substring(2, 15)
     let showingValue = $state('')
     let selectedCountry: CountryCode = $state('NL')
-    let selectedCountryPrefix = $derived('+' + getCountryCallingCode(selectedCountry))
     let phoneInputEl: HTMLInputElement | null = $state(null)
     let phoneTouched = $state(false)
     // Parse via libphonenumber so local-format inputs (e.g. "0612345678") are
