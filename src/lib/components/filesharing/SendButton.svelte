@@ -17,7 +17,7 @@
     import Chip from '../Chip.svelte'
 
     import { MAX_UPLOAD_SIZE, ROLLING_LIMIT } from '$lib/env'
-    import { parseLimitExceededBody, bytesToGiB } from '$lib/usage'
+    import { parseLimitExceededBody, bytesToGB } from '$lib/usage'
     import { recordUpload, getLocalUsedBytes } from '$lib/localUsage'
 
     interface props {
@@ -226,8 +226,8 @@
                     'filesharing.encryptPanel.usage.serverBlocked',
                     {
                         values: {
-                            used: bytesToGiB(status.usedBytes),
-                            limit: bytesToGiB(status.limitBytes),
+                            used: bytesToGB(status.usedBytes),
+                            limit: bytesToGB(status.limitBytes),
                             resets: resetsAt,
                         },
                     }
