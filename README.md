@@ -30,8 +30,7 @@ npm run dev
 | `VITE_PKG_URL` | PKG service URL | `http://localhost:8087` |
 | `VITE_MAX_UPLOAD_SIZE` | Maximum file upload size in bytes (default: 5 GB) | - |
 | `VITE_ROLLING_LIMIT` | Rolling upload limit in bytes per email per 2 weeks (default: 5 GB) | - |
-| `VITE_UPLOAD_CHUNK_SIZE` | Upload chunk size in bytes (default: 10 MiB) | - |
-| `VITE_FILEREAD_CHUNK_SIZE` | File read chunk size in bytes (default: 10 MiB) | - |
+| `VITE_CHUNK_SIZE` | Optional: upload chunk size in bytes. If unset, uses pg-js default (5 MB) | - |
 
 ## Releasing
 
