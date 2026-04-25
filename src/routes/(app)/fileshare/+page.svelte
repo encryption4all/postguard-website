@@ -35,6 +35,22 @@
 
     let EncryptState: EncryptState = $state(createDefaultEncryptState())
 
+    // Warn the user before they navigate away mid-upload. Cryptify does not
+    // support resume yet, so navigating away silently aborts the upload and
+    // discards all progress (see encryption4all/postguard-website#116,
+    // encryption4all/postguard-website#117). The built-in browser dialog is
+    // the only reliable cross-browser hook for this; modern browsers ignore
+    // the returned message and show their own wording.
+    $effect(() => {
+        if (EncryptState.encryptionState !== EncryptionState.Encrypting) return
+        const handler = (event: BeforeUnloadEvent) => {
+            event.preventDefault()
+            event.returnValue = ''
+        }
+        window.addEventListener('beforeunload', handler)
+        return () => window.removeEventListener('beforeunload', handler)
+    })
+
     const fileshareJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'WebApplication',
