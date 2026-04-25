@@ -1,6 +1,6 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
-    import { getCountryCallingCode, isValidPhoneNumber, type CountryCode } from 'libphonenumber-js/mobile'
+    import { getCountryCallingCode, parsePhoneNumberFromString, type CountryCode } from 'libphonenumber-js/mobile'
     import closeIcon from '$lib/assets/images/google-icons/close.svg'
 
     interface props {
@@ -15,12 +15,19 @@
     // So we have a unique id for the label-input pair so we can handle multiple inputs correctly in a list even with multiple recipients
     const randomId = Math.random().toString(36).substring(2, 15)
     let showingValue = $state('')
-    let selectedCountryPrefix = $state('+31')
+    let selectedCountry: CountryCode = $state('NL')
     let phoneInputEl: HTMLInputElement | null = $state(null)
     let phoneTouched = $state(false)
-    let phoneValid = $derived(
-        showingValue.length === 0 || isValidPhoneNumber(selectedCountryPrefix + showingValue)
+    // Parse via libphonenumber so local-format inputs (e.g. "0612345678") are
+    // normalised to E.164 ("+31612345678"). Yivi stores mobile numbers in
+    // E.164, so anything we send that isn't canonical fails the identity
+    // match at decrypt time (tracked in cryptify#39).
+    let parsedPhone = $derived(
+        showingValue.length === 0
+            ? null
+            : parsePhoneNumberFromString(showingValue, selectedCountry)
     )
+    let phoneValid = $derived(showingValue.length === 0 || (parsedPhone?.isValid() ?? false))
 
     $effect(() => {
         if (phoneInputEl) {
@@ -53,12 +60,12 @@
 
     $effect(() => {
         if (translation_key === 'filesharing.attributes.pbdf.sidn-pbdf.mobilenumber.mobilenumber') {
-            // strip the prefix before prepending it, so it doesn't get added twice
-            const stripped = showingValue.startsWith(selectedCountryPrefix)
-                ? showingValue.slice(selectedCountryPrefix.length)
-                : showingValue
-
-            value = stripped.length > 0 ? selectedCountryPrefix + stripped : ''
+            // Always emit canonical E.164 so the encrypted policy matches what
+            // Yivi discloses at decrypt time. If the input is not yet parseable
+            // (partial typing, invalid number) emit an empty string so the
+            // downstream form stays in the "no recipient attribute" state
+            // rather than committing a malformed value.
+            value = parsedPhone?.isValid() ? parsedPhone.number : ''
         }
     })
 
@@ -69,10 +76,10 @@
     </label>
     <div class="optional-value" class:removed-del-border={isConfirming}>
         {#if translation_key === 'filesharing.attributes.pbdf.sidn-pbdf.mobilenumber.mobilenumber'}
-            <select bind:value={selectedCountryPrefix} class="pg-input phone-select"
+            <select bind:value={selectedCountry} class="pg-input phone-select"
                     class:is-confirming-bg={isConfirming} disabled={isConfirming}>
                 {#each allowedCountries as country}
-                    <option value={getCountryPrefix(country)}>
+                    <option value={country.toUpperCase() as CountryCode}>
                         {country.toUpperCase()} {getCountryPrefix(country)}
                     </option>
                 {/each}
