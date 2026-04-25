@@ -1,29 +1,24 @@
 <script lang="ts">
-    import Header from '$lib/components/Header.svelte'
-    import '$lib/i18n'
-    import { isLoading } from 'svelte-i18n'
+    import { onMount } from 'svelte'
+    import { locale } from 'svelte-i18n'
 
     let { children } = $props()
+
+
+    // Mark that the app has hydrated so subsequent navigations
+    // to / don't trigger the returning visitor redirect.
+    onMount(() => {
+        ;(window as any).__pg_client_nav = true
+    })
+
+    $effect(() => {
+        if ($locale) {
+            document.documentElement.lang = $locale.substring(0, 2)
+        }
+    })
 </script>
 
-<svelte:head>
-    <title>PostGuard</title>
-    <meta
-        name="description"
-        content="PostGuard is an easy-to-use encryption protocol for email and files."
-    />
-    <meta
-        name="keywords"
-        content="Encryption, Usability, Privacy, Security, Identity-Based Encryption"
-    />
-</svelte:head>
-
-{#if !$isLoading}
-    <Header />
-    <main>
-        {@render children()}
-    </main>
-{/if}
+{@render children()}
 
 <style>
     :global(html),
@@ -32,12 +27,5 @@
         height: 100%;
         display: flex;
         flex-direction: column;
-    }
-
-    main {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        min-height: 0;
     }
 </style>

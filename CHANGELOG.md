@@ -1,5 +1,42 @@
 # Changelog
 
+## [1.3.0](https://github.com/encryption4all/postguard-website/compare/v1.2.0...v1.3.0) (2026-04-24)
+
+
+### Features
+
+* client-side upload limit pre-check via localStorage ([#112](https://github.com/encryption4all/postguard-website/issues/112)) ([c8f05e4](https://github.com/encryption4all/postguard-website/commit/c8f05e4da3931b3619a68a985ae8afb92084e1db))
+* upgrade pg-js to 0.10.0, single optional chunk size env var ([#118](https://github.com/encryption4all/postguard-website/issues/118)) ([e422bba](https://github.com/encryption4all/postguard-website/commit/e422bbada4dfa4b60078f5b600e7e19725da934f))
+* upload limits — 5 GB cap, landing page section, and usage warnings ([#110](https://github.com/encryption4all/postguard-website/issues/110)) ([2f45930](https://github.com/encryption4all/postguard-website/commit/2f45930a682728197b8d9f0a4cbeba733f451f0b))
+
+
+### Bug Fixes
+
+* add AI crawler rules to robots.txt and JSON-LD to key pages ([#106](https://github.com/encryption4all/postguard-website/issues/106)) ([cd0ce4c](https://github.com/encryption4all/postguard-website/commit/cd0ce4c561139199c40379b10f3fa0b16e150c1d))
+* address high and medium priority SEO audit findings ([#107](https://github.com/encryption4all/postguard-website/issues/107)) ([59a44a5](https://github.com/encryption4all/postguard-website/commit/59a44a587668827d1afd3f7b4f4c7b184e2ed0e0))
+* address SEO audit findings (prerender all pages, canonical, JSON-LD, llms.txt) ([#104](https://github.com/encryption4all/postguard-website/issues/104)) ([18e4ac3](https://github.com/encryption4all/postguard-website/commit/18e4ac3ea7ef981f2d08f1e4a83d1efecc218285))
+* align upload limits to round GB values (5 GB) ([#115](https://github.com/encryption4all/postguard-website/issues/115)) ([f9f5ebd](https://github.com/encryption4all/postguard-website/commit/f9f5ebd4973114c9201771aef7251fd496b5e763))
+* block indexing on non-production environments ([#109](https://github.com/encryption4all/postguard-website/issues/109)) ([4b11fbd](https://github.com/encryption4all/postguard-website/commit/4b11fbdf1ab5058ee382f425f1e2dd2ecd572619))
+* prevent footer from overlapping page content on mobile ([#113](https://github.com/encryption4all/postguard-website/issues/113)) ([b15fe96](https://github.com/encryption4all/postguard-website/commit/b15fe96edc7dc544d89d34b231cc3e0870f781a3))
+* schema overhaul, authors system, and robots.txt fixes ([#108](https://github.com/encryption4all/postguard-website/issues/108)) ([de0d329](https://github.com/encryption4all/postguard-website/commit/de0d329c602644301f0e358c3de3b47f05f2d266))
+* use GB instead of GiB throughout the UI and config ([#114](https://github.com/encryption4all/postguard-website/issues/114)) ([2fa524f](https://github.com/encryption4all/postguard-website/commit/2fa524fa63d91c69163bd3081ce1f5ffa36eb24d))
+
+## [1.2.0](https://github.com/encryption4all/postguard-website/compare/v1.1.2...v1.2.0) (2026-04-18)
+
+
+### Features
+
+* add FF_BUSINESS feature flag for PostGuard for Business ([#81](https://github.com/encryption4all/postguard-website/issues/81)) ([d3f2ce8](https://github.com/encryption4all/postguard-website/commit/d3f2ce8dcc9292de6af1136a7ea8c4ed53ad515d))
+* migrate from @e4a/pg-wasm to @e4a/pg-js SDK ([#72](https://github.com/encryption4all/postguard-website/issues/72)) ([0a29c8d](https://github.com/encryption4all/postguard-website/commit/0a29c8d51b06b5b933b3a591696800baf8f4efb9))
+* SEO landing page, blog, and prerendered marketing pages ([#77](https://github.com/encryption4all/postguard-website/issues/77)) ([10aa7b6](https://github.com/encryption4all/postguard-website/commit/10aa7b60be76b282a70a110e5adc5d173b7db259))
+
+
+### Bug Fixes
+
+* email case normalization and environment-dependent business URL ([#83](https://github.com/encryption4all/postguard-website/issues/83)) ([0e01079](https://github.com/encryption4all/postguard-website/commit/0e010793ccea59b49e0e3dd1df13d947482f8068))
+* resolve all svelte-check errors and warnings ([#79](https://github.com/encryption4all/postguard-website/issues/79)) ([9434f72](https://github.com/encryption4all/postguard-website/commit/9434f72753fd335a56216c4e6c7f9df2d2073450))
+* use mailto: placeholder for obfuscated contact links ([#80](https://github.com/encryption4all/postguard-website/issues/80)) ([b9a2f80](https://github.com/encryption4all/postguard-website/commit/b9a2f808c578ad9defd3bf9f186d50997cdd8de2))
+
 ## [1.1.2](https://github.com/encryption4all/postguard-website/compare/v1.1.1...v1.1.2) (2026-04-03)
 
 

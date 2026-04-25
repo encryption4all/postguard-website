@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte'
+    import SEO from '$lib/components/SEO.svelte'
 
     import decryptImg from '$lib/assets/images/decrypt.svg'
     import Decrypt from '$lib/components/fallback/Decrypt.svelte'
@@ -78,7 +79,26 @@
     })
 </script>
 
+<SEO
+    title="Decrypt Emails"
+    description="Decrypt PostGuard-encrypted emails securely in your browser. Upload the encrypted file and verify your identity with the Yivi app."
+    jsonLd={{
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        name: 'PostGuard Email Decryption',
+        url: 'https://postguard.eu/decrypt',
+        description: 'Decrypt PostGuard-encrypted emails securely in your browser using the Yivi identity wallet.',
+        applicationCategory: 'SecurityApplication',
+        operatingSystem: 'Any',
+        isPartOf: { '@id': 'https://postguard.eu/#website' },
+    }}
+/>
+
 <div class="fallback-page">
+    <div class="extension-banner">
+        <span>{$_('fallback.extensionPrompt')}</span>
+        <a href="/addons">{$_('fallback.extensionLink')}</a>
+    </div>
     <div class="fallback-container">
         <div class="left-panel">
             <label class="upload-area">
@@ -128,9 +148,19 @@
                         src={decryptImg}
                         class="invert"
                         alt="decrypt"
-                        width="280"
-                        height="320"
+                        width="200"
+                        height="228"
                     />
+                    <div class="welcome-text">
+                        <h2>{$_('fallback.welcome.title')}</h2>
+                        <p>{$_('fallback.welcome.description')}</p>
+                        <ol>
+                            <li>{$_('fallback.welcome.step1')}</li>
+                            <li>{$_('fallback.welcome.step2')}</li>
+                            <li>{$_('fallback.welcome.step3')}</li>
+                        </ol>
+                        <p class="privacy-note">{$_('fallback.welcome.privacy')}</p>
+                    </div>
                 </div>
             {:else}
                 {#key unique}
@@ -144,10 +174,34 @@
 <style lang="scss">
     .fallback-page {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        align-items: center;
         padding: 1.5rem;
         height: calc(100vh - 52px);
         box-sizing: border-box;
+    }
+
+    .extension-banner {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        margin-bottom: 1rem;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        background: var(--pg-soft-background);
+        border: 1px solid var(--pg-strong-background);
+        border-radius: var(--pg-border-radius-sm);
+
+        a {
+            color: var(--pg-primary);
+            font-weight: var(--pg-font-weight-semibold);
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
 
     .fallback-container {
@@ -263,8 +317,49 @@
     .placeholder {
         height: 100%;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        gap: 1.5rem;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .welcome-text {
+        max-width: 420px;
+
+        h2 {
+            font-size: var(--pg-font-size-lg);
+            font-weight: var(--pg-font-weight-semibold);
+            margin: 0 0 0.75rem;
+        }
+
+        p {
+            font-size: var(--pg-font-size-sm);
+            line-height: 1.6;
+            color: var(--pg-text-secondary);
+            margin: 0 0 0.75rem;
+        }
+
+        ol {
+            text-align: left;
+            padding-left: 1.25rem;
+            margin: 0 0 1rem;
+
+            li {
+                font-size: var(--pg-font-size-sm);
+                line-height: 1.6;
+                color: var(--pg-text-secondary);
+                margin-bottom: 0.25rem;
+            }
+        }
+
+        .privacy-note {
+            font-size: var(--pg-font-size-xs);
+            color: var(--pg-text-secondary);
+            opacity: 0.8;
+            margin: 0;
+        }
     }
 
     @media only screen and (max-width: 768px) {

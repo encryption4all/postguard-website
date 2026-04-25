@@ -7,14 +7,18 @@
     import Hamburger from '$lib/components/header/Hamburger.svelte'
     import { page } from '$app/state';
     import ThemeSwitcher from './ThemeSwitcher.svelte'
+    import { FF_BUSINESS, BUSINESS_URL } from '$lib/env'
 
-    let items = [
-        { name: 'fs', route: '/' },
-        { name: 'addons', route: '/addons' },
-        { name: 'decrypt', route: '/decrypt' },
+    const allItems = [
+        { name: 'fs', route: '/fileshare' },
         { name: 'about', route: '/about' },
+        { name: 'blog', route: '/blog' },
         { name: 'pol', route: '/privacy' },
+        { name: 'business', route: BUSINESS_URL },
+        { name: 'docs', route: 'https://docs.postguard.eu' },
     ]
+
+    let items = FF_BUSINESS ? allItems : allItems.filter(i => i.name !== 'business')
 
     function isSelected(route: String) {
         return page.url.pathname === route;
@@ -38,9 +42,12 @@
         </ul>
         <LocaleSwitcher />
         <ThemeSwitcher />
+        <a href="/decrypt" class="inbox-btn" class:selected={isSelected('/decrypt')}>
+            {$_('header.inbox')}
+        </a>
     </div>
     <Hamburger
-        {items}
+        items={[...items, { name: 'inbox', route: '/decrypt' }]}
     />
 </div>
 
@@ -79,9 +86,33 @@
     gap: 1rem;
   }
 
+
   @media only screen and (min-width: 768px) {
     .pg-desktop-menu {
       display: flex;
+    }
+  }
+
+  .inbox-btn {
+    padding: 0.25rem 1rem;
+    background: var(--pg-primary);
+    color: white;
+    border-radius: var(--pg-border-radius-sm);
+    text-decoration: none;
+    font-weight: var(--pg-font-weight-semibold);
+    font-size: var(--pg-font-size-sm);
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &.selected {
+      opacity: 0.85;
+      box-shadow: 0 0 0 2px var(--pg-primary);
+      background: transparent;
+      color: var(--pg-primary);
     }
   }
 

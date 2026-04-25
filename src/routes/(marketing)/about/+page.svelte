@@ -1,7 +1,37 @@
 <script>
     import { _ } from 'svelte-i18n'
     import aboutImg from '$lib/assets/images/about.svg'
+    import SEO from '$lib/components/SEO.svelte'
+
+    const aboutJsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            {
+                '@type': 'AboutPage',
+                url: 'https://postguard.eu/about',
+                name: 'About PostGuard',
+                description:
+                    'Learn how PostGuard uses identity-based encryption and the Yivi app to provide free, easy-to-use end-to-end encryption for emails and files.',
+                isPartOf: {
+                    '@id': 'https://postguard.eu/#website',
+                },
+            },
+            {
+                '@type': 'BreadcrumbList',
+                itemListElement: [
+                    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://postguard.eu' },
+                    { '@type': 'ListItem', position: 2, name: 'About PostGuard', item: 'https://postguard.eu/about' },
+                ],
+            },
+        ],
+    }
 </script>
+
+<SEO
+    title="About PostGuard"
+    description="Learn how PostGuard uses identity-based encryption and the Yivi app to provide free, easy-to-use end-to-end encryption for emails and files."
+    jsonLd={aboutJsonLd}
+/>
 
 <div class="page-wrapper">
     <div class="grid-container">
