@@ -65,17 +65,19 @@
     }
 
     function checkRecipients(recipients: string[]) {
-        if (recipientParam && recipients.includes(recipientParam)) {
+        const nonEmpty = recipients.filter((k) => k)
+
+        if (recipientParam && nonEmpty.includes(recipientParam)) {
             key = recipientParam
             startDecryption()
             return
         }
 
-        if (recipients.length === 1) {
-            key = recipients[0]
+        if (nonEmpty.length === 1) {
+            key = nonEmpty[0]
             startDecryption()
         } else {
-            keylist = recipients.filter((k) => k)
+            keylist = nonEmpty
             downloadState = 'Recipients'
         }
     }
@@ -149,7 +151,7 @@
                 <h3>{$_('filesharing.decryptpanel.irmaInstructionHeaderQr')}</h3>
                 <p class="card-subtitle">Please select which email belongs to you:</p>
                 <select bind:value={key} class="recipient-select">
-                    <option value=""></option>
+                    <option value="" disabled selected>Select your email…</option>
                     {#each keylist as k}
                         <option value={k}>{k}</option>
                     {/each}
