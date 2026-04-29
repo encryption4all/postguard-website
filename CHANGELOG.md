@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.0](https://github.com/encryption4all/postguard-website/compare/v1.3.0...v1.4.0) (2026-04-29)
+
+
+### Features
+
+* **fileshare:** warn user before navigating away mid-upload ([#121](https://github.com/encryption4all/postguard-website/issues/121)) ([2c07b8f](https://github.com/encryption4all/postguard-website/commit/2c07b8fccc817968de72926ca8f27a866b16ad1f))
+
+
+### Bug Fixes
+
+* add missing var() wrappers to CSS custom properties ([#74](https://github.com/encryption4all/postguard-website/issues/74)) ([78e36bf](https://github.com/encryption4all/postguard-website/commit/78e36bfc66f7e6c8860d63534c2e25eb9b9d6f80))
+* **download:** skip picker for single recipient and remove empty option ([#119](https://github.com/encryption4all/postguard-website/issues/119)) ([95a0b63](https://github.com/encryption4all/postguard-website/commit/95a0b63abacaf8ba8930b232e207ce168053a346))
+* **fileshare:** normalise mobile numbers to E.164 (cryptify[#39](https://github.com/encryption4all/postguard-website/issues/39)) ([#120](https://github.com/encryption4all/postguard-website/issues/120)) ([61bf4ae](https://github.com/encryption4all/postguard-website/commit/61bf4aef69fd78494795d8499be7248869dd19be))
+
 ## [1.3.0](https://github.com/encryption4all/postguard-website/compare/v1.2.0...v1.3.0) (2026-04-24)
 
 
