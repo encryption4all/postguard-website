@@ -42,7 +42,7 @@
             />
         {/if}
 
-        {#each recipients as _, index}
+        {#each recipients as recipient, index (recipient)}
             <RecipientSelectionFields
                 bind:recipient={recipients[index]}
                 remove={() => removeRecipient(index)}

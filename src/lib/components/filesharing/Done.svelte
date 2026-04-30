@@ -7,29 +7,29 @@
     import airplane from '$lib/assets/images/airplane.svg'
 
     interface props {
-        EncryptState: EncryptState;
+        encryptState: EncryptState;
         createDefaultEncryptState: () => EncryptState;
     }
-    let { EncryptState=$bindable(), createDefaultEncryptState }: props = $props()
+    let { encryptState=$bindable(), createDefaultEncryptState }: props = $props()
 </script>
 
 <div class="container">
     <h2>{$_('filesharing.encryptPanel.succes')}</h2>
 
     <!-- Files box -->
-    <FileList files={EncryptState.files.map(f => f.name)} />
+    <FileList files={encryptState.files.map(f => f.name)} />
 
     <!-- Recipients box -->
     <div class="info-box">
         <h3>{$_('filesharing.encryptPanel.recipientsHeader')}</h3>
         <div class="divider"></div>
         <div class="recipients-list">
-            {#each EncryptState.recipients as recipient}
+            {#each encryptState.recipients as recipient (recipient.email)}
                 <div class="recipient-item">
                     <div class="recipient-email">{recipient.email}</div>
                     {#if recipient.extra.length > 0}
                         <div class="recipient-attributes">
-                            {#each recipient.extra.filter(a => a.v) as attr}
+                            {#each recipient.extra.filter(a => a.v) as attr (attr.t)}
                                 <Chip text={attr.v!} size="sm" variant="default" />
                             {/each}
                         </div>
@@ -49,7 +49,7 @@
     <!-- Send another button -->
     <Chip
         text={$_('filesharing.encryptPanel.another')}
-        onclick={() => EncryptState = createDefaultEncryptState()}
+        onclick={() => (encryptState = createDefaultEncryptState())}
         size="lg"
         variant="dark"
     />

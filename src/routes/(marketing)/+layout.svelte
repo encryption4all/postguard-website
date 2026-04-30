@@ -3,6 +3,7 @@
     import { isLoading } from 'svelte-i18n'
     import { _ } from 'svelte-i18n'
     import { onMount } from 'svelte'
+    import { resolve } from '$app/paths'
     import { FF_BUSINESS, BUSINESS_URL } from '$lib/env'
 
     let { children } = $props()
@@ -12,6 +13,7 @@
         if (contactEl) {
             const addr = `${contactEl.dataset.name}@${contactEl.dataset.domain}`
             contactEl.href = `mailto:${addr}`
+            // eslint-disable-next-line svelte/no-dom-manipulating
             contactEl.textContent = addr
         }
     })
@@ -28,18 +30,18 @@
                 <div class="footer-col">
                     <h4>{$_('footer.productTitle')}</h4>
                     <ul>
-                        <li><a href="/fileshare">{$_('footer.fs')}</a></li>
-                        <li><a href="/decrypt">{$_('footer.inbox')}</a></li>
-                        <li><a href="/addons">{$_('footer.addons')}</a></li>
+                        <li><a href={resolve('/fileshare')}>{$_('footer.fs')}</a></li>
+                        <li><a href={resolve('/decrypt')}>{$_('footer.inbox')}</a></li>
+                        <li><a href={resolve('/addons/')}>{$_('footer.addons')}</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>{$_('footer.resourcesTitle')}</h4>
                     <ul>
-                        <li><a href="/about">{$_('footer.about')}</a></li>
-                        <li><a href="/blog">{$_('footer.blog')}</a></li>
+                        <li><a href={resolve('/about/')}>{$_('footer.about')}</a></li>
+                        <li><a href={resolve('/blog/')}>{$_('footer.blog')}</a></li>
                         <li><a href="https://docs.postguard.eu">{$_('footer.docs')}</a></li>
-                        <li><a href="/privacy">{$_('footer.pol')}</a></li>
+                        <li><a href={resolve('/privacy/')}>{$_('footer.pol')}</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -47,6 +49,7 @@
                     <ul>
                         <li><a href="mailto:" bind:this={contactEl} data-name="info" data-domain="postguard.eu">{$_('footer.contact')}</a></li>
                         <li><a href="https://github.com/encryption4all">GitHub</a></li>
+                        <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
                         {#if FF_BUSINESS}<li><a href={BUSINESS_URL}>PostGuard for Business</a></li>{/if}
                     </ul>
                 </div>

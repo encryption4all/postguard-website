@@ -11,6 +11,7 @@
     import Icon from '@iconify/svelte'
     import Chip from '$lib/components/Chip.svelte'
 
+    // eslint-disable-next-line no-useless-assignment
     let { currMode = $bindable() } = $props()
 
     function deleteAllMails() {
@@ -76,11 +77,11 @@
         <div class="settings-card">
             <h4>{$_('fallback.settings.creds')}</h4>
             <div class="credential-list">
-                {#each $krCache as kr}
+                {#each $krCache as kr (kr.key)}
                     <div class="credential-item">
                         <div class="credential-info">
                             <span class="credential-key">{kr.key}</span>
-                            {#each parseKr(kr.krCon) as cred}
+                            {#each parseKr(kr.krCon) as cred (cred)}
                                 <span class="credential-detail">{cred}</span>
                             {/each}
                             <span class="credential-exp">

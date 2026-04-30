@@ -33,7 +33,7 @@
         }
     }
 
-    let EncryptState: EncryptState = $state(createDefaultEncryptState())
+    let encryptState: EncryptState = $state(createDefaultEncryptState())
 
     // Warn the user before they navigate away mid-upload. Cryptify does not
     // support resume yet, so navigating away silently aborts the upload and
@@ -42,7 +42,7 @@
     // the only reliable cross-browser hook for this; modern browsers ignore
     // the returned message and show their own wording.
     $effect(() => {
-        if (EncryptState.encryptionState !== EncryptionState.Encrypting) return
+        if (encryptState.encryptionState !== EncryptionState.Encrypting) return
         const handler = (event: BeforeUnloadEvent) => {
             event.preventDefault()
             event.returnValue = ''
@@ -78,23 +78,23 @@
 />
 
 <div
-    class:container={EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Encrypting || EncryptState.encryptionState === EncryptionState.Error}
-    class:done={EncryptState.encryptionState === EncryptionState.Done}
+    class:container={encryptState.encryptionState === EncryptionState.FileSelection || encryptState.encryptionState === EncryptionState.Sign || encryptState.encryptionState === EncryptionState.Encrypting || encryptState.encryptionState === EncryptionState.Error}
+    class:done={encryptState.encryptionState === EncryptionState.Done}
 >
-    <FileInput bind:files={EncryptState.files} bind:percentages={EncryptState.percentages}
-               bind:done={EncryptState.done} bind:stage={EncryptState.encryptionState} />
-    {#if EncryptState.encryptionState === EncryptionState.FileSelection || EncryptState.encryptionState === EncryptionState.Sign || EncryptState.encryptionState === EncryptionState.Encrypting}
+    <FileInput bind:files={encryptState.files} bind:percentages={encryptState.percentages}
+               bind:done={encryptState.done} bind:stage={encryptState.encryptionState} />
+    {#if encryptState.encryptionState === EncryptionState.FileSelection || encryptState.encryptionState === EncryptionState.Sign || encryptState.encryptionState === EncryptionState.Encrypting}
         <div class="inputs-container">
-            <RecipientSelection bind:recipients={EncryptState.recipients} attributes={ATTRIBUTES} readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
-            <MessageInput bind:message={EncryptState.message} readonly={EncryptState.encryptionState === EncryptionState.Encrypting} />
-            <SendButton bind:EncryptState={EncryptState} />
+            <RecipientSelection bind:recipients={encryptState.recipients} attributes={ATTRIBUTES} readonly={encryptState.encryptionState === EncryptionState.Encrypting} />
+            <MessageInput bind:message={encryptState.message} readonly={encryptState.encryptionState === EncryptionState.Encrypting} />
+            <SendButton bind:encryptState={encryptState} />
         </div>
-    {:else if EncryptState.encryptionState === EncryptionState.Error}
+    {:else if encryptState.encryptionState === EncryptionState.Error}
         <div class="inputs-container">
-            <ErrorPanel bind:encryptionState={EncryptState.encryptionState} serverError={EncryptState.serverError} />
+            <ErrorPanel bind:encryptionState={encryptState.encryptionState} serverError={encryptState.serverError} />
         </div>
-    {:else if EncryptState.encryptionState === EncryptionState.Done}
-        <Done bind:EncryptState={EncryptState} {createDefaultEncryptState} />
+    {:else if encryptState.encryptionState === EncryptionState.Done}
+        <Done bind:encryptState={encryptState} {createDefaultEncryptState} />
     {/if}
 
 

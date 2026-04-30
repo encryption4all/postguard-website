@@ -11,6 +11,7 @@
     import { currSelected } from '$lib/components/fallback/stores.js'
 
     import { _ } from 'svelte-i18n'
+    import { resolve } from '$app/paths'
 
     import EmailView from '$lib/components/fallback/EmailView.svelte'
     import ListView from '$lib/components/fallback/ListView.svelte'
@@ -97,7 +98,7 @@
 <div class="fallback-page">
     <div class="extension-banner">
         <span>{$_('fallback.extensionPrompt')}</span>
-        <a href="/addons">{$_('fallback.extensionLink')}</a>
+        <a href={resolve('/addons/')}>{$_('fallback.extensionLink')}</a>
     </div>
     <div class="fallback-container">
         <div class="left-panel">

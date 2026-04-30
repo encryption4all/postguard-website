@@ -3,14 +3,20 @@
  */
 
 export async function load() {
-    const postFiles = import.meta.glob('/src/content/blog/*.svx', { eager: true })
+    const postFiles = import.meta.glob('/src/content/blog/*.svx', {
+        eager: true,
+    })
 
     /** @type {BlogPost[]} */
     const posts = Object.entries(postFiles)
         .map(([path, module]) => {
-            const { metadata } = /** @type {{ metadata: Record<string, any> }} */ (module)
+            const { metadata } =
+                /** @type {{ metadata: Record<string, any> }} */ (module)
             return /** @type {BlogPost} */ ({
-                slug: /** @type {string} */ (path.split('/').pop()).replace('.svx', ''),
+                slug: /** @type {string} */ (path.split('/').pop()).replace(
+                    '.svx',
+                    ''
+                ),
                 ...metadata,
             })
         })

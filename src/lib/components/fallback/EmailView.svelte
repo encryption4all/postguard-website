@@ -33,7 +33,7 @@
             <div class="header-row">
                 <span class="header-label">{$_('fallback.email.to')}:</span>
                 <span class="header-value">
-                    {#each parsed.to as { name, address }}
+                    {#each parsed.to as { name, address } (address)}
                         {name} &lt;{address}&gt;
                     {/each}
                 </span>
@@ -58,7 +58,7 @@
 
         {#if parsed.attachments.length > 0}
             <div class="email-attachments">
-                {#each parsed.attachments as att}
+                {#each parsed.attachments as att (att.filename)}
                     <button
                         class="attachment-chip"
                         onclick={(e) => {

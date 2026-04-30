@@ -11,20 +11,23 @@
         ]
     }
 
-    function getSenderEmail(identity: any): string {
+    type Attribute = { t?: string; v?: string }
+    type Identity = { con?: Attribute[] }
+
+    function getSenderEmail(identity: Identity): string {
         if (!identity?.con?.length) return ''
         return (
-            identity.con.find((a: any) => a.t?.includes('email') && a.v)?.v ??
-            identity.con.find((a: any) => a.v)?.v ??
+            identity.con.find((a) => a.t?.includes('email') && a.v)?.v ??
+            identity.con.find((a) => a.v)?.v ??
             ''
         )
     }
 
-    function getSenderExtras(identity: any): string[] {
+    function getSenderExtras(identity: Identity): string[] {
         if (!identity?.con?.length) return []
         return identity.con
-            .filter((a: any) => !a.t?.includes('email') && a.v)
-            .map((a: any) => a.v as string)
+            .filter((a) => !a.t?.includes('email') && a.v)
+            .map((a) => a.v as string)
     }
 </script>
 
@@ -77,7 +80,7 @@
                     <strong class="sender-email">{getSenderEmail(mockSenderIdentity)}</strong>
                     {#if getSenderExtras(mockSenderIdentity).length > 0}
                         <div class="attr-chips">
-                            {#each getSenderExtras(mockSenderIdentity) as extra}
+                            {#each getSenderExtras(mockSenderIdentity) as extra (extra)}
                                 <span class="attr-chip">{extra}</span>
                             {/each}
                         </div>
@@ -94,6 +97,7 @@
             <div class="content">
                 <h2>{$_('filesharing.decryptpanel.notFoundTitle')}</h2>
                 <p class="error-description">{$_('filesharing.decryptpanel.notFoundSubtitle')}</p>
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                 <p class="error-description">{@html $_('filesharing.decryptpanel.notFoundMessage')}</p>
             </div>
         </div>

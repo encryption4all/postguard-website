@@ -7,6 +7,7 @@
         serverError?: boolean;
     }
 
+    // eslint-disable-next-line no-useless-assignment
     let { encryptionState = $bindable(), serverError = false }: props = $props()
 </script>
 
@@ -17,6 +18,7 @@
         </h3>
         <p class="error-message">
             {#if serverError}
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                 {@html $_('filesharing.serverError')}
             {:else}
                 {$_('filesharing.error')}

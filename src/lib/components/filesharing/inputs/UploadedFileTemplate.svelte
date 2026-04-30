@@ -1,6 +1,5 @@
 <script lang="ts">
     import close from '$lib/assets/images/google-icons/close.svg'
-    import file from '$lib/assets/images/google-icons/file.svg'
 </script>
 
 <div class="files">

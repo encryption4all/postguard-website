@@ -3,6 +3,7 @@
     import { _, locale } from 'svelte-i18n'
 
     /** @type {{rightMode: any, searchTerm: any}} */
+    // eslint-disable-next-line no-useless-assignment
     let { rightMode = $bindable(), searchTerm = $bindable() } = $props();
 
     let sorted =
@@ -21,7 +22,7 @@
 
 {#if sortedFiltered.length > 0}
     <div class="email-list">
-        {#each sortedFiltered as email}
+        {#each sortedFiltered as email (email.id)}
             <button
                 class="email-item"
                 class:selected={$currSelected === email.id}

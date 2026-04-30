@@ -61,6 +61,7 @@
             <div id="team">
                 <h3>{$_('about.team.header')}</h3>
                 <p>
+                    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                     {@html $_('about.team.par')}
                 </p>
             </div>

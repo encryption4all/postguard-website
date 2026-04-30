@@ -1,6 +1,7 @@
 <script lang="ts">
     import { page } from '$app/state'
     import { _ } from 'svelte-i18n'
+    import { resolve } from '$app/paths'
 </script>
 
 <div class="error-page">
@@ -20,7 +21,7 @@
                 {$_('error.serverMessage')}
             {/if}
         </p>
-        <a href="/" class="home-btn">{$_('error.back')}</a>
+        <a href={resolve('/')} class="home-btn">{$_('error.back')}</a>
     </div>
 </div>
 

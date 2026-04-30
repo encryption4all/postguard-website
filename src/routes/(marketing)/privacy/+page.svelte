@@ -41,6 +41,7 @@
         <h2><span>{$_('privacypolicy.title')}</span></h2>
         <p class="last-updated">Last updated: April 21, 2026</p>
         <div class="privacy-text">
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html $_('privacypolicy.full')}
         </div>
     </div>

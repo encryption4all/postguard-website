@@ -1,6 +1,7 @@
 <script lang="ts">
     import Header from '$lib/components/Header.svelte'
     import { isLoading } from 'svelte-i18n'
+    import { resolve } from '$app/paths'
 
     let { children } = $props()
 </script>
@@ -11,9 +12,9 @@
         {@render children()}
     </main>
     <footer class="app-footer">
-        <a href="/about">About</a>
+        <a href={resolve('/about/')}>About</a>
         <span class="sep">&middot;</span>
-        <a href="/privacy">Privacy Policy</a>
+        <a href={resolve('/privacy/')}>Privacy Policy</a>
         <span class="sep">&middot;</span>
         <span>Built by <a href="https://yivi.app">Yivi</a></span>
     </footer>

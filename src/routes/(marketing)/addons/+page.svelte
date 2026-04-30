@@ -81,8 +81,6 @@
         tween.set(activeItem === 'Thunderbird' ? 0 : 1)
     }
 
-    let sign = $derived(activeItem === 'Thunderbird' ? -1 : 1)
-    
 </script>
 
 <SEO
@@ -111,6 +109,7 @@
                     <div
                         id="client-instruction"
                     >
+                        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                         {@html $_(`addons.${activeItem}`)}
                     </div>
                 {/key}

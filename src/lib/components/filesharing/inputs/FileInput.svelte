@@ -46,7 +46,6 @@
     let remainingSizeGB = $derived((Math.max(0, remainingSize) / 1e9).toFixed(2))
     let effectiveLimitGB = $derived((Math.max(0, effectiveLimit) / 1e9).toFixed(1))
     let overLimit = $derived(totalSize > effectiveLimit)
-    let totalSizeGB = $derived((totalSize / 1e9).toFixed(2))
 
     const previewTemplate = `
         <div class="dz-preview dz-file-preview files">
