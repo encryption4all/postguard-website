@@ -11,7 +11,7 @@
 {#if files.length > 0}
     <div class="file-list">
         <div class="file-list-header">{$_('filesharing.encryptPanel.filesHeader')}</div>
-        {#each files as filename}
+        {#each files as filename (filename)}
             <div class="file-list-item">{filename}</div>
         {/each}
     </div>

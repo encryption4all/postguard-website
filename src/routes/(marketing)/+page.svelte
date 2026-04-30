@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte'
     import { _ } from 'svelte-i18n'
+    import { resolve } from '$app/paths'
     import SEO from '$lib/components/SEO.svelte'
     import { FF_BUSINESS } from '$lib/env'
 
@@ -89,8 +90,8 @@
         <h1>{$_('home.title')}</h1>
         <p class="hero-text">{$_('home.par')}</p>
         <div class="cta-buttons">
-            <a href="/fileshare" class="cta-primary">{$_('landing.cta')}</a>
-            <a href="/about" class="cta-secondary">{$_('landing.learnMore')}</a>
+            <a href={resolve('/fileshare')} class="cta-primary">{$_('landing.cta')}</a>
+            <a href={resolve('/about/')} class="cta-secondary">{$_('landing.learnMore')}</a>
         </div>
     </div>
     <div class="scroll-indicator">

@@ -18,6 +18,7 @@
     <div class="help-content">
         <p class="help-text">{content}</p>
         {#if linkText && linkUrl}
+            <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
             <a href={linkUrl} target="_blank" rel="noopener noreferrer" class="help-link">
                 {linkText} →
             </a>

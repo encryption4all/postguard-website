@@ -21,10 +21,10 @@
     import { recordUpload, getLocalUsedBytes } from '$lib/localUsage'
 
     interface props {
-        EncryptState: EncryptState
+        encryptState: EncryptState
     }
 
-    let { EncryptState = $bindable() }: props = $props()
+    let { encryptState = $bindable() }: props = $props()
 
     let isMobileDevice = isMobile()
     let mobilePopupMode: 'none' | 'direct' | 'qr' = $state('none')
@@ -39,17 +39,17 @@
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
     let canEncrypt = $derived(() => {
-        if (EncryptState.files.length === 0) return false
-        const totalSize = EncryptState.files.reduce((a, f) => a + f.size, 0)
+        if (encryptState.files.length === 0) return false
+        const totalSize = encryptState.files.reduce((a, f) => a + f.size, 0)
         if (totalSize >= MAX_UPLOAD_SIZE) return false
         if (
-            !EncryptState.recipients.every(({ email }) =>
+            !encryptState.recipients.every(({ email }) =>
                 emailRegex.test(email)
             )
         )
             return false
         if (
-            !EncryptState.recipients.every(({ extra }) =>
+            !encryptState.recipients.every(({ extra }) =>
                 extra.every((att) => {
                     if (!att.v || att.v.length === 0) return false
                     if (
@@ -67,10 +67,10 @@
 
     function getValidationErrors(): string[] {
         const errors: string[] = []
-        if (EncryptState.files.length === 0) {
+        if (encryptState.files.length === 0) {
             errors.push($_('filesharing.encryptPanel.validation.noFiles'))
         }
-        const totalSize = EncryptState.files.reduce((a, f) => a + f.size, 0)
+        const totalSize = encryptState.files.reduce((a, f) => a + f.size, 0)
         const effectiveLimit = Math.min(MAX_UPLOAD_SIZE, ROLLING_LIMIT - getLocalUsedBytes())
         if (totalSize > effectiveLimit) {
             const over = ((totalSize - effectiveLimit) / (1024 ** 3)).toFixed(2)
@@ -78,7 +78,7 @@
                 values: { over }
             }))
         }
-        EncryptState.recipients.forEach(({ email, extra }) => {
+        encryptState.recipients.forEach(({ email, extra }) => {
             if (!email || email.trim() === '') {
                 errors.push($_('filesharing.encryptPanel.validation.noEmail'))
             } else if (!emailRegex.test(email)) {
@@ -128,7 +128,7 @@
     }
 
     async function startEncryption(): Promise<void> {
-        EncryptState.encryptionState = EncryptionState.Sign
+        encryptState.encryptionState = EncryptionState.Sign
 
         // Wait for Svelte to render the Yivi QR element into the DOM
         await tick()
@@ -137,7 +137,7 @@
             if (!canEncrypt()) return
 
             // Build recipients
-            const recipients = EncryptState.recipients.map(
+            const recipients = encryptState.recipients.map(
                 ({ email, extra }) => {
                     const r = pg.recipient.email(email.toLowerCase())
                     for (const a of extra) {
@@ -172,43 +172,43 @@
             const lang = selectedLang === 'nl-NL' ? 'NL' : 'EN'
 
             const sealed = pg.encrypt({
-                files: EncryptState.files,
+                files: encryptState.files,
                 recipients,
                 sign,
                 onProgress: (pct) => {
                     // First progress callback means signing is done
-                    if (EncryptState.encryptionState === EncryptionState.Sign) {
-                        EncryptState.encryptionState =
+                    if (encryptState.encryptionState === EncryptionState.Sign) {
+                        encryptState.encryptionState =
                             EncryptionState.Encrypting
-                        EncryptState.encryptStartTime = Date.now()
+                        encryptState.encryptStartTime = Date.now()
                         mobilePopupMode = 'none'
                     }
                     updateProgress(pct)
                 },
-                signal: EncryptState.abort.signal,
+                signal: encryptState.abort.signal,
             })
 
             await sealed.upload({
                 notify: {
-                    message: EncryptState.message,
+                    message: encryptState.message,
                     language: lang as 'EN' | 'NL',
                     confirmToSender: true,
                 },
             })
 
-            const totalBytes = EncryptState.files.reduce((a, f) => a + f.size, 0)
+            const totalBytes = encryptState.files.reduce((a, f) => a + f.size, 0)
             recordUpload(totalBytes)
 
-            EncryptState.encryptionState = EncryptionState.Done
-            EncryptState.selfAborted = false
+            encryptState.encryptionState = EncryptionState.Done
+            encryptState.selfAborted = false
         } catch (e) {
             console.error('Error occurred during encryption:', e)
-            if (EncryptState.selfAborted) {
-                EncryptState.percentages = EncryptState.files.map(() => 0)
-                EncryptState.done = EncryptState.files.map(() => false)
-                EncryptState.encryptionState = EncryptionState.FileSelection
-                EncryptState.selfAborted = false
-                EncryptState.encryptStartTime = 0
+            if (encryptState.selfAborted) {
+                encryptState.percentages = encryptState.files.map(() => 0)
+                encryptState.done = encryptState.files.map(() => false)
+                encryptState.encryptionState = EncryptionState.FileSelection
+                encryptState.selfAborted = false
+                encryptState.encryptStartTime = 0
             } else if (e instanceof NetworkError && e.status === 413) {
                 // cryptify#100: 413 Payload Too Large — either per-upload or rolling limit.
                 const status = parseLimitExceededBody(e.body ?? '')
@@ -232,25 +232,25 @@
                         },
                     }
                 )
-                EncryptState.percentages = EncryptState.files.map(() => 0)
-                EncryptState.done = EncryptState.files.map(() => false)
-                EncryptState.encryptionState = EncryptionState.FileSelection
-                EncryptState.encryptStartTime = 0
+                encryptState.percentages = encryptState.files.map(() => 0)
+                encryptState.done = encryptState.files.map(() => false)
+                encryptState.encryptionState = EncryptionState.FileSelection
+                encryptState.encryptStartTime = 0
             } else {
-                EncryptState.serverError =
+                encryptState.serverError =
                     e instanceof NetworkError && e.status >= 500
-                EncryptState.encryptionState = EncryptionState.Error
+                encryptState.encryptionState = EncryptionState.Error
             }
             mobilePopupMode = 'none'
         }
     }
 
     function updateProgress(pct: number) {
-        const totalSize = EncryptState.files.reduce((a, f) => a + f.size, 0)
+        const totalSize = encryptState.files.reduce((a, f) => a + f.size, 0)
         if (totalSize === 0) return
 
         let offset = 0
-        const percentages = EncryptState.files.map((f) => {
+        const percentages = encryptState.files.map((f) => {
             const fileStart = (offset / totalSize) * 100
             const fileEnd = ((offset + f.size) / totalSize) * 100
             offset += f.size
@@ -258,29 +258,20 @@
             if (pct <= fileStart) return 0
             return Math.round(((pct - fileStart) / (fileEnd - fileStart)) * 100)
         })
-        EncryptState.percentages = percentages
+        encryptState.percentages = percentages
 
         // Delay done status for smooth animation
         percentages.forEach((p, i) => {
-            if (p >= 100 && !EncryptState.done[i]) {
+            if (p >= 100 && !encryptState.done[i]) {
                 window.setTimeout(() => {
-                    const dones = EncryptState.done.map((d) => d)
+                    const dones = encryptState.done.map((d) => d)
                     dones[i] = true
-                    EncryptState.done = dones
+                    encryptState.done = dones
                 }, 1000 * SMOOTH_TIME)
             }
         })
     }
 
-    let lang = $state('nl')
-    if (browser) {
-        lang = (localStorage.getItem('preferredLanguage') ?? 'nl-NL').substring(
-            0,
-            2
-        )
-    }
-
-    let yiviInfoExpanded = $state(false)
     let buttonRef: HTMLButtonElement | null = $state(null)
     let dialogRef: HTMLDialogElement | null = $state(null)
 
@@ -311,13 +302,13 @@
             >
         </div>
     {/if}
-    {#if EncryptState.encryptionState === EncryptionState.Encrypting}
+    {#if encryptState.encryptionState === EncryptionState.Encrypting}
         <!-- Loading info box during upload -->
         {@const totalProgress =
-            EncryptState.percentages.length > 0
+            encryptState.percentages.length > 0
                 ? Math.round(
-                      EncryptState.percentages.reduce((a, b) => a + b, 0) /
-                          EncryptState.percentages.length
+                      encryptState.percentages.reduce((a, b) => a + b, 0) /
+                          encryptState.percentages.length
                   )
                 : 0}
         <div class="upload-info-box">
@@ -381,14 +372,14 @@
     />
 
     <!-- Desktop Yivi popup above the button -->
-    {#if !isMobileDevice && EncryptState.encryptionState === EncryptionState.Sign && buttonRef}
+    {#if !isMobileDevice && encryptState.encryptionState === EncryptionState.Sign && buttonRef}
         <button
             type="button"
             class="desktop-backdrop"
             tabindex="-1"
             aria-hidden="true"
             onclick={() => {
-                EncryptState.encryptionState = EncryptionState.FileSelection
+                encryptState.encryptionState = EncryptionState.FileSelection
             }}
         ></button>
         <div
@@ -407,7 +398,7 @@
                     <Chip
                         text={$_('filesharing.sign.close')}
                         onclick={() => {
-                            EncryptState.encryptionState =
+                            encryptState.encryptionState =
                                 EncryptionState.FileSelection
                         }}
                         icon="×"
@@ -427,14 +418,14 @@
     {/if}
 
     <!-- Mobile bottom sheet -->
-    {#if isMobileDevice && mobilePopupMode !== 'none' && EncryptState.encryptionState === EncryptionState.Sign}
+    {#if isMobileDevice && mobilePopupMode !== 'none' && encryptState.encryptionState === EncryptionState.Sign}
         <button
             type="button"
             class="mobile-backdrop"
             tabindex="-1"
             aria-hidden="true"
             onclick={() => {
-                EncryptState.encryptionState = EncryptionState.FileSelection
+                encryptState.encryptionState = EncryptionState.FileSelection
                 mobilePopupMode = 'none'
             }}
         ></button>
@@ -451,7 +442,7 @@
                     <Chip
                         text={$_('filesharing.sign.close')}
                         onclick={() => {
-                            EncryptState.encryptionState =
+                            encryptState.encryptionState =
                                 EncryptionState.FileSelection
                             mobilePopupMode = 'none'
                         }}
@@ -469,7 +460,7 @@
                     <Chip
                         text={$_('filesharing.sign.cancel')}
                         onclick={() => {
-                            EncryptState.encryptionState =
+                            encryptState.encryptionState =
                                 EncryptionState.FileSelection
                             mobilePopupMode = 'none'
                         }}
@@ -493,7 +484,7 @@
         {$_('filesharing.encryptPanel.validation.title')}
     </h2>
     <ul class="validation-errors">
-        {#each validationErrors as error}
+        {#each validationErrors as error (error)}
             <li>{error}</li>
         {/each}
     </ul>

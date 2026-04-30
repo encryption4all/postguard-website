@@ -6,16 +6,21 @@ import { mdsvex } from 'mdsvex'
 const config = {
     extensions: ['.svelte', '.svx'],
 
-    preprocess: [
-        sveltePreprocess(),
-        mdsvex({ extensions: ['.svx'] })
-    ],
+    preprocess: [sveltePreprocess(), mdsvex({ extensions: ['.svx'] })],
 
     kit: {
         adapter: adapter({ fallback: '200.html', precompress: false }),
         prerender: {
-            entries: ['/', '/about', '/addons', '/privacy', '/blog', '/sitemap.xml', '/robots.txt']
-        }
+            entries: [
+                '/',
+                '/about',
+                '/addons',
+                '/privacy',
+                '/blog',
+                '/sitemap.xml',
+                '/robots.txt',
+            ],
+        },
     },
 }
 

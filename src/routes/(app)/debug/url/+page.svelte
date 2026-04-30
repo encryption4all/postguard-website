@@ -9,8 +9,6 @@
     let hashInfo = $state(null)
     /** @type {any} */
     let wasmInfo = $state(null)
-    /** @type {any} */
-    let vkInfo = $state(null)
     /** @type {any[]} */
     let unsealerResults = $state([])
     /** @type {any} */
@@ -27,8 +25,6 @@
 
     /** @type {string | null} */
     let decodedBase64 = $state(null)
-    /** @type {Uint8Array | null} */
-    let decodedBytes = $state(null)
     /** @type {any} */
     let mod = $state(null)
 
@@ -111,7 +107,6 @@
         for (let i = 0; i < binaryString.length; i++) {
             bytes[i] = binaryString.charCodeAt(i)
         }
-        decodedBytes = bytes
 
         hashInfo = {
             hashLength: hash.length,
@@ -166,7 +161,7 @@
 
 {#if unsealerResults.length > 0}
 <h3>3. StreamUnsealer — per PKG</h3>
-{#each unsealerResults as result}
+{#each unsealerResults as result, idx (idx)}
 <pre class:success={result.success} class:fail={!result.success}>{JSON.stringify(result, null, 2)}</pre>
 {/each}
 {/if}

@@ -15,6 +15,7 @@
         abort: AbortController
     }
 
+    /* eslint-disable no-useless-assignment */
     let {
         encryptStartTime,
         files,
@@ -25,6 +26,7 @@
         selfAborted = $bindable(),
         abort,
     }: props = $props()
+    /* eslint-enable no-useless-assignment */
 
     let to = $derived(recipients.map(({ email }) => email).join(', '))
     let timeEstimateRepr = $derived(() => {
@@ -49,14 +51,16 @@
         switch (true) {
             case remaining < 1000 * 60:
                 return $_('filesharing.encryptPanel.timeremaining.seconds')
-            case remaining < 1000 * 60 * 60:
+            case remaining < 1000 * 60 * 60: {
                 const minutes = Math.ceil(remaining / (1000 * 60))
                 return $_('filesharing.encryptPanel.timeremaining.minutes',
                     { values: { minutes: minutes } })
-            case remaining < 1000 * 60 * 60 * 24:
+            }
+            case remaining < 1000 * 60 * 60 * 24: {
                 const hours = Math.ceil(remaining / (1000 * 60 * 60))
                 return $_('filesharing.encryptPanel.timeremaining.hours',
                     { values: { hours: hours } })
+            }
             default:
                 return $_('filesharing.encryptPanel.timeremaining.unknown')
         }

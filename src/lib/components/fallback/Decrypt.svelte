@@ -13,10 +13,9 @@
     import * as decrypt from './decrypt.js'
     import * as email from './email'
 
-    import { locale, _ } from 'svelte-i18n'
+    import { _ } from 'svelte-i18n'
 
     import { pg } from '$lib/postguard'
-    import { IdentityMismatchError } from '@e4a/pg-js'
 
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
     import Chip from '$lib/components/Chip.svelte'
@@ -44,6 +43,7 @@
     let err = $state()
 
     /** @type {{rightMode: any, readable: any}} */
+    // eslint-disable-next-line no-useless-assignment
     let { rightMode = $bindable(), readable } = $props();
 
     let opened = $state()
@@ -167,7 +167,7 @@
             <p class="card-subtitle">{$_('fallback.decrypt.selectRecipientDesc', { default: 'Please select which email belongs to you:' })}</p>
             <select bind:value={key} class="recipient-select">
                 <option value=""></option>
-                {#each keylist as k}
+                {#each keylist as k (k)}
                     <option value={k}>{k}</option>
                 {/each}
             </select>
@@ -178,7 +178,7 @@
             <h3>{$_('fallback.decrypt.scanQr', { default: 'Scan QR code' })}</h3>
             {#if showHints}
                 <div class="hints">
-                    {#each hints as hint}
+                    {#each hints as hint (hint)}
                         <span class="hint-chip">{hint}</span>
                     {/each}
                 </div>

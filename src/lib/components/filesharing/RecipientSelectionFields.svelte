@@ -53,7 +53,7 @@
                 {#if isConfirming}
                     {#if recipient.extra.length > 0}
                         <div class="attributes-list">
-                            {#each recipient.extra as attribute}
+                            {#each recipient.extra as attribute (attribute.t)}
                                 <AttributeButton
                                     type="added"
                                     translation_key={'filesharing.attributes.' + attribute.t}
@@ -62,7 +62,7 @@
                         </div>
                     {/if}
                 {:else}
-                    {#each recipient.extra as attribute, index}
+                    {#each recipient.extra as attribute, index (attribute.t)}
                         <MultiInput
                             translation_key={'filesharing.attributes.' + attribute.t}
                             bind:value={attribute.v}
@@ -72,7 +72,7 @@
                         />
                     {/each}
                     <div class="attributes-list">
-                        {#each addableButtons as attribute}
+                        {#each addableButtons as attribute (attribute)}
                             <AttributeButton
                                 type="add"
                                 translation_key={'filesharing.attributes.' + attribute}

@@ -1,39 +1,41 @@
 <script lang="ts">
-    import { _, locale, init } from 'svelte-i18n'
+    import { _ } from 'svelte-i18n'
     import logo from '$lib/assets/images/logo.svg'
     import logoDark from '$lib/assets/images/logo-dark.svg'
     import LocaleSwitcher from './LocaleSwitcher.svelte'
     import '$lib/global.scss'
     import Hamburger from '$lib/components/header/Hamburger.svelte'
-    import { page } from '$app/state';
+    import { page } from '$app/state'
+    import { resolve } from '$app/paths'
     import ThemeSwitcher from './ThemeSwitcher.svelte'
     import { FF_BUSINESS, BUSINESS_URL } from '$lib/env'
 
     const allItems = [
         { name: 'fs', route: '/fileshare' },
-        { name: 'about', route: '/about' },
-        { name: 'blog', route: '/blog' },
-        { name: 'pol', route: '/privacy' },
+        { name: 'about', route: '/about/' },
+        { name: 'blog', route: '/blog/' },
+        { name: 'pol', route: '/privacy/' },
         { name: 'business', route: BUSINESS_URL },
         { name: 'docs', route: 'https://docs.postguard.eu' },
     ]
 
     let items = FF_BUSINESS ? allItems : allItems.filter(i => i.name !== 'business')
 
-    function isSelected(route: String) {
+    function isSelected(route: string) {
         return page.url.pathname === route;
     }
 </script>
 
 <div class="pg-topbar">
-    <a href="/">
+    <a href={resolve('/')}>
         <img src={logo} alt="postguard logo" width="128" height="70" class="logo-light" />
         <img src={logoDark} alt="postguard logo" width="128" height="70" class="logo-dark" />
     </a>
     <div class="pg-desktop-menu">
         <ul>
-            {#each items as item, i}
+            {#each items as item (item.name)}
                 <li class:selected={isSelected(item.route)}>
+                    <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
                     <a href={item.route}>
                         {$_(`header.${item.name}`)}
                     </a>
@@ -42,7 +44,7 @@
         </ul>
         <LocaleSwitcher />
         <ThemeSwitcher />
-        <a href="/decrypt" class="inbox-btn" class:selected={isSelected('/decrypt')}>
+        <a href={resolve('/decrypt')} class="inbox-btn" class:selected={isSelected('/decrypt')}>
             {$_('header.inbox')}
         </a>
     </div>

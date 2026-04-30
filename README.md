@@ -24,13 +24,13 @@ npm run dev
 
 ### Environment variables
 
-| Variable | Description | Default |
-| --- | --- | --- |
-| `VITE_FILEHOST_URL` | Filehosting service URL (Cryptify) | `http://localhost:8000` |
-| `VITE_PKG_URL` | PKG service URL | `http://localhost:8087` |
-| `VITE_MAX_UPLOAD_SIZE` | Maximum file upload size in bytes (default: 5 GB) | - |
-| `VITE_ROLLING_LIMIT` | Rolling upload limit in bytes per email per 2 weeks (default: 5 GB) | - |
-| `VITE_CHUNK_SIZE` | Optional: upload chunk size in bytes. If unset, uses pg-js default (5 MB) | - |
+| Variable               | Description                                                               | Default                 |
+| ---------------------- | ------------------------------------------------------------------------- | ----------------------- |
+| `VITE_FILEHOST_URL`    | Filehosting service URL (Cryptify)                                        | `http://localhost:8000` |
+| `VITE_PKG_URL`         | PKG service URL                                                           | `http://localhost:8087` |
+| `VITE_MAX_UPLOAD_SIZE` | Maximum file upload size in bytes (default: 5 GB)                         | -                       |
+| `VITE_ROLLING_LIMIT`   | Rolling upload limit in bytes per email per 2 weeks (default: 5 GB)       | -                       |
+| `VITE_CHUNK_SIZE`      | Optional: upload chunk size in bytes. If unset, uses pg-js default (5 MB) | -                       |
 
 ## Releasing
 

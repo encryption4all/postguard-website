@@ -18,12 +18,13 @@
     }
 
     $effect(() => {
-        message
+        void message
         autoResize()
     })
 </script>
 
 <div class="crypt-select-protection-input-box">
+    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
     <h3>{@html $_('filesharing.encryptPanel.messageHeading').replace(/\s*\([^)]*\)/, (match) => ` <span class="optional-text">${match.trim()}</span>`)}</h3>
     <p>{$_('filesharing.encryptPanel.messageText')}</p>
     <textarea

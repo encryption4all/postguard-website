@@ -89,6 +89,7 @@
                 <div class="author-details">
                     <span class="author-name">
                         {#if author.linkedin}
+                            <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
                             <a href={author.linkedin} target="_blank" rel="noopener">{author.name}</a>
                         {:else}
                             {author.name}

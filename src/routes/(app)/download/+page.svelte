@@ -14,7 +14,6 @@
     type DownloadState = 'Downloading' | 'Recipients' | 'Ready' | 'Decrypting' | 'Done' | 'Fail' | 'ServerError' | 'IdentityMismatch'
 
     let downloadState: DownloadState = $state('Downloading')
-    let err = $state('')
 
     let uuid = ''
     let recipientParam = ''
@@ -23,7 +22,6 @@
     let key = $state('')
     let senderIdentity: FriendlySender | null = $state(null)
     let fileList: string[] = $state([])
-    let decryptedBlobUrl = $state('')
 
     let opened: Awaited<ReturnType<typeof pg.open>> | null = null
 
@@ -36,7 +34,6 @@
         recipientParam = params.get('recipient') ?? ''
 
         if (!uuid) {
-            err = 'Missing uuid parameter'
             downloadState = 'Fail'
         } else {
             startDownload()
@@ -58,7 +55,6 @@
             if (e instanceof NetworkError && e.status >= 500) {
                 downloadState = 'ServerError'
             } else {
-                err = String(e)
                 downloadState = 'Fail'
             }
         }
@@ -108,7 +104,6 @@
             downloadState = 'Done'
         } catch (e) {
             if (dev) console.error('[download] decrypt error:', e)
-            err = String(e)
             if (e instanceof IdentityMismatchError) {
                 downloadState = 'IdentityMismatch'
             } else if (e instanceof NetworkError && e.status >= 500) {
@@ -152,7 +147,7 @@
                 <p class="card-subtitle">Please select which email belongs to you:</p>
                 <select bind:value={key} class="recipient-select">
                     <option value="" disabled selected>Select your email…</option>
-                    {#each keylist as k}
+                    {#each keylist as k (k)}
                         <option value={k}>{k}</option>
                     {/each}
                 </select>
@@ -224,7 +219,7 @@
                     <strong class="sender-email">{senderIdentity.email}</strong>
                     {#if senderIdentity.attributes.filter(a => !a.type.includes('email') && a.value).length > 0}
                         <div class="attr-chips">
-                            {#each senderIdentity.attributes.filter(a => !a.type.includes('email') && a.value) as attr}
+                            {#each senderIdentity.attributes.filter(a => !a.type.includes('email') && a.value) as attr (attr.type)}
                                 <span class="attr-chip">{attr.value}</span>
                             {/each}
                         </div>
@@ -234,10 +229,12 @@
 
         {:else if downloadState === 'ServerError'}
             <p class="error-description">{$_('filesharing.decryptpanel.serverErrorSubtitle')}</p>
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             <p class="error-description">{@html $_('filesharing.decryptpanel.serverErrorMessage')}</p>
 
         {:else if downloadState === 'Fail'}
             <p class="error-description">{$_('filesharing.decryptpanel.notFoundSubtitle')}</p>
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             <p class="error-description">{@html $_('filesharing.decryptpanel.notFoundMessage')}</p>
 
         {:else if downloadState === 'IdentityMismatch'}

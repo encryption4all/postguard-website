@@ -46,6 +46,7 @@
     <meta name="twitter:description" content={description || defaultDescription} />
     <meta name="twitter:image" content={ogImageUrl} />
     {#if jsonLdString}
+        <!-- eslint-disable-next-line svelte/no-at-html-tags, no-useless-escape -->
         {@html `<script type="application/ld+json">${jsonLdString}<\/script>`}
     {/if}
 </svelte:head>
