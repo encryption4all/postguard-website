@@ -1,5 +1,5 @@
 import { browser } from '$app/environment'
-import { register, init, getLocaleFromNavigator } from 'svelte-i18n'
+import { register, init } from 'svelte-i18n'
 
 register('en-US', () => import('./locales/en.json'))
 register('nl-NL', () => import('./locales/nl.json'))

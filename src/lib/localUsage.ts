@@ -17,8 +17,11 @@ function readRecords(): UploadRecord[] {
         const parsed = JSON.parse(raw)
         if (!Array.isArray(parsed)) return []
         return parsed.filter(
-            (r: any) =>
-                typeof r.bytes === 'number' && typeof r.timestamp === 'number'
+            (r: unknown): r is UploadRecord =>
+                typeof r === 'object' &&
+                r !== null &&
+                typeof (r as UploadRecord).bytes === 'number' &&
+                typeof (r as UploadRecord).timestamp === 'number'
         )
     } catch {
         return []

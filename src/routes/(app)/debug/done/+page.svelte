@@ -66,7 +66,7 @@
 <!-- Mirrors the .done wrapper from +page.svelte -->
 <div class="done">
     <Done
-        bind:EncryptState={testEncryptState}
+        bind:encryptState={testEncryptState}
         {createDefaultEncryptState}
     />
 </div>

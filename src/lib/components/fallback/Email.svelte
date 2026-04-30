@@ -4,6 +4,7 @@
     const bubble = createBubbler();
     // stores
     import { emails } from './stores'
+    import { resolve } from '$app/paths'
 
     // components
     import EmailView from './EmailView.svelte'
@@ -12,12 +13,12 @@
     import * as email from './email.js'
 
     let showBody = $state(false)
-    let currentID, currentParsed = $state(), currentRaw = $state()
+    let currentID, currentRaw = $state()
 
     async function showMail(id, unparsed) {
         currentRaw = unparsed
         currentID = id
-        currentParsed = await email.parseMail(unparsed)
+        await email.parseMail(unparsed)
         showBody = true
     }
 
@@ -36,7 +37,7 @@
 
 <div id="client">
     <div id="sidebar">
-        {#each $emails as email}
+        {#each $emails as email (email.id)}
             <div
                 id="sb-th"
                 role="button"
@@ -62,7 +63,7 @@
                 <span class="material-icons">mail</span><br />
                 There are no emails here.<br />
                 Want to save your decrypted emails? Head over to
-                <a href="/settings">settings</a> to have your emails stored in your
+                <a href={resolve('/decrypt')}>settings</a> to have your emails stored in your
                 browser.
             </div>
         {/if}

@@ -78,7 +78,7 @@
         {#if translation_key === 'filesharing.attributes.pbdf.sidn-pbdf.mobilenumber.mobilenumber'}
             <select bind:value={selectedCountry} class="pg-input phone-select"
                     class:is-confirming-bg={isConfirming} disabled={isConfirming}>
-                {#each allowedCountries as country}
+                {#each allowedCountries as country (country)}
                     <option value={country.toUpperCase() as CountryCode}>
                         {country.toUpperCase()} {getCountryPrefix(country)}
                     </option>

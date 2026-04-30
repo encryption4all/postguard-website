@@ -1,5 +1,6 @@
 <script lang="ts">
     import SEO from '$lib/components/SEO.svelte'
+    import { resolve } from '$app/paths'
 
     let { data } = $props()
 
@@ -46,8 +47,8 @@
 <div class="blog-index">
     <h1>Blog</h1>
     <div class="posts">
-        {#each data.posts as post}
-            <a href="/blog/{post.slug}" class="post-card">
+        {#each data.posts as post (post.slug)}
+            <a href={resolve('/(marketing)/blog/[slug]', { slug: post.slug })} class="post-card">
                 {#if post.image}
                     <img src={post.image} alt={post.title} class="post-image" />
                 {/if}

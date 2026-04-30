@@ -9,7 +9,7 @@
 
 <div class="tabs">
     <ul>
-        {#each tabItems as { item, logo }}
+        {#each tabItems as { item, logo } (item)}
             <li class:active={item === activeItem}>
                 <button
                     onclick={() => dispatch('tabChange', item)}

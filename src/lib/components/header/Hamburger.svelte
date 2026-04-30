@@ -5,7 +5,7 @@
     import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte'
     import logo from '$lib/assets/images/logo.svg'
     import logoDark from '$lib/assets/images/logo-dark.svg'
-    import { _, locale } from 'svelte-i18n'
+    import { _ } from 'svelte-i18n'
     import { page } from '$app/state'
 
     interface props {
@@ -21,7 +21,7 @@
         return () => { document.body.style.overflow = '' }
     })
 
-    function isSelected(route: String) {
+    function isSelected(route: string) {
         return page.url.pathname === route;
     }
 </script>
@@ -62,8 +62,9 @@
         </button>
     </div>
     <ul>
-        {#each items as item, i}
+        {#each items as item (item.name)}
             <li class:selected={isSelected(item.route)}>
+                <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
                 <a href={item.route} onclick={() => {
                     hamburgerOpen = false
                 }}>

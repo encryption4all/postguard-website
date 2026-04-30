@@ -61,7 +61,7 @@
     // Add files to Dropzone after it initializes
     onMount(() => {
         setTimeout(() => {
-            const dropzoneElement = document.querySelector('#my-form') as any
+            const dropzoneElement = document.querySelector('#my-form') as (HTMLElement & { dropzone?: Dropzone }) | null
             if (dropzoneElement && dropzoneElement.dropzone) {
                 const dz = dropzoneElement.dropzone as Dropzone
                 mockFiles.forEach((file) => {
@@ -86,7 +86,7 @@
             {#if testEncryptState.encryptionState === EncryptionState.FileSelection || testEncryptState.encryptionState === EncryptionState.Encrypting}
                 <RecipientSelection bind:recipients={testEncryptState.recipients} attributes={ATTRIBUTES} readonly={testEncryptState.encryptionState === EncryptionState.Encrypting} />
                 <MessageInput bind:message={testEncryptState.message} readonly={testEncryptState.encryptionState === EncryptionState.Encrypting} />
-                <SendButton bind:EncryptState={testEncryptState} />
+                <SendButton bind:encryptState={testEncryptState} />
             {/if}
         </div>
     {/if}
