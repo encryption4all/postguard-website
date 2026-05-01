@@ -35,6 +35,8 @@
 
     let searchTerm = $state()
     let readable = $state()
+    let uuid = $state()
+    let recipient = $state()
 
     let unique = $state({})
     const onFile = async (event) => {
@@ -53,6 +55,8 @@
     }
 
     onMount(async () => {
+        // Path 1: hash carries the entire ciphertext (tier 1 — small
+        // payload embedded in the URL fragment by pg-js's createEnvelope).
         const hash = window.location.hash
         if (hash && hash.length > 1) {
             try {
@@ -73,9 +77,32 @@
                 hashMode = true
                 unique = {}
                 currRight = RIGHTMODES.Decrypt
+                return
             } catch (e) {
                 console.error('[PostGuard] Failed to decode URL hash:', e)
             }
+        }
+
+        // Path 2: ?uuid=… points at a Cryptify-uploaded ciphertext (tier
+        // 2/3 messages from pg-js >= 1.1.0 in `data: mime` mode). The
+        // Decrypt component accepts a uuid prop and calls pg.open({ uuid })
+        // to fetch + decrypt; the parsed plaintext is treated as RFC 5322
+        // MIME, so attachments and the inner body surface by name (matches
+        // the receive-side path the Outlook/TB add-ons take).
+        //
+        // ?recipient=… is an optional hint matching the /download page —
+        // when present and matching one of the encryption policy
+        // recipients, the Decrypt component skips the picker and goes
+        // straight to that key.
+        const params = new URLSearchParams(window.location.search)
+        const uuidParam = params.get('uuid')
+        const recipientParam = params.get('recipient')
+        if (uuidParam) {
+            uuid = uuidParam
+            recipient = recipientParam ?? undefined
+            hashMode = true
+            unique = {}
+            currRight = RIGHTMODES.Decrypt
         }
     })
 </script>
@@ -165,7 +192,7 @@
                 </div>
             {:else}
                 {#key unique}
-                    <Decrypt {readable} bind:rightMode={currRight} />
+                    <Decrypt {readable} {uuid} {recipient} bind:rightMode={currRight} />
                 {/key}
             {/if}
         </div>
