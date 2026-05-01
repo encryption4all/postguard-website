@@ -42,14 +42,22 @@
     let decryptedMail
     let err = $state()
 
-    /** @type {{rightMode: any, readable: any}} */
+    /** @type {{rightMode: any, readable?: any, uuid?: string, recipient?: string}} */
     // eslint-disable-next-line no-useless-assignment
-    let { rightMode = $bindable(), readable } = $props();
+    let { rightMode = $bindable(), readable, uuid, recipient } = $props();
 
     let opened = $state()
 
     function checkRecipients() {
         const recipients = [...policies.keys()].filter((k) => k)
+        // Optional hint from the URL: if the caller passed a recipient
+        // and it matches one of the encryption policy keys, skip the
+        // picker and go straight to that key. Mirrors the /download
+        // page's ?recipient= parameter.
+        if (recipient && recipients.includes(recipient)) {
+            key = recipient
+            return
+        }
         if (recipients.length === 1) {
             key = recipients[0]
         } else {
@@ -128,8 +136,11 @@
     }
 
     run(() => {
-        if (decryptState === STATES.Uninit && readable) {
-            const o = pg.open({ data: readable })
+        if (decryptState === STATES.Uninit && (readable || uuid)) {
+            // pg.open accepts either raw bytes (file upload / URL hash) or
+            // a Cryptify uuid (tier 2/3 envelopes from pg-js >= 1.1.0 in
+            // `data: mime` mode point recipients here with ?uuid=...).
+            const o = uuid ? pg.open({ uuid }) : pg.open({ data: readable })
             opened = o
             o.inspect()
                 .then((info) => {
