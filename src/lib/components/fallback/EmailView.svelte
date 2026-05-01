@@ -1,9 +1,9 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from 'svelte/legacy'
 
     import * as email from './email'
     import { emails, currSelected } from './../fallback/stores.js'
-    import { _, locale } from 'svelte-i18n';
+    import { _, locale } from 'svelte-i18n'
 
     import Icon from '@iconify/svelte'
 
@@ -20,43 +20,63 @@
                 })
             }
         }
-    });
+    })
 </script>
 
 {#if parsed}
     <div class="email-view">
         <div class="email-header">
-            <div class="header-row">
-                <span class="header-label">{$_('fallback.email.from')}:</span>
-                <span class="header-value">{parsed.from.name} &lt;{parsed.from.address}&gt;</span>
-            </div>
-            <div class="header-row">
-                <span class="header-label">{$_('fallback.email.to')}:</span>
-                <span class="header-value">
-                    {#each parsed.to as { name, address } (address)}
-                        {name} &lt;{address}&gt;
-                    {/each}
-                </span>
-            </div>
-            <div class="header-row">
-                <span class="header-label">{$_('fallback.email.subject')}:</span>
-                <span class="header-value">{parsed.subject}</span>
-            </div>
-            <div class="header-row">
-                <span class="header-label">{$_('fallback.email.date')}:</span>
-                <span class="header-value">{date.toLocaleString($locale)}</span>
-            </div>
+            {#if parsed.from}
+                <div class="header-row">
+                    <span class="header-label"
+                        >{$_('fallback.email.from')}:</span
+                    >
+                    <span class="header-value">
+                        {#if parsed.from.name}{parsed.from.name} &lt;{parsed
+                                .from.address}&gt;{:else}{parsed.from
+                                .address}{/if}
+                    </span>
+                </div>
+            {/if}
+            {#if parsed.to && parsed.to.length > 0}
+                <div class="header-row">
+                    <span class="header-label">{$_('fallback.email.to')}:</span>
+                    <span class="header-value">
+                        {#each parsed.to as { name, address } (address)}
+                            {#if name}{name} &lt;{address}&gt;{:else}{address}{/if}
+                        {/each}
+                    </span>
+                </div>
+            {/if}
+            {#if parsed.subject}
+                <div class="header-row">
+                    <span class="header-label"
+                        >{$_('fallback.email.subject')}:</span
+                    >
+                    <span class="header-value">{parsed.subject}</span>
+                </div>
+            {/if}
+            {#if date && !isNaN(date.getTime())}
+                <div class="header-row">
+                    <span class="header-label"
+                        >{$_('fallback.email.date')}:</span
+                    >
+                    <span class="header-value"
+                        >{date.toLocaleString($locale)}</span
+                    >
+                </div>
+            {/if}
         </div>
 
         <div class="email-body">
             <iframe
-                srcdoc={`<style>body{margin:1rem}</style>${parsed.html ?? ''}`}
+                srcdoc={`<style>body{margin:1rem}</style>${parsed.html ?? parsed.text ?? ''}`}
                 title="Mail message"
                 sandbox=""
             ></iframe>
         </div>
 
-        {#if parsed.attachments.length > 0}
+        {#if parsed.attachments && parsed.attachments.length > 0}
             <div class="email-attachments">
                 {#each parsed.attachments as att (att.filename)}
                     <button
