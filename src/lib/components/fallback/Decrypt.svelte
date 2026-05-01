@@ -1,14 +1,9 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from 'svelte/legacy'
 
     import { tick } from 'svelte'
 
-    import {
-        currSelected,
-        currentId,
-        nextId,
-        emails,
-    } from './stores'
+    import { currSelected, currentId, nextId, emails } from './stores'
 
     import * as decrypt from './decrypt.js'
     import * as email from './email'
@@ -44,7 +39,7 @@
 
     /** @type {{rightMode: any, readable?: any, uuid?: string, recipient?: string}} */
     // eslint-disable-next-line no-useless-assignment
-    let { rightMode = $bindable(), readable, uuid, recipient } = $props();
+    let { rightMode = $bindable(), readable, uuid, recipient } = $props()
 
     let opened = $state()
 
@@ -117,12 +112,19 @@
             return
         }
 
+        // postal-mime exposes the parsed Date directly; falling back to the
+        // raw headers array would break for messages where postal-mime
+        // returns headers: [] (we hit "headers[0] is undefined" in the wild
+        // on Outlook-encrypted MIME).
+        const parsedDate =
+            decryptedMail.date ?? decryptedMail.headers?.[0]?.value ?? ''
+
         $emails = [
             {
                 id: $nextId,
                 from: decryptedMail.from,
                 to: decryptedMail.to,
-                date: decryptedMail.headers[0]['value'],
+                date: parsedDate,
                 subject: decryptedMail.subject,
                 raw: unparsed,
                 hash,
@@ -153,29 +155,50 @@
                     decryptState = STATES.Fail
                 })
         }
-    });
+    })
     run(() => {
-        if ((decryptState === STATES.Init || decryptState === STATES.Recipients) && key) {
+        if (
+            (decryptState === STATES.Init ||
+                decryptState === STATES.Recipients) &&
+            key
+        ) {
             processCredentials()
             decryptState = STATES.Qr
             tick().then(() => startDecryption())
         }
-    });
+    })
 </script>
 
 <div class="decrypt-wrapper">
     {#if decryptState === STATES.Uninit || decryptState === STATES.Init}
         <div class="spinner-wrapper">
             <svg class="spinner" viewBox="0 0 24 24" width="36" height="36">
-                <circle class="spinner-circle" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3"></circle>
+                <circle
+                    class="spinner-circle"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                ></circle>
             </svg>
         </div>
-        <p class="status-text">{$_('fallback.decrypt.init', { default: 'Initializing...' })}</p>
-
+        <p class="status-text">
+            {$_('fallback.decrypt.init', { default: 'Initializing...' })}
+        </p>
     {:else if decryptState === STATES.Recipients}
         <div class="decrypt-card">
-            <h3>{$_('fallback.decrypt.selectRecipient', { default: 'Select recipient' })}</h3>
-            <p class="card-subtitle">{$_('fallback.decrypt.selectRecipientDesc', { default: 'Please select which email belongs to you:' })}</p>
+            <h3>
+                {$_('fallback.decrypt.selectRecipient', {
+                    default: 'Select recipient',
+                })}
+            </h3>
+            <p class="card-subtitle">
+                {$_('fallback.decrypt.selectRecipientDesc', {
+                    default: 'Please select which email belongs to you:',
+                })}
+            </p>
             <select bind:value={key} class="recipient-select">
                 <option value=""></option>
                 {#each keylist as k (k)}
@@ -183,10 +206,11 @@
                 {/each}
             </select>
         </div>
-
     {:else if decryptState === STATES.Qr}
         <div class="decrypt-card">
-            <h3>{$_('fallback.decrypt.scanQr', { default: 'Scan QR code' })}</h3>
+            <h3>
+                {$_('fallback.decrypt.scanQr', { default: 'Scan QR code' })}
+            </h3>
             {#if showHints}
                 <div class="hints">
                     {#each hints as hint (hint)}
@@ -196,18 +220,30 @@
             {/if}
             <YiviQRCode id="yivi-fallback" responsive />
         </div>
-
     {:else if decryptState === STATES.Decrypting}
         <div class="spinner-wrapper">
             <svg class="spinner" viewBox="0 0 24 24" width="36" height="36">
-                <circle class="spinner-circle" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3"></circle>
+                <circle
+                    class="spinner-circle"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                ></circle>
             </svg>
         </div>
-        <p class="status-text">{$_('fallback.decrypt.decrypting', { default: 'Decrypting...' })}</p>
-
+        <p class="status-text">
+            {$_('fallback.decrypt.decrypting', { default: 'Decrypting...' })}
+        </p>
     {:else if decryptState === STATES.Fail}
         <div class="decrypt-card error-card">
-            <p class="error-text">{$_('fallback.decrypt.failure', { default: 'Decryption failed' })}</p>
+            <p class="error-text">
+                {$_('fallback.decrypt.failure', {
+                    default: 'Decryption failed',
+                })}
+            </p>
             <p class="error-detail">{err}</p>
             <Chip
                 text={$_('fallback.decrypt.retry')}
@@ -251,13 +287,21 @@
     }
 
     @keyframes spin {
-        to { transform: rotate(360deg); }
+        to {
+            transform: rotate(360deg);
+        }
     }
 
     @keyframes dash {
-        0% { stroke-dashoffset: 60; }
-        50% { stroke-dashoffset: 15; }
-        100% { stroke-dashoffset: 60; }
+        0% {
+            stroke-dashoffset: 60;
+        }
+        50% {
+            stroke-dashoffset: 15;
+        }
+        100% {
+            stroke-dashoffset: 60;
+        }
     }
 
     .status-text {
