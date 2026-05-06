@@ -1,6 +1,6 @@
 ---
 title: "Looking ahead with PostGuard"
-description: "The Yivi team shares PostGuard's roadmap for 2026 — free personal use, business features, and exciting proof of concepts with NotifyNL and Bereken Je Recht."
+description: "The Yivi team shares PostGuard's roadmap for 2026: free personal use, business features, and proof of concepts with NotifyNL and Bereken Je Recht."
 date: "2026-04-16"
 author: "Ruben Hensen"
 image: "/blog/postguard_cover.png"
@@ -29,7 +29,7 @@ The second part of our roadmap is PostGuard for Business. The goal here is quite
 
 ### Information-rich notifications with NotifyNL
 
-"A message has arrived for you." When you receive an email from the government right now, it deliberately contains very little — no links or files — to make sure people navigate to a trusted environment on their own to read the message. Super secure of course, but not very user-friendly. With NotifyNL we're setting up a PoC where citizens receive an encrypted message in their email via NotifyNL. This way the government can use Yivi's attribute verification to be certain that the message can only be read by the right person. And the citizen gets the convenience of reading a regular email where all the information they need is included right away.
+"A message has arrived for you." When you receive an email from the government right now, it deliberately contains very little (no links, no files) to make sure people go to a trusted environment on their own to read the message. Super secure of course, but not very user-friendly. With NotifyNL we're setting up a PoC where citizens receive an encrypted message in their email via NotifyNL. This way the government can use Yivi's attribute verification to be certain that the message can only be read by the right person. And the citizen gets the convenience of reading a regular email where all the information they need is included right away.
 
 ### Bereken Je Recht
 
