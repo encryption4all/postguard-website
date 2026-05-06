@@ -41,6 +41,6 @@ PostGuard is currently developed and maintained by [Yivi](https://yivi.app) at [
 
 ## Get started
 
-Head over to [postguard.eu/fileshare](/fileshare) to try encrypted file sharing, use the [Inbox](/decrypt) to decrypt PostGuard emails in your browser, or install the [Thunderbird or Outlook add-on](/addons) for seamless email encryption.
+Head over to [postguard.eu/fileshare](/fileshare) to try encrypted file sharing, use the [Inbox](/decrypt) to decrypt PostGuard emails in your browser, or install the [Thunderbird or Outlook add-on](/addons) for built-in email encryption.
 
 PostGuard is fully open source under the MIT license. Visit our [GitHub](https://github.com/encryption4all) to explore the code, report issues, or contribute.
