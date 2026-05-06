@@ -58,9 +58,9 @@
         "businessCta": "Contact us",
         "limits": {
             "sectionTitle": "Send large files. Without limits that get in the way.",
-            "intro": "Most encrypted file-sharing services cap free transfers at just a few hundred megabytes. PostGuard lets you share much more — completely free.",
+            "intro": "Most encrypted file-sharing services cap free transfers at just a few hundred megabytes. PostGuard lets you share much more, completely free.",
             "uploadSuffix": "per upload",
-            "uploadDesc": "Send a single file or a whole batch — up to 5 GB in one encrypted transfer.",
+            "uploadDesc": "Send a single file or a whole batch, up to 5 GB in one encrypted transfer.",
             "rollingSuffix": "every 2 weeks",
             "rollingDesc": "Up to 5 GB of encrypted file sharing per email address, over a rolling 14-day window.",
             "footnote": "No account. No payment. End-to-end encrypted, always."
@@ -75,7 +75,7 @@
         "subtitle3": "What is Yivi and why does PostGuard use it?",
         "subpar3": "To decrypt and read encrypted emails and files, recipients only need to prove that they really are the intended recipient. This is done with the authentication app Yivi. PostGuard uses Yivi because it is a free, easy-to-use and privacy-friendly authentication app. Moreover, Yivi offers attribute-based authentication. This means that recipients are able to selectively disclose specific attributes (like having an email address, phone number or surname) of an email or file.",
         "team.header": "About the team",
-        "team.par": "PostGuard was originally developed by a multidisciplinary team from <a href=\"https://ihub.ru.nl\">iHub at Radboud University</a>, in the Netherlands, funded by NWO. The aim is to foster secure communication by offering free email encryption based on advanced (identity-based) encryption techniques. The team focuses on usability and accessibility of encryption technology by combining expertise in computing science, security, and user experience design. PostGuard is currently being developed by <a href=\"https://yivi.app\">Yivi</a> at the <a href=\"https://caesar.nl\">Caesar Groep</a>. This project partners with several public and private organisations in the Netherlands, including <a href=\"https://nedap-healthcare.com/\">Nedap Healthcare</a>, <a href=\"https://www.vgz.nl/\">VGZ</a>, <a href=\"https://www.surf.nl/en\">SURFnet</a>, <a href=\"https://www.nijmegen.nl/\">the Municipality of Nijmegen</a> and <a href=\"https://www.compumatica.com/\">Compumatica</a>. For questions or other inquiries, please contact us via <a href=\"mailto:info@postguard.eu\">our contact address</a>."
+        "team.par": "PostGuard was originally developed by a multidisciplinary team from <a href=\"https://ihub.ru.nl\">iHub at Radboud University</a>, in the Netherlands, funded by NWO. The aim is to enable secure communication by offering free email encryption based on advanced (identity-based) encryption techniques. The team focuses on usability and accessibility of encryption technology by combining expertise in computing science, security, and user experience design. PostGuard is currently being developed by <a href=\"https://yivi.app\">Yivi</a> at the <a href=\"https://caesar.nl\">Caesar Groep</a>. This project partners with several public and private organisations in the Netherlands, including <a href=\"https://nedap-healthcare.com/\">Nedap Healthcare</a>, <a href=\"https://www.vgz.nl/\">VGZ</a>, <a href=\"https://www.surf.nl/en\">SURFnet</a>, <a href=\"https://www.nijmegen.nl/\">the Municipality of Nijmegen</a> and <a href=\"https://www.compumatica.com/\">Compumatica</a>. For questions or other inquiries, please contact us via <a href=\"mailto:info@postguard.eu\">our contact address</a>."
     },
     "addons": {
         "title": "Add PostGuard to your mail client",
@@ -90,10 +90,10 @@
         "extensionLink": "Install the extension",
         "welcome": {
             "title": "Welcome to your Inbox",
-            "description": "This is your personal space to read encrypted PostGuard emails. Everything happens right here in your browser — your emails are never sent to a server.",
+            "description": "This is your personal space to read encrypted PostGuard emails. Everything happens right here in your browser. Your emails are never sent to a server.",
             "step1": "Upload the \"postguard.encrypted\" file you received as an email attachment",
             "step2": "Verify your identity with the Yivi app",
-            "step3": "Read your decrypted email — it's saved here for next time",
+            "step3": "Read your decrypted email. It's saved here for next time",
             "privacy": "Your emails are stored only in your browser. Clear them anytime in settings."
         },
         "drop": "Drop the \"postguard.encrypted\" attachment here",
@@ -185,7 +185,7 @@
                 "maxSizeText": "{max} GB remaining",
                 "addMoreFiles": "Add more files",
                 "fileSummary": "{count} {count, plural, one {file} other {files}} added, {size} GB remaining",
-                "overLimitText": "{over} GB over the limit — remove some files"
+                "overLimitText": "{over} GB over the limit. Remove some files"
             },
             "RecipientsHeading": "Recipients",
             "RecipientsHelpToggle": "What should I fill in here?",

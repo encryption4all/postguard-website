@@ -58,9 +58,9 @@
         "businessCta": "Neem contact op",
         "limits": {
             "sectionTitle": "Verstuur grote bestanden. Zonder vervelende limieten.",
-            "intro": "De meeste versleutelde bestandsdeeldiensten beperken gratis overdrachten tot slechts enkele honderden megabytes. Met PostGuard deel je veel meer — helemaal gratis.",
+            "intro": "De meeste versleutelde bestandsdeeldiensten beperken gratis overdrachten tot slechts enkele honderden megabytes. Met PostGuard deel je veel meer, helemaal gratis.",
             "uploadSuffix": "per upload",
-            "uploadDesc": "Verstuur één bestand of een hele batch — tot 5 GB in één versleutelde overdracht.",
+            "uploadDesc": "Verstuur één bestand of een hele batch, tot 5 GB in één versleutelde overdracht.",
             "rollingSuffix": "per 2 weken",
             "rollingDesc": "Tot 5 GB aan versleutelde bestandsdeling per e-mailadres, binnen een doorlopend venster van 14 dagen.",
             "footnote": "Geen account. Geen betaling. Altijd end-to-end versleuteld."
@@ -90,10 +90,10 @@
         "extensionLink": "Installeer de extensie",
         "welcome": {
             "title": "Welkom in je Inbox",
-            "description": "Dit is je persoonlijke plek om versleutelde PostGuard e-mails te lezen. Alles gebeurt hier in je browser — je e-mails worden nooit naar een server gestuurd.",
+            "description": "Dit is je persoonlijke plek om versleutelde PostGuard e-mails te lezen. Alles gebeurt hier in je browser. Je e-mails worden nooit naar een server gestuurd.",
             "step1": "Upload het \"postguard.encrypted\" bestand dat je als e-mailbijlage hebt ontvangen",
             "step2": "Bewijs je identiteit met de Yivi-app",
-            "step3": "Lees je ontsleutelde e-mail — deze wordt bewaard voor de volgende keer",
+            "step3": "Lees je ontsleutelde e-mail. Deze wordt bewaard voor de volgende keer",
             "privacy": "Je e-mails worden alleen in je browser opgeslagen. Verwijder ze op elk moment via instellingen."
         },
         "drop": "Selecteer \"postguard.encrypted\" attachment hier",
@@ -184,7 +184,7 @@
                 "maxSizeText": "nog {max} GB beschikbaar",
                 "addMoreFiles": "Voeg meer bestanden toe",
                 "fileSummary": "{count} {count, plural, one {bestand} other {bestanden}} toegevoegd, nog {size} GB over",
-                "overLimitText": "{over} GB over de limiet — verwijder bestanden"
+                "overLimitText": "{over} GB over de limiet. Verwijder bestanden"
             },
             "RecipientsHeading": "Ontvangers",
             "RecipientsHelpToggle": "Wat vul ik hier in?",
