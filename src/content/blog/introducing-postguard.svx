@@ -8,30 +8,30 @@ image: "/pg_logo.png"
 
 # Introducing PostGuard
 
-PostGuard is a free, open-source service that brings end-to-end encryption to emails and files — without the complexity that typically comes with it. Built on Identity-Based Encryption (IBE), PostGuard lets you encrypt messages for anyone using just their email address. No key exchange, no certificates, no setup required.
+PostGuard is a free, open-source service that brings end-to-end encryption to emails and files, without the usual complexity. Built on Identity-Based Encryption (IBE), PostGuard lets you encrypt messages for anyone using just their email address. No key exchange, no certificates, no setup required.
 
 ## The problem with encrypted communication
 
-Most email applications — Gmail, Outlook, Apple Mail — and most file sharing tools do not apply end-to-end encryption by default. Your messages travel through multiple servers in plaintext, meaning unauthorized parties could intercept, read, or tamper with them along the way. For sensitive information like medical records, legal documents, or personal data, this is unacceptable.
+Most email applications (Gmail, Outlook, Apple Mail) and most file sharing tools do not apply end-to-end encryption by default. Your messages travel through multiple servers in plaintext, meaning unauthorized parties could intercept, read, or tamper with them along the way. For sensitive information like medical records, legal documents, or personal data, this is unacceptable.
 
 Traditional encryption solutions like PGP or S/MIME exist, but they require both parties to manage cryptographic key pairs, exchange public keys beforehand, and keep certificates up to date. This complexity has kept encryption out of reach for most people.
 
 ## How PostGuard is different
 
-PostGuard uses **Identity-Based Encryption (IBE)**, a fundamentally different approach. With IBE, the recipient's identity — such as their email address — *is* their public key. There is nothing to exchange or look up beforehand.
+PostGuard uses **Identity-Based Encryption (IBE)**, a different approach. With IBE, the recipient's identity, such as their email address, *is* their public key. There is nothing to exchange or look up beforehand.
 
 Here is how sending an encrypted file works:
 
-1. **Select your recipients** — enter their email addresses
-2. **Choose your files** — drag and drop, or browse your computer
-3. **Sign with Yivi** — prove your own identity so recipients know the files came from you
-4. **Send** — PostGuard encrypts everything locally in your browser, then uploads only the encrypted data
+1. Enter the email addresses of your recipients.
+2. Drag and drop your files, or browse for them on your computer.
+3. Sign with Yivi to prove your own identity, so recipients know the files came from you.
+4. Hit send. PostGuard encrypts everything locally in your browser, then uploads only the encrypted data.
 
 The recipient receives a link by email, proves their identity using the free [Yivi](https://yivi.app) app, and downloads the decrypted files. At no point does PostGuard's server see your unencrypted data.
 
 ## What is Yivi?
 
-[Yivi](https://yivi.app) is a free, privacy-friendly identity wallet. Instead of logging in with a username and password, Yivi lets you prove specific attributes about yourself — like "I own this email address" or "my name is X" — without revealing anything else. PostGuard uses Yivi for both sender signing and recipient authentication, which means encryption is tied directly to verified identity attributes rather than passwords or key files.
+[Yivi](https://yivi.app) is a free, privacy-friendly identity wallet. Instead of logging in with a username and password, Yivi lets you prove specific attributes about yourself, like "I own this email address" or "my name is X", without revealing anything else. PostGuard uses Yivi for both sender signing and recipient authentication, which means encryption is tied directly to verified identity attributes rather than passwords or key files.
 
 ## Who built PostGuard?
 
