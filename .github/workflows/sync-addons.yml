@@ -1,0 +1,43 @@
+name: Sync addons
+
+# Mirrors the latest postguard-tb-addon release into static/downloads/ so the
+# website can serve the .xpi directly. Opens a PR when the upstream sha256
+# differs from what is currently committed; no-op otherwise.
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-tb-addon:
+    name: Sync Thunderbird addon
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Run sync script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/sync-tb-addon.mjs
+      - name: Open PR if changed
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: chore/sync-tb-addon
+          delete-branch: true
+          commit-message: 'chore: sync Thunderbird addon to latest release'
+          title: 'chore: sync Thunderbird addon to latest release'
+          body: |
+            Automated sync of the latest [postguard-tb-addon release](https://github.com/encryption4all/postguard-tb-addon/releases/latest).
+
+            Version metadata lives in `static/downloads/postguard-tb-addon.json`.
+          add-paths: |
+            static/downloads/postguard-tb-addon.xpi
+            static/downloads/postguard-tb-addon.json
