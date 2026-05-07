@@ -190,9 +190,10 @@
 
             await sealed.upload({
                 notify: {
+                    recipients: true,
+                    sender: true,
                     message: encryptState.message,
                     language: lang as 'EN' | 'NL',
-                    confirmToSender: true,
                 },
             })
 
