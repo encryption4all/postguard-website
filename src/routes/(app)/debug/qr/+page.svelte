@@ -14,9 +14,8 @@
 <div class="test-container">
     <h1>Yivi QR Code Test Page</h1>
 
-
-            <YiviQRCode />
-    <br/>
+    <YiviQRCode />
+    <br />
     <div class="debug-info">
         <h2>Debug Info:</h2>
         <ul>
@@ -32,7 +31,10 @@
         padding: 2rem;
         max-width: 800px;
         margin: 0 auto;
-        font-family: system-ui, -apple-system, sans-serif;
+        font-family:
+            system-ui,
+            -apple-system,
+            sans-serif;
     }
 
     h1 {

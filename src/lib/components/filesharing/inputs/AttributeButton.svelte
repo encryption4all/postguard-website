@@ -3,9 +3,9 @@
     import Chip from '$lib/components/Chip.svelte'
 
     interface props {
-        clickAction?: () => void;
-        translation_key: string;
-        type: 'add' | 'added';
+        clickAction?: () => void
+        translation_key: string
+        type: 'add' | 'added'
     }
 
     let { clickAction, translation_key, type }: props = $props()

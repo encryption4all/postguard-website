@@ -1,7 +1,7 @@
 <script lang="ts">
     import { _, locale } from 'svelte-i18n'
     import { isValidPhoneNumber } from 'libphonenumber-js/mobile'
-    import { NetworkError } from '@e4a/pg-js'
+    import { NetworkError, UploadSessionExpiredError } from '@e4a/pg-js'
     import { tick } from 'svelte'
 
     import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
@@ -9,7 +9,7 @@
         EncryptionState,
         type EncryptState,
     } from '$lib/types/filesharing/attributes'
-    import { pg } from '$lib/postguard'
+    import { pg, retryStatus } from '$lib/postguard'
     import { browser } from '$app/environment'
     import { isMobile } from '$lib/browser-detect'
     import YiviQRCode from './YiviQRCode.svelte'
@@ -31,7 +31,6 @@
     let showValidationModal = $state(false)
     let validationErrors: string[] = $state([])
     let limitExceededMessage: string | null = $state(null)
-
 
     let SMOOTH_TIME = 2
 
@@ -71,12 +70,17 @@
             errors.push($_('filesharing.encryptPanel.validation.noFiles'))
         }
         const totalSize = encryptState.files.reduce((a, f) => a + f.size, 0)
-        const effectiveLimit = Math.min(MAX_UPLOAD_SIZE, ROLLING_LIMIT - getLocalUsedBytes())
+        const effectiveLimit = Math.min(
+            MAX_UPLOAD_SIZE,
+            ROLLING_LIMIT - getLocalUsedBytes()
+        )
         if (totalSize > effectiveLimit) {
-            const over = ((totalSize - effectiveLimit) / (1024 ** 3)).toFixed(2)
-            errors.push($_('filesharing.encryptPanel.fileBox.overLimitText', {
-                values: { over }
-            }))
+            const over = ((totalSize - effectiveLimit) / 1024 ** 3).toFixed(2)
+            errors.push(
+                $_('filesharing.encryptPanel.fileBox.overLimitText', {
+                    values: { over },
+                })
+            )
         }
         encryptState.recipients.forEach(({ email, extra }) => {
             if (!email || email.trim() === '') {
@@ -188,6 +192,10 @@
                 signal: encryptState.abort.signal,
             })
 
+            // Reset any retry banner state from a previous attempt before
+            // we start streaming chunks.
+            retryStatus.set(null)
+
             await sealed.upload({
                 notify: {
                     recipients: true,
@@ -197,19 +205,31 @@
                 },
             })
 
-            const totalBytes = encryptState.files.reduce((a, f) => a + f.size, 0)
+            const totalBytes = encryptState.files.reduce(
+                (a, f) => a + f.size,
+                0
+            )
             recordUpload(totalBytes)
 
+            retryStatus.set(null)
             encryptState.encryptionState = EncryptionState.Done
             encryptState.selfAborted = false
         } catch (e) {
             console.error('Error occurred during encryption:', e)
+            retryStatus.set(null)
             if (encryptState.selfAborted) {
                 encryptState.percentages = encryptState.files.map(() => 0)
                 encryptState.done = encryptState.files.map(() => false)
                 encryptState.encryptionState = EncryptionState.FileSelection
                 encryptState.selfAborted = false
                 encryptState.encryptStartTime = 0
+            } else if (e instanceof UploadSessionExpiredError) {
+                // cryptify evicted the upload session (idle past the
+                // configured TTL or the server restarted). Retry won't help —
+                // the user must start a fresh upload. Surface a distinct
+                // message so it doesn't blur into a generic server error.
+                encryptState.serverError = false
+                encryptState.encryptionState = EncryptionState.Error
             } else if (e instanceof NetworkError && e.status === 413) {
                 // cryptify#100: 413 Payload Too Large — either per-upload or rolling limit.
                 const status = parseLimitExceededBody(e.body ?? '')
@@ -334,6 +354,16 @@
                 </svg>
                 {$_('filesharing.encryptPanel.sending')}
             </div>
+            {#if $retryStatus}
+                <p class="retry-status" role="status">
+                    {$_('filesharing.encryptPanel.retrying', {
+                        values: {
+                            attempt: $retryStatus.attempt + 1,
+                            max: $retryStatus.maxAttempts,
+                        },
+                    })}
+                </p>
+            {/if}
         </div>
     {:else}
         <!-- Normal button -->
@@ -600,6 +630,14 @@
 
     .upload-info-box .spinner-circle {
         stroke: var(--pg-text);
+    }
+
+    .retry-status {
+        margin: 0;
+        padding: 0 1rem 0.75rem 1rem;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
     }
 
     .spinner {

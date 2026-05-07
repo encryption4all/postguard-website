@@ -31,9 +31,7 @@
     let to = $derived(recipients.map(({ email }) => email).join(', '))
     let timeEstimateRepr = $derived(() => {
         const deltaT = Date.now() - encryptStartTime
-        const totalSize = files
-            .map((f) => f.size)
-            .reduce((a, b) => a + b, 0)
+        const totalSize = files.map((f) => f.size).reduce((a, b) => a + b, 0)
 
         const totalProgress = files
             .map((f, i) => (percentages[i] * f.size) / totalSize)
@@ -53,13 +51,15 @@
                 return $_('filesharing.encryptPanel.timeremaining.seconds')
             case remaining < 1000 * 60 * 60: {
                 const minutes = Math.ceil(remaining / (1000 * 60))
-                return $_('filesharing.encryptPanel.timeremaining.minutes',
-                    { values: { minutes: minutes } })
+                return $_('filesharing.encryptPanel.timeremaining.minutes', {
+                    values: { minutes: minutes },
+                })
             }
             case remaining < 1000 * 60 * 60 * 24: {
                 const hours = Math.ceil(remaining / (1000 * 60 * 60))
-                return $_('filesharing.encryptPanel.timeremaining.hours',
-                    { values: { hours: hours } })
+                return $_('filesharing.encryptPanel.timeremaining.hours', {
+                    values: { hours: hours },
+                })
             }
             default:
                 return $_('filesharing.encryptPanel.timeremaining.unknown')
@@ -98,18 +98,17 @@
 </div>
 
 <style lang="scss">
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 1rem;
+    }
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 1rem;
-  }
-
-  button {
-    padding: 0.5rem 1rem;
-    margin-top: 1rem;
-  }
+    button {
+        padding: 0.5rem 1rem;
+        margin-top: 1rem;
+    }
 </style>

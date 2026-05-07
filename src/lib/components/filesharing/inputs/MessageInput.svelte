@@ -24,8 +24,14 @@
 </script>
 
 <div class="crypt-select-protection-input-box">
-    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-    <h3>{@html $_('filesharing.encryptPanel.messageHeading').replace(/\s*\([^)]*\)/, (match) => ` <span class="optional-text">${match.trim()}</span>`)}</h3>
+    <h3>
+        <!-- eslint-disable svelte/no-at-html-tags -->
+        {@html $_('filesharing.encryptPanel.messageHeading').replace(
+            /\s*\([^)]*\)/,
+            (match) => ` <span class="optional-text">${match.trim()}</span>`
+        )}
+        <!-- eslint-enable svelte/no-at-html-tags -->
+    </h3>
     <p>{$_('filesharing.encryptPanel.messageText')}</p>
     <textarea
         bind:this={textarea}
@@ -39,7 +45,6 @@
 </div>
 
 <style>
-
     p {
         font-size: var(--pg-font-size-sm);
         color: var(--pg-text-secondary);
@@ -64,7 +69,6 @@
             min-height: 6rem;
         }
     }
-
 
     @media only screen and (min-height: 1024px) {
         textarea {

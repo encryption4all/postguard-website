@@ -169,6 +169,9 @@
             "identityMismatchTitle": "Decryption failed",
             "identityMismatchSubtitle": "The identity you provided does not match the intended recipient.",
             "identityMismatchMessage": "Please make sure you are proving the correct email address in Yivi.",
+            "sessionExpiredTitle": "Upload session expired",
+            "sessionExpiredSubtitle": "The server no longer has this upload available.",
+            "sessionExpiredMessage": "Ask the sender to send the files <strong>once more</strong>.",
             "tryAgain": "Try again"
         },
         "encryptPanel": {
@@ -206,6 +209,7 @@
             "yiviInfoLink": "Learn more about Yivi",
             "yiviTip": "Tip: In the Yivi app you can add optional data. This way you let the recipient(s) know for sure that these files come from you.",
             "sending": "Your files are being sent",
+            "retrying": "Connection hiccup, retrying… (attempt {attempt} of {max})",
             "encrypting": "Encrypting & uploading...",
             "encryptingInfo": "Your files are being encrypted first and afterwards are sent to: ",
             "succes": "Your files have been sent!",

@@ -6,9 +6,12 @@
     const mockSenderIdentity = {
         con: [
             { t: 'pbdf.sidn-pbdf.email.email', v: 'alice@example.com' },
-            { t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber', v: '+31612345678' },
+            {
+                t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
+                v: '+31612345678',
+            },
             { t: 'pbdf.nijmegen.personalData.fullname', v: 'Alice Jansen' },
-        ]
+        ],
     }
 
     type Attribute = { t?: string; v?: string }
@@ -37,7 +40,6 @@
 </div>
 
 <div class="states-grid">
-
     <!-- Downloading -->
     <div class="state-col">
         <div class="state-label">Downloading</div>
@@ -45,8 +47,21 @@
             <div class="content">
                 <h2>{$_('filesharing.decryptpanel.header')}</h2>
                 <div class="spinner-wrapper">
-                    <svg class="spinner" viewBox="0 0 24 24" width="36" height="36">
-                        <circle class="spinner-circle" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3"></circle>
+                    <svg
+                        class="spinner"
+                        viewBox="0 0 24 24"
+                        width="36"
+                        height="36"
+                    >
+                        <circle
+                            class="spinner-circle"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="3"
+                        ></circle>
                     </svg>
                 </div>
             </div>
@@ -59,10 +74,16 @@
         <div class="page-wrapper">
             <div class="content">
                 <h2>{$_('filesharing.decryptpanel.header')}</h2>
-                <p class="description">{$_('filesharing.decryptpanel.pageDescription')}</p>
+                <p class="description">
+                    {$_('filesharing.decryptpanel.pageDescription')}
+                </p>
                 <div class="decrypt-card">
-                    <h3>{$_('filesharing.decryptpanel.irmaInstructionHeaderQr')}</h3>
-                    <p class="card-subtitle">{$_('filesharing.decryptpanel.irmaInstructionQr')}</p>
+                    <h3>
+                        {$_('filesharing.decryptpanel.irmaInstructionHeaderQr')}
+                    </h3>
+                    <p class="card-subtitle">
+                        {$_('filesharing.decryptpanel.irmaInstructionQr')}
+                    </p>
                     <YiviQRCode id="yivi-test-ready" responsive mode="qr" />
                 </div>
                 <HelpToggle
@@ -73,11 +94,26 @@
                     bordered
                 />
                 <div class="sender-section">
-                    <svg class="checkmark" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 5L4.5 8.5L11 1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                    <svg
+                        class="checkmark"
+                        viewBox="0 0 12 10"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M1 5L4.5 8.5L11 1"
+                            stroke="currentColor"
+                            stroke-width="1.75"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
                     </svg>
-                    <p class="sender-label">{$_('filesharing.decryptpanel.verifiedEmail')}</p>
-                    <strong class="sender-email">{getSenderEmail(mockSenderIdentity)}</strong>
+                    <p class="sender-label">
+                        {$_('filesharing.decryptpanel.verifiedEmail')}
+                    </p>
+                    <strong class="sender-email"
+                        >{getSenderEmail(mockSenderIdentity)}</strong
+                    >
                     {#if getSenderExtras(mockSenderIdentity).length > 0}
                         <div class="attr-chips">
                             {#each getSenderExtras(mockSenderIdentity) as extra (extra)}
@@ -96,13 +132,17 @@
         <div class="page-wrapper">
             <div class="content">
                 <h2>{$_('filesharing.decryptpanel.notFoundTitle')}</h2>
-                <p class="error-description">{$_('filesharing.decryptpanel.notFoundSubtitle')}</p>
-                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                <p class="error-description">{@html $_('filesharing.decryptpanel.notFoundMessage')}</p>
+                <p class="error-description">
+                    {$_('filesharing.decryptpanel.notFoundSubtitle')}
+                </p>
+                <p class="error-description">
+                    <!-- eslint-disable svelte/no-at-html-tags -->
+                    {@html $_('filesharing.decryptpanel.notFoundMessage')}
+                    <!-- eslint-enable svelte/no-at-html-tags -->
+                </p>
             </div>
         </div>
     </div>
-
 </div>
 
 <style lang="scss">
@@ -129,7 +169,9 @@
     .states-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        min-height: calc(100vh - 52px - 52px); /* minus navbar and test header */
+        min-height: calc(
+            100vh - 52px - 52px
+        ); /* minus navbar and test header */
         border-top: 1px solid var(--pg-strong-background);
     }
 
@@ -233,13 +275,21 @@
     }
 
     @keyframes spin {
-        to { transform: rotate(360deg); }
+        to {
+            transform: rotate(360deg);
+        }
     }
 
     @keyframes dash {
-        0% { stroke-dashoffset: 60; }
-        50% { stroke-dashoffset: 15; }
-        100% { stroke-dashoffset: 60; }
+        0% {
+            stroke-dashoffset: 60;
+        }
+        50% {
+            stroke-dashoffset: 15;
+        }
+        100% {
+            stroke-dashoffset: 60;
+        }
     }
 
     .sender-section {

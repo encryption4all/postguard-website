@@ -78,76 +78,96 @@
 />
 
 <div
-    class:container={encryptState.encryptionState === EncryptionState.FileSelection || encryptState.encryptionState === EncryptionState.Sign || encryptState.encryptionState === EncryptionState.Encrypting || encryptState.encryptionState === EncryptionState.Error}
+    class:container={encryptState.encryptionState ===
+        EncryptionState.FileSelection ||
+        encryptState.encryptionState === EncryptionState.Sign ||
+        encryptState.encryptionState === EncryptionState.Encrypting ||
+        encryptState.encryptionState === EncryptionState.Error}
     class:done={encryptState.encryptionState === EncryptionState.Done}
 >
-    <FileInput bind:files={encryptState.files} bind:percentages={encryptState.percentages}
-               bind:done={encryptState.done} bind:stage={encryptState.encryptionState} />
+    <FileInput
+        bind:files={encryptState.files}
+        bind:percentages={encryptState.percentages}
+        bind:done={encryptState.done}
+        bind:stage={encryptState.encryptionState}
+    />
     {#if encryptState.encryptionState === EncryptionState.FileSelection || encryptState.encryptionState === EncryptionState.Sign || encryptState.encryptionState === EncryptionState.Encrypting}
         <div class="inputs-container">
-            <RecipientSelection bind:recipients={encryptState.recipients} attributes={ATTRIBUTES} readonly={encryptState.encryptionState === EncryptionState.Encrypting} />
-            <MessageInput bind:message={encryptState.message} readonly={encryptState.encryptionState === EncryptionState.Encrypting} />
-            <SendButton bind:encryptState={encryptState} />
+            <RecipientSelection
+                bind:recipients={encryptState.recipients}
+                attributes={ATTRIBUTES}
+                readonly={encryptState.encryptionState ===
+                    EncryptionState.Encrypting}
+            />
+            <MessageInput
+                bind:message={encryptState.message}
+                readonly={encryptState.encryptionState ===
+                    EncryptionState.Encrypting}
+            />
+            <SendButton bind:encryptState />
         </div>
     {:else if encryptState.encryptionState === EncryptionState.Error}
         <div class="inputs-container">
-            <ErrorPanel bind:encryptionState={encryptState.encryptionState} serverError={encryptState.serverError} />
+            <ErrorPanel
+                bind:encryptionState={encryptState.encryptionState}
+                serverError={encryptState.serverError}
+            />
         </div>
     {:else if encryptState.encryptionState === EncryptionState.Done}
-        <Done bind:encryptState={encryptState} {createDefaultEncryptState} />
+        <Done bind:encryptState {createDefaultEncryptState} />
     {/if}
-
-
 </div>
 
 <style lang="scss">
-  * {
-    list-style-type: none;
-  }
+    * {
+        list-style-type: none;
+    }
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-inline: 1rem;
-    padding: 0.5rem 0;
-  }
-
-  .inputs-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    font-size: var(--pg-font-size-lg);
-    min-width: 0;
-    gap: 1.25rem;
-    margin: 0;
-  }
-
-  .done {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-  }
-
-  @media only screen and (min-width: 768px) {
     .container {
-      display: grid;
-      grid-template-columns: 1fr min(800px, 43%);
-      gap: 2rem;
-      height: calc(100vh - 52px - 0.5rem - 1rem); /* navbar height + margin */
-      overflow-y: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-inline: 1rem;
+        padding: 0.5rem 0;
     }
 
     .inputs-container {
-      max-height: 100%;
-      margin: 1rem 0 0 0;
-      padding-right: 1rem;
-      overflow-y: auto;
-      border-left: 2px solid var(--pg-strong-background);
-      display: flex;
-      justify-content: flex-start;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        font-size: var(--pg-font-size-lg);
+        min-width: 0;
+        gap: 1.25rem;
+        margin: 0;
     }
-  }
+
+    .done {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    @media only screen and (min-width: 768px) {
+        .container {
+            display: grid;
+            grid-template-columns: 1fr min(800px, 43%);
+            gap: 2rem;
+            height: calc(
+                100vh - 52px - 0.5rem - 1rem
+            ); /* navbar height + margin */
+            overflow-y: hidden;
+        }
+
+        .inputs-container {
+            max-height: 100%;
+            margin: 1rem 0 0 0;
+            padding-right: 1rem;
+            overflow-y: auto;
+            border-left: 2px solid var(--pg-strong-background);
+            display: flex;
+            justify-content: flex-start;
+        }
+    }
 </style>

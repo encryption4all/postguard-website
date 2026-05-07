@@ -2,16 +2,33 @@
     import { onMount, tick } from 'svelte'
     import { browser, dev } from '$app/environment'
     import { _ } from 'svelte-i18n'
-    import { pg } from '$lib/postguard'
-    import { IdentityMismatchError, NetworkError } from '@e4a/pg-js'
-    import type { DecryptFileResult, FriendlySender, InspectResult } from '@e4a/pg-js'
+    import { pg, retryStatus } from '$lib/postguard'
+    import {
+        IdentityMismatchError,
+        NetworkError,
+        UploadSessionExpiredError,
+    } from '@e4a/pg-js'
+    import type {
+        DecryptFileResult,
+        FriendlySender,
+        InspectResult,
+    } from '@e4a/pg-js'
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
     import FileList from '$lib/components/filesharing/FileList.svelte'
     import { isMobile } from '$lib/browser-detect'
     import Chip from '$lib/components/Chip.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
 
-    type DownloadState = 'Downloading' | 'Recipients' | 'Ready' | 'Decrypting' | 'Done' | 'Fail' | 'ServerError' | 'IdentityMismatch'
+    type DownloadState =
+        | 'Downloading'
+        | 'Recipients'
+        | 'Ready'
+        | 'Decrypting'
+        | 'Done'
+        | 'Fail'
+        | 'ServerError'
+        | 'IdentityMismatch'
+        | 'SessionExpired'
 
     let downloadState: DownloadState = $state('Downloading')
 
@@ -42,17 +59,23 @@
 
     async function startDownload() {
         downloadState = 'Downloading'
+        retryStatus.set(null)
         try {
             opened = pg.open({ uuid })
             const info: InspectResult = await opened.inspect()
 
-            if (dev) console.debug('[download] header recipients:', info.recipients)
+            if (dev)
+                console.debug('[download] header recipients:', info.recipients)
 
             senderIdentity = info.sender
 
+            retryStatus.set(null)
             checkRecipients(info.recipients)
         } catch (e) {
-            if (e instanceof NetworkError && e.status >= 500) {
+            retryStatus.set(null)
+            if (e instanceof UploadSessionExpiredError) {
+                downloadState = 'SessionExpired'
+            } else if (e instanceof NetworkError && e.status >= 500) {
                 downloadState = 'ServerError'
             } else {
                 downloadState = 'Fail'
@@ -84,16 +107,17 @@
 
     async function startDecryption() {
         downloadState = 'Ready'
+        retryStatus.set(null)
         await tick()
 
         try {
             if (!opened) throw new Error('No opened instance')
 
-            const result = await opened.decrypt({
+            const result = (await opened.decrypt({
                 element: '#yivi-download',
                 recipient: key,
                 enableCache: true,
-            }) as DecryptFileResult
+            })) as DecryptFileResult
 
             senderIdentity = result.sender
             fileList = result.files
@@ -101,11 +125,15 @@
             // Trigger automatic download
             result.download('files.zip')
 
+            retryStatus.set(null)
             downloadState = 'Done'
         } catch (e) {
             if (dev) console.error('[download] decrypt error:', e)
+            retryStatus.set(null)
             if (e instanceof IdentityMismatchError) {
                 downloadState = 'IdentityMismatch'
+            } else if (e instanceof UploadSessionExpiredError) {
+                downloadState = 'SessionExpired'
             } else if (e instanceof NetworkError && e.status >= 500) {
                 downloadState = 'ServerError'
             } else {
@@ -124,6 +152,8 @@
         <h2>
             {#if downloadState === 'Fail'}
                 {$_('filesharing.decryptpanel.notFoundTitle')}
+            {:else if downloadState === 'SessionExpired'}
+                {$_('filesharing.decryptpanel.sessionExpiredTitle')}
             {:else if downloadState === 'ServerError'}
                 {$_('filesharing.decryptpanel.serverErrorTitle')}
             {:else if downloadState === 'IdentityMismatch'}
@@ -136,17 +166,42 @@
         {#if downloadState === 'Downloading'}
             <div class="spinner-wrapper">
                 <svg class="spinner" viewBox="0 0 24 24" width="36" height="36">
-                    <circle class="spinner-circle" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3"></circle>
+                    <circle
+                        class="spinner-circle"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                    ></circle>
                 </svg>
             </div>
-
+            {#if $retryStatus}
+                <p class="retry-status" role="status">
+                    {$_('filesharing.encryptPanel.retrying', {
+                        values: {
+                            attempt: $retryStatus.attempt + 1,
+                            max: $retryStatus.maxAttempts,
+                        },
+                    })}
+                </p>
+            {/if}
         {:else if downloadState === 'Recipients'}
-            <p class="description">{$_('filesharing.decryptpanel.pageDescription')}</p>
+            <p class="description">
+                {$_('filesharing.decryptpanel.pageDescription')}
+            </p>
             <div class="decrypt-card">
-                <h3>{$_('filesharing.decryptpanel.irmaInstructionHeaderQr')}</h3>
-                <p class="card-subtitle">Please select which email belongs to you:</p>
+                <h3>
+                    {$_('filesharing.decryptpanel.irmaInstructionHeaderQr')}
+                </h3>
+                <p class="card-subtitle">
+                    Please select which email belongs to you:
+                </p>
                 <select bind:value={key} class="recipient-select">
-                    <option value="" disabled selected>Select your email…</option>
+                    <option value="" disabled selected
+                        >Select your email…</option
+                    >
                     {#each keylist as k (k)}
                         <option value={k}>{k}</option>
                     {/each}
@@ -159,21 +214,30 @@
                     disabled={!key}
                 />
             </div>
-
         {:else if downloadState === 'Ready'}
-            <p class="description">{$_('filesharing.decryptpanel.pageDescription')}</p>
+            <p class="description">
+                {$_('filesharing.decryptpanel.pageDescription')}
+            </p>
             <div class="decrypt-card">
                 <h3>
                     {isMobileDevice
-                        ? $_('filesharing.decryptpanel.irmaInstructionHeaderMobile')
-                        : $_('filesharing.decryptpanel.irmaInstructionHeaderQr')}
+                        ? $_(
+                              'filesharing.decryptpanel.irmaInstructionHeaderMobile'
+                          )
+                        : $_(
+                              'filesharing.decryptpanel.irmaInstructionHeaderQr'
+                          )}
                 </h3>
                 <p class="card-subtitle">
                     {isMobileDevice
                         ? $_('filesharing.decryptpanel.irmaInstructionMobile')
                         : $_('filesharing.decryptpanel.irmaInstructionQr')}
                 </p>
-                <YiviQRCode id="yivi-download" responsive mode={isMobileDevice ? 'deeplink' : 'qr'} />
+                <YiviQRCode
+                    id="yivi-download"
+                    responsive
+                    mode={isMobileDevice ? 'deeplink' : 'qr'}
+                />
             </div>
             <HelpToggle
                 title={$_('filesharing.encryptPanel.yiviInfo')}
@@ -184,26 +248,58 @@
             />
             {#if senderIdentity?.email}
                 <div class="sender-section">
-                    <svg class="checkmark" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 5L4.5 8.5L11 1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                    <svg
+                        class="checkmark"
+                        viewBox="0 0 12 10"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M1 5L4.5 8.5L11 1"
+                            stroke="currentColor"
+                            stroke-width="1.75"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
                     </svg>
-                    <p class="sender-label">{$_('filesharing.decryptpanel.verifiedEmail')}</p>
+                    <p class="sender-label">
+                        {$_('filesharing.decryptpanel.verifiedEmail')}
+                    </p>
                     <strong class="sender-email">{senderIdentity.email}</strong>
                 </div>
             {/if}
-
         {:else if downloadState === 'Decrypting'}
             <div class="spinner-wrapper">
                 <svg class="spinner" viewBox="0 0 24 24" width="36" height="36">
-                    <circle class="spinner-circle" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3"></circle>
+                    <circle
+                        class="spinner-circle"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                    ></circle>
                 </svg>
             </div>
-            <p class="description">{$_('filesharing.decryptpanel.decrypting')}</p>
-
+            <p class="description">
+                {$_('filesharing.decryptpanel.decrypting')}
+            </p>
         {:else if downloadState === 'Done'}
             <div class="success-banner">
-                <svg class="banner-check" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1 5L4.5 8.5L11 1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg
+                    class="banner-check"
+                    viewBox="0 0 12 10"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M1 5L4.5 8.5L11 1"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
                 </svg>
                 <p>{$_('filesharing.decryptpanel.doneMessage')}</p>
             </div>
@@ -212,34 +308,64 @@
 
             {#if senderIdentity?.email}
                 <div class="sender-section">
-                    <svg class="checkmark" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 5L4.5 8.5L11 1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                    <svg
+                        class="checkmark"
+                        viewBox="0 0 12 10"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M1 5L4.5 8.5L11 1"
+                            stroke="currentColor"
+                            stroke-width="1.75"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
                     </svg>
-                    <p class="sender-label">{$_('filesharing.decryptpanel.verifiedEmail')}</p>
+                    <p class="sender-label">
+                        {$_('filesharing.decryptpanel.verifiedEmail')}
+                    </p>
                     <strong class="sender-email">{senderIdentity.email}</strong>
-                    {#if senderIdentity.attributes.filter(a => !a.type.includes('email') && a.value).length > 0}
+                    {#if senderIdentity.attributes.filter((a) => !a.type.includes('email') && a.value).length > 0}
                         <div class="attr-chips">
-                            {#each senderIdentity.attributes.filter(a => !a.type.includes('email') && a.value) as attr (attr.type)}
+                            {#each senderIdentity.attributes.filter((a) => !a.type.includes('email') && a.value) as attr (attr.type)}
                                 <span class="attr-chip">{attr.value}</span>
                             {/each}
                         </div>
                     {/if}
                 </div>
             {/if}
-
+        {:else if downloadState === 'SessionExpired'}
+            <p class="error-description">
+                {$_('filesharing.decryptpanel.sessionExpiredSubtitle')}
+            </p>
+            <p class="error-description">
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                {@html $_('filesharing.decryptpanel.sessionExpiredMessage')}
+            </p>
         {:else if downloadState === 'ServerError'}
-            <p class="error-description">{$_('filesharing.decryptpanel.serverErrorSubtitle')}</p>
-            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-            <p class="error-description">{@html $_('filesharing.decryptpanel.serverErrorMessage')}</p>
-
+            <p class="error-description">
+                {$_('filesharing.decryptpanel.serverErrorSubtitle')}
+            </p>
+            <p class="error-description">
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                {@html $_('filesharing.decryptpanel.serverErrorMessage')}
+            </p>
         {:else if downloadState === 'Fail'}
-            <p class="error-description">{$_('filesharing.decryptpanel.notFoundSubtitle')}</p>
-            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-            <p class="error-description">{@html $_('filesharing.decryptpanel.notFoundMessage')}</p>
-
+            <p class="error-description">
+                {$_('filesharing.decryptpanel.notFoundSubtitle')}
+            </p>
+            <p class="error-description">
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                {@html $_('filesharing.decryptpanel.notFoundMessage')}
+            </p>
         {:else if downloadState === 'IdentityMismatch'}
-            <p class="error-description">{$_('filesharing.decryptpanel.identityMismatchSubtitle')}</p>
-            <p class="error-description">{$_('filesharing.decryptpanel.identityMismatchMessage')}</p>
+            <p class="error-description">
+                {$_('filesharing.decryptpanel.identityMismatchSubtitle')}
+            </p>
+            <p class="error-description">
+                {$_('filesharing.decryptpanel.identityMismatchMessage')}
+            </p>
             <div class="retry-wrapper">
                 <Chip
                     text={$_('filesharing.decryptpanel.tryAgain')}
@@ -317,6 +443,14 @@
         padding: 2rem 0;
     }
 
+    .retry-status {
+        text-align: center;
+        margin: 0 0 1rem 0;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
+    }
+
     .spinner {
         animation: spin 1s linear infinite;
         color: var(--pg-text-secondary);
@@ -329,13 +463,21 @@
     }
 
     @keyframes spin {
-        to { transform: rotate(360deg); }
+        to {
+            transform: rotate(360deg);
+        }
     }
 
     @keyframes dash {
-        0% { stroke-dashoffset: 60; }
-        50% { stroke-dashoffset: 15; }
-        100% { stroke-dashoffset: 60; }
+        0% {
+            stroke-dashoffset: 60;
+        }
+        50% {
+            stroke-dashoffset: 15;
+        }
+        100% {
+            stroke-dashoffset: 60;
+        }
     }
 
     .recipient-select {

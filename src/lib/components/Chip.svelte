@@ -1,11 +1,11 @@
 <script lang="ts">
     interface props {
-        text: string;
-        onclick?: () => void;
-        size?: 'sm' | 'md' | 'lg';
-        variant?: 'default' | 'filled' | 'dark';
-        icon?: '+' | '×' | null;
-        disabled?: boolean;
+        text: string
+        onclick?: () => void
+        size?: 'sm' | 'md' | 'lg'
+        variant?: 'default' | 'filled' | 'dark'
+        icon?: '+' | '×' | null
+        disabled?: boolean
     }
 
     let {
@@ -14,7 +14,7 @@
         size = 'md',
         variant = 'default',
         icon = null,
-        disabled = false
+        disabled = false,
     }: props = $props()
 
     let isInteractive = $derived(onclick !== undefined)
@@ -33,7 +33,9 @@
         {disabled}
         type="button"
     >
-        {#if icon}<span class="chip-icon">{icon}</span>{/if}<span class="chip-text">{text}</span>
+        {#if icon}<span class="chip-icon">{icon}</span>{/if}<span
+            class="chip-text">{text}</span
+        >
     </button>
 {:else}
     <span
@@ -45,7 +47,9 @@
         class:chip-filled={variant === 'filled'}
         class:chip-dark={variant === 'dark'}
     >
-        {#if icon}<span class="chip-icon">{icon}</span>{/if}<span class="chip-text">{text}</span>
+        {#if icon}<span class="chip-icon">{icon}</span>{/if}<span
+            class="chip-text">{text}</span
+        >
     </span>
 {/if}
 
