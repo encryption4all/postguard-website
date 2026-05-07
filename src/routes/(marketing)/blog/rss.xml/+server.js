@@ -58,7 +58,7 @@ export function GET() {
 
     const items = posts
         .map((post) => {
-            const url = `${SITE_URL}/blog/${post.slug}`
+            const url = `${SITE_URL}/blog/${post.slug}/`
             return `    <item>
       <title>${escapeXml(post.title)}</title>
       <link>${escapeXml(url)}</link>
@@ -74,7 +74,7 @@ export function GET() {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>${escapeXml(FEED_TITLE)}</title>
-    <link>${SITE_URL}/blog</link>
+    <link>${SITE_URL}/blog/</link>
     <atom:link href="${FEED_URL}" rel="self" type="application/rss+xml" />
     <description>${escapeXml(FEED_DESCRIPTION)}</description>
     <language>en</language>
