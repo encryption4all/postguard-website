@@ -132,9 +132,13 @@
     <div class="fallback-container">
         <div class="left-panel">
             <label class="upload-area">
-                <Icon icon="mdi:upload-lock" width="28px" />
+                <Icon icon="mdi:upload-lock" width="28px" aria-hidden="true" />
                 <span>{$_('fallback.drop')}</span>
-                <input type="file" onchange={onFile} />
+                <input
+                    type="file"
+                    onchange={onFile}
+                    aria-label={$_('fallback.drop')}
+                />
             </label>
 
             <div class="search-bar">

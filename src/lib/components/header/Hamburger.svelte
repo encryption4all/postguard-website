@@ -37,7 +37,8 @@
     <span class="sr-only">Open menu</span>
     <img
         src={menuIcon}
-        alt="open menu"
+        alt=""
+        aria-hidden="true"
         width="32"
         height="32"
         class="hamburger-icon invert"
@@ -69,7 +70,8 @@
             <span class="sr-only">Close menu</span>
             <img
                 src={closeIcon}
-                alt="close menu"
+                alt=""
+                aria-hidden="true"
                 width="32"
                 height="32"
                 class="hamburger-icon invert"

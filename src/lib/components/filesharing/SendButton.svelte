@@ -372,7 +372,13 @@
             class="primary-btn send-btn"
             onclick={onSign}
         >
-            <img src={yiviLogoDark} alt="yivi-logo" width={50} height={27} />
+            <img
+                src={yiviLogoDark}
+                alt=""
+                aria-hidden="true"
+                width={50}
+                height={27}
+            />
             {$_('filesharing.encryptPanel.encryptSend')}
         </button>
 

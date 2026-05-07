@@ -20,8 +20,11 @@
 </script>
 
 {#if !$isLoading}
+    <a class="sr-only sr-only-focusable skip-link" href="#main-content">
+        {$_('common.skipToMain', { default: 'Skip to main content' })}
+    </a>
     <Header />
-    <main>
+    <main id="main-content" tabindex="-1">
         {@render children()}
     </main>
     <footer>
@@ -108,6 +111,25 @@
         display: flex;
         flex-direction: column;
         flex: 1;
+    }
+
+    .skip-link {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 0.5rem 1rem;
+        background: var(--pg-primary);
+        color: #fff;
+        font-weight: var(--pg-font-weight-semibold);
+        text-decoration: none;
+        z-index: 1000;
+        transform: translateY(-200%);
+        transition: transform 0.15s ease-in-out;
+    }
+    .skip-link:focus {
+        transform: translateY(0);
+        outline: 2px solid #fff;
+        outline-offset: 2px;
     }
 
     footer {
