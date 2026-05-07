@@ -97,6 +97,25 @@ async function findReleaseWithAsset(target) {
     )
 }
 
+async function writeMeta(metaPath, { release, asset, sha256, size }) {
+    await writeFile(
+        metaPath,
+        JSON.stringify(
+            {
+                tag: release.tag_name,
+                assetName: asset.name,
+                sha256,
+                size,
+                publishedAt: release.published_at,
+                sourceUrl: asset.browser_download_url,
+                releaseUrl: release.html_url,
+            },
+            null,
+            2
+        ) + '\n'
+    )
+}
+
 async function syncTarget(target) {
     const outputPath = resolve(downloadsDir, target.outputFile)
     const metaPath = resolve(downloadsDir, target.metaFile)
@@ -111,9 +130,25 @@ async function syncTarget(target) {
 
     const cached = await readCached(metaPath)
     if (cached?.sha256 === remoteSha) {
+        if (cached.tag === release.tag_name) {
+            console.log(
+                `[${target.name}] up-to-date: ${release.tag_name} (sha256 ${remoteSha})`
+            )
+            return
+        }
+        // Upstream re-tagged with byte-identical content (e.g. v0.1.3 → v0.1.5
+        // with the same manifest.xml). Refresh the metadata so tag/releaseUrl/
+        // publishedAt stay current without a redundant re-download.
         console.log(
-            `[${target.name}] up-to-date: ${cached.tag} (sha256 ${remoteSha})`
+            `[${target.name}] re-tagged: ${cached.tag} -> ${release.tag_name} (content unchanged)`
         )
+        await writeMeta(metaPath, {
+            release,
+            asset,
+            sha256: remoteSha,
+            size: asset.size ?? cached.size,
+        })
+        console.log(`[${target.name}] wrote ${metaPath}`)
         return
     }
     console.log(
@@ -140,22 +175,12 @@ async function syncTarget(target) {
 
     await mkdir(downloadsDir, { recursive: true })
     await writeFile(outputPath, buf)
-    await writeFile(
-        metaPath,
-        JSON.stringify(
-            {
-                tag: release.tag_name,
-                assetName: asset.name,
-                sha256: localSha,
-                size: buf.length,
-                publishedAt: release.published_at,
-                sourceUrl: asset.browser_download_url,
-                releaseUrl: release.html_url,
-            },
-            null,
-            2
-        ) + '\n'
-    )
+    await writeMeta(metaPath, {
+        release,
+        asset,
+        sha256: localSha,
+        size: buf.length,
+    })
     console.log(`[${target.name}] wrote ${outputPath} (${buf.length} bytes)`)
     console.log(`[${target.name}] wrote ${metaPath}`)
 }
