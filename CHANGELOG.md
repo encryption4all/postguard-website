@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.6.0](https://github.com/encryption4all/postguard-website/compare/v1.5.0...v1.6.0) (2026-05-07)
+
+
+### Features
+
+* **blog:** add RSS feed at /blog/rss.xml ([#149](https://github.com/encryption4all/postguard-website/issues/149)) ([8adcdaf](https://github.com/encryption4all/postguard-website/commit/8adcdafa45eeae4eb367cb8aa32396446a509059))
+
+
+### Bug Fixes
+
+* **a11y:** WCAG 2.2 AA fixes for marketing layout, app shell, fallback ([#150](https://github.com/encryption4all/postguard-website/issues/150)) ([e04d68f](https://github.com/encryption4all/postguard-website/commit/e04d68f27d7d1540ddb4bce922853a55e36ae733))
+* **docker:** serve mirrored addon files instead of redirecting to GitHub ([#147](https://github.com/encryption4all/postguard-website/issues/147)) ([931903f](https://github.com/encryption4all/postguard-website/commit/931903f082fae59dfd470d8c0630dde2527c9b09))
+* **qr:** tighten container padding and force white background ([#156](https://github.com/encryption4all/postguard-website/issues/156)) ([4aaf4d3](https://github.com/encryption4all/postguard-website/commit/4aaf4d35636a0b8243d0b13ab2a602e313d95499))
+* **sync-addons:** fall back to last release with the expected asset ([#151](https://github.com/encryption4all/postguard-website/issues/151)) ([e13063e](https://github.com/encryption4all/postguard-website/commit/e13063e062b7c05bf377a50b22bb73ed625abf87))
+
 ## [1.5.0](https://github.com/encryption4all/postguard-website/compare/v1.4.0...v1.5.0) (2026-05-07)
 
 
