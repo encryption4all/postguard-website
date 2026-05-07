@@ -54,8 +54,38 @@
     jsonLd={blogJsonLd}
 />
 
+<svelte:head>
+    <link
+        rel="alternate"
+        type="application/rss+xml"
+        title="PostGuard Blog RSS Feed"
+        href="/blog/rss.xml"
+    />
+</svelte:head>
+
 <div class="blog-index">
-    <h1>Blog</h1>
+    <div class="header">
+        <h1>Blog</h1>
+        <a
+            class="rss-link"
+            href={resolve('/(marketing)/blog/rss.xml')}
+            aria-label="RSS feed"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+            >
+                <path
+                    d="M6.18 15.64a2.18 2.18 0 1 1 0 4.36 2.18 2.18 0 0 1 0-4.36zM4 4.44A19.56 19.56 0 0 1 19.56 20h-2.83A16.73 16.73 0 0 0 4 7.27V4.44zm0 5.66a13.9 13.9 0 0 1 9.9 9.9h-2.83A11.07 11.07 0 0 0 4 12.93V10.1z"
+                />
+            </svg>
+            <span>RSS</span>
+        </a>
+    </div>
     <div class="posts">
         {#each data.posts as post (post.slug)}
             <a
@@ -88,7 +118,35 @@
         padding: 2rem 1rem;
 
         h1 {
-            margin-bottom: 2rem;
+            margin: 0;
+        }
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .rss-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: var(--pg-text-secondary);
+        text-decoration: none;
+        font-size: var(--pg-font-size-sm);
+        padding: 0.4rem 0.75rem;
+        border: 1px solid var(--pg-strong-background);
+        border-radius: var(--pg-border-radius-md);
+        transition:
+            color 0.2s ease,
+            border-color 0.2s ease;
+
+        &:hover {
+            color: #f26522;
+            border-color: #f26522;
         }
     }
 
