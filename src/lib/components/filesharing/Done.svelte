@@ -62,7 +62,7 @@
     <div class="spacer"></div>
 
     <!-- Airplane decoration -->
-    <img src={airplane} alt="airplane" class="airplane-decoration" />
+    <img src={airplane} alt="" aria-hidden="true" class="airplane-decoration" />
 </div>
 
 <style>

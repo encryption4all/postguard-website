@@ -1,7 +1,5 @@
 <script>
-    import { preventDefault, createBubbler } from 'svelte/legacy'
-
-    const bubble = createBubbler()
+    import { preventDefault } from 'svelte/legacy'
     // stores
     import { emails } from './stores'
     import { resolve } from '$app/paths'
@@ -42,9 +40,14 @@
             <div
                 id="sb-th"
                 role="button"
-                tabindex="-1"
+                tabindex="0"
                 onclick={preventDefault(() => showMail(email.id, email.raw))}
-                onkeypress={bubble('keypress')}
+                onkeydown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        showMail(email.id, email.raw)
+                    }
+                }}
             >
                 <b>{email.subject}</b> <br />
                 {#if email.from.name}

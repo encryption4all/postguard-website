@@ -7,8 +7,11 @@
 </script>
 
 {#if !$isLoading}
+    <a class="sr-only sr-only-focusable skip-link" href="#main-content">
+        Skip to main content
+    </a>
     <Header />
-    <main>
+    <main id="main-content" tabindex="-1">
         {@render children()}
     </main>
     <footer class="app-footer">
@@ -27,6 +30,25 @@
         flex: 1;
         min-height: 0;
         overflow-y: auto;
+    }
+
+    .skip-link {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 0.5rem 1rem;
+        background: var(--pg-primary);
+        color: var(--pg-on-primary);
+        font-weight: 600;
+        text-decoration: none;
+        z-index: 1000;
+        transform: translateY(-200%);
+        transition: transform 0.15s ease-in-out;
+    }
+    .skip-link:focus {
+        transform: translateY(0);
+        outline: 2px solid var(--pg-on-primary);
+        outline-offset: 2px;
     }
 
     .app-footer {

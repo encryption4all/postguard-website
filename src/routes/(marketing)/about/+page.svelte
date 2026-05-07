@@ -63,7 +63,7 @@
             </div>
         </div>
         <div class="grid-item content-box">
-            <img src={aboutImg} alt="about" class="invert" />
+            <img src={aboutImg} alt="" aria-hidden="true" class="invert" />
             <div id="team">
                 <h3>{$_('about.team.header')}</h3>
                 <p>

@@ -105,7 +105,12 @@
         <div class="grid-item header">
             <h2><span>{$_('addons.title')}</span></h2>
             <p>{$_('addons.par')}</p>
-            <img src={composeImg} class="image invert" alt="compose" />
+            <img
+                src={composeImg}
+                class="image invert"
+                alt=""
+                aria-hidden="true"
+            />
         </div>
         <div class="grid-item instruction" style="min-height: {height}px">
             <h2>{$_('addons.instruction.header')}</h2>
