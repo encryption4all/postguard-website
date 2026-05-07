@@ -2,7 +2,8 @@
 // Sync PostGuard addon release artifacts into static/downloads/.
 //
 // For each target:
-//   1. Query the GitHub API for the latest release.
+//   1. Query the GitHub API for recent releases and pick the most recent
+//      published one that actually has the expected asset attached.
 //   2. Locate the matching asset and read its sha256 digest from the API response.
 //   3. Compare against the cached digest in the sibling .json file.
 //   4. If unchanged, skip with no file changes.
@@ -63,19 +64,44 @@ function parseSha256(digest) {
     return digest.slice('sha256:'.length).toLowerCase()
 }
 
+// We scan a window of recent releases instead of hitting /releases/latest so a
+// release that's tagged before its asset finishes uploading (or one that's
+// genuinely missing the asset) doesn't break the sync — we fall back to the
+// most recent release that does have it and warn loudly.
+const RELEASE_LOOKBACK = 10
+
+async function findReleaseWithAsset(target) {
+    const releases = await fetchJson(
+        `https://api.github.com/repos/${target.repo}/releases?per_page=${RELEASE_LOOKBACK}`
+    )
+    const eligible = releases.filter((r) => !r.draft && !r.prerelease)
+    if (eligible.length === 0) {
+        throw new Error(`[${target.name}] no published releases found`)
+    }
+    for (let i = 0; i < eligible.length; i++) {
+        const release = eligible[i]
+        const asset = release.assets?.find((a) =>
+            target.assetPattern.test(a.name)
+        )
+        if (asset) {
+            if (i > 0) {
+                console.warn(
+                    `[${target.name}] WARNING: latest release ${eligible[0].tag_name} has no asset matching ${target.assetPattern}; falling back to ${release.tag_name}`
+                )
+            }
+            return { release, asset }
+        }
+    }
+    throw new Error(
+        `[${target.name}] no asset matching ${target.assetPattern} in last ${eligible.length} published releases`
+    )
+}
+
 async function syncTarget(target) {
     const outputPath = resolve(downloadsDir, target.outputFile)
     const metaPath = resolve(downloadsDir, target.metaFile)
 
-    const release = await fetchJson(
-        `https://api.github.com/repos/${target.repo}/releases/latest`
-    )
-    const asset = release.assets?.find((a) => target.assetPattern.test(a.name))
-    if (!asset) {
-        throw new Error(
-            `[${target.name}] no asset matching ${target.assetPattern} in release ${release.tag_name}`
-        )
-    }
+    const { release, asset } = await findReleaseWithAsset(target)
     const remoteSha = parseSha256(asset.digest)
     if (!remoteSha) {
         throw new Error(
