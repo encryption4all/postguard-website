@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.5.0](https://github.com/encryption4all/postguard-website/compare/v1.4.0...v1.5.0) (2026-05-07)
+
+
+### Features
+
+* add wide PostGuard logo assets ([#140](https://github.com/encryption4all/postguard-website/issues/140)) ([df394f1](https://github.com/encryption4all/postguard-website/commit/df394f198e0447a325537f2b0dd1b931ce39fd3d))
+* **decrypt:** accept ?uuid= and ?recipient= query params ([#131](https://github.com/encryption4all/postguard-website/issues/131)) ([0398c87](https://github.com/encryption4all/postguard-website/commit/0398c87d113ab7b9fc518f4eb9aaf7059745d54a))
+* **filesharing:** pg-js 1.4 + transparent retry UX ([#145](https://github.com/encryption4all/postguard-website/issues/145)) ([2a882ad](https://github.com/encryption4all/postguard-website/commit/2a882ad675fe119403f2eb45e647594f72e8b32c))
+* serve PostGuard addons directly from the website ([#141](https://github.com/encryption4all/postguard-website/issues/141)) ([98c7b8f](https://github.com/encryption4all/postguard-website/commit/98c7b8f29d25737c96df3bd1521348d5d990b338))
+* **static:** add checkmark.png for use in pg-js email envelopes ([#129](https://github.com/encryption4all/postguard-website/issues/129)) ([118e73d](https://github.com/encryption4all/postguard-website/commit/118e73dae145706326cd8df284893898d76baac6))
+
+
+### Bug Fixes
+
+* **decrypt:** handle large MIME payloads and missing date headers ([#132](https://github.com/encryption4all/postguard-website/issues/132)) ([9901e5d](https://github.com/encryption4all/postguard-website/commit/9901e5db4ee5ea20ef500442dc48427b19077abe))
+* **decrypt:** unwrap data.bin from zip in uuid-mode decrypt ([#134](https://github.com/encryption4all/postguard-website/issues/134)) ([4a63b58](https://github.com/encryption4all/postguard-website/commit/4a63b580afbd4694a5acd42db4f6d0eb7aceeaa0))
+* **fallback:** guard EmailView against missing postal-mime fields ([#133](https://github.com/encryption4all/postguard-website/issues/133)) ([0891d0c](https://github.com/encryption4all/postguard-website/commit/0891d0c39270bf02dcc9e1c0cd7bfbfdc5752c15))
+
 ## [1.4.0](https://github.com/encryption4all/postguard-website/compare/v1.3.0...v1.4.0) (2026-04-30)
 
 
