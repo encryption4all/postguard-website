@@ -38,7 +38,7 @@
         left: 0;
         padding: 0.5rem 1rem;
         background: var(--pg-primary);
-        color: #fff;
+        color: var(--pg-on-primary);
         font-weight: 600;
         text-decoration: none;
         z-index: 1000;
@@ -47,7 +47,7 @@
     }
     .skip-link:focus {
         transform: translateY(0);
-        outline: 2px solid #fff;
+        outline: 2px solid var(--pg-on-primary);
         outline-offset: 2px;
     }
 
