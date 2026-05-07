@@ -6,15 +6,19 @@
     import type { AttributeCon } from '$lib/types/filesharing/attributes'
     import type { AttType } from '$lib/types/filesharing/attributes'
 
-
     interface props {
-        recipients: { email: string; extra: AttributeCon }[];
-        attributes: AttType[];
-        isConfirming?: boolean;
-        readonly?: boolean;
+        recipients: { email: string; extra: AttributeCon }[]
+        attributes: AttType[]
+        isConfirming?: boolean
+        readonly?: boolean
     }
 
-    let { recipients = $bindable([]), attributes, isConfirming = false, readonly = false }: props = $props()
+    let {
+        recipients = $bindable([]),
+        attributes,
+        isConfirming = false,
+        readonly = false,
+    }: props = $props()
 
     function removeRecipient(index: number) {
         recipients.splice(index, 1)
@@ -28,8 +32,12 @@
         recipients[index].extra.push({ t: att, v: '' })
     }
 </script>
+
 <div>
-    <div class="crypt-select-protection-input-box" class:remove-border={isConfirming}>
+    <div
+        class="crypt-select-protection-input-box"
+        class:remove-border={isConfirming}
+    >
         {#if !isConfirming}
             <div class="recipient-heading">
                 <h3>
@@ -46,7 +54,8 @@
             <RecipientSelectionFields
                 bind:recipient={recipients[index]}
                 remove={() => removeRecipient(index)}
-                addAttribute={(att: AttType) => addAttributeToRecipient(index, att)}
+                addAttribute={(att: AttType) =>
+                    addAttributeToRecipient(index, att)}
                 {attributes}
                 isConfirming={isConfirming || readonly}
                 isFirstRecipient={index === 0}
@@ -66,13 +75,13 @@
 </div>
 
 <style lang="scss">
-  .recipient-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+    .recipient-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-  .remove-border {
-    border: none;
-  }
+    .remove-border {
+        border: none;
+    }
 </style>

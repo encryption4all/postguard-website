@@ -7,17 +7,18 @@
     import airplane from '$lib/assets/images/airplane.svg'
 
     interface props {
-        encryptState: EncryptState;
-        createDefaultEncryptState: () => EncryptState;
+        encryptState: EncryptState
+        createDefaultEncryptState: () => EncryptState
     }
-    let { encryptState=$bindable(), createDefaultEncryptState }: props = $props()
+    let { encryptState = $bindable(), createDefaultEncryptState }: props =
+        $props()
 </script>
 
 <div class="container">
     <h2>{$_('filesharing.encryptPanel.succes')}</h2>
 
     <!-- Files box -->
-    <FileList files={encryptState.files.map(f => f.name)} />
+    <FileList files={encryptState.files.map((f) => f.name)} />
 
     <!-- Recipients box -->
     <div class="info-box">
@@ -29,8 +30,12 @@
                     <div class="recipient-email">{recipient.email}</div>
                     {#if recipient.extra.length > 0}
                         <div class="recipient-attributes">
-                            {#each recipient.extra.filter(a => a.v) as attr (attr.t)}
-                                <Chip text={attr.v!} size="sm" variant="default" />
+                            {#each recipient.extra.filter((a) => a.v) as attr (attr.t)}
+                                <Chip
+                                    text={attr.v!}
+                                    size="sm"
+                                    variant="default"
+                                />
                             {/each}
                         </div>
                     {/if}
@@ -61,7 +66,6 @@
 </div>
 
 <style>
-
     .container {
         display: flex;
         flex-direction: column;
@@ -150,5 +154,4 @@
             width: 100%;
         }
     }
-
 </style>

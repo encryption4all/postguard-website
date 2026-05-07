@@ -19,8 +19,18 @@
             {
                 '@type': 'BreadcrumbList',
                 itemListElement: [
-                    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://postguard.eu' },
-                    { '@type': 'ListItem', position: 2, name: 'About PostGuard', item: 'https://postguard.eu/about' },
+                    {
+                        '@type': 'ListItem',
+                        position: 1,
+                        name: 'Home',
+                        item: 'https://postguard.eu',
+                    },
+                    {
+                        '@type': 'ListItem',
+                        position: 2,
+                        name: 'About PostGuard',
+                        item: 'https://postguard.eu/about',
+                    },
                 ],
             },
         ],
@@ -53,11 +63,7 @@
             </div>
         </div>
         <div class="grid-item content-box">
-            <img
-                src={aboutImg}
-                alt="about"
-                class="invert"
-            />
+            <img src={aboutImg} alt="about" class="invert" />
             <div id="team">
                 <h3>{$_('about.team.header')}</h3>
                 <p>

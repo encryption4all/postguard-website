@@ -1,13 +1,19 @@
 <script lang="ts">
     interface props {
-        title: string;
-        content: string;
-        bordered?: boolean;
-        linkText?: string;
-        linkUrl?: string;
+        title: string
+        content: string
+        bordered?: boolean
+        linkText?: string
+        linkUrl?: string
     }
 
-    let { title, content, bordered = false, linkText, linkUrl }: props = $props()
+    let {
+        title,
+        content,
+        bordered = false,
+        linkText,
+        linkUrl,
+    }: props = $props()
 </script>
 
 <details class="help-section" class:bordered>
@@ -18,10 +24,16 @@
     <div class="help-content">
         <p class="help-text">{content}</p>
         {#if linkText && linkUrl}
-            <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-            <a href={linkUrl} target="_blank" rel="noopener noreferrer" class="help-link">
+            <!-- eslint-disable svelte/no-navigation-without-resolve -->
+            <a
+                href={linkUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="help-link"
+            >
                 {linkText} →
             </a>
+            <!-- eslint-enable svelte/no-navigation-without-resolve -->
         {/if}
     </div>
 </details>

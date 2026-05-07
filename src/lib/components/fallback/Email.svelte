@@ -1,7 +1,7 @@
 <script>
-    import { preventDefault, createBubbler } from 'svelte/legacy';
+    import { preventDefault, createBubbler } from 'svelte/legacy'
 
-    const bubble = createBubbler();
+    const bubble = createBubbler()
     // stores
     import { emails } from './stores'
     import { resolve } from '$app/paths'
@@ -13,7 +13,8 @@
     import * as email from './email.js'
 
     let showBody = $state(false)
-    let currentID, currentRaw = $state()
+    let currentID,
+        currentRaw = $state()
 
     async function showMail(id, unparsed) {
         currentRaw = unparsed
@@ -63,8 +64,8 @@
                 <span class="material-icons">mail</span><br />
                 There are no emails here.<br />
                 Want to save your decrypted emails? Head over to
-                <a href={resolve('/decrypt')}>settings</a> to have your emails stored in your
-                browser.
+                <a href={resolve('/decrypt')}>settings</a> to have your emails stored
+                in your browser.
             </div>
         {/if}
 

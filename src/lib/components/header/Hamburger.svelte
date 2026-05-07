@@ -9,7 +9,7 @@
     import { page } from '$app/state'
 
     interface props {
-        items: { name: string; route: string; }[];
+        items: { name: string; route: string }[]
     }
 
     let hamburgerOpen = $state(false)
@@ -18,11 +18,13 @@
 
     $effect(() => {
         document.body.style.overflow = hamburgerOpen ? 'hidden' : ''
-        return () => { document.body.style.overflow = '' }
+        return () => {
+            document.body.style.overflow = ''
+        }
     })
 
     function isSelected(route: string) {
-        return page.url.pathname === route;
+        return page.url.pathname === route
     }
 </script>
 
@@ -45,11 +47,24 @@
 
 <div class:open={hamburgerOpen} class="hamburger-menu">
     <div class="topbar">
-        <img src={logo} alt="postguard logo" width="128" height="70" class="logo-light" />
-        <img src={logoDark} alt="postguard logo" width="128" height="70" class="logo-dark" />
-        <button onclick={() => {
-        hamburgerOpen = !hamburgerOpen
-    }}
+        <img
+            src={logo}
+            alt="postguard logo"
+            width="128"
+            height="70"
+            class="logo-light"
+        />
+        <img
+            src={logoDark}
+            alt="postguard logo"
+            width="128"
+            height="70"
+            class="logo-dark"
+        />
+        <button
+            onclick={() => {
+                hamburgerOpen = !hamburgerOpen
+            }}
         >
             <span class="sr-only">Close menu</span>
             <img
@@ -64,11 +79,16 @@
     <ul>
         {#each items as item (item.name)}
             <li class:selected={isSelected(item.route)}>
-                <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-                <a href={item.route} onclick={() => {
-                    hamburgerOpen = false
-                }}>
-                    {$_(`header.${item.name}`)}</a>
+                <!-- eslint-disable svelte/no-navigation-without-resolve -->
+                <a
+                    href={item.route}
+                    onclick={() => {
+                        hamburgerOpen = false
+                    }}
+                >
+                    {$_(`header.${item.name}`)}</a
+                >
+                <!-- eslint-enable svelte/no-navigation-without-resolve -->
             </li>
         {/each}
     </ul>
@@ -79,7 +99,6 @@
 </div>
 
 <style>
-
     .logo-dark {
         display: none;
     }

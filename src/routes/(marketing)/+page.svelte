@@ -61,9 +61,7 @@
                     width: 512,
                     height: 512,
                 },
-                sameAs: [
-                    'https://github.com/encryption4all',
-                ],
+                sameAs: ['https://github.com/encryption4all'],
                 parentOrganization: {
                     '@type': 'Organization',
                     name: 'Yivi',
@@ -90,8 +88,12 @@
         <h1>{$_('home.title')}</h1>
         <p class="hero-text">{$_('home.par')}</p>
         <div class="cta-buttons">
-            <a href={resolve('/fileshare')} class="cta-primary">{$_('landing.cta')}</a>
-            <a href={resolve('/about/')} class="cta-secondary">{$_('landing.learnMore')}</a>
+            <a href={resolve('/fileshare')} class="cta-primary"
+                >{$_('landing.cta')}</a
+            >
+            <a href={resolve('/about/')} class="cta-secondary"
+                >{$_('landing.learnMore')}</a
+            >
         </div>
     </div>
     <div class="scroll-indicator">
@@ -110,7 +112,9 @@
                     <span class="limit-value">5</span>
                     <span class="limit-unit">GB</span>
                 </div>
-                <div class="limit-suffix">{$_('landing.limits.uploadSuffix')}</div>
+                <div class="limit-suffix">
+                    {$_('landing.limits.uploadSuffix')}
+                </div>
                 <p class="limit-desc">{$_('landing.limits.uploadDesc')}</p>
             </div>
             <div class="limit-stat">
@@ -118,7 +122,9 @@
                     <span class="limit-value">5</span>
                     <span class="limit-unit">GB</span>
                 </div>
-                <div class="limit-suffix">{$_('landing.limits.rollingSuffix')}</div>
+                <div class="limit-suffix">
+                    {$_('landing.limits.rollingSuffix')}
+                </div>
                 <p class="limit-desc">{$_('landing.limits.rollingDesc')}</p>
             </div>
         </div>
@@ -149,42 +155,50 @@
     </section>
 
     {#if FF_BUSINESS}
-    <section class="business">
-        <div class="business-content">
-            <h2>{$_('landing.businessTitle')}</h2>
-            <p>{$_('landing.businessDesc')}</p>
-            <div class="business-features">
-                <div class="business-feature">
-                    <h3>{$_('landing.business1Title')}</h3>
-                    <p>{$_('landing.business1Desc')}</p>
+        <section class="business">
+            <div class="business-content">
+                <h2>{$_('landing.businessTitle')}</h2>
+                <p>{$_('landing.businessDesc')}</p>
+                <div class="business-features">
+                    <div class="business-feature">
+                        <h3>{$_('landing.business1Title')}</h3>
+                        <p>{$_('landing.business1Desc')}</p>
+                    </div>
+                    <div class="business-feature">
+                        <h3>{$_('landing.business2Title')}</h3>
+                        <p>{$_('landing.business2Desc')}</p>
+                    </div>
+                    <div class="business-feature">
+                        <h3>{$_('landing.business3Title')}</h3>
+                        <p>{$_('landing.business3Desc')}</p>
+                    </div>
                 </div>
-                <div class="business-feature">
-                    <h3>{$_('landing.business2Title')}</h3>
-                    <p>{$_('landing.business2Desc')}</p>
+                <h3 class="coming-soon-heading">
+                    {$_('landing.comingSoonTitle')}
+                </h3>
+                <div class="business-features">
+                    <div class="business-feature">
+                        <h3>{$_('landing.business4Title')}</h3>
+                        <p>{$_('landing.business4Desc')}</p>
+                    </div>
+                    <div class="business-feature">
+                        <h3>{$_('landing.business5Title')}</h3>
+                        <p>{$_('landing.business5Desc')}</p>
+                    </div>
+                    <div class="business-feature">
+                        <h3>{$_('landing.business6Title')}</h3>
+                        <p>{$_('landing.business6Desc')}</p>
+                    </div>
                 </div>
-                <div class="business-feature">
-                    <h3>{$_('landing.business3Title')}</h3>
-                    <p>{$_('landing.business3Desc')}</p>
-                </div>
+                <a
+                    href="mailto:"
+                    bind:this={contactEl}
+                    data-name="info"
+                    data-domain="postguard.eu"
+                    class="business-cta">{$_('landing.businessCta')}</a
+                >
             </div>
-            <h3 class="coming-soon-heading">{$_('landing.comingSoonTitle')}</h3>
-            <div class="business-features">
-                <div class="business-feature">
-                    <h3>{$_('landing.business4Title')}</h3>
-                    <p>{$_('landing.business4Desc')}</p>
-                </div>
-                <div class="business-feature">
-                    <h3>{$_('landing.business5Title')}</h3>
-                    <p>{$_('landing.business5Desc')}</p>
-                </div>
-                <div class="business-feature">
-                    <h3>{$_('landing.business6Title')}</h3>
-                    <p>{$_('landing.business6Desc')}</p>
-                </div>
-            </div>
-            <a href="mailto:" bind:this={contactEl} data-name="info" data-domain="postguard.eu" class="business-cta">{$_('landing.businessCta')}</a>
-        </div>
-    </section>
+        </section>
     {/if}
 </div>
 
@@ -274,7 +288,11 @@
     }
 
     @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
             translate: 0 0;
         }
         40% {

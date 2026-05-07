@@ -41,10 +41,16 @@
 
     let totalSize = $derived(files.reduce((acc, file) => acc + file.size, 0))
     let usedBytes = $derived(getLocalUsedBytes())
-    let effectiveLimit = $derived(Math.min(MAX_UPLOAD_SIZE, ROLLING_LIMIT - usedBytes))
+    let effectiveLimit = $derived(
+        Math.min(MAX_UPLOAD_SIZE, ROLLING_LIMIT - usedBytes)
+    )
     let remainingSize = $derived(effectiveLimit - totalSize)
-    let remainingSizeGB = $derived((Math.max(0, remainingSize) / 1e9).toFixed(2))
-    let effectiveLimitGB = $derived((Math.max(0, effectiveLimit) / 1e9).toFixed(1))
+    let remainingSizeGB = $derived(
+        (Math.max(0, remainingSize) / 1e9).toFixed(2)
+    )
+    let effectiveLimitGB = $derived(
+        (Math.max(0, effectiveLimit) / 1e9).toFixed(1)
+    )
     let overLimit = $derived(totalSize > effectiveLimit)
 
     const previewTemplate = `
@@ -68,7 +74,13 @@
             autoProcessQueue: false, // Prevent automatic upload
             maxFilesize: maxFileSizeMB,
             filesizeBase: 1000,
-            dictFileSizeUnits: { tb: 'TB', gb: 'GB', mb: 'MB', kb: 'KB', b: 'b' },
+            dictFileSizeUnits: {
+                tb: 'TB',
+                gb: 'GB',
+                mb: 'MB',
+                kb: 'KB',
+                b: 'b',
+            },
             previewsContainer: '#previews',
             previewTemplate: previewTemplate,
             clickable: '#my-form .primary-btn, .add-more-chip-container', // Only these elements trigger file selection
@@ -200,16 +212,27 @@
                 <div class="file-summary" class:over-limit={overLimit}>
                     <p>
                         {#if overLimit}
-                            {$_('filesharing.encryptPanel.fileBox.overLimitText', {
-                                values: { over: ((totalSize - effectiveLimit) / (1024 ** 3)).toFixed(2) },
-                            })}
+                            {$_(
+                                'filesharing.encryptPanel.fileBox.overLimitText',
+                                {
+                                    values: {
+                                        over: (
+                                            (totalSize - effectiveLimit) /
+                                            1024 ** 3
+                                        ).toFixed(2),
+                                    },
+                                }
+                            )}
                         {:else}
-                            {$_('filesharing.encryptPanel.fileBox.fileSummary', {
-                                values: {
-                                    count: files.length,
-                                    size: remainingSizeGB,
-                                },
-                            })}
+                            {$_(
+                                'filesharing.encryptPanel.fileBox.fileSummary',
+                                {
+                                    values: {
+                                        count: files.length,
+                                        size: remainingSizeGB,
+                                    },
+                                }
+                            )}
                         {/if}
                     </p>
                 </div>

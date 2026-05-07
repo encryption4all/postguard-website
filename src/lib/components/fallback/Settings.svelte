@@ -55,7 +55,11 @@
 
 <div class="settings-container">
     <div class="settings-header">
-        <button class="back-button" onclick={() => (currMode = 'List')} type="button">
+        <button
+            class="back-button"
+            onclick={() => (currMode = 'List')}
+            type="button"
+        >
             <Icon icon="mdi:arrow-left" width="20px" />
             <span>{$_('fallback.settings.back')}</span>
         </button>
@@ -85,12 +89,17 @@
                                 <span class="credential-detail">{cred}</span>
                             {/each}
                             <span class="credential-exp">
-                                {$_('fallback.settings.exp')}: {new Date(kr.jwtValid * 1000).toLocaleDateString($locale ?? undefined)}
+                                {$_('fallback.settings.exp')}: {new Date(
+                                    kr.jwtValid * 1000
+                                ).toLocaleDateString($locale ?? undefined)}
                             </span>
                         </div>
                         <button
                             class="delete-button"
-                            onclick={(e) => { e.preventDefault(); deleteJwt(kr); }}
+                            onclick={(e) => {
+                                e.preventDefault()
+                                deleteJwt(kr)
+                            }}
                             type="button"
                         >
                             <Icon icon="mdi:trash-can-outline" width="20px" />

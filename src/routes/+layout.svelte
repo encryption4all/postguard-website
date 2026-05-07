@@ -4,11 +4,11 @@
 
     let { children } = $props()
 
-
     // Mark that the app has hydrated so subsequent navigations
     // to / don't trigger the returning visitor redirect.
     onMount(() => {
-        ;(window as unknown as { __pg_client_nav: boolean }).__pg_client_nav = true
+        ;(window as unknown as { __pg_client_nav: boolean }).__pg_client_nav =
+            true
     })
 
     $effect(() => {

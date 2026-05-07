@@ -1,16 +1,25 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
-    import { getCountryCallingCode, parsePhoneNumberFromString, type CountryCode } from 'libphonenumber-js/mobile'
+    import {
+        getCountryCallingCode,
+        parsePhoneNumberFromString,
+        type CountryCode,
+    } from 'libphonenumber-js/mobile'
     import closeIcon from '$lib/assets/images/google-icons/close.svg'
 
     interface props {
-        translation_key: string;
-        value?: string;
-        deleteAction?: () => void;
-        isConfirming?: boolean;
+        translation_key: string
+        value?: string
+        deleteAction?: () => void
+        isConfirming?: boolean
     }
 
-    let { translation_key, value = $bindable(''), deleteAction, isConfirming = false }: props = $props()
+    let {
+        translation_key,
+        value = $bindable(''),
+        deleteAction,
+        isConfirming = false,
+    }: props = $props()
 
     // So we have a unique id for the label-input pair so we can handle multiple inputs correctly in a list even with multiple recipients
     const randomId = Math.random().toString(36).substring(2, 15)
@@ -27,11 +36,15 @@
             ? null
             : parsePhoneNumberFromString(showingValue, selectedCountry)
     )
-    let phoneValid = $derived(showingValue.length === 0 || (parsedPhone?.isValid() ?? false))
+    let phoneValid = $derived(
+        showingValue.length === 0 || (parsedPhone?.isValid() ?? false)
+    )
 
     $effect(() => {
         if (phoneInputEl) {
-            phoneInputEl.setCustomValidity(phoneValid ? '' : 'Invalid phone number')
+            phoneInputEl.setCustomValidity(
+                phoneValid ? '' : 'Invalid phone number'
+            )
         }
     })
 
@@ -49,9 +62,41 @@
         return p.length === 3 ? `${p[2]}-${p[1]}-${p[0]}` : yyyymmdd
     }
 
-    const allowedCountries = ['at', 'be', 'bg', 'cy', 'dk', 'de', 'ee', 'fi', 'fr', 'gr', 'hu', 'ie',
-        'is', 'it', 'hr', 'lv', 'lt', 'li', 'lu', 'mt', 'mc', 'nl', 'no',
-        'pl', 'pt', 'ro', 'si', 'sk', 'es', 'cz', 'gb', 'se', 'ch']
+    const allowedCountries = [
+        'at',
+        'be',
+        'bg',
+        'cy',
+        'dk',
+        'de',
+        'ee',
+        'fi',
+        'fr',
+        'gr',
+        'hu',
+        'ie',
+        'is',
+        'it',
+        'hr',
+        'lv',
+        'lt',
+        'li',
+        'lu',
+        'mt',
+        'mc',
+        'nl',
+        'no',
+        'pl',
+        'pt',
+        'ro',
+        'si',
+        'sk',
+        'es',
+        'cz',
+        'gb',
+        'se',
+        'ch',
+    ]
 
     function getCountryPrefix(countryCode: string): string {
         const country = countryCode.toUpperCase() as CountryCode
@@ -59,7 +104,10 @@
     }
 
     $effect(() => {
-        if (translation_key === 'filesharing.attributes.pbdf.sidn-pbdf.mobilenumber.mobilenumber') {
+        if (
+            translation_key ===
+            'filesharing.attributes.pbdf.sidn-pbdf.mobilenumber.mobilenumber'
+        ) {
             // Always emit canonical E.164 so the encrypted policy matches what
             // Yivi discloses at decrypt time. If the input is not yet parseable
             // (partial typing, invalid number) emit an empty string so the
@@ -68,19 +116,24 @@
             value = parsedPhone?.isValid() ? parsedPhone.number : ''
         }
     })
-
 </script>
+
 <div class="input-wrapper">
     <label for={randomId}>
         {$_(translation_key)}
     </label>
     <div class="optional-value" class:removed-del-border={isConfirming}>
         {#if translation_key === 'filesharing.attributes.pbdf.sidn-pbdf.mobilenumber.mobilenumber'}
-            <select bind:value={selectedCountry} class="pg-input phone-select"
-                    class:is-confirming-bg={isConfirming} disabled={isConfirming}>
+            <select
+                bind:value={selectedCountry}
+                class="pg-input phone-select"
+                class:is-confirming-bg={isConfirming}
+                disabled={isConfirming}
+            >
                 {#each allowedCountries as country (country)}
                     <option value={country.toUpperCase() as CountryCode}>
-                        {country.toUpperCase()} {getCountryPrefix(country)}
+                        {country.toUpperCase()}
+                        {getCountryPrefix(country)}
                     </option>
                 {/each}
             </select>
@@ -94,7 +147,9 @@
                 type="tel"
                 placeholder={$_(translation_key + '.placeholder')}
                 bind:value={showingValue}
-                onblur={() => { phoneTouched = true }}
+                onblur={() => {
+                    phoneTouched = true
+                }}
             />
         {:else if translation_key === 'filesharing.attributes.pbdf.gemeente.personalData.dateofbirth'}
             <input
@@ -104,7 +159,9 @@
                 disabled={isConfirming}
                 type="date"
                 value={dateToHtml(value)}
-                oninput={(e) => { value = dateFromHtml((e.target as HTMLInputElement).value) }}
+                oninput={(e) => {
+                    value = dateFromHtml((e.target as HTMLInputElement).value)
+                }}
             />
         {:else}
             <input
@@ -114,7 +171,7 @@
                 disabled={isConfirming}
                 type="text"
                 placeholder={$_(translation_key + '.placeholder')}
-                bind:value={value}
+                bind:value
             />
         {/if}
         {#if deleteAction}
@@ -137,7 +194,6 @@
 </div>
 
 <style>
-
     .input-wrapper:last-child {
         margin-bottom: 0;
     }
@@ -159,10 +215,9 @@
         display: block;
     }
 
-
     .btn-delete {
         all: unset;
-        aspect-ratio : 1 / 1;
+        aspect-ratio: 1 / 1;
         border-radius: var(--pg-border-radius-md);
         margin: 4px;
         margin-left: 0px;
@@ -205,5 +260,4 @@
         margin: 0.25rem 0 0 0;
         font-family: var(--pg-font-family);
     }
-
 </style>

@@ -4,20 +4,26 @@
 
     /** @type {{rightMode: any, searchTerm: any}} */
     // eslint-disable-next-line no-useless-assignment
-    let { rightMode = $bindable(), searchTerm = $bindable() } = $props();
+    let { rightMode = $bindable(), searchTerm = $bindable() } = $props()
 
-    let sorted =
-        $derived($emails &&
-        $emails.length > 0 &&
-        $emails.sort(
-            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-        ))
-    let sortedFiltered = $derived(searchTerm
-        ? sorted.filter(
-              (email) =>
-                  email.raw.toLowerCase().indexOf(searchTerm.toLowerCase()) > 0
-          )
-        : sorted)
+    let sorted = $derived(
+        $emails &&
+            $emails.length > 0 &&
+            $emails.sort(
+                (a, b) =>
+                    new Date(b.date).getTime() - new Date(a.date).getTime()
+            )
+    )
+    let sortedFiltered = $derived(
+        searchTerm
+            ? sorted.filter(
+                  (email) =>
+                      email.raw
+                          .toLowerCase()
+                          .indexOf(searchTerm.toLowerCase()) > 0
+              )
+            : sorted
+    )
 </script>
 
 {#if sortedFiltered.length > 0}

@@ -8,7 +8,11 @@
         responsive?: boolean
     }
 
-    let { mode = 'qr', id = 'crypt-irma-qr', responsive = false }: props = $props()
+    let {
+        mode = 'qr',
+        id = 'crypt-irma-qr',
+        responsive = false,
+    }: props = $props()
 
     let qrLoaded = $state(false)
     let containerEl: HTMLDivElement
@@ -29,14 +33,18 @@
             if (!autoClicked) {
                 if (mode === 'deeplink') {
                     // Deep link mode: auto-click the app button to open Yivi
-                    const buttonLink = containerEl.querySelector<HTMLElement>('.yivi-web-button-link')
+                    const buttonLink = containerEl.querySelector<HTMLElement>(
+                        '.yivi-web-button-link'
+                    )
                     if (buttonLink) {
                         autoClicked = true
                         buttonLink.click()
                     }
                 } else {
                     // QR mode: auto-click "show QR" to force QR rendering
-                    const chooseQR = containerEl.querySelector<HTMLElement>('[data-yivi-glue-transition="chooseQR"]')
+                    const chooseQR = containerEl.querySelector<HTMLElement>(
+                        '[data-yivi-glue-transition="chooseQR"]'
+                    )
                     if (chooseQR) {
                         autoClicked = true
                         chooseQR.click()
@@ -52,7 +60,15 @@
 <div {id} class="yivi-qr-container" class:responsive bind:this={containerEl}>
     {#if !qrLoaded}
         <svg class="spinner" viewBox="0 0 24 24" width="32" height="32">
-            <circle class="spinner-circle" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3"></circle>
+            <circle
+                class="spinner-circle"
+                cx="12"
+                cy="12"
+                r="10"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+            ></circle>
         </svg>
     {/if}
 </div>
@@ -94,12 +110,20 @@
     }
 
     @keyframes spin {
-        to { transform: rotate(360deg); }
+        to {
+            transform: rotate(360deg);
+        }
     }
 
     @keyframes dash {
-        0% { stroke-dashoffset: 60; }
-        50% { stroke-dashoffset: 15; }
-        100% { stroke-dashoffset: 60; }
+        0% {
+            stroke-dashoffset: 60;
+        }
+        50% {
+            stroke-dashoffset: 15;
+        }
+        100% {
+            stroke-dashoffset: 60;
+        }
     }
 </style>

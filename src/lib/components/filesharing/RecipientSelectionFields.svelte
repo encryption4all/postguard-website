@@ -6,18 +6,26 @@
     import AttributeButton from '$lib/components/filesharing/inputs/AttributeButton.svelte'
     import MultiInput from '$lib/components/filesharing/inputs/MultiInput.svelte'
     interface props {
-        recipient: { email: string; extra: AttributeCon };
-        remove: () => void;
-        addAttribute: (att: AttType) => void;
-        attributes: AttType[];
-        isConfirming?: boolean;
-        isFirstRecipient?: boolean;
+        recipient: { email: string; extra: AttributeCon }
+        remove: () => void
+        addAttribute: (att: AttType) => void
+        attributes: AttType[]
+        isConfirming?: boolean
+        isFirstRecipient?: boolean
     }
 
-    let { recipient = $bindable(), remove, addAttribute, attributes, isConfirming = false, isFirstRecipient = false }: props = $props()
+    let {
+        recipient = $bindable(),
+        remove,
+        addAttribute,
+        attributes,
+        isConfirming = false,
+        isFirstRecipient = false,
+    }: props = $props()
 
-
-    let addableButtons: AttType[] = $derived(attributes.filter((att) => !recipient.extra.some(({ t }) => t === att)))
+    let addableButtons: AttType[] = $derived(
+        attributes.filter((att) => !recipient.extra.some(({ t }) => t === att))
+    )
 </script>
 
 <li class="crypt-recipient" class:is-confirming-bg={isConfirming}>
@@ -28,19 +36,29 @@
                 class:hidden={isConfirming}
                 onclick={remove}
             >
-                <img class="invert" style="width: 14px; height: 14px;" src={closebutton} alt="close button" />
+                <img
+                    class="invert"
+                    style="width: 14px; height: 14px;"
+                    src={closebutton}
+                    alt="close button"
+                />
             </button>
         {/if}
 
         <div class="recipient-content">
             <div class="recipient-heading">
-                <label class="field-label" for="recipient-email-{recipient.email}">
+                <label
+                    class="field-label"
+                    for="recipient-email-{recipient.email}"
+                >
                     {$_('filesharing.encryptPanel.emailRecipient')}
                 </label>
             </div>
             <input
                 id="recipient-email-{recipient.email}"
-                placeholder={$_('filesharing.encryptPanel.emailRecipientPlaceholder')}
+                placeholder={$_(
+                    'filesharing.encryptPanel.emailRecipientPlaceholder'
+                )}
                 type="email"
                 required
                 class="pg-input"
@@ -56,7 +74,8 @@
                             {#each recipient.extra as attribute (attribute.t)}
                                 <AttributeButton
                                     type="added"
-                                    translation_key={'filesharing.attributes.' + attribute.t}
+                                    translation_key={'filesharing.attributes.' +
+                                        attribute.t}
                                 />
                             {/each}
                         </div>
@@ -64,7 +83,8 @@
                 {:else}
                     {#each recipient.extra as attribute, index (attribute.t)}
                         <MultiInput
-                            translation_key={'filesharing.attributes.' + attribute.t}
+                            translation_key={'filesharing.attributes.' +
+                                attribute.t}
                             bind:value={attribute.v}
                             deleteAction={() => {
                                 recipient.extra.splice(index, 1)
@@ -75,7 +95,8 @@
                         {#each addableButtons as attribute (attribute)}
                             <AttributeButton
                                 type="add"
-                                translation_key={'filesharing.attributes.' + attribute}
+                                translation_key={'filesharing.attributes.' +
+                                    attribute}
                                 clickAction={() => addAttribute(attribute)}
                             />
                         {/each}
@@ -142,7 +163,6 @@
         color: var(--pg-text);
         font-family: var(--pg-font-family);
     }
-
 
     .optionals-container {
         display: flex;

@@ -42,7 +42,10 @@
         const beginIdx = armorContent.indexOf(beginMarker)
         const endIdx = armorContent.indexOf(endMarker)
         if (beginIdx !== -1 && endIdx !== -1) {
-            armorContent = armorContent.substring(beginIdx + beginMarker.length, endIdx)
+            armorContent = armorContent.substring(
+                beginIdx + beginMarker.length,
+                endIdx
+            )
         }
         const armorBase64 = armorContent.replace(/\s/g, '')
 
@@ -56,11 +59,21 @@
         }
         if (!match) {
             // Find first difference
-            for (let i = 0; i < Math.max(armorBase64.length, decodedBase64.length); i++) {
+            for (
+                let i = 0;
+                i < Math.max(armorBase64.length, decodedBase64.length);
+                i++
+            ) {
                 if (armorBase64[i] !== decodedBase64[i]) {
                     bodyCompare.firstDiffAt = i
-                    bodyCompare.armorAt = armorBase64.substring(Math.max(0,i-5), i+10)
-                    bodyCompare.urlAt = decodedBase64.substring(Math.max(0,i-5), i+10)
+                    bodyCompare.armorAt = armorBase64.substring(
+                        Math.max(0, i - 5),
+                        i + 10
+                    )
+                    bodyCompare.urlAt = decodedBase64.substring(
+                        Math.max(0, i - 5),
+                        i + 10
+                    )
                     break
                 }
             }
@@ -76,17 +89,24 @@
                 return result
             }
             const { publicKey: vk } = await vkResp.json()
-            result.vkPreview = typeof vk === 'string' ? vk.substring(0, 40) + '...' : JSON.stringify(vk).substring(0, 40) + '...'
+            result.vkPreview =
+                typeof vk === 'string'
+                    ? vk.substring(0, 40) + '...'
+                    : JSON.stringify(vk).substring(0, 40) + '...'
 
             const readable = new ReadableStream({
-                start(c) { c.enqueue(bytes); c.close() }
+                start(c) {
+                    c.enqueue(bytes)
+                    c.close()
+                },
             })
             const unsealer = await pgMod.StreamUnsealer.new(readable, vk)
             const policies = unsealer.inspect_header()
             result.success = true
             result.recipients = [...policies.keys()]
         } catch (e) {
-            result.error = e instanceof Error ? `${e.name}: ${e.message}` : String(e)
+            result.error =
+                e instanceof Error ? `${e.name}: ${e.message}` : String(e)
         }
         return result
     }
@@ -113,7 +133,9 @@
             urlSafeBase64Length: urlSafeBase64.length,
             base64Length: base64.length,
             bytesLength: bytes.length,
-            first16Hex: Array.from(bytes.slice(0, 16)).map(b => b.toString(16).padStart(2, '0')).join(' '),
+            first16Hex: Array.from(bytes.slice(0, 16))
+                .map((b) => b.toString(16).padStart(2, '0'))
+                .join(' '),
             base64Preview: base64.substring(0, 80) + '...',
             roundtrip: `URL-safe → standard base64 → ${bytes.length} bytes → re-encode base64 match: ${btoa(binaryString) === base64}`,
         }
@@ -134,8 +156,18 @@
 
         // Step 3: Try both PKGs
         status = 'Testing PKG endpoints...'
-        const websitePkg = await tryUnsealer(`Website (${PKG_URL})`, PKG_URL, new Uint8Array(bytes), mod)
-        const outlookPkg = await tryUnsealer(`Outlook (${OUTLOOK_PKG})`, OUTLOOK_PKG, new Uint8Array(bytes), mod)
+        const websitePkg = await tryUnsealer(
+            `Website (${PKG_URL})`,
+            PKG_URL,
+            new Uint8Array(bytes),
+            mod
+        )
+        const outlookPkg = await tryUnsealer(
+            `Outlook (${OUTLOOK_PKG})`,
+            OUTLOOK_PKG,
+            new Uint8Array(bytes),
+            mod
+        )
         unsealerResults = [websitePkg, outlookPkg]
 
         if (websitePkg.success || outlookPkg.success) {
@@ -150,36 +182,79 @@
 <h2>Status: {status}</h2>
 
 {#if hashInfo}
-<h3>1. URL Hash Decode</h3>
-<pre>{JSON.stringify(hashInfo, null, 2)}</pre>
+    <h3>1. URL Hash Decode</h3>
+    <pre>{JSON.stringify(hashInfo, null, 2)}</pre>
 {/if}
 
 {#if wasmInfo}
-<h3>2. pg-js Module</h3>
-<pre>{JSON.stringify(wasmInfo, null, 2)}</pre>
+    <h3>2. pg-js Module</h3>
+    <pre>{JSON.stringify(wasmInfo, null, 2)}</pre>
 {/if}
 
 {#if unsealerResults.length > 0}
-<h3>3. StreamUnsealer — per PKG</h3>
-{#each unsealerResults as result, idx (idx)}
-<pre class:success={result.success} class:fail={!result.success}>{JSON.stringify(result, null, 2)}</pre>
-{/each}
+    <h3>3. StreamUnsealer — per PKG</h3>
+    {#each unsealerResults as result, idx (idx)}
+        <pre
+            class:success={result.success}
+            class:fail={!result.success}>{JSON.stringify(result, null, 2)}</pre>
+    {/each}
 {/if}
 
 <h3>4. Compare with email body armor</h3>
-<p>Paste the content of the hidden <code>postguard-armor</code> div from the email source (including or excluding the BEGIN/END markers):</p>
-<textarea bind:value={pastedArmor} rows="6" style="width:100%;font-family:monospace;font-size:12px" placeholder="-----BEGIN POSTGUARD MESSAGE-----&#10;FIqOpwACAA...&#10;-----END POSTGUARD MESSAGE-----"></textarea>
+<p>
+    Paste the content of the hidden <code>postguard-armor</code> div from the email
+    source (including or excluding the BEGIN/END markers):
+</p>
+<textarea
+    bind:value={pastedArmor}
+    rows="6"
+    style="width:100%;font-family:monospace;font-size:12px"
+    placeholder="-----BEGIN POSTGUARD MESSAGE-----&#10;FIqOpwACAA...&#10;-----END POSTGUARD MESSAGE-----"
+></textarea>
 <button onclick={compareWithArmor}>Compare</button>
 {#if bodyCompare}
-<pre class:success={bodyCompare.match} class:fail={!bodyCompare.match && !bodyCompare.error}>{JSON.stringify(bodyCompare, null, 2)}</pre>
+    <pre
+        class:success={bodyCompare.match}
+        class:fail={!bodyCompare.match && !bodyCompare.error}>{JSON.stringify(
+            bodyCompare,
+            null,
+            2
+        )}</pre>
 {/if}
 
 <style>
-    pre { background: #f4f4f4; padding: 1rem; overflow-x: auto; border-radius: 4px; font-size: 13px; }
-    pre.success { background: #e6ffe6; border-left: 4px solid green; }
-    pre.fail { background: #ffe6e6; border-left: 4px solid red; }
-    h1, h2, h3, p { font-family: sans-serif; }
-    h2 { color: #555; }
-    button { padding: 0.5rem 1rem; margin-top: 0.5rem; cursor: pointer; }
-    textarea { border: 1px solid #ccc; border-radius: 4px; padding: 0.5rem; }
+    pre {
+        background: #f4f4f4;
+        padding: 1rem;
+        overflow-x: auto;
+        border-radius: 4px;
+        font-size: 13px;
+    }
+    pre.success {
+        background: #e6ffe6;
+        border-left: 4px solid green;
+    }
+    pre.fail {
+        background: #ffe6e6;
+        border-left: 4px solid red;
+    }
+    h1,
+    h2,
+    h3,
+    p {
+        font-family: sans-serif;
+    }
+    h2 {
+        color: #555;
+    }
+    button {
+        padding: 0.5rem 1rem;
+        margin-top: 0.5rem;
+        cursor: pointer;
+    }
+    textarea {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 0.5rem;
+    }
 </style>

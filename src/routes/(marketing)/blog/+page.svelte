@@ -30,8 +30,18 @@
             {
                 '@type': 'BreadcrumbList',
                 itemListElement: [
-                    { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
-                    { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteUrl}/blog` },
+                    {
+                        '@type': 'ListItem',
+                        position: 1,
+                        name: 'Home',
+                        item: siteUrl,
+                    },
+                    {
+                        '@type': 'ListItem',
+                        position: 2,
+                        name: 'Blog',
+                        item: `${siteUrl}/blog`,
+                    },
                 ],
             },
         ],
@@ -48,7 +58,10 @@
     <h1>Blog</h1>
     <div class="posts">
         {#each data.posts as post (post.slug)}
-            <a href={resolve('/(marketing)/blog/[slug]', { slug: post.slug })} class="post-card">
+            <a
+                href={resolve('/(marketing)/blog/[slug]', { slug: post.slug })}
+                class="post-card"
+            >
                 {#if post.image}
                     <img src={post.image} alt={post.title} class="post-image" />
                 {/if}

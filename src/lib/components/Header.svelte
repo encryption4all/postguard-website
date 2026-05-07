@@ -19,17 +19,31 @@
         { name: 'docs', route: 'https://docs.postguard.eu' },
     ]
 
-    let items = FF_BUSINESS ? allItems : allItems.filter(i => i.name !== 'business')
+    let items = FF_BUSINESS
+        ? allItems
+        : allItems.filter((i) => i.name !== 'business')
 
     function isSelected(route: string) {
-        return page.url.pathname === route;
+        return page.url.pathname === route
     }
 </script>
 
 <div class="pg-topbar">
     <a href={resolve('/')}>
-        <img src={logo} alt="postguard logo" width="128" height="70" class="logo-light" />
-        <img src={logoDark} alt="postguard logo" width="128" height="70" class="logo-dark" />
+        <img
+            src={logo}
+            alt="postguard logo"
+            width="128"
+            height="70"
+            class="logo-light"
+        />
+        <img
+            src={logoDark}
+            alt="postguard logo"
+            width="128"
+            height="70"
+            class="logo-dark"
+        />
     </a>
     <div class="pg-desktop-menu">
         <ul>
@@ -44,117 +58,118 @@
         </ul>
         <LocaleSwitcher />
         <ThemeSwitcher />
-        <a href={resolve('/decrypt')} class="inbox-btn" class:selected={isSelected('/decrypt')}>
+        <a
+            href={resolve('/decrypt')}
+            class="inbox-btn"
+            class:selected={isSelected('/decrypt')}
+        >
             {$_('header.inbox')}
         </a>
     </div>
-    <Hamburger
-        items={[...items, { name: 'inbox', route: '/decrypt' }]}
-    />
+    <Hamburger items={[...items, { name: 'inbox', route: '/decrypt' }]} />
 </div>
 
 <style lang="scss">
-  .logo-light {
-    display: block;
-  }
+    .logo-light {
+        display: block;
+    }
 
-  .logo-dark {
-    display: none;
-  }
+    .logo-dark {
+        display: none;
+    }
 
-  :global(.dark) .logo-light {
-    display: none;
-  }
+    :global(.dark) .logo-light {
+        display: none;
+    }
 
-  :global(.dark) .logo-dark {
-    display: block;
-  }
+    :global(.dark) .logo-dark {
+        display: block;
+    }
 
-  .pg-topbar {
-    width: auto;
-    margin: 0.5rem 1rem 1rem 1rem;
+    .pg-topbar {
+        width: auto;
+        margin: 0.5rem 1rem 1rem 1rem;
 
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
 
-  .pg-desktop-menu {
-    display: none;
-    margin-left: auto;
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
-  }
-
-
-  @media only screen and (min-width: 768px) {
     .pg-desktop-menu {
-      display: flex;
-    }
-  }
-
-  .inbox-btn {
-    padding: 0.25rem 1rem;
-    background: var(--pg-primary);
-    color: white;
-    border-radius: var(--pg-border-radius-sm);
-    text-decoration: none;
-    font-weight: var(--pg-font-weight-semibold);
-    font-size: var(--pg-font-size-sm);
-    transition: opacity 0.2s ease;
-    white-space: nowrap;
-
-    &:hover {
-      opacity: 0.9;
+        display: none;
+        margin-left: auto;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
     }
 
-    &.selected {
-      opacity: 0.85;
-      box-shadow: 0 0 0 2px var(--pg-primary);
-      background: transparent;
-      color: var(--pg-primary);
-    }
-  }
-
-  .pg-desktop-menu ul li {
-    display: inline-block;
-    position: relative;
-    list-style-type: none;
-    margin-left: 15px;
-    padding-right: 15px;
-
-    &:not(:last-child) {
-      border-right: 1px solid var(--pg-text);
+    @media only screen and (min-width: 768px) {
+        .pg-desktop-menu {
+            display: flex;
+        }
     }
 
-    &.selected a {
-      text-decoration: 2px underline;
-      text-decoration-color: var(--pg-text);
-      text-underline-offset: 4px;
+    .inbox-btn {
+        padding: 0.25rem 1rem;
+        background: var(--pg-primary);
+        color: white;
+        border-radius: var(--pg-border-radius-sm);
+        text-decoration: none;
+        font-weight: var(--pg-font-weight-semibold);
+        font-size: var(--pg-font-size-sm);
+        transition: opacity 0.2s ease;
+        white-space: nowrap;
+
+        &:hover {
+            opacity: 0.9;
+        }
+
+        &.selected {
+            opacity: 0.85;
+            box-shadow: 0 0 0 2px var(--pg-primary);
+            background: transparent;
+            color: var(--pg-primary);
+        }
     }
 
-    &:not(.selected) a {
-      text-decoration: none;
+    .pg-desktop-menu ul li {
+        display: inline-block;
+        position: relative;
+        list-style-type: none;
+        margin-left: 15px;
+        padding-right: 15px;
 
-      &:after {
-        content: '';
-        position: absolute;
-        width: calc(100% - 15px);
-        transform: scaleX(0);
-        height: 2px;
-        bottom: 0;
-        left: 0;
-        background-color: var(--pg-text);
-        transform-origin: bottom right;
-        transition: transform 0.25s ease-out;
-      }
+        &:not(:last-child) {
+            border-right: 1px solid var(--pg-text);
+        }
 
-      &:hover:after {
-        transform: scaleX(1);
-        transform-origin: bottom left;
-      }
+        &.selected a {
+            text-decoration: 2px underline;
+            text-decoration-color: var(--pg-text);
+            text-underline-offset: 4px;
+        }
+
+        &:not(.selected) a {
+            text-decoration: none;
+
+            &:after {
+                content: '';
+                position: absolute;
+                width: calc(100% - 15px);
+                transform: scaleX(0);
+                height: 2px;
+                bottom: 0;
+                left: 0;
+                background-color: var(--pg-text);
+                transform-origin: bottom right;
+                transition: transform 0.25s ease-out;
+            }
+
+            &:hover:after {
+                transform: scaleX(1);
+                transform-origin: bottom left;
+            }
+        }
     }
-  }
 </style>

@@ -26,12 +26,13 @@
     }
 
     let hashMode = $state(false)
-    let currRight = $state();
+    let currRight = $state()
     $effect(() => {
         if (!hashMode) {
-            currRight = $currSelected >= 0 ? RIGHTMODES.MailView : RIGHTMODES.Nothing
+            currRight =
+                $currSelected >= 0 ? RIGHTMODES.MailView : RIGHTMODES.Nothing
         }
-    });
+    })
 
     let searchTerm = $state()
     let readable = $state()
@@ -115,7 +116,8 @@
         '@type': 'WebApplication',
         name: 'PostGuard Email Decryption',
         url: 'https://postguard.eu/decrypt',
-        description: 'Decrypt PostGuard-encrypted emails securely in your browser using the Yivi identity wallet.',
+        description:
+            'Decrypt PostGuard-encrypted emails securely in your browser using the Yivi identity wallet.',
         applicationCategory: 'SecurityApplication',
         operatingSystem: 'Any',
         isPartOf: { '@id': 'https://postguard.eu/#website' },
@@ -187,12 +189,19 @@
                             <li>{$_('fallback.welcome.step2')}</li>
                             <li>{$_('fallback.welcome.step3')}</li>
                         </ol>
-                        <p class="privacy-note">{$_('fallback.welcome.privacy')}</p>
+                        <p class="privacy-note">
+                            {$_('fallback.welcome.privacy')}
+                        </p>
                     </div>
                 </div>
             {:else}
                 {#key unique}
-                    <Decrypt {readable} {uuid} {recipient} bind:rightMode={currRight} />
+                    <Decrypt
+                        {readable}
+                        {uuid}
+                        {recipient}
+                        bind:rightMode={currRight}
+                    />
                 {/key}
             {/if}
         </div>

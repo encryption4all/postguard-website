@@ -17,7 +17,6 @@
 </div>
 
 <style>
-
     .files {
         display: flex;
         flex-direction: row;
@@ -58,7 +57,6 @@
         background-color: #f9fafb;
         padding: 4px;
     } */
-
 
     .file-title {
         overflow: hidden;

@@ -3,8 +3,8 @@
     import { EncryptionState } from '$lib/types/filesharing/attributes'
 
     interface props {
-        encryptionState: EncryptionState;
-        serverError?: boolean;
+        encryptionState: EncryptionState
+        serverError?: boolean
     }
 
     // eslint-disable-next-line no-useless-assignment
@@ -14,7 +14,9 @@
 <div class="error-container">
     <div class="error-content">
         <h3 class="error-title">
-            {serverError ? $_('filesharing.serverErrorTitle') : $_('filesharing.errorTitle')}
+            {serverError
+                ? $_('filesharing.serverErrorTitle')
+                : $_('filesharing.errorTitle')}
         </h3>
         <p class="error-message">
             {#if serverError}
@@ -26,7 +28,7 @@
         </p>
         <button
             class="error-btn"
-            onclick={() => encryptionState = EncryptionState.FileSelection}
+            onclick={() => (encryptionState = EncryptionState.FileSelection)}
             type="button"
         >
             {$_('filesharing.tryAgain')}

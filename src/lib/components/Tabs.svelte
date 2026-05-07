@@ -4,7 +4,7 @@
     const dispatch = createEventDispatcher()
 
     /** @type {{tabItems: any, activeItem: any}} */
-    let { tabItems, activeItem } = $props();
+    let { tabItems, activeItem } = $props()
 </script>
 
 <div class="tabs">

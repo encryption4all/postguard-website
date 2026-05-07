@@ -30,32 +30,74 @@
                 <div class="footer-col">
                     <h4>{$_('footer.productTitle')}</h4>
                     <ul>
-                        <li><a href={resolve('/fileshare')}>{$_('footer.fs')}</a></li>
-                        <li><a href={resolve('/decrypt')}>{$_('footer.inbox')}</a></li>
-                        <li><a href={resolve('/addons/')}>{$_('footer.addons')}</a></li>
+                        <li>
+                            <a href={resolve('/fileshare')}>{$_('footer.fs')}</a
+                            >
+                        </li>
+                        <li>
+                            <a href={resolve('/decrypt')}
+                                >{$_('footer.inbox')}</a
+                            >
+                        </li>
+                        <li>
+                            <a href={resolve('/addons/')}
+                                >{$_('footer.addons')}</a
+                            >
+                        </li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>{$_('footer.resourcesTitle')}</h4>
                     <ul>
-                        <li><a href={resolve('/about/')}>{$_('footer.about')}</a></li>
-                        <li><a href={resolve('/blog/')}>{$_('footer.blog')}</a></li>
-                        <li><a href="https://docs.postguard.eu">{$_('footer.docs')}</a></li>
-                        <li><a href={resolve('/privacy/')}>{$_('footer.pol')}</a></li>
+                        <li>
+                            <a href={resolve('/about/')}>{$_('footer.about')}</a
+                            >
+                        </li>
+                        <li>
+                            <a href={resolve('/blog/')}>{$_('footer.blog')}</a>
+                        </li>
+                        <li>
+                            <a href="https://docs.postguard.eu"
+                                >{$_('footer.docs')}</a
+                            >
+                        </li>
+                        <li>
+                            <a href={resolve('/privacy/')}>{$_('footer.pol')}</a
+                            >
+                        </li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>{$_('footer.connectTitle')}</h4>
                     <ul>
-                        <li><a href="mailto:" bind:this={contactEl} data-name="info" data-domain="postguard.eu">{$_('footer.contact')}</a></li>
-                        <li><a href="https://github.com/encryption4all">GitHub</a></li>
-                        <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-                        {#if FF_BUSINESS}<li><a href={BUSINESS_URL}>PostGuard for Business</a></li>{/if}
+                        <li>
+                            <a
+                                href="mailto:"
+                                bind:this={contactEl}
+                                data-name="info"
+                                data-domain="postguard.eu"
+                                >{$_('footer.contact')}</a
+                            >
+                        </li>
+                        <li>
+                            <a href="https://github.com/encryption4all"
+                                >GitHub</a
+                            >
+                        </li>
+                        <!-- eslint-disable svelte/no-navigation-without-resolve -->
+                        {#if FF_BUSINESS}<li>
+                                <a href={BUSINESS_URL}>PostGuard for Business</a
+                                >
+                            </li>{/if}
+                        <!-- eslint-enable svelte/no-navigation-without-resolve -->
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>{$_('footer.builtBy')} <a href="https://yivi.app">Yivi</a> @ <a href="https://caesar.nl">Caesar Groep</a></p>
+                <p>
+                    {$_('footer.builtBy')} <a href="https://yivi.app">Yivi</a> @
+                    <a href="https://caesar.nl">Caesar Groep</a>
+                </p>
             </div>
         </div>
     </footer>

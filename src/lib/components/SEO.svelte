@@ -17,7 +17,8 @@
     const defaultImage = '/pg_logo.png'
 
     const canonicalUrl = $derived(
-        canonical || (page?.url?.pathname ? `${siteUrl}${page.url.pathname}` : '')
+        canonical ||
+            (page?.url?.pathname ? `${siteUrl}${page.url.pathname}` : '')
     )
     const ogImageUrl = $derived(
         (ogImage || defaultImage).startsWith('http')
@@ -31,7 +32,10 @@
     <title>{title ? `${title} | ${siteName}` : siteName}</title>
     <meta name="description" content={description || defaultDescription} />
     <meta property="og:title" content={title || siteName} />
-    <meta property="og:description" content={description || defaultDescription} />
+    <meta
+        property="og:description"
+        content={description || defaultDescription}
+    />
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={siteName} />
@@ -43,7 +47,10 @@
     {/if}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title || siteName} />
-    <meta name="twitter:description" content={description || defaultDescription} />
+    <meta
+        name="twitter:description"
+        content={description || defaultDescription}
+    />
     <meta name="twitter:image" content={ogImageUrl} />
     {#if jsonLdString}
         <!-- eslint-disable-next-line svelte/no-at-html-tags, no-useless-escape -->

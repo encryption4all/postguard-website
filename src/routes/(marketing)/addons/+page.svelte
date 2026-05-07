@@ -21,8 +21,18 @@
             {
                 '@type': 'BreadcrumbList',
                 itemListElement: [
-                    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://postguard.eu' },
-                    { '@type': 'ListItem', position: 2, name: 'Addons', item: 'https://postguard.eu/addons' },
+                    {
+                        '@type': 'ListItem',
+                        position: 1,
+                        name: 'Home',
+                        item: 'https://postguard.eu',
+                    },
+                    {
+                        '@type': 'ListItem',
+                        position: 2,
+                        name: 'Addons',
+                        item: 'https://postguard.eu/addons',
+                    },
                 ],
             },
             {
@@ -73,14 +83,15 @@
 
     const tween = new Tween(0, { delay: 150, duration: 500, easing: cubicOut })
 
-    let height = $derived((containerWidth > 800 ? 400 : 500) +
-        tween.current * (containerWidth > 800 ? 150 : 200))
+    let height = $derived(
+        (containerWidth > 800 ? 400 : 500) +
+            tween.current * (containerWidth > 800 ? 150 : 200)
+    )
 
     const triggerTabChange = (event) => {
         activeItem = event.detail
         tween.set(activeItem === 'Thunderbird' ? 0 : 1)
     }
-
 </script>
 
 <SEO
@@ -94,11 +105,7 @@
         <div class="grid-item header">
             <h2><span>{$_('addons.title')}</span></h2>
             <p>{$_('addons.par')}</p>
-            <img
-                src={composeImg}
-                class="image invert"
-                alt="compose"
-            />
+            <img src={composeImg} class="image invert" alt="compose" />
         </div>
         <div class="grid-item instruction" style="min-height: {height}px">
             <h2>{$_('addons.instruction.header')}</h2>
@@ -106,9 +113,7 @@
             <Tabs {tabItems} {activeItem} on:tabChange={triggerTabChange} />
             {#if activeItem}
                 {#key activeItem}
-                    <div
-                        id="client-instruction"
-                    >
+                    <div id="client-instruction">
                         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                         {@html $_(`addons.${activeItem}`)}
                     </div>
@@ -152,7 +157,7 @@
             grid-template-columns: 1fr;
         }
     }
-    
+
     .instruction {
         height: 100%;
         border: 1px dashed black;

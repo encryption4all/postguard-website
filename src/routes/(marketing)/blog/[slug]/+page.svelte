@@ -30,9 +30,9 @@
         datePublished: data.metadata.date,
         dateModified: data.metadata.modified || data.metadata.date,
         image: data.metadata.image
-            ? (data.metadata.image.startsWith('http')
+            ? data.metadata.image.startsWith('http')
                 ? data.metadata.image
-                : `${siteUrl}${data.metadata.image}`)
+                : `${siteUrl}${data.metadata.image}`
             : `${siteUrl}/pg_logo.png`,
         author: authorJsonLd(),
         publisher: {
@@ -89,8 +89,13 @@
                 <div class="author-details">
                     <span class="author-name">
                         {#if author.linkedin}
-                            <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-                            <a href={author.linkedin} target="_blank" rel="noopener">{author.name}</a>
+                            <!-- eslint-disable svelte/no-navigation-without-resolve -->
+                            <a
+                                href={author.linkedin}
+                                target="_blank"
+                                rel="noopener">{author.name}</a
+                            >
+                            <!-- eslint-enable svelte/no-navigation-without-resolve -->
                         {:else}
                             {author.name}
                         {/if}

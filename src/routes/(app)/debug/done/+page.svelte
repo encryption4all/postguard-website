@@ -1,40 +1,67 @@
 <script lang="ts">
     import Done from '$lib/components/filesharing/Done.svelte'
-    import { EncryptionState, type EncryptState } from '$lib/types/filesharing/attributes'
+    import {
+        EncryptionState,
+        type EncryptState,
+    } from '$lib/types/filesharing/attributes'
 
     // Hardcoded test data
     let testEncryptState: EncryptState = $state({
         encryptionState: EncryptionState.Done,
         files: [
-            new File([''], 'presentation.pdf', { type: 'application/pdf', lastModified: Date.now() }),
-            new File([''], 'budget_2024_final_version_v3.xlsx', { type: 'application/vnd.ms-excel', lastModified: Date.now() }),
-            new File([''], 'team_photo.jpg', { type: 'image/jpeg', lastModified: Date.now() }),
-            new File([''], 'contract_signed.docx', { type: 'application/msword', lastModified: Date.now() }),
+            new File([''], 'presentation.pdf', {
+                type: 'application/pdf',
+                lastModified: Date.now(),
+            }),
+            new File([''], 'budget_2024_final_version_v3.xlsx', {
+                type: 'application/vnd.ms-excel',
+                lastModified: Date.now(),
+            }),
+            new File([''], 'team_photo.jpg', {
+                type: 'image/jpeg',
+                lastModified: Date.now(),
+            }),
+            new File([''], 'contract_signed.docx', {
+                type: 'application/msword',
+                lastModified: Date.now(),
+            }),
         ],
         recipients: [
             {
                 email: 'jan.janssen@example.com',
-                extra: []
+                extra: [],
             },
             {
                 email: 'marie.pietersen@company.nl',
                 extra: [
-                    { t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber', v: '+31612345678' }
-                ]
+                    {
+                        t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
+                        v: '+31612345678',
+                    },
+                ],
             },
             {
                 email: 'test.user@domain.com',
                 extra: [
-                    { t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber', v: '+31687654321' },
-                    { t: 'pbdf.gemeente.personalData.fullname', v: 'Test User' }
-                ]
+                    {
+                        t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
+                        v: '+31687654321',
+                    },
+                    {
+                        t: 'pbdf.gemeente.personalData.fullname',
+                        v: 'Test User',
+                    },
+                ],
             },
             {
                 email: 'another.recipient@example.org',
                 extra: [
-                    { t: 'pbdf.gemeente.personalData.fullname', v: 'Another Recipient' }
-                ]
-            }
+                    {
+                        t: 'pbdf.gemeente.personalData.fullname',
+                        v: 'Another Recipient',
+                    },
+                ],
+            },
         ],
         sender: '',
         message: 'Test message',
@@ -65,10 +92,7 @@
 
 <!-- Mirrors the .done wrapper from +page.svelte -->
 <div class="done">
-    <Done
-        bind:encryptState={testEncryptState}
-        {createDefaultEncryptState}
-    />
+    <Done bind:encryptState={testEncryptState} {createDefaultEncryptState} />
 </div>
 
 <style>
