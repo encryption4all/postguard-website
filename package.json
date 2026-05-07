@@ -72,7 +72,7 @@
         "@deltablot/dropzone": "^7.4.3",
         "@e4a/pg-js": "^1.4.0",
         "@iconify/svelte": "^5.2.1",
-        "@privacybydesign/yivi-css": "^1.0.0-beta.4",
+        "@privacybydesign/yivi-css": "^1.0.0-beta.5",
         "country-flag-icons": "^1.6.17",
         "libphonenumber-js": "^1.12.42",
         "postal-mime": "^2.7.4",
