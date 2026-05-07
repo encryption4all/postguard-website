@@ -1,0 +1,49 @@
+name: Sync addons
+
+# Mirrors the latest PostGuard addon releases (Thunderbird .xpi, Outlook
+# manifest.xml) into static/downloads/ so the website can serve them directly.
+# Opens a PR when an upstream sha256 differs from what is currently committed;
+# no-op otherwise.
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    name: Sync addons
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Run sync script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/sync-addons.mjs
+      - name: Open PR if changed
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: chore/sync-addons
+          delete-branch: true
+          commit-message: 'chore: sync PostGuard addons to latest releases'
+          title: 'chore: sync PostGuard addons to latest releases'
+          body: |
+            Automated sync of the latest PostGuard addon releases:
+
+            - [`postguard-tb-addon`](https://github.com/encryption4all/postguard-tb-addon/releases/latest)
+            - [`postguard-outlook-addon`](https://github.com/encryption4all/postguard-outlook-addon/releases/latest)
+
+            Version metadata lives in `static/downloads/*.json`.
+          add-paths: |
+            static/downloads/postguard-tb-addon.xpi
+            static/downloads/postguard-tb-addon.json
+            static/downloads/postguard-outlook-manifest.xml
+            static/downloads/postguard-outlook-manifest.json
