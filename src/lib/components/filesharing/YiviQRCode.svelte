@@ -75,16 +75,16 @@
 
 <style>
     .yivi-qr-container {
-        width: 250px;
-        height: 250px;
+        width: 330px;
+        height: 330px;
         display: flex;
         justify-content: center;
         align-items: center;
         overflow: hidden;
-        background: var(--pg-general-background);
+        background: white;
         border: 1px solid var(--pg-strong-background);
         border-radius: var(--pg-border-radius-sm);
-        padding: 10px;
+        padding: 4px;
     }
 
     .yivi-qr-container.responsive {
