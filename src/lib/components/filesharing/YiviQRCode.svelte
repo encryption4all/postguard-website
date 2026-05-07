@@ -75,8 +75,8 @@
 
 <style>
     .yivi-qr-container {
-        width: 250px;
-        height: 250px;
+        width: 320px;
+        height: 320px;
         display: flex;
         justify-content: center;
         align-items: center;
