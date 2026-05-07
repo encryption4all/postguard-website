@@ -10,12 +10,16 @@
 //   5. Otherwise download, verify the sha256 matches, and write the asset + metadata.
 
 import { createHash } from 'node:crypto'
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, rename, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const downloadsDir = resolve(projectRoot, 'static/downloads')
+// DOWNLOADS_DIR lets the container point at the live nginx htdocs dir at
+// runtime instead of the in-repo static/ tree.
+const downloadsDir = process.env.DOWNLOADS_DIR
+    ? resolve(process.env.DOWNLOADS_DIR)
+    : resolve(projectRoot, 'static/downloads')
 
 const TARGETS = [
     {
@@ -97,8 +101,17 @@ async function findReleaseWithAsset(target) {
     )
 }
 
+// writeAtomic writes to <path>.tmp and then renames into place so concurrent
+// readers (e.g. nginx serving live download requests) never observe a
+// partially-written file. POSIX rename(2) is atomic within a single filesystem.
+async function writeAtomic(path, data) {
+    const tmp = `${path}.tmp`
+    await writeFile(tmp, data)
+    await rename(tmp, path)
+}
+
 async function writeMeta(metaPath, { release, asset, sha256, size }) {
-    await writeFile(
+    await writeAtomic(
         metaPath,
         JSON.stringify(
             {
@@ -174,7 +187,7 @@ async function syncTarget(target) {
     }
 
     await mkdir(downloadsDir, { recursive: true })
-    await writeFile(outputPath, buf)
+    await writeAtomic(outputPath, buf)
     await writeMeta(metaPath, {
         release,
         asset,
