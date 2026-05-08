@@ -1,0 +1,62 @@
+---
+title: "May update: PostGuard for Business launch, add-ins and reliability"
+description: "The recap of everything that changed in PostGuard through March and April. Highlights include the soft launch of PostGuard for Business, new add-ins for Thunderbird and Outlook. And some reliability additions to PostGuard for the transfer of large files."
+date: "2026-05-08"
+author: "Ruben Hensen"
+image: "/blog/may_update.png"
+---
+
+# May Update
+![PostGuard cover](/blog/may_update.png)
+We've been hard at work turning PostGuard from a research project to a usable service for everyone. Let me walk you through all the exciting changes from the past few months. 
+
+## Infrastructure Move
+We used to be hosted at the Radboud University and at Procolix. We have modernized everything into containers and moved to the Yivi Kubernetes cluster on Scaleway. We also renewed our deal with Procolix. Procolix generously provides us with the fileshare server. We are very grateful for that! We also are done moving all the domains and email the email server.
+
+## Soft launch of PostGuard for Business
+We officially launched PostGuard for Business. We have two proof of concepts partners with the Dutch government to programmatically send encrypted emails to citizens. If you want to try PostGuard for Business too, you can! Just head on over to https://business.postguard.eu/ and press register.
+
+## Brand new Javascript/Typescript SDK
+We made implementing PostGuard for Business easy as pie by inlining the web assembly and wrapping the whole thing in a builder pattern. Programmatically sending encrypted email has never been easier:
+
+```js
+const sealed = pg.encrypt({
+  files,
+  recipients: [pg.recipient.email(citizen.email), pg.recipient.emailDomain(organisation.email)],
+  sign: pg.sign.apiKey(apiKey),
+  onProgress,
+  signal: abortController?.signal
+});
+
+const { uuid } = await sealed.upload();
+```
+
+The SDK handles all the complicated stuff. From zipping, chunking, encrypting, decrypting and even creating entire email envelopes for our own PostGuard email client add-ins
+
+## Also a .NET SDK with native performance using pg-ffi
+We created a C-ABI bridge (pg-ffi) that exposes the rust core to .NET. We wrap this in a easy to use NuGet package so you can easily send PostGuard for Business emails using .NET too.
+```
+var sealed = pg.Encrypt(new EncryptInput
+{
+    Files = [new PgFile("report.txt", fileStream)],
+    Recipients = [
+        pg.Recipient.Email("citizen@example.com"),
+        pg.Recipient.EmailDomain("info@org.nl")
+    ],
+    Sign = pg.Sign.ApiKey("PG-your-key")
+});
+```
+
+## Brand new add-ins for Thunderbird and Outlook
+We released the alpha version of our Thunderbird and Outlook add-ins. There is still some work to do, but sending email through Thunderbird or Outlook for Mac, Windows or online is now possible. Check it out at https://postguard.eu/addons!
+
+![PostGuard cover](/blog/outlook_plugin_may.png)
+
+## YADW (Yet Another Docs Website)
+At https://docs.postguard.eu you can now see all our documentation in one central place. It is mostly developer focussed, but also contains some great information if you are curious how PostGuard works under the hood.
+
+![PostGuard cover](/blog/postguard_docs_may.png)
+
+## Miscellaneous
+We also been hard at work at a bunch of other things. We've increased the postguard free tier to 5gb every 14 days. We've hardened our security around the PKG server. We've made the upload and download more robust for large files. It all a bit to much to sum up in a small blog. 
+
