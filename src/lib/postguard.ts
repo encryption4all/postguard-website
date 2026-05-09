@@ -19,6 +19,12 @@ export const pg = new PostGuard({
     cryptifyUrl: FILEHOST_URL,
     ...(CHUNK_SIZE !== undefined && { uploadChunkSize: CHUNK_SIZE }),
     retry: {
+        // Defaults (5 attempts, 500ms initial) exhaust the retry budget in
+        // ~7.5s — shorter than a typical cryptify restart, so a brief outage
+        // surfaces as a hard failure to the user. Stretch the budget so the
+        // total wait covers a realistic restart window (~90s).
+        maxAttempts: 8,
+        initialDelayMs: 1000,
         onRetry: (event) => retryStatus.set(event),
     },
 })
