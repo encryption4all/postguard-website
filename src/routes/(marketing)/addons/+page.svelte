@@ -118,6 +118,12 @@
             <Tabs {tabItems} {activeItem} on:tabChange={triggerTabChange} />
             {#if activeItem}
                 {#key activeItem}
+                    {#if activeItem === 'Outlook'}
+                        <div class="callout" role="note">
+                            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                            {@html $_('addons.outlookWarning')}
+                        </div>
+                    {/if}
                     <div id="client-instruction">
                         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                         {@html $_(`addons.${activeItem}`)}
@@ -172,5 +178,15 @@
         h2 {
             margin-top: 0;
         }
+    }
+
+    .callout {
+        border-left: 4px solid #c9941b;
+        background: #fff7e0;
+        padding: 0.75rem 1rem;
+        margin: 0.75rem 0 1rem;
+        border-radius: 4px;
+        font-size: 0.95em;
+        line-height: 1.4;
     }
 </style>
