@@ -1,5 +1,5 @@
 <script>
-    import { _ } from 'svelte-i18n'
+    import { _, locale } from 'svelte-i18n'
     import Tabs from '$lib/components/Tabs.svelte'
     import SEO from '$lib/components/SEO.svelte'
     // import { fade } from 'svelte/transition'
@@ -117,7 +117,13 @@
             <p>{$_('addons.instruction.download')}</p>
             <Tabs {tabItems} {activeItem} on:tabChange={triggerTabChange} />
             {#if activeItem}
-                {#key activeItem}
+                {#key `${activeItem}-${$locale}`}
+                    {#if activeItem === 'Outlook'}
+                        <div class="callout" role="note">
+                            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                            {@html $_('addons.outlookWarning')}
+                        </div>
+                    {/if}
                     <div id="client-instruction">
                         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                         {@html $_(`addons.${activeItem}`)}
@@ -172,5 +178,15 @@
         h2 {
             margin-top: 0;
         }
+    }
+
+    .callout {
+        border-left: 4px solid #c9941b;
+        background: #fff7e0;
+        padding: 0.75rem 1rem;
+        margin: 0.75rem 0 1rem;
+        border-radius: 4px;
+        font-size: 0.95em;
+        line-height: 1.4;
     }
 </style>
