@@ -14,6 +14,7 @@
 
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
     import Chip from '$lib/components/Chip.svelte'
+    import { isMobile } from '$lib/browser-detect'
 
     const STATES = {
         Uninit: 'Uninit',
@@ -26,6 +27,7 @@
     }
 
     let decryptState = $state(STATES.Uninit)
+    const isMobileDevice = isMobile()
 
     let policies = $state()
     let keylist = $state()
@@ -312,7 +314,11 @@
                     {/each}
                 </div>
             {/if}
-            <YiviQRCode id="yivi-fallback" responsive />
+            <YiviQRCode
+                id="yivi-fallback"
+                responsive
+                mode={isMobileDevice ? 'deeplink' : 'qr'}
+            />
         </div>
     {:else if decryptState === STATES.Decrypting}
         <div class="spinner-wrapper">
