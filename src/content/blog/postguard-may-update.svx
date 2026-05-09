@@ -11,10 +11,10 @@ image: "/blog/may_update.png"
 We've been hard at work turning PostGuard from a research project into a usable service for everyone. Let me walk you through all the exciting changes from the past few months. 
 
 ## Infrastructure Move
-We used to be hosted at the Radboud University and at Procolix. We have modernized everything into containers and moved to the Yivi Kubernetes cluster on Scaleway. We also renewed our deal with Procolix, who generously provides us with the fileshare server. We are very grateful for that! We've also finished moving all the domains and the email server.
+We used to be hosted at the Radboud University and at Procolix. We have modernized everything into containers and moved to the Yivi Kubernetes cluster on Scaleway. We also renewed our deal with Procolix, who generously provides us with the fileshare server. We are very grateful for that. We've also finished moving all the domains and the email server.
 
 ## Soft launch of PostGuard for Business
-We officially launched PostGuard for Business! We currently have two proof-of-concept partners with the Dutch government to programmatically send encrypted emails to citizens. 
+We officially launched PostGuard for Business. We currently have two proof-of-concept partners with the Dutch government to programmatically send encrypted emails to citizens. 
 
 To support these partners, we’ve made the Business portal fully bilingual (Dutch and English) and ensured it hits WCAG 2.2 AA accessibility standards. Whether you're using a screen reader or just prefer a specific language, PostGuard for Business is ready for you. If you want to try it out, just head on over to https://business.postguard.eu/ and press register.
 
@@ -49,7 +49,7 @@ var sealed = pg.Encrypt(new EncryptInput
 ```
 
 ## Brand new add-ins for Thunderbird and Outlook
-We released the alpha version of our Thunderbird and Outlook add-ins. There is still some work to do, but sending email through Thunderbird or Outlook for Mac, Windows, or online is now possible. Our goal is to make it the smoothest way to send encrypted email. Check it out at https://postguard.eu/addons!
+We released the alpha version of our Thunderbird and Outlook add-ins. There is still some work to do, but sending email through Thunderbird or Outlook for Mac, Windows, or online is now possible. Our goal is to make it the smoothest way to send encrypted email. Check it out at https://postguard.eu/addons.
 
 ![PostGuard cover](/blog/outlook_plugin_may.png)
 
