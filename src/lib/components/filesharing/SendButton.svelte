@@ -266,6 +266,18 @@
         }
     }
 
+    function onCancelUpload(): void {
+        if (!browser) return
+        // Mark before aborting so the catch in startEncryption() takes the
+        // self-aborted path and resets to FileSelection rather than showing
+        // the generic Error panel.
+        encryptState.selfAborted = true
+        encryptState.abort.abort()
+        // AbortController is single-use — provide a fresh one so a subsequent
+        // send attempt can be cancelled too.
+        encryptState.abort = new AbortController()
+    }
+
     function updateProgress(pct: number) {
         const totalSize = encryptState.files.reduce((a, f) => a + f.size, 0)
         if (totalSize === 0) return
@@ -365,6 +377,14 @@
                 </p>
             {/if}
         </div>
+        <button
+            type="button"
+            class="crypt-btn crypt-btn-secondary cancel-upload-btn"
+            onclick={onCancelUpload}
+            disabled={encryptState.selfAborted}
+        >
+            {$_('filesharing.cancel')}
+        </button>
     {:else}
         <!-- Normal button -->
         <button
@@ -636,6 +656,11 @@
 
     .upload-info-box .spinner-circle {
         stroke: var(--pg-text);
+    }
+
+    .cancel-upload-btn {
+        align-self: flex-start;
+        margin-top: 0.25rem;
     }
 
     .retry-status {
