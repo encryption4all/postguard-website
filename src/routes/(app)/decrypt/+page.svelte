@@ -131,15 +131,21 @@
     </div>
     <div class="fallback-container">
         <div class="left-panel">
-            <label class="upload-area">
-                <Icon icon="mdi:upload-lock" width="28px" aria-hidden="true" />
-                <span>{$_('fallback.drop')}</span>
-                <input
-                    type="file"
-                    onchange={onFile}
-                    aria-label={$_('fallback.drop')}
-                />
-            </label>
+            {#if !hashMode}
+                <label class="upload-area">
+                    <Icon
+                        icon="mdi:upload-lock"
+                        width="28px"
+                        aria-hidden="true"
+                    />
+                    <span>{$_('fallback.drop')}</span>
+                    <input
+                        type="file"
+                        onchange={onFile}
+                        aria-label={$_('fallback.drop')}
+                    />
+                </label>
+            {/if}
 
             <div class="search-bar">
                 <div class="search-input-wrapper">
