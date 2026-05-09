@@ -1,5 +1,5 @@
 <script>
-    import { _ } from 'svelte-i18n'
+    import { _, locale } from 'svelte-i18n'
     import Tabs from '$lib/components/Tabs.svelte'
     import SEO from '$lib/components/SEO.svelte'
     // import { fade } from 'svelte/transition'
@@ -117,7 +117,7 @@
             <p>{$_('addons.instruction.download')}</p>
             <Tabs {tabItems} {activeItem} on:tabChange={triggerTabChange} />
             {#if activeItem}
-                {#key activeItem}
+                {#key `${activeItem}-${$locale}`}
                     <div id="client-instruction">
                         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                         {@html $_(`addons.${activeItem}`)}
