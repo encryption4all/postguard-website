@@ -70,6 +70,7 @@
             class="rss-link"
             href={resolve('/(marketing)/blog/rss.xml')}
             aria-label="RSS feed"
+            data-sveltekit-reload
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
