@@ -295,8 +295,16 @@
     {:else if decryptState === STATES.Qr}
         <div class="decrypt-card">
             <h3>
-                {$_('fallback.decrypt.scanQr', { default: 'Scan QR code' })}
+                {$_('fallback.decrypt.scanQr', {
+                    default: 'Scan QR code with Yivi',
+                })}
             </h3>
+            <p class="card-subtitle">
+                {$_('fallback.decrypt.scanQrDesc', {
+                    default:
+                        'Verify your identity by scanning this QR code with the free Yivi app on your phone.',
+                })}
+            </p>
             {#if showHints}
                 <div class="hints">
                     {#each hints as hint (hint)}

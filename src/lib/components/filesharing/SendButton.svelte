@@ -449,6 +449,13 @@
                 <div class="qr-code-wrapper">
                     <YiviQRCode />
                 </div>
+
+                <HelpToggle
+                    title={$_('filesharing.encryptPanel.yiviInfo')}
+                    content={$_('filesharing.encryptPanel.yiviInfoText')}
+                    linkText={$_('filesharing.encryptPanel.yiviInfoLink')}
+                    linkUrl="https://yivi.app"
+                />
             </div>
             <div class="popup-arrow"></div>
         </div>
@@ -476,6 +483,12 @@
                         {$_('filesharing.sign.scanQR')}
                     </p>
                     <div class="qr-code-wrapper"><YiviQRCode /></div>
+                    <HelpToggle
+                        title={$_('filesharing.encryptPanel.yiviInfo')}
+                        content={$_('filesharing.encryptPanel.yiviInfoText')}
+                        linkText={$_('filesharing.encryptPanel.yiviInfoLink')}
+                        linkUrl="https://yivi.app"
+                    />
                     <Chip
                         text={$_('filesharing.sign.close')}
                         onclick={() => {
