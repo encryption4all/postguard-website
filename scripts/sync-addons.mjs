@@ -38,16 +38,17 @@ const TARGETS = [
     },
 ]
 
+// At the 6h container interval we make 2 unauthenticated calls / 6h — far under
+// GitHub's 60/h unauthenticated cap. No token plumbing needed; downloads from
+// browser_download_url aren't API-rate-limited at all.
 async function fetchJson(url) {
-    const headers = {
-        Accept: 'application/vnd.github+json',
-        'X-GitHub-Api-Version': '2022-11-28',
-        'User-Agent': 'postguard-website-sync',
-    }
-    if (process.env.GITHUB_TOKEN) {
-        headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`
-    }
-    const res = await fetch(url, { headers })
+    const res = await fetch(url, {
+        headers: {
+            Accept: 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+            'User-Agent': 'postguard-website-sync',
+        },
+    })
     if (!res.ok) {
         throw new Error(`GET ${url} failed: ${res.status} ${res.statusText}`)
     }
