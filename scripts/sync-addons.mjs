@@ -10,12 +10,16 @@
 //   5. Otherwise download, verify the sha256 matches, and write the asset + metadata.
 
 import { createHash } from 'node:crypto'
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, rename, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const downloadsDir = resolve(projectRoot, 'static/downloads')
+// DOWNLOADS_DIR lets the container point at the live nginx htdocs dir at
+// runtime instead of the in-repo static/ tree.
+const downloadsDir = process.env.DOWNLOADS_DIR
+    ? resolve(process.env.DOWNLOADS_DIR)
+    : resolve(projectRoot, 'static/downloads')
 
 const TARGETS = [
     {
@@ -34,16 +38,17 @@ const TARGETS = [
     },
 ]
 
+// At the 6h container interval we make 2 unauthenticated calls / 6h — far under
+// GitHub's 60/h unauthenticated cap. No token plumbing needed; downloads from
+// browser_download_url aren't API-rate-limited at all.
 async function fetchJson(url) {
-    const headers = {
-        Accept: 'application/vnd.github+json',
-        'X-GitHub-Api-Version': '2022-11-28',
-        'User-Agent': 'postguard-website-sync',
-    }
-    if (process.env.GITHUB_TOKEN) {
-        headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`
-    }
-    const res = await fetch(url, { headers })
+    const res = await fetch(url, {
+        headers: {
+            Accept: 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+            'User-Agent': 'postguard-website-sync',
+        },
+    })
     if (!res.ok) {
         throw new Error(`GET ${url} failed: ${res.status} ${res.statusText}`)
     }
@@ -97,6 +102,34 @@ async function findReleaseWithAsset(target) {
     )
 }
 
+// writeAtomic writes to <path>.tmp and then renames into place so concurrent
+// readers (e.g. nginx serving live download requests) never observe a
+// partially-written file. POSIX rename(2) is atomic within a single filesystem.
+async function writeAtomic(path, data) {
+    const tmp = `${path}.tmp`
+    await writeFile(tmp, data)
+    await rename(tmp, path)
+}
+
+async function writeMeta(metaPath, { release, asset, sha256, size }) {
+    await writeAtomic(
+        metaPath,
+        JSON.stringify(
+            {
+                tag: release.tag_name,
+                assetName: asset.name,
+                sha256,
+                size,
+                publishedAt: release.published_at,
+                sourceUrl: asset.browser_download_url,
+                releaseUrl: release.html_url,
+            },
+            null,
+            2
+        ) + '\n'
+    )
+}
+
 async function syncTarget(target) {
     const outputPath = resolve(downloadsDir, target.outputFile)
     const metaPath = resolve(downloadsDir, target.metaFile)
@@ -111,9 +144,25 @@ async function syncTarget(target) {
 
     const cached = await readCached(metaPath)
     if (cached?.sha256 === remoteSha) {
+        if (cached.tag === release.tag_name) {
+            console.log(
+                `[${target.name}] up-to-date: ${release.tag_name} (sha256 ${remoteSha})`
+            )
+            return
+        }
+        // Upstream re-tagged with byte-identical content (e.g. v0.1.3 → v0.1.5
+        // with the same manifest.xml). Refresh the metadata so tag/releaseUrl/
+        // publishedAt stay current without a redundant re-download.
         console.log(
-            `[${target.name}] up-to-date: ${cached.tag} (sha256 ${remoteSha})`
+            `[${target.name}] re-tagged: ${cached.tag} -> ${release.tag_name} (content unchanged)`
         )
+        await writeMeta(metaPath, {
+            release,
+            asset,
+            sha256: remoteSha,
+            size: asset.size ?? cached.size,
+        })
+        console.log(`[${target.name}] wrote ${metaPath}`)
         return
     }
     console.log(
@@ -139,23 +188,13 @@ async function syncTarget(target) {
     }
 
     await mkdir(downloadsDir, { recursive: true })
-    await writeFile(outputPath, buf)
-    await writeFile(
-        metaPath,
-        JSON.stringify(
-            {
-                tag: release.tag_name,
-                assetName: asset.name,
-                sha256: localSha,
-                size: buf.length,
-                publishedAt: release.published_at,
-                sourceUrl: asset.browser_download_url,
-                releaseUrl: release.html_url,
-            },
-            null,
-            2
-        ) + '\n'
-    )
+    await writeAtomic(outputPath, buf)
+    await writeMeta(metaPath, {
+        release,
+        asset,
+        sha256: localSha,
+        size: buf.length,
+    })
     console.log(`[${target.name}] wrote ${outputPath} (${buf.length} bytes)`)
     console.log(`[${target.name}] wrote ${metaPath}`)
 }

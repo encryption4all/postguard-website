@@ -74,6 +74,15 @@ COPY docker/default.conf.template /etc/nginx/templates/default.conf.template
 COPY docker/entrypoint.sh /docker-entrypoint.d/40-substitute-env-vars.sh
 RUN chmod +x /docker-entrypoint.d/40-substitute-env-vars.sh
 
+# Bundle the addon-sync script + a Node binary so the running container can
+# self-refresh PostGuard addon downloads (see /docker-entrypoint.d/50-…).
+# We pull the binary from node:24-slim — same debian-bookworm base as nginx,
+# so the runtime libs match without an apt install.
+COPY --from=node:24-slim /usr/local/bin/node /usr/local/bin/node
+COPY scripts/sync-addons.mjs /opt/sync-addons/sync-addons.mjs
+COPY docker/sync-addons-loop.sh /docker-entrypoint.d/50-sync-addons.sh
+RUN chmod +x /docker-entrypoint.d/50-sync-addons.sh
+
 # Copy frontend built in Stage 1
 COPY --from=frontend /app/build /usr/share/nginx/html/postguard
 
