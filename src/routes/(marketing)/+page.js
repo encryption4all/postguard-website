@@ -1,6 +1,5 @@
 import { browser } from '$app/environment'
 import { redirect } from '@sveltejs/kit'
-import { hasVisited } from '$lib/visitedCookie'
 
 export function load() {
     // Only redirect returning visitors on direct/external navigation (full page load),
@@ -8,7 +7,7 @@ export function load() {
     if (
         browser &&
         !(/** @type {any} */ (window).__pg_client_nav) &&
-        hasVisited()
+        localStorage.getItem('pg_visited')
     ) {
         redirect(302, '/fileshare')
     }

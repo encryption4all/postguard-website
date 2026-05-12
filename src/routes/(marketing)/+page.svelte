@@ -4,12 +4,11 @@
     import { resolve } from '$app/paths'
     import SEO from '$lib/components/SEO.svelte'
     import { FF_BUSINESS } from '$lib/env'
-    import { markVisited } from '$lib/visitedCookie'
 
     let contactEl: HTMLAnchorElement
 
     onMount(() => {
-        markVisited()
+        localStorage.setItem('pg_visited', 'true')
         if (contactEl) {
             const addr = `${contactEl.dataset.name}@${contactEl.dataset.domain}`
             contactEl.href = `mailto:${addr}`
