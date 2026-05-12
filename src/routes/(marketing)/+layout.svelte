@@ -120,7 +120,7 @@
         padding: 0.5rem 1rem;
         background: var(--pg-primary);
         color: var(--pg-on-primary);
-        font-weight: var(--pg-font-weight-semibold);
+        font-weight: var(--pg-font-weight-medium);
         text-decoration: none;
         z-index: 1000;
         transform: translateY(-200%);
@@ -156,7 +156,7 @@
     .footer-col {
         h4 {
             font-size: var(--pg-font-size-sm);
-            font-weight: var(--pg-font-weight-semibold);
+            font-weight: var(--pg-font-weight-medium);
             color: var(--pg-text);
             margin: 0 0 0.75rem;
         }
@@ -193,7 +193,7 @@
         a {
             color: var(--pg-text-secondary);
             text-decoration: none;
-            font-weight: var(--pg-font-weight-semibold);
+            font-weight: var(--pg-font-weight-medium);
 
             &:hover {
                 color: var(--pg-primary);

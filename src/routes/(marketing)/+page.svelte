@@ -246,7 +246,7 @@
         border: 2px solid var(--pg-primary);
         border-radius: var(--pg-border-radius-sm);
         text-decoration: none;
-        font-weight: var(--pg-font-weight-semibold);
+        font-weight: var(--pg-font-weight-medium);
         font-size: var(--pg-font-size-base);
         transition: opacity 0.2s ease;
 
@@ -262,7 +262,7 @@
         color: var(--pg-primary);
         border-radius: var(--pg-border-radius-sm);
         text-decoration: none;
-        font-weight: var(--pg-font-weight-semibold);
+        font-weight: var(--pg-font-weight-medium);
         font-size: var(--pg-font-size-base);
         transition: background 0.2s ease;
 
@@ -365,7 +365,7 @@
 
     .limit-suffix {
         font-size: var(--pg-font-size-base);
-        font-weight: var(--pg-font-weight-semibold);
+        font-weight: var(--pg-font-weight-medium);
         color: var(--pg-text);
         margin-bottom: 1rem;
     }
@@ -421,7 +421,7 @@
         h3 {
             margin: 0 0 0.75rem;
             font-size: var(--pg-font-size-base);
-            font-weight: var(--pg-font-weight-semibold);
+            font-weight: var(--pg-font-weight-medium);
         }
 
         p {
@@ -470,7 +470,7 @@
         h3 {
             margin: 0 0 0.75rem;
             font-size: var(--pg-font-size-base);
-            font-weight: var(--pg-font-weight-semibold);
+            font-weight: var(--pg-font-weight-medium);
         }
 
         p {
@@ -483,7 +483,7 @@
 
     .coming-soon-heading {
         font-size: var(--pg-font-size-base);
-        font-weight: var(--pg-font-weight-semibold);
+        font-weight: var(--pg-font-weight-medium);
         color: var(--pg-primary);
         margin-bottom: 1.5rem;
     }
@@ -495,7 +495,7 @@
         color: var(--pg-general-background);
         border-radius: var(--pg-border-radius-sm);
         text-decoration: none;
-        font-weight: var(--pg-font-weight-semibold);
+        font-weight: var(--pg-font-weight-medium);
         font-size: var(--pg-font-size-base);
         transition: opacity 0.2s ease;
 

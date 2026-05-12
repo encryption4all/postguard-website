@@ -153,7 +153,7 @@
     }
 
     .author-name {
-        font-weight: var(--pg-font-weight-semibold);
+        font-weight: var(--pg-font-weight-medium);
         font-size: var(--pg-font-size-sm);
 
         a {
@@ -198,7 +198,7 @@
     }
 
     .blog-post :global(strong) {
-        font-weight: var(--pg-font-weight-semibold);
+        font-weight: var(--pg-font-weight-medium);
     }
 
     .blog-post :global(ol),

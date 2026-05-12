@@ -265,7 +265,7 @@
 
         a {
             color: var(--pg-primary);
-            font-weight: var(--pg-font-weight-semibold);
+            font-weight: var(--pg-font-weight-medium);
             text-decoration: none;
 
             &:hover {
@@ -408,7 +408,7 @@
 
         h2 {
             font-size: var(--pg-font-size-lg);
-            font-weight: var(--pg-font-weight-semibold);
+            font-weight: var(--pg-font-weight-medium);
             margin: 0 0 0.75rem;
         }
 
@@ -528,7 +528,7 @@
             gap: 0.4rem;
             padding: 0.75rem 1rem;
             font-size: var(--pg-font-size-sm);
-            font-weight: var(--pg-font-weight-semibold);
+            font-weight: var(--pg-font-weight-medium);
             color: var(--pg-primary);
             border-bottom: 1px solid var(--pg-input-normal);
             flex-shrink: 0;
