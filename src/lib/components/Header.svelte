@@ -116,7 +116,7 @@
         color: white;
         border-radius: var(--pg-border-radius-sm);
         text-decoration: none;
-        font-weight: var(--pg-font-weight-semibold);
+        font-weight: var(--pg-font-weight-medium);
         font-size: var(--pg-font-size-sm);
         transition: opacity 0.2s ease;
         white-space: nowrap;

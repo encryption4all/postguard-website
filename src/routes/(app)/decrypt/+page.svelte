@@ -47,6 +47,15 @@
         currRight = RIGHTMODES.Decrypt
     }
 
+    function backToList() {
+        // On mobile the list and reader are stacked single-screen flows;
+        // resetting both selection and hashMode collapses currRight back to
+        // Nothing via the effect above, which hides the reader panel.
+        currSelected.set(-1)
+        hashMode = false
+        currRight = RIGHTMODES.Nothing
+    }
+
     function fromUrlSafeBase64(urlSafe) {
         let base64 = urlSafe.replace(/-/g, '+').replace(/_/g, '/')
         const pad = base64.length % 4
@@ -129,7 +138,10 @@
         <span>{$_('fallback.extensionPrompt')}</span>
         <a href={resolve('/addons/')}>{$_('fallback.extensionLink')}</a>
     </div>
-    <div class="fallback-container">
+    <div
+        class="fallback-container"
+        class:mobile-reading={currRight !== RIGHTMODES.Nothing}
+    >
         <div class="left-panel">
             {#if !hashMode}
                 <label class="upload-area">
@@ -138,11 +150,16 @@
                         width="28px"
                         aria-hidden="true"
                     />
-                    <span>{$_('fallback.drop')}</span>
+                    <span class="upload-text upload-text-desktop"
+                        >{$_('fallback.drop')}</span
+                    >
+                    <span class="upload-text upload-text-mobile"
+                        >{$_('fallback.upload')}</span
+                    >
                     <input
                         type="file"
                         onchange={onFile}
-                        aria-label={$_('fallback.drop')}
+                        aria-label={$_('fallback.upload')}
                     />
                 </label>
             {/if}
@@ -180,6 +197,12 @@
         </div>
 
         <div class="right-panel">
+            {#if currRight !== RIGHTMODES.Nothing}
+                <button class="mobile-back" type="button" onclick={backToList}>
+                    <Icon icon="mdi:arrow-left" width="20px" />
+                    <span>{$_('fallback.back')}</span>
+                </button>
+            {/if}
             {#if currRight === RIGHTMODES.MailView}
                 <EmailView />
             {:else if currRight === RIGHTMODES.Nothing}
@@ -242,7 +265,7 @@
 
         a {
             color: var(--pg-primary);
-            font-weight: var(--pg-font-weight-semibold);
+            font-weight: var(--pg-font-weight-medium);
             text-decoration: none;
 
             &:hover {
@@ -292,6 +315,14 @@
         input[type='file'] {
             display: none;
         }
+    }
+
+    .upload-text-mobile {
+        display: none;
+    }
+
+    .mobile-back {
+        display: none;
     }
 
     .search-bar {
@@ -377,7 +408,7 @@
 
         h2 {
             font-size: var(--pg-font-size-lg);
-            font-weight: var(--pg-font-weight-semibold);
+            font-weight: var(--pg-font-weight-medium);
             margin: 0 0 0.75rem;
         }
 
@@ -411,22 +442,96 @@
 
     @media only screen and (max-width: 768px) {
         .fallback-page {
-            height: auto;
-            min-height: calc(100vh - 52px);
+            height: calc(100vh - 52px);
+            min-height: 0;
+            padding: 0;
+        }
+
+        .extension-banner {
+            display: none;
+        }
+
+        .upload-area {
+            flex: 0 0 auto;
+            flex-direction: row;
+            padding: 0.75rem 1rem;
+            margin: 0.75rem 1rem;
+            border-style: solid;
+            border-color: var(--pg-primary);
+            background: var(--pg-primary);
+            color: white;
+            order: 3;
+
+            &:hover {
+                color: white;
+                opacity: 0.9;
+            }
+        }
+
+        .upload-text-desktop {
+            display: none;
+        }
+
+        .upload-text-mobile {
+            display: inline;
+        }
+
+        .search-bar {
+            order: 1;
+            padding-top: 0.75rem;
+            flex: 0 0 auto;
+        }
+
+        .email-list-area {
+            order: 2;
+            flex: 1 1 0;
+            min-height: 0;
         }
 
         .fallback-container {
             flex-direction: column;
-            height: auto;
+            height: 100%;
+            gap: 0;
+            flex: 1;
+            min-height: 0;
         }
 
         .left-panel {
-            flex: none;
-            max-height: 40vh;
+            flex: 1 1 0;
+            min-height: 0;
+            max-height: none;
+            border: none;
+            border-radius: 0;
         }
 
         .right-panel {
-            min-height: 50vh;
+            min-height: 0;
+            border: none;
+            border-radius: 0;
+            flex: 1 1 0;
+        }
+
+        // Single-screen flow: list view OR reader view, never both.
+        .fallback-container.mobile-reading .left-panel {
+            display: none;
+        }
+
+        .fallback-container:not(.mobile-reading) .right-panel {
+            display: none;
+        }
+
+        .mobile-back {
+            all: unset;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.75rem 1rem;
+            font-size: var(--pg-font-size-sm);
+            font-weight: var(--pg-font-weight-medium);
+            color: var(--pg-primary);
+            border-bottom: 1px solid var(--pg-input-normal);
+            flex-shrink: 0;
         }
     }
 </style>
