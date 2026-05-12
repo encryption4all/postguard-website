@@ -47,6 +47,15 @@
         currRight = RIGHTMODES.Decrypt
     }
 
+    function backToList() {
+        // On mobile the list and reader are stacked single-screen flows;
+        // resetting both selection and hashMode collapses currRight back to
+        // Nothing via the effect above, which hides the reader panel.
+        currSelected.set(-1)
+        hashMode = false
+        currRight = RIGHTMODES.Nothing
+    }
+
     function fromUrlSafeBase64(urlSafe) {
         let base64 = urlSafe.replace(/-/g, '+').replace(/_/g, '/')
         const pad = base64.length % 4
@@ -129,7 +138,10 @@
         <span>{$_('fallback.extensionPrompt')}</span>
         <a href={resolve('/addons/')}>{$_('fallback.extensionLink')}</a>
     </div>
-    <div class="fallback-container">
+    <div
+        class="fallback-container"
+        class:mobile-reading={currRight !== RIGHTMODES.Nothing}
+    >
         <div class="left-panel">
             {#if !hashMode}
                 <label class="upload-area">
@@ -185,6 +197,12 @@
         </div>
 
         <div class="right-panel">
+            {#if currRight !== RIGHTMODES.Nothing}
+                <button class="mobile-back" type="button" onclick={backToList}>
+                    <Icon icon="mdi:arrow-left" width="20px" />
+                    <span>{$_('fallback.back')}</span>
+                </button>
+            {/if}
             {#if currRight === RIGHTMODES.MailView}
                 <EmailView />
             {:else if currRight === RIGHTMODES.Nothing}
@@ -300,6 +318,10 @@
     }
 
     .upload-text-mobile {
+        display: none;
+    }
+
+    .mobile-back {
         display: none;
     }
 
@@ -422,6 +444,7 @@
         .fallback-page {
             height: auto;
             min-height: calc(100vh - 52px);
+            padding: 0;
         }
 
         .extension-banner {
@@ -431,10 +454,12 @@
         .upload-area {
             flex-direction: row;
             padding: 0.75rem 1rem;
+            margin: 0.75rem 1rem;
             border-style: solid;
             border-color: var(--pg-primary);
             background: var(--pg-primary);
             color: white;
+            order: 3;
 
             &:hover {
                 color: white;
@@ -450,18 +475,58 @@
             display: inline;
         }
 
+        .search-bar {
+            order: 1;
+            padding-top: 0.75rem;
+        }
+
+        .email-list-area {
+            order: 2;
+            flex: 1;
+        }
+
         .fallback-container {
             flex-direction: column;
-            height: auto;
+            height: 100%;
+            gap: 0;
+            flex: 1;
         }
 
         .left-panel {
-            flex: none;
-            max-height: 40vh;
+            flex: 1;
+            max-height: none;
+            border: none;
+            border-radius: 0;
         }
 
         .right-panel {
-            min-height: 50vh;
+            min-height: 0;
+            border: none;
+            border-radius: 0;
+            flex: 1;
+        }
+
+        // Single-screen flow: list view OR reader view, never both.
+        .fallback-container.mobile-reading .left-panel {
+            display: none;
+        }
+
+        .fallback-container:not(.mobile-reading) .right-panel {
+            display: none;
+        }
+
+        .mobile-back {
+            all: unset;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.75rem 1rem;
+            font-size: var(--pg-font-size-sm);
+            font-weight: var(--pg-font-weight-semibold);
+            color: var(--pg-primary);
+            border-bottom: 1px solid var(--pg-input-normal);
+            flex-shrink: 0;
         }
     }
 </style>
