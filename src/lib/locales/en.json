@@ -98,6 +98,7 @@
             "privacy": "Your emails are stored only in your browser. Clear them anytime in settings."
         },
         "drop": "Drop the \"postguard.encrypted\" attachment here",
+        "upload": "Upload \"postguard.encrypted\"",
         "search": "Search decrypted mails...",
         "decrypt": {
             "helper": "Decrypt this mail by showing who you are with <i class=\"yivi-web-logo\">Yivi</i>",

@@ -138,11 +138,16 @@
                         width="28px"
                         aria-hidden="true"
                     />
-                    <span>{$_('fallback.drop')}</span>
+                    <span class="upload-text upload-text-desktop"
+                        >{$_('fallback.drop')}</span
+                    >
+                    <span class="upload-text upload-text-mobile"
+                        >{$_('fallback.upload')}</span
+                    >
                     <input
                         type="file"
                         onchange={onFile}
-                        aria-label={$_('fallback.drop')}
+                        aria-label={$_('fallback.upload')}
                     />
                 </label>
             {/if}
@@ -294,6 +299,10 @@
         }
     }
 
+    .upload-text-mobile {
+        display: none;
+    }
+
     .search-bar {
         display: flex;
         align-items: center;
@@ -413,6 +422,32 @@
         .fallback-page {
             height: auto;
             min-height: calc(100vh - 52px);
+        }
+
+        .extension-banner {
+            display: none;
+        }
+
+        .upload-area {
+            flex-direction: row;
+            padding: 0.75rem 1rem;
+            border-style: solid;
+            border-color: var(--pg-primary);
+            background: var(--pg-primary);
+            color: white;
+
+            &:hover {
+                color: white;
+                opacity: 0.9;
+            }
+        }
+
+        .upload-text-desktop {
+            display: none;
+        }
+
+        .upload-text-mobile {
+            display: inline;
         }
 
         .fallback-container {
