@@ -739,8 +739,9 @@
         background: var(--pg-soft-background);
         border-radius: var(--pg-border-radius-md);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        padding: 1rem 1.5rem 1.5rem 1.5rem;
-        width: var(--popup-width);
+        padding: 1rem;
+        width: fit-content;
+        max-width: calc(330px + 2rem);
         z-index: 4;
     }
 
