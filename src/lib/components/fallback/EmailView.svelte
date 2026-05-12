@@ -43,7 +43,9 @@
 
     // HTML emails carry their own design — leave their styling untouched.
     // Plain-text emails have no styling of their own, so mirror the site
-    // theme so the text stays legible when dark mode is toggled.
+    // theme so the text stays legible when dark mode is toggled, and use
+    // a monospace face — that's what real mail clients render text/plain
+    // in, and ASCII tables / signatures / quoted replies rely on it.
     let bodyDoc = $derived.by(() => {
         if (!parsed) return ''
         if (parsed.html) {
@@ -53,9 +55,9 @@
         const fg = isDark ? '#ffffff' : '#030e17'
         const scheme = isDark ? 'dark' : 'light'
         const text = escapeHtml(parsed.text ?? '')
-        const bodyStyle = `margin:1rem;background:${bg};color:${fg};color-scheme:${scheme};font-family:system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.5`
+        const bodyStyle = `margin:1rem;background:${bg};color:${fg};color-scheme:${scheme};font-size:13px;line-height:1.5`
         const preStyle =
-            'margin:0;white-space:pre-wrap;word-break:break-word;font-family:inherit'
+            'margin:0;white-space:pre-wrap;word-break:break-word;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace'
         return `<!doctype html><html><body style="${bodyStyle}"><pre style="${preStyle}">${text}</pre></body></html>`
     })
 </script>
