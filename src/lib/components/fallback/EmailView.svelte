@@ -1,5 +1,6 @@
 <script>
     import { run } from 'svelte/legacy'
+    import { onMount } from 'svelte'
 
     import * as email from './email'
     import { emails, currSelected } from './../fallback/stores.js'
@@ -9,6 +10,17 @@
 
     let parsed = $state()
     let date = $state()
+    let isDark = $state(false)
+
+    onMount(() => {
+        const html = document.documentElement
+        isDark = html.classList.contains('dark')
+        const obs = new MutationObserver(() => {
+            isDark = html.classList.contains('dark')
+        })
+        obs.observe(html, { attributes: true, attributeFilter: ['class'] })
+        return () => obs.disconnect()
+    })
 
     run(() => {
         if ($currSelected >= 0) {
@@ -20,6 +32,31 @@
                 })
             }
         }
+    })
+
+    function escapeHtml(s) {
+        return s
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+    }
+
+    // HTML emails carry their own design — leave their styling untouched.
+    // Plain-text emails have no styling of their own, so mirror the site
+    // theme so the text stays legible when dark mode is toggled.
+    let bodyDoc = $derived.by(() => {
+        if (!parsed) return ''
+        if (parsed.html) {
+            return `<!doctype html><html><body style="margin:1rem">${parsed.html}</body></html>`
+        }
+        const bg = isDark ? '#061b2d' : '#ffffff'
+        const fg = isDark ? '#ffffff' : '#030e17'
+        const scheme = isDark ? 'dark' : 'light'
+        const text = escapeHtml(parsed.text ?? '')
+        const bodyStyle = `margin:1rem;background:${bg};color:${fg};color-scheme:${scheme};font-family:system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.5`
+        const preStyle =
+            'margin:0;white-space:pre-wrap;word-break:break-word;font-family:inherit'
+        return `<!doctype html><html><body style="${bodyStyle}"><pre style="${preStyle}">${text}</pre></body></html>`
     })
 </script>
 
@@ -69,11 +106,7 @@
         </div>
 
         <div class="email-body">
-            <iframe
-                srcdoc={`<!doctype html><html><head><meta charset="utf-8"><style>:root{color-scheme:light}html,body{background:#fff;color:#000}body{margin:1rem}</style></head><body>${parsed.html ?? parsed.text ?? ''}</body></html>`}
-                title="Mail message"
-                sandbox=""
-            ></iframe>
+            <iframe srcdoc={bodyDoc} title="Mail message" sandbox=""></iframe>
         </div>
 
         {#if parsed.attachments && parsed.attachments.length > 0}
