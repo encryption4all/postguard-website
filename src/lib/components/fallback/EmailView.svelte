@@ -70,7 +70,7 @@
 
         <div class="email-body">
             <iframe
-                srcdoc={`<style>body{margin:1rem}</style>${parsed.html ?? parsed.text ?? ''}`}
+                srcdoc={`<!doctype html><html><head><meta charset="utf-8"><style>:root{color-scheme:light}html,body{background:#fff;color:#000}body{margin:1rem}</style></head><body>${parsed.html ?? parsed.text ?? ''}</body></html>`}
                 title="Mail message"
                 sandbox=""
             ></iframe>
