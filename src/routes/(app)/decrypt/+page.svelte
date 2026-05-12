@@ -442,8 +442,8 @@
 
     @media only screen and (max-width: 768px) {
         .fallback-page {
-            height: auto;
-            min-height: calc(100vh - 52px);
+            height: calc(100vh - 52px);
+            min-height: 0;
             padding: 0;
         }
 
@@ -452,6 +452,7 @@
         }
 
         .upload-area {
+            flex: 0 0 auto;
             flex-direction: row;
             padding: 0.75rem 1rem;
             margin: 0.75rem 1rem;
@@ -478,11 +479,13 @@
         .search-bar {
             order: 1;
             padding-top: 0.75rem;
+            flex: 0 0 auto;
         }
 
         .email-list-area {
             order: 2;
-            flex: 1;
+            flex: 1 1 0;
+            min-height: 0;
         }
 
         .fallback-container {
@@ -490,10 +493,12 @@
             height: 100%;
             gap: 0;
             flex: 1;
+            min-height: 0;
         }
 
         .left-panel {
-            flex: 1;
+            flex: 1 1 0;
+            min-height: 0;
             max-height: none;
             border: none;
             border-radius: 0;
@@ -503,7 +508,7 @@
             min-height: 0;
             border: none;
             border-radius: 0;
-            flex: 1;
+            flex: 1 1 0;
         }
 
         // Single-screen flow: list view OR reader view, never both.

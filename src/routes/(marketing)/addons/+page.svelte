@@ -181,12 +181,13 @@
     }
 
     .callout {
-        border-left: 4px solid #c9941b;
         background: #fff7e0;
+        border: 1px solid #e8d28f;
         padding: 0.75rem 1rem;
         margin: 0.75rem 0 1rem;
         border-radius: 4px;
         font-size: 0.95em;
         line-height: 1.4;
+        color: #5a3f00;
     }
 </style>

@@ -75,17 +75,23 @@
         gap: 0.15rem;
         padding: 0.75rem 1rem;
         border-bottom: 1px solid var(--pg-input-normal);
-        border-left: 3px solid transparent;
         text-align: left;
-        transition: background 0.15s ease;
+        transition:
+            background 0.15s ease,
+            color 0.15s ease;
 
         &:hover {
             background: var(--pg-soft-background);
         }
 
         &.selected {
-            background: var(--pg-general-background);
-            border-left-color: var(--pg-primary);
+            background: var(--pg-primary);
+            color: white;
+
+            .email-sender,
+            .email-date {
+                color: rgba(255, 255, 255, 0.85);
+            }
         }
 
         &:focus-visible {
