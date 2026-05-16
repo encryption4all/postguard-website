@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.7.0](https://github.com/encryption4all/postguard-website/compare/v1.6.0...v1.7.0) (2026-05-16)
+
+
+### Features
+
+* **addons:** self-refresh inside the container, drop sync workflow ([#211](https://github.com/encryption4all/postguard-website/issues/211)) ([3dbf9b7](https://github.com/encryption4all/postguard-website/commit/3dbf9b75c091f3b2d1c663b0ca979a32d0f99546))
+
+
+### Bug Fixes
+
+* **addons:** consolidated install-doc, i18n & UI fixes ([#204](https://github.com/encryption4all/postguard-website/issues/204)) ([cd365ac](https://github.com/encryption4all/postguard-website/commit/cd365acb056edbbd2dae4b171c3c40b8d7b25818))
+* consolidated site UX & content fixes ([#202](https://github.com/encryption4all/postguard-website/issues/202)) ([df3ed53](https://github.com/encryption4all/postguard-website/commit/df3ed53044d558b17a354dcb802f9d18e40947b1))
+* **decrypt,addons:** dark-mode email body + mobile decrypt overhaul ([#212](https://github.com/encryption4all/postguard-website/issues/212)) ([e970f91](https://github.com/encryption4all/postguard-website/commit/e970f91f00b65c5723808784497a8f5c57b0f76b))
+* **decrypt:** consolidated /decrypt page UX fixes ([#203](https://github.com/encryption4all/postguard-website/issues/203)) ([358d000](https://github.com/encryption4all/postguard-website/commit/358d0004660ee6db847047f023e131cf674819e9))
+* **filesharing:** inline cancel button, fit responsive QR to parent ([#222](https://github.com/encryption4all/postguard-website/issues/222)) ([92e61c5](https://github.com/encryption4all/postguard-website/commit/92e61c5da52e42af09a99ded302714ddee4608de))
+* format script glob only matched directories ([#219](https://github.com/encryption4all/postguard-website/issues/219)) ([d5f0df1](https://github.com/encryption4all/postguard-website/commit/d5f0df1116f8e97e3a368169e884dca124eb1a9f)), closes [#216](https://github.com/encryption4all/postguard-website/issues/216)
+* misc website fixes — decrypt UX, dark-mode, QR popup width ([#213](https://github.com/encryption4all/postguard-website/issues/213)) ([2db2dcf](https://github.com/encryption4all/postguard-website/commit/2db2dcf868b9aaaf65f216350151b0751b56cd4e))
+
 ## [1.6.0](https://github.com/encryption4all/postguard-website/compare/v1.5.0...v1.6.0) (2026-05-07)
 
 
