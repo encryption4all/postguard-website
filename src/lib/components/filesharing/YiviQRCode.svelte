@@ -88,6 +88,9 @@
     }
 
     .yivi-qr-container.responsive {
+        width: 100%;
+        max-width: 330px;
+        aspect-ratio: 1 / 1;
         height: auto;
         min-height: 200px;
     }
