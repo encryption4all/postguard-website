@@ -364,7 +364,17 @@
                         stroke-width="3"
                     ></circle>
                 </svg>
-                {$_('filesharing.encryptPanel.sending')}
+                <span class="upload-info-label">
+                    {$_('filesharing.encryptPanel.sending')}
+                </span>
+                <button
+                    type="button"
+                    class="cancel-upload-btn"
+                    onclick={onCancelUpload}
+                    disabled={encryptState.selfAborted}
+                >
+                    {$_('filesharing.cancel')}
+                </button>
             </div>
             {#if $retryStatus}
                 <p class="retry-status" role="status">
@@ -377,14 +387,6 @@
                 </p>
             {/if}
         </div>
-        <button
-            type="button"
-            class="crypt-btn crypt-btn-secondary cancel-upload-btn"
-            onclick={onCancelUpload}
-            disabled={encryptState.selfAborted}
-        >
-            {$_('filesharing.cancel')}
-        </button>
     {:else}
         <!-- Normal button -->
         <button
@@ -671,9 +673,36 @@
         stroke: var(--pg-text);
     }
 
+    .upload-info-label {
+        flex: 1;
+    }
+
     .cancel-upload-btn {
-        align-self: flex-start;
-        margin-top: 0.25rem;
+        all: unset;
+        box-sizing: border-box;
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-font-size-sm);
+        font-weight: var(--pg-font-weight-medium);
+        color: var(--pg-on-primary);
+        background: var(--pg-input-error);
+        border-radius: var(--pg-border-radius-sm);
+        padding: 0.4rem 0.9rem;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .cancel-upload-btn:hover:not(:disabled) {
+        background: color-mix(in srgb, var(--pg-input-error) 85%, black);
+    }
+
+    .cancel-upload-btn:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+    }
+
+    .cancel-upload-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
     }
 
     .retry-status {
