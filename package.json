@@ -72,10 +72,10 @@
         "@deltablot/dropzone": "^7.4.3",
         "@e4a/pg-js": "^1.8.0",
         "@iconify/svelte": "^5.2.1",
-        "@privacybydesign/yivi-css": "^1.0.0-beta.7",
+        "@privacybydesign/yivi-css": "^1.0.1",
         "country-flag-icons": "^1.6.17",
-        "libphonenumber-js": "^1.13.1",
+        "libphonenumber-js": "^1.13.2",
         "postal-mime": "^2.7.4",
-        "web-streams-polyfill": "^4.2.0"
+        "web-streams-polyfill": "^4.3.0"
     }
 }
