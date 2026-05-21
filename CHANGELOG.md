@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/encryption4all/postguard-website/compare/v1.7.0...v1.8.0) (2026-05-21)
+
+
+### Features
+
+* **metrics:** tag cryptify uploads with X-Cryptify-Source: website ([#228](https://github.com/encryption4all/postguard-website/issues/228)) ([70ee865](https://github.com/encryption4all/postguard-website/commit/70ee86562c47bfc7e04e763014e351cb0563aa21))
+
 ## [1.7.0](https://github.com/encryption4all/postguard-website/compare/v1.6.0...v1.7.0) (2026-05-16)
 
 
