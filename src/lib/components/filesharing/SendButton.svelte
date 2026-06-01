@@ -37,7 +37,7 @@
     const emailRegex =
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
-    let canEncrypt = $derived(() => {
+    let canEncrypt = $derived.by(() => {
         if (encryptState.files.length === 0) return false
         const totalSize = encryptState.files.reduce((a, f) => a + f.size, 0)
         if (totalSize >= MAX_UPLOAD_SIZE) return false
@@ -138,7 +138,7 @@
         await tick()
 
         try {
-            if (!canEncrypt()) return
+            if (!canEncrypt) return
 
             // Build recipients
             const recipients = encryptState.recipients.map(
@@ -151,13 +151,14 @@
                 }
             )
 
-            // Build sign method — email always included, other attributes optional
+            // Build sign method — email and full name always required so the
+            // recipient mail can show a real name; other attributes optional.
             const sign = pg.sign.yivi({
                 element: '#crypt-irma-qr',
                 attributes: [
                     {
                         t: 'pbdf.gemeente.personalData.fullname',
-                        optional: true,
+                        optional: false,
                     },
                     {
                         t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
