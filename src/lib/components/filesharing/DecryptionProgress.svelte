@@ -11,19 +11,36 @@
 </script>
 
 <div class="container">
-    <p class="label">
+    <p class="label" id="decryption-progress-label">
         {$_('filesharing.decryptpanel.downloadingAndDecrypting')}
     </p>
-    <div class="bar-track">
-        {#if determinate}
+    {#if determinate}
+        <div
+            class="bar-track"
+            role="progressbar"
+            aria-labelledby="decryption-progress-label"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow={Math.round(
+                Math.max(0, Math.min(100, percentage ?? 0))
+            )}
+        >
             <div
                 class="bar-fill"
                 style="width: {Math.max(0, Math.min(100, percentage ?? 0))}%"
             ></div>
-        {:else}
+        </div>
+    {:else}
+        <div
+            class="bar-track"
+            role="progressbar"
+            aria-labelledby="decryption-progress-label"
+            aria-valuemin="0"
+            aria-valuemax="100"
+        >
             <div class="bar-indeterminate"></div>
-        {/if}
-    </div>
+        </div>
+    {/if}
     {#if determinate}
         <p class="percent">{Math.round(percentage ?? 0)}%</p>
     {/if}
