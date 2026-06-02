@@ -13,6 +13,7 @@
     import { pg } from '$lib/postguard'
 
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
+    import DecryptionProgress from '$lib/components/filesharing/DecryptionProgress.svelte'
     import Chip from '$lib/components/Chip.svelte'
     import { isMobile } from '$lib/browser-detect'
 
@@ -44,6 +45,8 @@
     let { rightMode = $bindable(), readable, uuid, recipient } = $props()
 
     let opened = $state()
+    /** @type {number | undefined} */
+    let decryptPct = $state(undefined)
 
     function checkRecipients() {
         const recipients = [...policies.keys()].filter((k) => k)
@@ -86,24 +89,29 @@
     }
 
     async function startDecryption() {
+        decryptPct = undefined
         try {
             const result = await opened.decrypt({
                 element: '#yivi-fallback',
                 recipient: key,
                 enableCache: true,
+                /** @param {number | undefined} pct */
+                onDownloadProgress: (pct) => {
+                    if (decryptState !== STATES.Decrypting) {
+                        decryptState = STATES.Decrypting
+                    }
+                    decryptPct = pct
+                },
             })
 
-            decryptState = STATES.Decrypting
-
-            // pg-js wraps `data:`-mode uploads as a single-file zip
-            // (`data.bin` = the raw bytes) before encrypting, because the
-            // upload pipeline always works on Files. uuid-mode decrypts
-            // therefore yield DecryptFileResult{blob, files} and not
-            // DecryptDataResult{plaintext}. Unwrap the zip here so the
-            // downstream parseMail sees real MIME bytes.
-            const plaintext = result.plaintext
-                ? result.plaintext
-                : await extractFromZip(result.blob, 'data.bin')
+            // pg-js auto-unwraps `data:`-mode payloads (single-entry zip
+            // with `data.bin`) into DecryptDataResult.plaintext. Email
+            // fallback uploads are always `data:` mode, so this branch is
+            // the expected one. If we ever receive a multi-file result
+            // here, fall back to the first entry's bytes.
+            const plaintext =
+                result.plaintext ??
+                new Uint8Array(await result.files[0].blob.arrayBuffer())
 
             const outStream = new TextDecoder().decode(plaintext)
             decryptedMail = await email.parseMail(outStream)
@@ -112,82 +120,6 @@
             err = e
             decryptState = STATES.Fail
         }
-    }
-
-    /** Extract a single file from a ZIP blob and return its uncompressed
-     *  bytes. Reads via the central directory (where conflux — pg-js's zip
-     *  writer — records the real sizes) because the local file headers in
-     *  streaming-mode zips carry zeros. Supports stored (method 0) and
-     *  deflate (method 8); DecompressionStream('deflate-raw') is the right
-     *  decoder for ZIP-embedded deflate. */
-    async function extractFromZip(blob, filename) {
-        const buf = await blob.arrayBuffer()
-        const view = new DataView(buf)
-        const bytes = new Uint8Array(buf)
-        const decoder = new TextDecoder('utf-8')
-
-        // Find EOCD (End of Central Directory): signature 0x06054b50,
-        // located in the last ~64 KB of the file.
-        let eocdOffset = -1
-        for (
-            let i = bytes.length - 22;
-            i >= Math.max(0, bytes.length - 65557);
-            i--
-        ) {
-            if (view.getUint32(i, true) === 0x06054b50) {
-                eocdOffset = i
-                break
-            }
-        }
-        if (eocdOffset === -1) throw new Error('ZIP EOCD record not found')
-
-        const cdOffset = view.getUint32(eocdOffset + 16, true)
-        const numEntries = view.getUint16(eocdOffset + 10, true)
-
-        let pos = cdOffset
-        for (let i = 0; i < numEntries; i++) {
-            if (view.getUint32(pos, true) !== 0x02014b50) break // CDR signature
-
-            const method = view.getUint16(pos + 10, true)
-            const compressedSize = view.getUint32(pos + 20, true)
-            const nameLen = view.getUint16(pos + 28, true)
-            const extraLen = view.getUint16(pos + 30, true)
-            const commentLen = view.getUint16(pos + 32, true)
-            const lfhOffset = view.getUint32(pos + 42, true)
-            const name = decoder.decode(
-                bytes.slice(pos + 46, pos + 46 + nameLen)
-            )
-
-            if (name === filename) {
-                // Re-parse the local file header to find the data start;
-                // its name + extra fields can differ in length from the
-                // CDR entry.
-                const lfhNameLen = view.getUint16(lfhOffset + 26, true)
-                const lfhExtraLen = view.getUint16(lfhOffset + 28, true)
-                const dataStart = lfhOffset + 30 + lfhNameLen + lfhExtraLen
-                const compressed = bytes.slice(
-                    dataStart,
-                    dataStart + compressedSize
-                )
-
-                if (method === 0) return compressed
-                if (method === 8) {
-                    const stream = new Blob([compressed])
-                        .stream()
-                        .pipeThrough(new DecompressionStream('deflate-raw'))
-                    return new Uint8Array(
-                        await new Response(stream).arrayBuffer()
-                    )
-                }
-                throw new Error(
-                    `Unsupported zip compression method ${method} for ${filename}`
-                )
-            }
-
-            pos += 46 + nameLen + extraLen + commentLen
-        }
-
-        throw new Error(`File "${filename}" not found in zip`)
     }
 
     async function storeMail(unparsed) {
@@ -321,22 +253,7 @@
             />
         </div>
     {:else if decryptState === STATES.Decrypting}
-        <div class="spinner-wrapper">
-            <svg class="spinner" viewBox="0 0 24 24" width="36" height="36">
-                <circle
-                    class="spinner-circle"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="3"
-                ></circle>
-            </svg>
-        </div>
-        <p class="status-text">
-            {$_('fallback.decrypt.decrypting', { default: 'Decrypting...' })}
-        </p>
+        <DecryptionProgress percentage={decryptPct} />
     {:else if decryptState === STATES.Fail}
         <div class="decrypt-card error-card">
             <p class="error-text">
