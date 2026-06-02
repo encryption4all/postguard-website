@@ -70,7 +70,7 @@
     },
     "dependencies": {
         "@deltablot/dropzone": "^7.4.3",
-        "@e4a/pg-js": "github:encryption4all/postguard-js#feat/decrypt-progress-and-autounzip",
+        "@e4a/pg-js": "^2.0.0",
         "@iconify/svelte": "^5.2.1",
         "@privacybydesign/yivi-css": "^1.0.1",
         "country-flag-icons": "^1.6.17",
