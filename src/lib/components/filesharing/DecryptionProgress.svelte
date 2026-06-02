@@ -14,7 +14,7 @@
     <p class="label">
         {$_('filesharing.decryptpanel.downloadingAndDecrypting')}
     </p>
-    <div class="bar-track" class:indeterminate={!determinate}>
+    <div class="bar-track">
         {#if determinate}
             <div
                 class="bar-fill"

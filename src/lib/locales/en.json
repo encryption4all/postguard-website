@@ -156,7 +156,6 @@
             "irmaInstructionQr": "Decrypt the files by verifying your e-mail address. Scan the QR code below with the free Yivi app on your phone.",
             "irmaInstructionMobile": "Decrypt the files by verifying your e-mail address. Please click the button below to open the Yivi-app.",
             "noIrma": "Don't have the Yivi-app yet?",
-            "decrypting": "Your files are being downloaded and decrypted afterwards.",
             "downloadingAndDecrypting": "Downloading and decrypting locally…",
             "succes": "Successfully downloaded and decrypted",
             "askDownload": "Download",
