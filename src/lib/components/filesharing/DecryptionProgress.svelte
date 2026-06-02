@@ -10,7 +10,7 @@
     let determinate = $derived(typeof percentage === 'number')
 </script>
 
-<div class="container">
+<div class="container" role="status" aria-live="polite">
     <p class="label" id="decryption-progress-label">
         {$_('filesharing.decryptpanel.downloadingAndDecrypting')}
     </p>
@@ -35,8 +35,7 @@
             class="bar-track"
             role="progressbar"
             aria-labelledby="decryption-progress-label"
-            aria-valuemin="0"
-            aria-valuemax="100"
+            aria-busy="true"
         >
             <div class="bar-indeterminate"></div>
         </div>
