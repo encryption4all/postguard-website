@@ -202,7 +202,7 @@
             "emailSender": "Email address",
             "emailSenderHeading": "Your information",
             "emailSenderSubHeadingToggle": "Why do you need this information?",
-            "emailSenderSubHeading": "Let the recipient(s) know these files are from you. Before sending, you sign the files with the Yivi app by proving your email address and your name (from a Dutch municipality credential, or from a passport, ID card, or driving licence).",
+            "emailSenderSubHeading": "Let the recipient(s) know these files are from you. Before sending, you sign the files with the Yivi app by proving your email address.",
             "messageHeading": "Message (optional)",
             "messageText": "This message will not be encrypted and will be included in the notification email.",
             "messagePlaceholder": "Type your message here...",

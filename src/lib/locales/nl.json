@@ -201,7 +201,7 @@
             "emailSender": "E-mailadres",
             "emailSenderHeading": "Jouw gegevens",
             "emailSenderSubHeadingToggle": "Waarom heb je deze gegevens nodig?",
-            "emailSenderSubHeading": "Laat de ontvanger(s) weten dat deze bestanden van jou afkomstig zijn. Voor het verzenden onderteken je de bestanden met de Yivi-app door je e-mailadres en je naam aan te tonen (afkomstig uit je gemeente, paspoort, ID-kaart of rijbewijs).",
+            "emailSenderSubHeading": "Laat de ontvanger(s) weten dat deze bestanden van jou afkomstig zijn. Voor het verzenden onderteken je de bestanden met de Yivi-app door je e-mailadres aan te tonen.",
             "messageHeading": "Bericht (optioneel)",
             "messageText": "Dit bericht wordt niet versleuteld en wordt opgenomen in de notificatie-e-mail.",
             "messagePlaceholder": "Typ hier je bericht...",
