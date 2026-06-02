@@ -104,11 +104,8 @@
                 },
             })
 
-            // pg-js auto-unwraps `data:`-mode payloads (single-entry zip
-            // with `data.bin`) into DecryptDataResult.plaintext. Email
-            // fallback uploads are always `data:` mode, so this branch is
-            // the expected one. If we ever receive a multi-file result
-            // here, fall back to the first entry's bytes.
+            // Email fallback uploads are `data:` mode → plaintext;
+            // `files[0]` is a defensive fallback for unexpected shapes.
             const plaintext =
                 result.plaintext ??
                 new Uint8Array(await result.files[0].blob.arrayBuffer())
