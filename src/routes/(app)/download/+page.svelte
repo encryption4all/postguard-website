@@ -15,6 +15,7 @@
     } from '@e4a/pg-js'
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
     import FileList from '$lib/components/filesharing/FileList.svelte'
+    import DecryptionProgress from '$lib/components/filesharing/DecryptionProgress.svelte'
     import { isMobile } from '$lib/browser-detect'
     import Chip from '$lib/components/Chip.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
@@ -39,6 +40,7 @@
     let key = $state('')
     let senderIdentity: FriendlySender | null = $state(null)
     let fileList: string[] = $state([])
+    let decryptPct: number | undefined = $state(undefined)
 
     let opened: Awaited<ReturnType<typeof pg.open>> | null = null
 
@@ -107,6 +109,7 @@
 
     async function startDecryption() {
         downloadState = 'Ready'
+        decryptPct = undefined
         retryStatus.set(null)
         await tick()
 
@@ -117,13 +120,21 @@
                 element: '#yivi-download',
                 recipient: key,
                 enableCache: true,
+                onDownloadProgress: (pct) => {
+                    // Yivi scan happens before any bytes flow — the first
+                    // progress tick is our cue to flip into Decrypting.
+                    if (downloadState !== 'Decrypting') {
+                        downloadState = 'Decrypting'
+                    }
+                    decryptPct = pct
+                },
             })) as DecryptFileResult
 
             senderIdentity = result.sender
-            fileList = result.files
+            fileList = result.files.map((f) => f.name)
 
-            // Trigger automatic download
-            result.download('files.zip')
+            // Trigger automatic download (one browser download per file)
+            result.download()
 
             retryStatus.set(null)
             downloadState = 'Done'
@@ -269,22 +280,17 @@
                 </div>
             {/if}
         {:else if downloadState === 'Decrypting'}
-            <div class="spinner-wrapper">
-                <svg class="spinner" viewBox="0 0 24 24" width="36" height="36">
-                    <circle
-                        class="spinner-circle"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="3"
-                    ></circle>
-                </svg>
-            </div>
-            <p class="description">
-                {$_('filesharing.decryptpanel.decrypting')}
-            </p>
+            <DecryptionProgress percentage={decryptPct} />
+            {#if $retryStatus}
+                <p class="retry-status" role="status">
+                    {$_('filesharing.encryptPanel.retrying', {
+                        values: {
+                            attempt: $retryStatus.attempt + 1,
+                            max: $retryStatus.maxAttempts,
+                        },
+                    })}
+                </p>
+            {/if}
         {:else if downloadState === 'Done'}
             <div class="success-banner">
                 <svg

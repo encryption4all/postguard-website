@@ -156,7 +156,7 @@
             "irmaInstructionQr": "Ontsleutel de bestanden door je e-mailadres te verifiëren. Scan de onderstaande QR-code met de gratis Yivi-app op je telefoon.",
             "irmaInstructionMobile": "Ontsleutel het bestand door je e-mailadres te tonen. Click daarvoor op de onderstaande knop om naar de identificatie app Yivi te gaan.",
             "noIrma": "Nog geen Yivi-app?",
-            "decrypting": "Jouw bestand wordt gedownload en vervolgens ontsleuteld.",
+            "downloadingAndDecrypting": "Bezig met downloaden en lokaal ontsleutelen…",
             "succes": "Succesvol gedownload en ontsleuteld",
             "askDownload": "Download",
             "askDownloadText": "Druk op onderstaande knop om de bestanden te ontsleutelen en downloaden.",
