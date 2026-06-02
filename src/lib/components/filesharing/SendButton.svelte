@@ -152,10 +152,8 @@
                 }
             )
 
-            // Build sign method — email and a name attribute are always
-            // required so the recipient mail can show a real name. The
-            // name may come from any one of four credentials; see
-            // signAttributes.ts for the disjunction.
+            // Build sign method — email is always required; name is optional
+            // (any of four credentials accepted). See signAttributes.ts.
             const sign = pg.sign.yivi({
                 element: '#crypt-irma-qr',
                 attributes: SIGN_ATTRIBUTES,
