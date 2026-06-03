@@ -87,6 +87,17 @@
         })
 
         myDropzone.on('addedfile', (file) => {
+            const isDuplicate = files.some(
+                (f) =>
+                    f.name === file.name &&
+                    f.size === file.size &&
+                    f.lastModified === file.lastModified
+            )
+            if (isDuplicate) {
+                myDropzone!.removeFile(file)
+                return
+            }
+
             files = files.concat([file])
             percentages = percentages.concat([0])
             done = done.concat([false])
