@@ -38,7 +38,7 @@
 
     let { uuid, onClose }: Props = $props()
 
-    type Status = 'loading' | 'ready' | 'error'
+    type Status = 'loading' | 'ready' | 'empty' | 'error'
     let status: Status = $state('loading')
     let errorMessage = $state('')
     let data = $state<PreviewResponse | null>(null)
@@ -70,8 +70,7 @@
             }
             data = (await res.json()) as PreviewResponse
             if (allEmails.length === 0) {
-                status = 'error'
-                errorMessage = $_('filesharing.emailPreview.empty')
+                status = 'empty'
                 return
             }
             status = 'ready'
@@ -126,6 +125,8 @@
                 <p>{$_('filesharing.emailPreview.error')}</p>
                 <p class="error-detail">{errorMessage}</p>
             </div>
+        {:else if status === 'empty'}
+            <div class="state">{$_('filesharing.emailPreview.empty')}</div>
         {:else if active}
             <section class="meta">
                 <div class="meta-row">
@@ -262,6 +263,12 @@
 
     .close-btn:hover {
         color: var(--pg-text);
+    }
+
+    .close-btn:focus-visible,
+    .backdrop-close:focus-visible {
+        outline: 2px solid var(--pg-text);
+        outline-offset: 2px;
     }
 
     .meta {
