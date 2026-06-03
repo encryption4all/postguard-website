@@ -75,7 +75,7 @@
 
     .bar-fill {
         height: 100%;
-        background: var(--pg-text);
+        background: var(--pg-primary-contrast);
         border-radius: 4px;
         transition: width 0.15s ease-out;
     }
@@ -86,7 +86,7 @@
         left: 0;
         height: 100%;
         width: 40%;
-        background: var(--pg-text);
+        background: var(--pg-primary-contrast);
         border-radius: 4px;
         animation: slide 1.4s ease-in-out infinite;
     }

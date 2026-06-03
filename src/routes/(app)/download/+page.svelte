@@ -280,7 +280,9 @@
                 </div>
             {/if}
         {:else if downloadState === 'Decrypting'}
-            <DecryptionProgress percentage={decryptPct} />
+            <div class="decrypt-card">
+                <DecryptionProgress percentage={decryptPct} />
+            </div>
             {#if $retryStatus}
                 <p class="retry-status" role="status">
                     {$_('filesharing.encryptPanel.retrying', {
