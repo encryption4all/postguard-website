@@ -269,7 +269,9 @@
             "to": "To",
             "confirmationTag": "sender copy",
             "iframeTitle": "Notification email body",
-            "reopen": "Show email preview"
+            "reopen": "Show email preview",
+            "viewHtml": "HTML",
+            "viewText": "Plain text"
         },
         "attributes": {
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobile phone number",

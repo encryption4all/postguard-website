@@ -268,7 +268,9 @@
             "to": "Aan",
             "confirmationTag": "bevestigingskopie",
             "iframeTitle": "Inhoud van de notificatie-e-mail",
-            "reopen": "Toon e-mailvoorbeeld"
+            "reopen": "Toon e-mailvoorbeeld",
+            "viewHtml": "HTML",
+            "viewText": "Platte tekst"
         },
         "attributes": {
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobiel telefoonnummer",

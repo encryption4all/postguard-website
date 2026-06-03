@@ -44,6 +44,10 @@
     let data = $state<PreviewResponse | null>(null)
     /** Index into the flat list of [...recipients, confirmation?] */
     let activeIdx = $state(0)
+    /** Which MIME alternative to show in the body. Mail clients pick
+     *  HTML when available; the plain-text branch is what text-only
+     *  clients (or accessibility tools) actually render. */
+    let bodyView: 'html' | 'text' = $state('html')
 
     let allEmails = $derived.by<RenderedEmail[]>(() => {
         if (!data) return []
@@ -200,12 +204,37 @@
                 </div>
             </section>
 
-            <iframe
-                class="email-frame"
-                title={$_('filesharing.emailPreview.iframeTitle')}
-                srcdoc={withBaseTarget(active.html)}
-                sandbox="allow-popups allow-popups-to-escape-sandbox"
-            ></iframe>
+            <div class="body-tabs" role="tablist">
+                <button
+                    type="button"
+                    role="tab"
+                    aria-selected={bodyView === 'html'}
+                    class="body-tab"
+                    class:active={bodyView === 'html'}
+                    onclick={() => (bodyView = 'html')}
+                    >{$_('filesharing.emailPreview.viewHtml')}</button
+                >
+                <button
+                    type="button"
+                    role="tab"
+                    aria-selected={bodyView === 'text'}
+                    class="body-tab"
+                    class:active={bodyView === 'text'}
+                    onclick={() => (bodyView = 'text')}
+                    >{$_('filesharing.emailPreview.viewText')}</button
+                >
+            </div>
+
+            {#if bodyView === 'html'}
+                <iframe
+                    class="email-frame"
+                    title={$_('filesharing.emailPreview.iframeTitle')}
+                    srcdoc={withBaseTarget(active.html)}
+                    sandbox="allow-popups allow-popups-to-escape-sandbox"
+                ></iframe>
+            {:else}
+                <pre class="email-text">{active.text}</pre>
+            {/if}
         {/if}
     </div>
 </div>
@@ -331,11 +360,58 @@
         font-size: var(--pg-font-size-sm);
     }
 
+    .body-tabs {
+        display: flex;
+        gap: 0.25rem;
+        padding: 0.5rem 1.5rem 0;
+        background: var(--pg-soft-background);
+        border-bottom: 1px solid var(--pg-strong-background);
+    }
+
+    .body-tab {
+        background: transparent;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        padding: 0.4rem 0.8rem;
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        cursor: pointer;
+    }
+
+    .body-tab:hover {
+        color: var(--pg-text);
+    }
+
+    .body-tab.active {
+        color: var(--pg-text);
+        border-bottom-color: var(--pg-primary-contrast);
+    }
+
+    .body-tab:focus-visible {
+        outline: 2px solid var(--pg-text);
+        outline-offset: 2px;
+    }
+
     .email-frame {
         width: 100%;
         height: min(70vh, 720px);
         border: 0;
         background: var(--pg-soft-background);
+    }
+
+    .email-text {
+        margin: 0;
+        padding: 1rem 1.5rem;
+        max-height: min(70vh, 720px);
+        overflow: auto;
+        background: var(--pg-soft-background);
+        color: var(--pg-text);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: var(--pg-font-size-sm);
+        line-height: 1.5;
+        white-space: pre-wrap;
+        word-break: break-word;
     }
 
     .state {
