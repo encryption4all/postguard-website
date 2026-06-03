@@ -16,11 +16,18 @@
     async function sendReport() {
         if (sendState === 'sending' || sendState === 'sent') return
         sendState = 'sending'
-        const ok = await reportError(error, {
-            appVersion: APP_VERSION,
-            uiLocale: $locale,
-        })
-        sendState = ok ? 'sent' : 'failed'
+        // Sentry's transport is fire-and-forget but the SDK can still
+        // throw synchronously on a malformed DSN or an internal init
+        // failure. Catch so the button isn't stuck on "Sending…" forever.
+        try {
+            const ok = await reportError(error, {
+                appVersion: APP_VERSION,
+                uiLocale: $locale,
+            })
+            sendState = ok ? 'sent' : 'failed'
+        } catch {
+            sendState = 'failed'
+        }
     }
 
     let reportingEnabled = isErrorReportingEnabled()
@@ -31,11 +38,17 @@
         <h3 class="crash-title">{$_('filesharing.crash.title')}</h3>
         <p class="crash-message">{$_('filesharing.crash.message')}</p>
 
-        {#if sendState === 'failed'}
-            <p class="crash-status error">
-                {$_('filesharing.crash.failed')}
-            </p>
-        {/if}
+        <!-- Stable live-region wrapper so screen readers announce the
+             failed-state message when it appears (WCAG 4.1.3 Status
+             Messages, Level AA). The wrapper exists from first render;
+             only its child swaps in, which is the announcement trigger. -->
+        <div role="status" aria-live="polite" class="crash-status-region">
+            {#if sendState === 'failed'}
+                <p class="crash-status error">
+                    {$_('filesharing.crash.failed')}
+                </p>
+            {/if}
+        </div>
 
         <div class="crash-actions">
             {#if reportingEnabled}
@@ -149,5 +162,10 @@
 
     .crash-btn:not(:disabled):hover {
         transform: translateY(-1px);
+    }
+
+    .crash-btn:focus-visible {
+        outline: 2px solid var(--pg-text);
+        outline-offset: 2px;
     }
 </style>

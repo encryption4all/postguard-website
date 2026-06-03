@@ -223,13 +223,20 @@ services:
                 # full volume wipe. Without this, a fresh postgres volume
                 # regenerates the UUID and any hardcoded DSN in
                 # static/config.js silently goes stale.
+                #
+                # GlitchTip auto-creates a default ProjectKey when a
+                # Project is saved, so on a fresh volume the get_or_create
+                # below returns that auto-created key (key_created=False)
+                # and the defaults= clause is ignored. The `not key_created`
+                # branch catches that case and rewrites public_key to
+                # DEV_KEY.
                 import uuid
                 DEV_KEY = uuid.UUID('1d8ea2a49c904f079b116550780c0ece')
                 key, key_created = ProjectKey.objects.get_or_create(
                     project=project,
                     defaults={'public_key': DEV_KEY},
                 )
-                if key_created and key.public_key != DEV_KEY:
+                if not key_created and key.public_key != DEV_KEY:
                     key.public_key = DEV_KEY
                     key.save()
                 dsn = f'http://{key.public_key.hex}@localhost:8001/{project.id}'

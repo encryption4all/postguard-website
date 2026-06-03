@@ -37,7 +37,6 @@ export async function reportError(
     }
     if (typeof navigator !== 'undefined') {
         ctx.userAgent = navigator.userAgent
-        ctx.platform = navigator.platform
         ctx.language = navigator.language
     }
 

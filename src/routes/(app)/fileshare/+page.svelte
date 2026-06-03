@@ -86,13 +86,13 @@
         encryptState.encryptionState === EncryptionState.Error}
     class:done={encryptState.encryptionState === EncryptionState.Done}
 >
-    <FileInput
-        bind:files={encryptState.files}
-        bind:percentages={encryptState.percentages}
-        bind:done={encryptState.done}
-        bind:stage={encryptState.encryptionState}
-    />
     <svelte:boundary>
+        <FileInput
+            bind:files={encryptState.files}
+            bind:percentages={encryptState.percentages}
+            bind:done={encryptState.done}
+            bind:stage={encryptState.encryptionState}
+        />
         {#if encryptState.encryptionState === EncryptionState.FileSelection || encryptState.encryptionState === EncryptionState.Sign || encryptState.encryptionState === EncryptionState.Encrypting}
             <div class="inputs-container">
                 <RecipientSelection
