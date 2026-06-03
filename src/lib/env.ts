@@ -36,3 +36,7 @@ export const BUSINESS_URL =
  *  so developers can grab the download link without trawling the cryptify
  *  logs. */
 export const STAGING = runtimeConfig().STAGING === true
+
+/** GlitchTip / Sentry-compatible DSN. Empty disables error reporting. */
+export const GLITCHTIP_DSN: string =
+    (runtimeConfig().GLITCHTIP_DSN as string) ?? ''

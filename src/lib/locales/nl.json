@@ -140,6 +140,14 @@
         "serverError": "Onze server heeft een fout ondervonden bij het verwerken van je verzoek. Probeer het later opnieuw. Als het probleem aanhoudt, <a href=\"mailto:info@postguard.eu\">neem dan contact met ons op</a>.",
         "tryAgain": "Probeer opnieuw",
         "cancel": "Annuleer",
+        "crash": {
+            "title": "Er ging iets mis",
+            "message": "Een onverwachte fout heeft dit deel van de pagina onderbroken. Je kunt het opnieuw proberen, of de foutgegevens naar PostGuard sturen zodat we het kunnen oplossen.",
+            "report": "Vertel PostGuard",
+            "sending": "Verzenden…",
+            "sentButton": "Bedankt!",
+            "failed": "Kon de rapportageserver niet bereiken. Probeer het later opnieuw."
+        },
         "sign": {
             "scanQR": "Bewijs wie je bent door deze QR-code te scannen met de gratis Yivi-app op je telefoon.",
             "close": "Sluit",

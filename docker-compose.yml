@@ -91,6 +91,157 @@ services:
         networks:
             - postguard
 
+    # GlitchTip — open-source, Sentry-compatible error tracker.
+    # Reports posted by the website's CrashReport button land here.
+    # UI at http://localhost:8000 (override via GLITCHTIP_PORT if 8000 is taken).
+    # On first boot, create an account and a project; the DSN goes into
+    # APP_CONFIG.GLITCHTIP_DSN (see src/lib/env.ts).
+    glitchtip-postgres:
+        image: postgres:16-alpine
+        environment:
+            - POSTGRES_HOST_AUTH_METHOD=trust
+            - POSTGRES_DB=glitchtip
+        volumes:
+            - glitchtip-pg:/var/lib/postgresql/data
+        networks:
+            - postguard
+
+    glitchtip-redis:
+        image: valkey/valkey:8-alpine
+        networks:
+            - postguard
+
+    glitchtip-web:
+        image: glitchtip/glitchtip:v5
+        depends_on:
+            - glitchtip-postgres
+            - glitchtip-redis
+        environment:
+            - DATABASE_URL=postgres://postgres@glitchtip-postgres:5432/glitchtip
+            - REDIS_URL=redis://glitchtip-redis:6379/0
+            - SECRET_KEY=${GLITCHTIP_SECRET_KEY:-dev-only-change-me}
+            - PORT=8001
+            - DEFAULT_FROM_EMAIL=noreply@postguard.local
+            - GLITCHTIP_DOMAIN=http://localhost:8001
+            - ENABLE_OPEN_USER_REGISTRATION=true
+        ports:
+            - '8001:8001'
+        volumes:
+            - glitchtip-uploads:/code/uploads
+        networks:
+            - postguard
+
+    glitchtip-worker:
+        image: glitchtip/glitchtip:v5
+        command: ./bin/run-celery-with-beat.sh
+        # `glitchtip-web` runs Django migrations on startup. Without
+        # depending on it, the worker's celery-beat starts firing
+        # scheduled jobs (uptime-dispatch-checks etc.) before the
+        # tables exist and crashes with `relation "uptime_monitor"
+        # does not exist`. The web container has no healthcheck, so
+        # this is a `service_started` ordering rather than a true
+        # readiness gate — good enough on a single host where the
+        # web container reaches Postgres in a few seconds.
+        depends_on:
+            - glitchtip-postgres
+            - glitchtip-redis
+            - glitchtip-web
+            - glitchtip-init
+        environment:
+            - DATABASE_URL=postgres://postgres@glitchtip-postgres:5432/glitchtip
+            - REDIS_URL=redis://glitchtip-redis:6379/0
+            - SECRET_KEY=${GLITCHTIP_SECRET_KEY:-dev-only-change-me}
+        volumes:
+            - glitchtip-uploads:/code/uploads
+        networks:
+            - postguard
+
+    # One-shot: applies migrations and creates the dev superuser if it
+    # doesn't already exist. Runs to completion and exits. Idempotent —
+    # `createsuperuser --noinput` errors on a duplicate, which we
+    # swallow so subsequent `up`s remain no-ops. Override credentials
+    # by exporting GLITCHTIP_ADMIN_EMAIL / GLITCHTIP_ADMIN_PASSWORD.
+    glitchtip-init:
+        image: glitchtip/glitchtip:v5
+        depends_on:
+            - glitchtip-postgres
+        environment:
+            - DATABASE_URL=postgres://postgres@glitchtip-postgres:5432/glitchtip
+            - REDIS_URL=redis://glitchtip-redis:6379/0
+            - SECRET_KEY=${GLITCHTIP_SECRET_KEY:-dev-only-change-me}
+            # python-email-validator (used by GlitchTip's Pydantic response
+            # schemas) rejects `local`, `localhost`, `test`, `invalid`,
+            # `arpa`, `onion` TLDs as special-use — so `/api/0/users/me/`
+            # 500s if the superuser email lands on one of those. `.dev` is
+            # a real public TLD and not on that list.
+            - DJANGO_SUPERUSER_EMAIL=${GLITCHTIP_ADMIN_EMAIL:-admin@postguard.dev}
+            - DJANGO_SUPERUSER_PASSWORD=${GLITCHTIP_ADMIN_PASSWORD:-devpass1}
+        # Bootstraps: migrations → superuser → PostGuard org → website
+        # project → prints the DSN. Each step is idempotent so subsequent
+        # `up`s remain no-ops. Paste the printed DSN into static/config.js
+        # under `APP_CONFIG.GLITCHTIP_DSN` (or set `GLITCHTIP_DSN=…` in
+        # .env.dev) — the DSN is stable as long as the postgres volume
+        # survives, so this is a one-time copy.
+        command:
+            - sh
+            - -c
+            - |
+                ./manage.py migrate --noinput &&
+                (./manage.py createsuperuser --noinput 2>/dev/null \
+                  && echo 'glitchtip-init: superuser created' \
+                  || echo 'glitchtip-init: superuser already exists') &&
+                ./manage.py shell -c "
+                from django.apps import apps
+                from django.contrib.auth import get_user_model
+                Organization = apps.get_model('organizations_ext', 'Organization')
+                Project = apps.get_model('projects', 'Project')
+                ProjectKey = apps.get_model('projects', 'ProjectKey')
+
+                user = get_user_model().objects.get(email='$$DJANGO_SUPERUSER_EMAIL')
+
+                org, org_created = Organization.objects.get_or_create(
+                    slug='postguard',
+                    defaults={'name': 'PostGuard'},
+                )
+                if org_created:
+                    org.add_user(user)
+                    print('glitchtip-init: org PostGuard created')
+                else:
+                    print('glitchtip-init: org PostGuard already exists')
+
+                project, proj_created = Project.objects.get_or_create(
+                    organization=org,
+                    slug='postguard-website',
+                    defaults={'name': 'postguard-website', 'platform': 'javascript'},
+                )
+                if proj_created:
+                    print('glitchtip-init: project postguard-website created')
+                else:
+                    print('glitchtip-init: project postguard-website already exists')
+
+                # Pin a deterministic public_key so the DSN survives a
+                # full volume wipe. Without this, a fresh postgres volume
+                # regenerates the UUID and any hardcoded DSN in
+                # static/config.js silently goes stale.
+                import uuid
+                DEV_KEY = uuid.UUID('1d8ea2a49c904f079b116550780c0ece')
+                key, key_created = ProjectKey.objects.get_or_create(
+                    project=project,
+                    defaults={'public_key': DEV_KEY},
+                )
+                if key_created and key.public_key != DEV_KEY:
+                    key.public_key = DEV_KEY
+                    key.save()
+                dsn = f'http://{key.public_key.hex}@localhost:8001/{project.id}'
+                print('========================================')
+                print('glitchtip-init: DSN (already set in static/config.js):')
+                print(f'  {dsn}')
+                print('========================================')
+                "
+        restart: 'no'
+        networks:
+            - postguard
+
     # Nginx reverse proxy
     nginx:
         image: nginx:alpine
@@ -114,3 +265,5 @@ volumes:
     cryptify-data:
     cryptify-target:
     postguard-pkg-target:
+    glitchtip-pg:
+    glitchtip-uploads:

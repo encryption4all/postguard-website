@@ -140,6 +140,14 @@
         "serverError": "Our server encountered an error while processing your request. Please try again later. If the problem persists, please <a href=\"mailto:info@postguard.eu\">contact us</a>.",
         "tryAgain": "Try again",
         "cancel": "Cancel",
+        "crash": {
+            "title": "Something went wrong",
+            "message": "An unexpected error broke this part of the page. You can try again, or send the error details to PostGuard so we can fix it.",
+            "report": "Tell PostGuard",
+            "sending": "Sending…",
+            "sentButton": "Thank you!",
+            "failed": "Could not reach the reporting server. Please try again later."
+        },
         "sign": {
             "scanQR": "Verify your identity by scanning this QR code with the free Yivi app on your phone.",
             "close": "Close",
