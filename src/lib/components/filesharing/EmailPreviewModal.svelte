@@ -1,0 +1,335 @@
+<!--
+    Staging-only preview of the notification email cryptify *would* send
+    to a recipient. On staging, cryptify runs with `staging_mode = true`
+    (see cryptify/src/email.rs::send_email) and logs the email instead of
+    dispatching via SMTP — which makes it tedious to grab a download link
+    for testing.
+
+    Source of truth for the rendering lives in cryptify, exposed via
+    `GET /staging/preview/<uuid>`. This component fetches that JSON and
+    drops the per-recipient HTML body into a sandboxed iframe via
+    `srcdoc`, so the email's own inline styles render in isolation. The
+    header bar (from / to / subject / reply-to + recipient switcher) is
+    the only locally-rendered chrome.
+-->
+<script lang="ts">
+    import { _ } from 'svelte-i18n'
+    import { onMount } from 'svelte'
+    import { FILEHOST_URL } from '$lib/env'
+
+    interface RenderedEmail {
+        recipient: string
+        subject: string
+        from: string
+        reply_to: string | null
+        html: string
+        text: string
+    }
+
+    interface PreviewResponse {
+        recipients: RenderedEmail[]
+        confirmation: RenderedEmail | null
+    }
+
+    interface Props {
+        uuid: string
+        onClose: () => void
+    }
+
+    let { uuid, onClose }: Props = $props()
+
+    type Status = 'loading' | 'ready' | 'error'
+    let status: Status = $state('loading')
+    let errorMessage = $state('')
+    let data = $state<PreviewResponse | null>(null)
+    /** Index into the flat list of [...recipients, confirmation?] */
+    let activeIdx = $state(0)
+
+    let allEmails = $derived.by<RenderedEmail[]>(() => {
+        if (!data) return []
+        return data.confirmation
+            ? [...data.recipients, data.confirmation]
+            : data.recipients
+    })
+    let active = $derived(allEmails[activeIdx])
+    let isConfirmation = $derived(
+        !!data?.confirmation && activeIdx === allEmails.length - 1
+    )
+
+    onMount(async () => {
+        try {
+            const url = `${FILEHOST_URL.replace(
+                /\/$/,
+                ''
+            )}/staging/preview/${encodeURIComponent(uuid)}`
+            const res = await fetch(url, { credentials: 'omit' })
+            if (!res.ok) {
+                status = 'error'
+                errorMessage = `${res.status} ${res.statusText}`
+                return
+            }
+            data = (await res.json()) as PreviewResponse
+            if (allEmails.length === 0) {
+                status = 'error'
+                errorMessage = $_('filesharing.emailPreview.empty')
+                return
+            }
+            status = 'ready'
+        } catch (e) {
+            status = 'error'
+            errorMessage = e instanceof Error ? e.message : String(e)
+        }
+    })
+
+    function handleKey(e: KeyboardEvent) {
+        if (e.key === 'Escape') onClose()
+    }
+</script>
+
+<svelte:window onkeydown={handleKey} />
+
+<div
+    class="backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="email-preview-title"
+>
+    <button
+        class="backdrop-close"
+        type="button"
+        aria-label={$_('filesharing.emailPreview.close')}
+        onclick={onClose}
+    ></button>
+
+    <div class="modal">
+        <header class="modal-header">
+            <div>
+                <h2 id="email-preview-title">
+                    {$_('filesharing.emailPreview.title')}
+                </h2>
+                <p class="modal-subtitle">
+                    {$_('filesharing.emailPreview.subtitle')}
+                </p>
+            </div>
+            <button
+                class="close-btn"
+                type="button"
+                aria-label={$_('filesharing.emailPreview.close')}
+                onclick={onClose}>×</button
+            >
+        </header>
+
+        {#if status === 'loading'}
+            <div class="state">{$_('filesharing.emailPreview.loading')}</div>
+        {:else if status === 'error'}
+            <div class="state state-error">
+                <p>{$_('filesharing.emailPreview.error')}</p>
+                <p class="error-detail">{errorMessage}</p>
+            </div>
+        {:else if active}
+            <section class="meta">
+                <div class="meta-row">
+                    <span class="meta-label"
+                        >{$_('filesharing.emailPreview.from')}</span
+                    >
+                    <span class="meta-value">{active.from}</span>
+                </div>
+                {#if active.reply_to}
+                    <div class="meta-row">
+                        <span class="meta-label"
+                            >{$_('filesharing.emailPreview.replyTo')}</span
+                        >
+                        <span class="meta-value">{active.reply_to}</span>
+                    </div>
+                {/if}
+                <div class="meta-row">
+                    <span class="meta-label"
+                        >{$_('filesharing.emailPreview.subject')}</span
+                    >
+                    <span class="meta-value">{active.subject}</span>
+                </div>
+                <div class="meta-row meta-row-recipient">
+                    <label class="meta-label" for="recipient-switcher"
+                        >{$_('filesharing.emailPreview.to')}</label
+                    >
+                    {#if allEmails.length > 1}
+                        <select
+                            id="recipient-switcher"
+                            class="recipient-select"
+                            bind:value={activeIdx}
+                        >
+                            {#each allEmails as r, i (i)}
+                                <option value={i}
+                                    >{r.recipient}{data?.confirmation &&
+                                    i === allEmails.length - 1
+                                        ? ` (${$_(
+                                              'filesharing.emailPreview.confirmationTag'
+                                          )})`
+                                        : ''}</option
+                                >
+                            {/each}
+                        </select>
+                    {:else}
+                        <span class="meta-value"
+                            >{active.recipient}{isConfirmation
+                                ? ` (${$_(
+                                      'filesharing.emailPreview.confirmationTag'
+                                  )})`
+                                : ''}</span
+                        >
+                    {/if}
+                </div>
+            </section>
+
+            <iframe
+                class="email-frame"
+                title={$_('filesharing.emailPreview.iframeTitle')}
+                srcdoc={active.html}
+                sandbox="allow-popups allow-popups-to-escape-sandbox"
+            ></iframe>
+        {/if}
+    </div>
+</div>
+
+<style lang="scss">
+    .backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(3, 14, 23, 0.55);
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        z-index: 1000;
+        padding: 2rem 1rem;
+        overflow-y: auto;
+    }
+
+    .backdrop-close {
+        position: absolute;
+        inset: 0;
+        background: transparent;
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    .modal {
+        position: relative;
+        background: var(--pg-general-background);
+        border-radius: var(--pg-border-radius-lg);
+        max-width: 720px;
+        width: 100%;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+        z-index: 1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modal-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.25rem 1.5rem;
+        background: var(--pg-soft-background);
+        border-bottom: 1px solid var(--pg-strong-background);
+    }
+
+    .modal-header h2 {
+        margin: 0;
+        font-size: var(--pg-font-size-lg);
+        font-weight: var(--pg-font-weight-bold);
+        color: var(--pg-text);
+    }
+
+    .modal-subtitle {
+        margin: 0.25rem 0 0;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
+    }
+
+    .close-btn {
+        background: transparent;
+        border: 0;
+        font-size: 1.75rem;
+        line-height: 1;
+        cursor: pointer;
+        color: var(--pg-text-secondary);
+        padding: 0 0.25rem;
+    }
+
+    .close-btn:hover {
+        color: var(--pg-text);
+    }
+
+    .meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--pg-strong-background);
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text);
+    }
+
+    .meta-row {
+        display: flex;
+        gap: 0.75rem;
+        align-items: baseline;
+    }
+
+    .meta-row-recipient {
+        align-items: center;
+    }
+
+    .meta-label {
+        flex: 0 0 5.5rem;
+        color: var(--pg-text-secondary);
+        font-weight: var(--pg-font-weight-bold);
+    }
+
+    .meta-value {
+        word-break: break-word;
+    }
+
+    .recipient-select {
+        flex: 1;
+        padding: 0.35rem 0.6rem;
+        border: 1px solid var(--pg-strong-background);
+        border-radius: var(--pg-border-radius-sm);
+        background: var(--pg-general-background);
+        color: var(--pg-text);
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-font-size-sm);
+    }
+
+    .email-frame {
+        width: 100%;
+        height: min(70vh, 720px);
+        border: 0;
+        background: var(--pg-soft-background);
+    }
+
+    .state {
+        padding: 2rem 1.5rem;
+        text-align: center;
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-font-size-md);
+        color: var(--pg-text-secondary);
+    }
+
+    .state-error {
+        color: var(--pg-text);
+    }
+
+    .error-detail {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        margin: 0.5rem 0 0;
+        word-break: break-all;
+    }
+</style>

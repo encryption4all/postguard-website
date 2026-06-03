@@ -192,6 +192,13 @@
                     message: encryptState.message,
                     language: lang as 'EN' | 'NL',
                 },
+                // Captured here (not from the upload() return value) so the
+                // staging email-preview modal can render even if a later
+                // chunk fails — the uuid is what links the preview to the
+                // /download?uuid=… link cryptify would have emailed.
+                onUploadInit: ({ uuid }) => {
+                    encryptState.uploadUuid = uuid
+                },
             })
 
             const totalBytes = encryptState.files.reduce(

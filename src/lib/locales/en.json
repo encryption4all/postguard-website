@@ -229,6 +229,21 @@
             "addRecipient": "recipient",
             "addRecipientButton": "Add another recipient",
             "emailSenderConfirm": "Send me a confirmation",
+            "emailPreview": {
+                "title": "Notification email preview",
+                "subtitle": "Staging only — cryptify does not actually send notification emails on staging. This is what each recipient would have received.",
+                "loading": "Loading preview…",
+                "error": "Could not load preview.",
+                "empty": "No recipients to preview.",
+                "close": "Close",
+                "from": "From",
+                "replyTo": "Reply to",
+                "subject": "Subject",
+                "to": "To",
+                "confirmationTag": "sender copy",
+                "iframeTitle": "Notification email body",
+                "reopen": "Show email preview"
+            },
             "timeremaining": {
                 "estimate": "Estimating...",
                 "unknown": "More then one day left.",

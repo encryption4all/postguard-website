@@ -26,6 +26,9 @@ export type EncryptState = {
     selfAborted: boolean
     serverError: boolean
     encryptStartTime: number
+    /** Cryptify upload UUID, captured via `onUploadInit` as soon as the
+     *  server allocates one. Used by the staging email-preview modal. */
+    uploadUuid?: string
 }
 
 export type AttType =

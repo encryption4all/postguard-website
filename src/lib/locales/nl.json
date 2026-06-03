@@ -228,6 +228,21 @@
             "addRecipient": "ontvanger",
             "addRecipientButton": "Voeg nog een ontvanger toe",
             "emailSenderConfirm": "Stuur mij een bevestiging",
+            "emailPreview": {
+                "title": "Voorbeeld notificatie-e-mail",
+                "subtitle": "Alleen staging — cryptify verstuurt op staging geen e-mails. Dit is wat elke ontvanger zou hebben gezien.",
+                "loading": "Voorbeeld laden…",
+                "error": "Voorbeeld kon niet worden geladen.",
+                "empty": "Geen ontvangers om weer te geven.",
+                "close": "Sluiten",
+                "from": "Van",
+                "replyTo": "Antwoord aan",
+                "subject": "Onderwerp",
+                "to": "Aan",
+                "confirmationTag": "bevestigingskopie",
+                "iframeTitle": "Inhoud van de notificatie-e-mail",
+                "reopen": "Toon e-mailvoorbeeld"
+            },
             "timeremaining": {
                 "estimate": "Estimating...",
                 "unknown": "Nog meer dan een dag",
