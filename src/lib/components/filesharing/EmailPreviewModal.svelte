@@ -83,6 +83,24 @@
     function handleKey(e: KeyboardEvent) {
         if (e.key === 'Escape') onClose()
     }
+
+    /** Inject `<base target="_blank">` into the rendered email HTML so
+     *  anchor clicks open in a new top-level tab instead of trying to
+     *  navigate the sandboxed iframe (which has no `allow-top-navigation`
+     *  and would otherwise blank the body). The `allow-popups` /
+     *  `allow-popups-to-escape-sandbox` flags already permit the new
+     *  tab. We try to splice into an existing `<head>`; if cryptify ever
+     *  changes the template shape, the prepended fallback still works
+     *  because browsers tolerate a `<base>` before `<html>`. */
+    function withBaseTarget(html: string): string {
+        const tag = '<base target="_blank" rel="noopener">'
+        const headIdx = html.search(/<head[^>]*>/i)
+        if (headIdx >= 0) {
+            const end = html.indexOf('>', headIdx) + 1
+            return html.slice(0, end) + tag + html.slice(end)
+        }
+        return tag + html
+    }
 </script>
 
 <svelte:window onkeydown={handleKey} />
@@ -185,7 +203,7 @@
             <iframe
                 class="email-frame"
                 title={$_('filesharing.emailPreview.iframeTitle')}
-                srcdoc={active.html}
+                srcdoc={withBaseTarget(active.html)}
                 sandbox="allow-popups allow-popups-to-escape-sandbox"
             ></iframe>
         {/if}
