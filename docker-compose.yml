@@ -18,6 +18,12 @@ services:
             - ./cryptify/conf/config.dev.toml:/app/config.toml:ro
             - ./cryptify/src:/app/src
             - ./cryptify/templates:/app/templates
+            # build.rs feeds `PG_CORE_VERSION` (used by the X-PostGuard
+            # mail header) from Cargo.lock at compile time. Both files
+            # need to be visible inside the container, or cargo bails
+            # on `env!("PG_CORE_VERSION")`.
+            - ./cryptify/build.rs:/app/build.rs:ro
+            - ./cryptify/Cargo.lock:/app/Cargo.lock:ro
             - cryptify-target:/app/target
         environment:
             - RUST_LOG=info
