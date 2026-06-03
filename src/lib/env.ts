@@ -29,3 +29,10 @@ function runtimeConfig(): Record<string, unknown> {
 export const FF_BUSINESS = runtimeConfig().FF_BUSINESS === true
 export const BUSINESS_URL =
     (runtimeConfig().BUSINESS_URL as string) ?? 'https://business.postguard.eu'
+
+/** True on staging/dev where cryptify runs with `staging_mode = true` and
+ *  does not actually send notification emails. The website uses this to
+ *  render an in-page preview of the email a recipient would have received,
+ *  so developers can grab the download link without trawling the cryptify
+ *  logs. */
+export const STAGING = runtimeConfig().STAGING === true

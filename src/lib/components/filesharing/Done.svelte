@@ -4,7 +4,9 @@
     import HelpToggle from '$lib/components/HelpToggle.svelte'
     import Chip from '$lib/components/Chip.svelte'
     import FileList from '$lib/components/filesharing/FileList.svelte'
+    import EmailPreviewModal from '$lib/components/filesharing/EmailPreviewModal.svelte'
     import airplane from '$lib/assets/images/airplane.svg'
+    import { STAGING } from '$lib/env'
 
     interface props {
         encryptState: EncryptState
@@ -12,6 +14,13 @@
     }
     let { encryptState = $bindable(), createDefaultEncryptState }: props =
         $props()
+
+    // On staging, cryptify renders the notification email but does not
+    // dispatch via SMTP. Auto-open the preview modal so developers don't
+    // have to scrape cryptify logs for the /download link. The modal
+    // fetches the actual rendered HTML from cryptify, so this branch
+    // never runs in production (STAGING is false there).
+    let previewOpen = $state(STAGING && !!encryptState.uploadUuid)
 </script>
 
 <div class="container">
@@ -59,11 +68,27 @@
         variant="dark"
     />
 
+    {#if STAGING && encryptState.uploadUuid}
+        <Chip
+            text={$_('filesharing.emailPreview.reopen')}
+            onclick={() => (previewOpen = true)}
+            size="lg"
+            variant="default"
+        />
+    {/if}
+
     <div class="spacer"></div>
 
     <!-- Airplane decoration -->
     <img src={airplane} alt="" aria-hidden="true" class="airplane-decoration" />
 </div>
+
+{#if STAGING && previewOpen && encryptState.uploadUuid}
+    <EmailPreviewModal
+        uuid={encryptState.uploadUuid}
+        onClose={() => (previewOpen = false)}
+    />
+{/if}
 
 <style>
     .container {
