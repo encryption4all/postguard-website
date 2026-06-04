@@ -17,6 +17,7 @@
     import YiviQRCode from '$lib/components/filesharing/YiviQRCode.svelte'
     import FileList from '$lib/components/filesharing/FileList.svelte'
     import DecryptionProgress from '$lib/components/filesharing/DecryptionProgress.svelte'
+    import ReportErrorButton from '$lib/components/filesharing/ReportErrorButton.svelte'
     import { isMobile } from '$lib/browser-detect'
     import Chip from '$lib/components/Chip.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
@@ -42,6 +43,7 @@
     let senderIdentity: FriendlySender | null = $state(null)
     let fileList: string[] = $state([])
     let decryptPct: number | undefined = $state(undefined)
+    let lastError: unknown = $state(null)
 
     let opened: Awaited<ReturnType<typeof pg.open>> | null = null
 
@@ -81,6 +83,7 @@
             checkRecipients(info.recipients)
         } catch (e) {
             retryStatus.set(null)
+            lastError = e
             if (e instanceof UploadSessionExpiredError) {
                 downloadState = 'SessionExpired'
             } else if (e instanceof NetworkError && e.status >= 500) {
@@ -153,6 +156,7 @@
         } catch (e) {
             if (dev) console.error('[download] decrypt error:', e)
             retryStatus.set(null)
+            lastError = e
             if (e instanceof IdentityMismatchError) {
                 downloadState = 'IdentityMismatch'
             } else if (e instanceof UploadSessionExpiredError) {
@@ -326,7 +330,7 @@
                                 />
                             </svg>
                         {/if}
-                        <p>
+                        <p role="status">
                             {downloadState === 'Done'
                                 ? $_(
                                       'filesharing.decryptpanel.doneMessageComplete'
@@ -408,6 +412,12 @@
                 <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                 {@html $_('filesharing.decryptpanel.serverErrorMessage')}
             </p>
+            <div class="report-wrapper">
+                <ReportErrorButton
+                    error={lastError}
+                    context={{ source: 'download', state: 'ServerError' }}
+                />
+            </div>
         {:else if downloadState === 'Fail'}
             <p class="error-description">
                 {$_('filesharing.decryptpanel.notFoundSubtitle')}
@@ -647,9 +657,11 @@
         background: var(--pg-general-background);
     }
 
-    .retry-wrapper {
+    .retry-wrapper,
+    .report-wrapper {
         display: flex;
         justify-content: center;
+        margin-top: 0.5rem;
     }
 
     .error-description {
