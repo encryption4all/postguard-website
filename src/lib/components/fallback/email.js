@@ -1,17 +1,20 @@
 import { browser } from '$app/environment'
 
-let PostalMime
+let postalMimePromise
 
-// postalmime only works in browser
-if (browser) {
-    import('postal-mime').then((module) => {
-        PostalMime = module
-    })
+function loadPostalMime() {
+    if (!browser)
+        return Promise.reject(new Error('postal-mime is browser-only'))
+    if (!postalMimePromise) {
+        postalMimePromise = import('postal-mime')
+    }
+    return postalMimePromise
 }
 
 // parse email using postalmime
-export function parseMail(unparsed) {
-    const parser = new PostalMime.default()
+export async function parseMail(unparsed) {
+    const module = await loadPostalMime()
+    const parser = new module.default()
     return parser.parse(unparsed)
 }
 
