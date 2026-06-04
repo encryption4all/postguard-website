@@ -616,8 +616,19 @@
         padding: 0;
     }
 
+    /* Hide the visual label inside the success banner (the banner message
+       above the bar conveys the same thing) but keep it accessible so the
+       aria-live region still announces the decrypt transition. */
     .success-banner :global(.container .label) {
-        display: none;
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
     }
 
     .banner-check {
