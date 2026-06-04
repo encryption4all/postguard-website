@@ -169,6 +169,7 @@
             "askDownload": "Download",
             "askDownloadText": "Druk op onderstaande knop om de bestanden te ontsleutelen en downloaden.",
             "doneMessage": "Je bestanden worden gedownload en ontsleuteld",
+            "doneMessageComplete": "Je bestanden zijn gedownload en ontsleuteld",
             "verifiedEmail": "De bestanden komen van",
             "verifiedExtra": "De bestanden zijn ondertekend met",
             "notFoundTitle": "Deze bestanden bestaan niet (meer)",

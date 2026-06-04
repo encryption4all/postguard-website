@@ -169,6 +169,7 @@
             "askDownload": "Download",
             "askDownloadText": "Press the button below to start decrypting and downloading your files",
             "doneMessage": "Your files are being downloaded and decrypted",
+            "doneMessageComplete": "Your files have been downloaded and decrypted",
             "verifiedEmail": "The files are from",
             "verifiedExtra": "The files were signed using",
             "notFoundTitle": "These files no longer exist",

@@ -1,5 +1,6 @@
 <script lang="ts">
     import { onMount, tick } from 'svelte'
+    import { fade, slide } from 'svelte/transition'
     import { browser, dev } from '$app/environment'
     import { _ } from 'svelte-i18n'
     import { pg, retryStatus } from '$lib/postguard'
@@ -43,6 +44,11 @@
     let decryptPct: number | undefined = $state(undefined)
 
     let opened: Awaited<ReturnType<typeof pg.open>> | null = null
+
+    // Hold on the QR card briefly after Yivi succeeds so its success
+    // animation can finish before we swap in the progress banner.
+    const YIVI_SUCCESS_HOLD_MS = 1400
+    let pendingDecryptFlip: ReturnType<typeof setTimeout> | null = null
 
     let isMobileDevice = isMobile()
 
@@ -121,12 +127,18 @@
                 recipient: key,
                 enableCache: true,
                 onDownloadProgress: (pct) => {
-                    // Yivi scan happens before any bytes flow — the first
-                    // progress tick is our cue to flip into Decrypting.
-                    if (downloadState !== 'Decrypting') {
-                        downloadState = 'Decrypting'
-                    }
                     decryptPct = pct
+                    if (
+                        downloadState !== 'Decrypting' &&
+                        pendingDecryptFlip === null
+                    ) {
+                        pendingDecryptFlip = setTimeout(() => {
+                            pendingDecryptFlip = null
+                            if (downloadState === 'Ready') {
+                                downloadState = 'Decrypting'
+                            }
+                        }, YIVI_SUCCESS_HOLD_MS)
+                    }
                 },
             })) as DecryptFileResult
 
@@ -226,123 +238,160 @@
                 />
             </div>
         {:else if downloadState === 'Ready'}
-            <p class="description">
-                {$_('filesharing.decryptpanel.pageDescription')}
-            </p>
-            <div class="decrypt-card">
-                <h3>
-                    {isMobileDevice
-                        ? $_(
-                              'filesharing.decryptpanel.irmaInstructionHeaderMobile'
-                          )
-                        : $_(
-                              'filesharing.decryptpanel.irmaInstructionHeaderQr'
-                          )}
-                </h3>
-                <p class="card-subtitle">
-                    {isMobileDevice
-                        ? $_('filesharing.decryptpanel.irmaInstructionMobile')
-                        : $_('filesharing.decryptpanel.irmaInstructionQr')}
+            <div
+                class="state-wrap"
+                in:fade={{ duration: 250, delay: 200 }}
+                out:fade={{ duration: 200 }}
+            >
+                <p class="description">
+                    {$_('filesharing.decryptpanel.pageDescription')}
                 </p>
-                <YiviQRCode
-                    id="yivi-download"
-                    responsive
-                    mode={isMobileDevice ? 'deeplink' : 'qr'}
-                />
-            </div>
-            <HelpToggle
-                title={$_('filesharing.encryptPanel.yiviInfo')}
-                content={$_('filesharing.encryptPanel.yiviInfoText')}
-                linkText={$_('filesharing.encryptPanel.yiviInfoLink')}
-                linkUrl="https://yivi.app"
-                bordered
-            />
-            {#if senderIdentity?.email}
-                <div class="sender-section">
-                    <svg
-                        class="checkmark"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            d="M1 5L4.5 8.5L11 1"
-                            stroke="currentColor"
-                            stroke-width="1.75"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        />
-                    </svg>
-                    <p class="sender-label">
-                        {$_('filesharing.decryptpanel.verifiedEmail')}
+                <div class="decrypt-card">
+                    <h3>
+                        {isMobileDevice
+                            ? $_(
+                                  'filesharing.decryptpanel.irmaInstructionHeaderMobile'
+                              )
+                            : $_(
+                                  'filesharing.decryptpanel.irmaInstructionHeaderQr'
+                              )}
+                    </h3>
+                    <p class="card-subtitle">
+                        {isMobileDevice
+                            ? $_(
+                                  'filesharing.decryptpanel.irmaInstructionMobile'
+                              )
+                            : $_('filesharing.decryptpanel.irmaInstructionQr')}
                     </p>
-                    <strong class="sender-email">{senderIdentity.email}</strong>
-                </div>
-            {/if}
-        {:else if downloadState === 'Decrypting'}
-            <div class="decrypt-card">
-                <DecryptionProgress percentage={decryptPct} />
-            </div>
-            {#if $retryStatus}
-                <p class="retry-status" role="status">
-                    {$_('filesharing.encryptPanel.retrying', {
-                        values: {
-                            attempt: $retryStatus.attempt + 1,
-                            max: $retryStatus.maxAttempts,
-                        },
-                    })}
-                </p>
-            {/if}
-        {:else if downloadState === 'Done'}
-            <div class="success-banner">
-                <svg
-                    class="banner-check"
-                    viewBox="0 0 12 10"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        d="M1 5L4.5 8.5L11 1"
-                        stroke="currentColor"
-                        stroke-width="1.75"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                    <YiviQRCode
+                        id="yivi-download"
+                        responsive
+                        mode={isMobileDevice ? 'deeplink' : 'qr'}
                     />
-                </svg>
-                <p>{$_('filesharing.decryptpanel.doneMessage')}</p>
+                </div>
+                <HelpToggle
+                    title={$_('filesharing.encryptPanel.yiviInfo')}
+                    content={$_('filesharing.encryptPanel.yiviInfoText')}
+                    linkText={$_('filesharing.encryptPanel.yiviInfoLink')}
+                    linkUrl="https://yivi.app"
+                    bordered
+                />
+                {#if senderIdentity?.email}
+                    <div class="sender-section">
+                        <svg
+                            class="checkmark"
+                            viewBox="0 0 12 10"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M1 5L4.5 8.5L11 1"
+                                stroke="currentColor"
+                                stroke-width="1.75"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <p class="sender-label">
+                            {$_('filesharing.decryptpanel.verifiedEmail')}
+                        </p>
+                        <strong class="sender-email"
+                            >{senderIdentity.email}</strong
+                        >
+                    </div>
+                {/if}
             </div>
-
-            <FileList files={fileList} />
-
-            {#if senderIdentity?.email}
-                <div class="sender-section">
-                    <svg
-                        class="checkmark"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            d="M1 5L4.5 8.5L11 1"
-                            stroke="currentColor"
-                            stroke-width="1.75"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        />
-                    </svg>
-                    <p class="sender-label">
-                        {$_('filesharing.decryptpanel.verifiedEmail')}
-                    </p>
-                    <strong class="sender-email">{senderIdentity.email}</strong>
-                    {#if senderIdentity.attributes.filter((a) => !a.type.includes('email') && a.value).length > 0}
-                        <div class="attr-chips">
-                            {#each senderIdentity.attributes.filter((a) => !a.type.includes('email') && a.value) as attr (attr.type)}
-                                <span class="attr-chip">{attr.value}</span>
-                            {/each}
+        {:else if downloadState === 'Decrypting' || downloadState === 'Done'}
+            <div
+                class="state-wrap"
+                in:fade={{ duration: 300, delay: 200 }}
+                out:fade={{ duration: 200 }}
+            >
+                <div class="success-banner">
+                    <div class="banner-row">
+                        {#if downloadState === 'Done'}
+                            <svg
+                                class="banner-check"
+                                viewBox="0 0 12 10"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                in:fade={{ duration: 250, delay: 100 }}
+                            >
+                                <path
+                                    d="M1 5L4.5 8.5L11 1"
+                                    stroke="currentColor"
+                                    stroke-width="1.75"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        {/if}
+                        <p>
+                            {downloadState === 'Done'
+                                ? $_(
+                                      'filesharing.decryptpanel.doneMessageComplete'
+                                  )
+                                : $_('filesharing.decryptpanel.doneMessage')}
+                        </p>
+                    </div>
+                    {#if downloadState === 'Decrypting'}
+                        <div transition:slide={{ duration: 280 }}>
+                            <DecryptionProgress percentage={decryptPct} />
                         </div>
                     {/if}
                 </div>
-            {/if}
+                {#if downloadState === 'Decrypting' && $retryStatus}
+                    <p class="retry-status" role="status">
+                        {$_('filesharing.encryptPanel.retrying', {
+                            values: {
+                                attempt: $retryStatus.attempt + 1,
+                                max: $retryStatus.maxAttempts,
+                            },
+                        })}
+                    </p>
+                {/if}
+
+                {#if downloadState === 'Done'}
+                    <div in:fade={{ duration: 300, delay: 200 }}>
+                        <FileList files={fileList} />
+                    </div>
+                {/if}
+
+                {#if downloadState === 'Done' && senderIdentity?.email}
+                    <div
+                        class="sender-section"
+                        in:fade={{ duration: 300, delay: 280 }}
+                    >
+                        <svg
+                            class="checkmark"
+                            viewBox="0 0 12 10"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M1 5L4.5 8.5L11 1"
+                                stroke="currentColor"
+                                stroke-width="1.75"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <p class="sender-label">
+                            {$_('filesharing.decryptpanel.verifiedEmail')}
+                        </p>
+                        <strong class="sender-email"
+                            >{senderIdentity.email}</strong
+                        >
+                        {#if senderIdentity.attributes.filter((a) => !a.type.includes('email') && a.value).length > 0}
+                            <div class="attr-chips">
+                                {#each senderIdentity.attributes.filter((a) => !a.type.includes('email') && a.value) as attr (attr.type)}
+                                    <span class="attr-chip">{attr.value}</span>
+                                {/each}
+                            </div>
+                        {/if}
+                    </div>
+                {/if}
+            </div>
         {:else if downloadState === 'SessionExpired'}
             <p class="error-description">
                 {$_('filesharing.decryptpanel.sessionExpiredSubtitle')}
@@ -531,7 +580,7 @@
 
     .success-banner {
         display: flex;
-        align-items: center;
+        flex-direction: column;
         gap: 0.75rem;
         background: var(--pg-strong-background);
         border-radius: var(--pg-border-radius-lg);
@@ -544,6 +593,31 @@
             line-height: 1.4;
             color: var(--pg-text);
         }
+    }
+
+    .banner-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        position: relative;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    .state-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .success-banner :global(.container) {
+        padding: 0;
+    }
+
+    .success-banner :global(.container .label) {
+        display: none;
     }
 
     .banner-check {
