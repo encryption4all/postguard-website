@@ -1,3 +1,5 @@
+import { SITE_URL } from '$lib/env'
+
 export const prerender = true
 
 const DISALLOW_RULES = `Disallow: /fileshare
@@ -30,7 +32,7 @@ User-agent: Google-Extended
 Allow: /
 ${DISALLOW_RULES}
 
-Sitemap: https://postguard.eu/sitemap.xml
+Sitemap: ${SITE_URL}/sitemap.xml
 `
 
     return new Response(body, {

@@ -5,6 +5,7 @@
     // import { fade } from 'svelte/transition'
     import { Tween } from 'svelte/motion'
     import { cubicOut } from 'svelte/easing'
+    import { SITE_URL } from '$lib/env'
 
     import tbLogo from '$lib/assets/images/tb_logo.svg'
     import olLogo from '$lib/assets/images/ol_logo.svg'
@@ -25,13 +26,13 @@
                         '@type': 'ListItem',
                         position: 1,
                         name: 'Home',
-                        item: 'https://postguard.eu',
+                        item: SITE_URL,
                     },
                     {
                         '@type': 'ListItem',
                         position: 2,
                         name: 'Addons',
-                        item: 'https://postguard.eu/addons',
+                        item: `${SITE_URL}/addons`,
                     },
                 ],
             },
@@ -47,12 +48,12 @@
                     price: '0',
                     priceCurrency: 'EUR',
                 },
-                url: 'https://postguard.eu/addons',
+                url: `${SITE_URL}/addons`,
                 softwareRequirements: 'Mozilla Thunderbird, Yivi app',
                 author: {
                     '@type': 'Organization',
                     name: 'PostGuard',
-                    url: 'https://postguard.eu',
+                    url: SITE_URL,
                 },
             },
             {
@@ -67,12 +68,12 @@
                     price: '0',
                     priceCurrency: 'EUR',
                 },
-                url: 'https://postguard.eu/addons',
+                url: `${SITE_URL}/addons`,
                 softwareRequirements: 'Microsoft Outlook, Yivi app',
                 author: {
                     '@type': 'Organization',
                     name: 'PostGuard',
-                    url: 'https://postguard.eu',
+                    url: SITE_URL,
                 },
             },
         ],

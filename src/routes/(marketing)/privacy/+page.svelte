@@ -1,6 +1,7 @@
 <script>
     import { _ } from 'svelte-i18n'
     import SEO from '$lib/components/SEO.svelte'
+    import { SITE_URL } from '$lib/env'
 
     const privacyJsonLd = {
         '@context': 'https://schema.org',
@@ -8,15 +9,15 @@
             {
                 '@type': 'WebPage',
                 name: 'Privacy Policy',
-                url: 'https://postguard.eu/privacy',
+                url: `${SITE_URL}/privacy`,
                 description:
                     "PostGuard's privacy policy. Learn how we handle your data when you use our end-to-end encryption services.",
                 dateModified: '2026-04-21',
                 isPartOf: {
-                    '@id': 'https://postguard.eu/#website',
+                    '@id': `${SITE_URL}/#website`,
                 },
                 about: {
-                    '@id': 'https://postguard.eu/#organization',
+                    '@id': `${SITE_URL}/#organization`,
                 },
             },
             {
@@ -26,13 +27,13 @@
                         '@type': 'ListItem',
                         position: 1,
                         name: 'Home',
-                        item: 'https://postguard.eu',
+                        item: SITE_URL,
                     },
                     {
                         '@type': 'ListItem',
                         position: 2,
                         name: 'Privacy Policy',
-                        item: 'https://postguard.eu/privacy',
+                        item: `${SITE_URL}/privacy`,
                     },
                 ],
             },
