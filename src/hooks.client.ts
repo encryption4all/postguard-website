@@ -1,4 +1,7 @@
 import type { HandleClientError } from '@sveltejs/kit'
+import { initErrorReporting } from '$lib/errorReporting'
+
+initErrorReporting()
 
 export const handleError: HandleClientError = ({ error }) => {
     // When a new deployment happens, old JS chunks are gone.
