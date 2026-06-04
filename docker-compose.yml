@@ -18,6 +18,9 @@ services:
             - ./cryptify/conf/config.dev.toml:/app/config.toml:ro
             - ./cryptify/src:/app/src
             - ./cryptify/templates:/app/templates
+            - ./cryptify/build.rs:/app/build.rs:ro
+            - ./cryptify/Cargo.toml:/app/Cargo.toml:ro
+            - ./cryptify/Cargo.lock:/app/Cargo.lock:ro
             - cryptify-target:/app/target
         environment:
             - RUST_LOG=info
