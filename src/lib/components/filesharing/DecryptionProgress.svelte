@@ -10,8 +10,8 @@
     let determinate = $derived(typeof percentage === 'number')
 </script>
 
-<div class="container" role="status" aria-live="polite">
-    <p class="label" id="decryption-progress-label">
+<div class="container">
+    <p class="label" id="decryption-progress-label" role="status">
         {$_('filesharing.decryptpanel.downloadingAndDecrypting')}
     </p>
     {#if determinate}
@@ -35,7 +35,6 @@
             class="bar-track"
             role="progressbar"
             aria-labelledby="decryption-progress-label"
-            aria-busy="true"
         >
             <div class="bar-indeterminate"></div>
         </div>
@@ -104,5 +103,11 @@
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
         font-size: var(--pg-font-size-sm);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .bar-indeterminate {
+            animation: none;
+        }
     }
 </style>
