@@ -8,13 +8,20 @@
     import ReportErrorButton from '$lib/components/filesharing/ReportErrorButton.svelte'
     import Chip from '$lib/components/Chip.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
+    import type { FriendlySender } from '@e4a/pg-js'
+    import {
+        isWeakSenderIdentity,
+        verifiedAttributesFor,
+    } from '$lib/components/filesharing/verifiedAttributes'
 
     type DownloadState =
         | 'Downloading'
         | 'Recipients'
         | 'Ready'
         | 'Decrypting'
+        | 'Confirm'
         | 'Done'
+        | 'Discarded'
         | 'Fail'
         | 'ServerError'
         | 'IdentityMismatch'
@@ -25,7 +32,9 @@
         'Recipients',
         'Ready',
         'Decrypting',
+        'Confirm',
         'Done',
+        'Discarded',
         'Fail',
         'ServerError',
         'IdentityMismatch',
@@ -39,20 +48,34 @@
     let retryAttempt = $state(0)
     const retryMax = 5
 
-    const mockSenderIdentity = {
+    const STRONG_ATTRS = [
+        { type: 'pbdf.sidn-pbdf.email.email', value: 'alice@example.com' },
+        {
+            type: 'pbdf.gemeente.personalData.fullname',
+            value: 'A. Jansen',
+        },
+        {
+            type: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
+            value: '+31612345678',
+        },
+        {
+            type: 'pbdf.gemeente.personalData.dateofbirth',
+            value: '04-11-1987',
+        },
+    ]
+    const EMAIL_ONLY_ATTRS = [
+        { type: 'pbdf.sidn-pbdf.email.email', value: 'alice@example.com' },
+    ]
+
+    let weakIdentity = $state(false)
+    /** Cast to FriendlySender so verifiedAttributesFor/isWeakSenderIdentity
+     *  accept the mock. `raw` is unused by those helpers — the field
+     *  exists on the real type for power-user pass-through only. */
+    const mockSenderIdentity = $derived<FriendlySender>({
         email: 'alice@example.com',
-        attributes: [
-            { type: 'pbdf.sidn-pbdf.email.email', value: 'alice@example.com' },
-            {
-                type: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
-                value: '+31612345678',
-            },
-            {
-                type: 'pbdf.nijmegen.personalData.fullname',
-                value: 'Alice Jansen',
-            },
-        ],
-    }
+        attributes: weakIdentity ? EMAIL_ONLY_ATTRS : STRONG_ATTRS,
+        raw: { public: { con: [] } },
+    })
 
     let showSenderIdentity = $state(true)
     let multipleRecipients = $state(false)
@@ -79,6 +102,20 @@
 
     function defer(ms: number, fn: () => void) {
         scenarioTimeouts.push(setTimeout(fn, ms))
+    }
+
+    /** Shared tail for the "Decrypting complete" branch of every
+     *  scenario. Mirrors production: Decrypting → Confirm (the trust
+     *  gate) and then waits for the developer to click Accept (→ Done)
+     *  or Decline (→ Discarded) in the preview pane. The scenario is
+     *  considered over once we arrive at Confirm — `activeScenario` is
+     *  cleared so the highlight tracks whichever state the developer
+     *  drives next. */
+    function finishDecryptingToConfirm(postCompleteMs: number = 500) {
+        defer(postCompleteMs, () => {
+            downloadState = 'Confirm'
+            activeScenario = null
+        })
     }
 
     function reset() {
@@ -108,10 +145,7 @@
                     decryptPct = 100
                     if (scenarioTimer) clearInterval(scenarioTimer)
                     scenarioTimer = null
-                    defer(500, () => {
-                        downloadState = 'Done'
-                        activeScenario = null
-                    })
+                    finishDecryptingToConfirm()
                 } else {
                     decryptPct = pct
                 }
@@ -140,10 +174,7 @@
                     decryptPct = 100
                     if (scenarioTimer) clearInterval(scenarioTimer)
                     scenarioTimer = null
-                    defer(500, () => {
-                        downloadState = 'Done'
-                        activeScenario = null
-                    })
+                    finishDecryptingToConfirm()
                 } else {
                     decryptPct = pct
                 }
@@ -164,7 +195,7 @@
             decryptPct = undefined
         })
         defer(8000, () => {
-            downloadState = 'Done'
+            downloadState = 'Confirm'
             activeScenario = null
         })
     }
@@ -191,10 +222,7 @@
                             decryptPct = 100
                             if (scenarioTimer) clearInterval(scenarioTimer)
                             scenarioTimer = null
-                            defer(400, () => {
-                                downloadState = 'Done'
-                                activeScenario = null
-                            })
+                            finishDecryptingToConfirm(400)
                         } else {
                             decryptPct = pct
                         }
@@ -277,8 +305,7 @@
                     {#each ALL_STATES as s (s)}
                         <button
                             class="dev-btn"
-                            class:active={downloadState === s &&
-                                !activeScenario}
+                            class:active={downloadState === s}
                             onclick={() => setStateManual(s)}
                         >
                             {s}
@@ -364,6 +391,10 @@
                     Show verified sender identity
                 </label>
                 <label class="toggle">
+                    <input type="checkbox" bind:checked={weakIdentity} />
+                    Weak identity (email only)
+                </label>
+                <label class="toggle">
                     <input type="checkbox" bind:checked={multipleRecipients} />
                     Recipients list has multiple entries
                 </label>
@@ -400,6 +431,10 @@
                         {$_('filesharing.decryptpanel.serverErrorTitle')}
                     {:else if downloadState === 'IdentityMismatch'}
                         {$_('filesharing.decryptpanel.identityMismatchTitle')}
+                    {:else if downloadState === 'Confirm'}
+                        {$_('filesharing.decryptpanel.trustHeader')}
+                    {:else if downloadState === 'Discarded'}
+                        {$_('filesharing.decryptpanel.discardedTitle')}
                     {:else}
                         {$_('filesharing.decryptpanel.header')}
                     {/if}
@@ -530,7 +565,7 @@
                             </div>
                         {/if}
                     </div>
-                {:else if downloadState === 'Decrypting' || downloadState === 'Done'}
+                {:else if downloadState === 'Decrypting'}
                     <div
                         class="state-wrap"
                         in:fade={{ duration: 300, delay: 200 }}
@@ -538,42 +573,15 @@
                     >
                         <div class="success-banner">
                             <div class="banner-row">
-                                {#if downloadState === 'Done'}
-                                    <svg
-                                        class="banner-check"
-                                        viewBox="0 0 12 10"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        in:fade={{ duration: 250, delay: 100 }}
-                                    >
-                                        <path
-                                            d="M1 5L4.5 8.5L11 1"
-                                            stroke="currentColor"
-                                            stroke-width="1.75"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        />
-                                    </svg>
-                                {/if}
                                 <p role="status">
-                                    {downloadState === 'Done'
-                                        ? $_(
-                                              'filesharing.decryptpanel.doneMessageComplete'
-                                          )
-                                        : $_(
-                                              'filesharing.decryptpanel.doneMessage'
-                                          )}
+                                    {$_('filesharing.decryptpanel.doneMessage')}
                                 </p>
                             </div>
-                            {#if downloadState === 'Decrypting'}
-                                <div transition:slide={{ duration: 280 }}>
-                                    <DecryptionProgress
-                                        percentage={decryptPct}
-                                    />
-                                </div>
-                            {/if}
+                            <div transition:slide={{ duration: 280 }}>
+                                <DecryptionProgress percentage={decryptPct} />
+                            </div>
                         </div>
-                        {#if downloadState === 'Decrypting' && showRetry}
+                        {#if showRetry}
                             <p class="retry-status" role="status">
                                 {$_('filesharing.encryptPanel.retrying', {
                                     values: {
@@ -583,14 +591,154 @@
                                 })}
                             </p>
                         {/if}
+                    </div>
+                {:else if downloadState === 'Confirm'}
+                    <div
+                        class="state-wrap"
+                        in:fade={{ duration: 300, delay: 100 }}
+                        out:fade={{ duration: 200 }}
+                    >
+                        <div class="success-banner">
+                            <div class="banner-row">
+                                <svg
+                                    class="banner-check"
+                                    viewBox="0 0 12 10"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    in:fade={{ duration: 250, delay: 100 }}
+                                >
+                                    <path
+                                        d="M1 5L4.5 8.5L11 1"
+                                        stroke="currentColor"
+                                        stroke-width="1.75"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                                <p role="status">
+                                    {$_(
+                                        'filesharing.decryptpanel.doneMessageComplete'
+                                    )}
+                                </p>
+                            </div>
+                        </div>
 
-                        {#if downloadState === 'Done'}
-                            <div in:fade={{ duration: 300, delay: 200 }}>
-                                <FileList files={fileList} />
+                        <FileList files={fileList} />
+
+                        {#if showSenderIdentity}
+                            <div class="sender-section">
+                                <svg
+                                    class="checkmark"
+                                    viewBox="0 0 12 10"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        d="M1 5L4.5 8.5L11 1"
+                                        stroke="currentColor"
+                                        stroke-width="1.75"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                                <p class="sender-label">
+                                    {$_(
+                                        'filesharing.decryptpanel.verifiedEmail'
+                                    )}
+                                </p>
+                                <strong class="sender-email">
+                                    {mockSenderIdentity.email}
+                                </strong>
+                                {#if verifiedAttributesFor(mockSenderIdentity).length > 0}
+                                    <div class="attr-chips">
+                                        {#each verifiedAttributesFor(mockSenderIdentity) as attr (attr.type)}
+                                            <span class="attr-chip">
+                                                {attr.value}
+                                            </span>
+                                        {/each}
+                                    </div>
+                                {/if}
                             </div>
                         {/if}
 
-                        {#if downloadState === 'Done' && showSenderIdentity}
+                        {#if isWeakSenderIdentity(mockSenderIdentity)}
+                            <div class="trust-warning" role="alert">
+                                <svg
+                                    class="trust-warning-icon"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="M12 3L2 21h20L12 3zm0 6v6m0 2v2"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                                <p>
+                                    {$_(
+                                        'filesharing.decryptpanel.trustWarnEmailOnly'
+                                    )}
+                                </p>
+                            </div>
+                        {/if}
+
+                        <div class="trust-actions">
+                            <button
+                                type="button"
+                                class="trust-btn trust-btn-decline"
+                                onclick={() => setStateManual('Discarded')}
+                            >
+                                {$_('filesharing.decryptpanel.trustDecline')}
+                            </button>
+                            <button
+                                type="button"
+                                class="trust-btn trust-btn-accept"
+                                onclick={() => setStateManual('Done')}
+                            >
+                                {$_('filesharing.decryptpanel.trustAccept')}
+                            </button>
+                        </div>
+                    </div>
+                {:else if downloadState === 'Done'}
+                    <div
+                        class="state-wrap"
+                        in:fade={{ duration: 300, delay: 200 }}
+                        out:fade={{ duration: 200 }}
+                    >
+                        <div class="success-banner">
+                            <div class="banner-row">
+                                <svg
+                                    class="banner-check"
+                                    viewBox="0 0 12 10"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    in:fade={{ duration: 250, delay: 100 }}
+                                >
+                                    <path
+                                        d="M1 5L4.5 8.5L11 1"
+                                        stroke="currentColor"
+                                        stroke-width="1.75"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                                <p role="status">
+                                    {$_(
+                                        'filesharing.decryptpanel.doneMessageComplete'
+                                    )}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div in:fade={{ duration: 300, delay: 200 }}>
+                            <FileList files={fileList} />
+                        </div>
+
+                        {#if showSenderIdentity}
                             <div
                                 class="sender-section"
                                 in:fade={{ duration: 300, delay: 280 }}
@@ -617,15 +765,27 @@
                                 <strong class="sender-email">
                                     {mockSenderIdentity.email}
                                 </strong>
-                                <div class="attr-chips">
-                                    {#each mockSenderIdentity.attributes.filter((a) => !a.type.includes('email') && a.value) as attr (attr.type)}
-                                        <span class="attr-chip">
-                                            {attr.value}
-                                        </span>
-                                    {/each}
-                                </div>
+                                {#if verifiedAttributesFor(mockSenderIdentity).length > 0}
+                                    <div class="attr-chips">
+                                        {#each verifiedAttributesFor(mockSenderIdentity) as attr (attr.type)}
+                                            <span class="attr-chip">
+                                                {attr.value}
+                                            </span>
+                                        {/each}
+                                    </div>
+                                {/if}
                             </div>
                         {/if}
+                    </div>
+                {:else if downloadState === 'Discarded'}
+                    <div
+                        class="state-wrap"
+                        in:fade={{ duration: 300, delay: 100 }}
+                        out:fade={{ duration: 200 }}
+                    >
+                        <p class="description" role="status">
+                            {$_('filesharing.decryptpanel.discardedBody')}
+                        </p>
                     </div>
                 {:else if downloadState === 'SessionExpired'}
                     <p class="error-description">
@@ -694,7 +854,8 @@
     .debug-shell {
         display: grid;
         grid-template-columns: 360px 1fr;
-        min-height: calc(100vh - 52px);
+        height: calc(100vh - 52px);
+        overflow: hidden;
     }
 
     .devtools {
@@ -848,20 +1009,32 @@
 
     /* ---- The block below is copy-pasted from download/+page.svelte ---- */
 
+    /* min-height is intentionally dropped here vs production: the
+       preview pane already constrains height to viewport-minus-header,
+       and the wrapper's flex centering doesn't need a baseline. With
+       the production min-height the wrapper would always overflow the
+       preview by its own padding and force a scrollbar even when the
+       inner content fits. */
     .page-wrapper {
-        min-height: calc(100vh - 52px);
         display: flex;
         align-items: flex-start;
         justify-content: center;
-        padding: 3rem 1rem 2rem;
+        padding: 2rem 1rem;
     }
 
     .content {
-        width: calc(250px + 3rem);
-        max-width: 400px;
+        width: 100%;
+        max-width: 350px;
+        padding-inline: 1rem;
         display: flex;
         flex-direction: column;
         gap: 1.25rem;
+    }
+
+    /* Mirrors the QR-fills-column override applied on the real download
+       page so the sandbox previews the same proportions. */
+    :global(#yivi-debug-flow.yivi-qr-container.responsive) {
+        max-width: 100%;
     }
 
     h2 {
@@ -1057,6 +1230,78 @@
         font-family: var(--pg-font-family);
         color: var(--pg-text-secondary);
         background: var(--pg-soft-background);
+    }
+
+    .trust-warning {
+        display: flex;
+        gap: 0.6rem;
+        align-items: flex-start;
+        padding: 0.85rem 1rem;
+        border: 1px solid var(--pg-input-error);
+        background: color-mix(in srgb, var(--pg-input-error) 8%, transparent);
+        border-radius: var(--pg-border-radius-md);
+        color: var(--pg-text);
+
+        p {
+            margin: 0;
+            font-family: var(--pg-font-family);
+            font-size: var(--pg-font-size-sm);
+            line-height: 1.45;
+        }
+    }
+
+    .trust-warning-icon {
+        width: 20px;
+        height: 20px;
+        color: var(--pg-input-error);
+        flex-shrink: 0;
+        margin-top: 0.05rem;
+    }
+
+    .trust-actions {
+        display: flex;
+        gap: 0.6rem;
+        justify-content: center;
+        margin-top: 0.25rem;
+    }
+
+    .trust-btn {
+        all: unset;
+        flex: 1 1 0;
+        box-sizing: border-box;
+        text-align: center;
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-font-size-md);
+        font-weight: var(--pg-font-weight-medium);
+        color: var(--pg-text-secondary);
+        background: transparent;
+        border: 1px solid var(--pg-input-normal);
+        border-radius: var(--pg-border-radius-sm);
+        padding: 0.55rem 1rem;
+        cursor: pointer;
+        transition:
+            background 0.2s ease,
+            color 0.2s ease,
+            border-color 0.2s ease;
+    }
+
+    .trust-btn:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+    }
+
+    .trust-btn-decline:hover,
+    .trust-btn-decline:focus-visible {
+        color: var(--pg-input-error);
+        border-color: var(--pg-input-error);
+        background: color-mix(in srgb, var(--pg-input-error) 8%, transparent);
+    }
+
+    .trust-btn-accept:hover,
+    .trust-btn-accept:focus-visible {
+        color: var(--pg-success);
+        border-color: var(--pg-success);
+        background: color-mix(in srgb, var(--pg-success) 10%, transparent);
     }
 
     .error-description {

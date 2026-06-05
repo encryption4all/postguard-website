@@ -23,3 +23,14 @@ export function verifiedAttributesFor(
             value: a.value as string,
         }))
 }
+
+/** A sender that disclosed nothing beyond an email address is a "weak"
+ *  identity claim — anyone who controls the mailbox could have signed.
+ *  The download-page trust gate uses this to escalate the warning.
+ *  A missing sender is also weak: if the file was not signed at all,
+ *  the recipient has no verified claim to act on. */
+export function isWeakSenderIdentity(
+    sender: FriendlySender | null | undefined
+): boolean {
+    return verifiedAttributesFor(sender).length === 0
+}

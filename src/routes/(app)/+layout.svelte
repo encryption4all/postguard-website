@@ -2,8 +2,13 @@
     import Header from '$lib/components/Header.svelte'
     import { isLoading } from 'svelte-i18n'
     import { resolve } from '$app/paths'
+    import { page } from '$app/state'
 
     let { children } = $props()
+
+    // Debug sandboxes are dev-only and use the full viewport for their
+    // own chrome; suppress the global footer there.
+    const isDebug = $derived(page.url.pathname.startsWith('/debug'))
 </script>
 
 {#if !$isLoading}
@@ -14,13 +19,15 @@
     <main id="main-content" tabindex="-1">
         {@render children()}
     </main>
-    <footer class="app-footer">
-        <a href={resolve('/about/')}>About</a>
-        <span class="sep">&middot;</span>
-        <a href={resolve('/privacy/')}>Privacy Policy</a>
-        <span class="sep">&middot;</span>
-        <span>Built by <a href="https://yivi.app">Yivi</a></span>
-    </footer>
+    {#if !isDebug}
+        <footer class="app-footer">
+            <a href={resolve('/about/')}>About</a>
+            <span class="sep">&middot;</span>
+            <a href={resolve('/privacy/')}>Privacy Policy</a>
+            <span class="sep">&middot;</span>
+            <span>Built by <a href="https://yivi.app">Yivi</a></span>
+        </footer>
+    {/if}
 {/if}
 
 <style>
