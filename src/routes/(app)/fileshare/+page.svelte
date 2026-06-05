@@ -12,6 +12,7 @@
     import ErrorPanel from '$lib/components/filesharing/Error.svelte'
     import Done from '$lib/components/filesharing/Done.svelte'
     import CrashReport from '$lib/components/filesharing/CrashReport.svelte'
+    import { SITE_URL } from '$lib/env'
 
     const ATTRIBUTES: Array<AttType> = [
         'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
@@ -56,7 +57,7 @@
         '@context': 'https://schema.org',
         '@type': 'WebApplication',
         name: 'PostGuard Secure File Sharing',
-        url: 'https://postguard.eu/fileshare',
+        url: `${SITE_URL}/fileshare`,
         description:
             'Send end-to-end encrypted files to anyone using their email address. Encryption happens entirely in your browser.',
         applicationCategory: 'SecurityApplication',
@@ -67,7 +68,7 @@
             priceCurrency: 'EUR',
         },
         isPartOf: {
-            '@id': 'https://postguard.eu/#website',
+            '@id': `${SITE_URL}/#website`,
         },
     }
 </script>

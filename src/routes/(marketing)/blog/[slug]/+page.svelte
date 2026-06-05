@@ -2,10 +2,10 @@
     import SEO from '$lib/components/SEO.svelte'
     import { page } from '$app/state'
     import { getAuthor } from '$lib/authors'
+    import { SITE_URL } from '$lib/env'
 
     let { data } = $props()
 
-    const siteUrl = 'https://postguard.eu'
     const author = $derived(getAuthor(data.metadata.author))
 
     const authorJsonLd = $derived(() => {
@@ -32,26 +32,26 @@
         image: data.metadata.image
             ? data.metadata.image.startsWith('http')
                 ? data.metadata.image
-                : `${siteUrl}${data.metadata.image}`
-            : `${siteUrl}/pg_logo.png`,
+                : `${SITE_URL}${data.metadata.image}`
+            : `${SITE_URL}/pg_logo.png`,
         author: authorJsonLd(),
         publisher: {
             '@type': 'Organization',
-            '@id': `${siteUrl}/#organization`,
+            '@id': `${SITE_URL}/#organization`,
             name: 'PostGuard',
             logo: {
                 '@type': 'ImageObject',
-                url: `${siteUrl}/pg_logo.png`,
+                url: `${SITE_URL}/pg_logo.png`,
                 width: 512,
                 height: 512,
             },
         },
         mainEntityOfPage: {
             '@type': 'WebPage',
-            '@id': `${siteUrl}${page.url.pathname}`,
+            '@id': `${SITE_URL}${page.url.pathname}`,
         },
         isPartOf: {
-            '@id': `${siteUrl}/#website`,
+            '@id': `${SITE_URL}/#website`,
         },
     })
 </script>

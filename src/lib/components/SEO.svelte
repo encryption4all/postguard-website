@@ -1,5 +1,6 @@
 <script>
     import { page } from '$app/state'
+    import { SITE_URL } from '$lib/env'
 
     let {
         title = '',
@@ -11,19 +12,18 @@
     } = $props()
 
     const siteName = 'PostGuard'
-    const siteUrl = 'https://postguard.eu'
     const defaultDescription =
         'PostGuard offers free and easy-to-use end-to-end encryption for emails and files.'
     const defaultImage = '/pg_logo.png'
 
     const canonicalUrl = $derived(
         canonical ||
-            (page?.url?.pathname ? `${siteUrl}${page.url.pathname}` : '')
+            (page?.url?.pathname ? `${SITE_URL}${page.url.pathname}` : '')
     )
     const ogImageUrl = $derived(
         (ogImage || defaultImage).startsWith('http')
             ? ogImage || defaultImage
-            : `${siteUrl}${ogImage || defaultImage}`
+            : `${SITE_URL}${ogImage || defaultImage}`
     )
     const jsonLdString = $derived(jsonLd ? JSON.stringify(jsonLd) : '')
 </script>

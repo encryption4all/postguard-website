@@ -1,3 +1,5 @@
+import { SITE_URL } from '$lib/env'
+
 export const prerender = true
 
 export function GET() {
@@ -35,7 +37,7 @@ export function GET() {
     const urls = entries
         .map(
             (e) =>
-                `  <url>\n    <loc>https://postguard.eu${e.path}/</loc>\n    <lastmod>${e.lastmod}</lastmod>\n  </url>`
+                `  <url>\n    <loc>${SITE_URL}${e.path}/</loc>\n    <lastmod>${e.lastmod}</lastmod>\n  </url>`
         )
         .join('\n')
 

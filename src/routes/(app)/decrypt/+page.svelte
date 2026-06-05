@@ -12,6 +12,7 @@
 
     import { _ } from 'svelte-i18n'
     import { resolve } from '$app/paths'
+    import { SITE_URL } from '$lib/env'
 
     import EmailView from '$lib/components/fallback/EmailView.svelte'
     import ListView from '$lib/components/fallback/ListView.svelte'
@@ -124,12 +125,12 @@
         '@context': 'https://schema.org',
         '@type': 'WebApplication',
         name: 'PostGuard Email Decryption',
-        url: 'https://postguard.eu/decrypt',
+        url: `${SITE_URL}/decrypt`,
         description:
             'Decrypt PostGuard-encrypted emails securely in your browser using the Yivi identity wallet.',
         applicationCategory: 'SecurityApplication',
         operatingSystem: 'Any',
-        isPartOf: { '@id': 'https://postguard.eu/#website' },
+        isPartOf: { '@id': `${SITE_URL}/#website` },
     }}
 />
 
