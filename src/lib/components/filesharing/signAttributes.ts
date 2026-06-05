@@ -12,12 +12,20 @@ import type { AttrConItem } from '@e4a/pg-js'
  *   - `pbdf.pbdf.idcard.{firstName,lastName}`, OR
  *   - `pbdf.pbdf.drivinglicence.{firstName,lastName}`.
  *
- * The leading `[]` alternative makes the whole group optional per Yivi
+ * The trailing `[]` alternative makes the whole group optional per Yivi
  * convention — senders without any of these credentials can still send.
+ *
+ * Workaround for irmamobile#360: the empty-alternative `[]` must come
+ * LAST in each discon, not first. When it comes first, optional
+ * attributes disclosed from the same credential as a mandatory
+ * attribute are silently dropped before reaching the requestor. For
+ * the same reason we expand the per-attribute `optional: true`
+ * shorthand by hand into `[[attr], []]` instead of relying on pg-js to
+ * emit `[[], [attr]]`. Revert once the irmamobile fix has shipped to
+ * the app stores.
  */
 export const SIGN_ATTRIBUTES: AttrConItem[] = [
     [
-        [],
         [{ t: 'pbdf.gemeente.personalData.fullname' }],
         [
             { t: 'pbdf.pbdf.passport.firstName' },
@@ -31,7 +39,8 @@ export const SIGN_ATTRIBUTES: AttrConItem[] = [
             { t: 'pbdf.pbdf.drivinglicence.firstName' },
             { t: 'pbdf.pbdf.drivinglicence.lastName' },
         ],
+        [],
     ],
-    { t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber', optional: true },
-    { t: 'pbdf.gemeente.personalData.dateofbirth', optional: true },
+    [[{ t: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber' }], []],
+    [[{ t: 'pbdf.gemeente.personalData.dateofbirth' }], []],
 ]

@@ -18,6 +18,7 @@
     import FileList from '$lib/components/filesharing/FileList.svelte'
     import DecryptionProgress from '$lib/components/filesharing/DecryptionProgress.svelte'
     import ReportErrorButton from '$lib/components/filesharing/ReportErrorButton.svelte'
+    import { verifiedAttributesFor } from '$lib/components/filesharing/verifiedAttributes'
     import { isMobile } from '$lib/browser-detect'
     import Chip from '$lib/components/Chip.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
@@ -302,6 +303,17 @@
                         <strong class="sender-email"
                             >{senderIdentity.email}</strong
                         >
+                        {#if verifiedAttributesFor(senderIdentity).length > 0}
+                            <p class="sender-label sender-label-extra">
+                                {$_('filesharing.decryptpanel.verifiedExtra')}
+                            </p>
+                            <dl class="attr-list">
+                                {#each verifiedAttributesFor(senderIdentity) as attr (attr.type)}
+                                    <dt>{$_(attr.labelKey)}</dt>
+                                    <dd>{attr.value}</dd>
+                                {/each}
+                            </dl>
+                        {/if}
                     </div>
                 {/if}
             </div>
@@ -386,12 +398,16 @@
                         <strong class="sender-email"
                             >{senderIdentity.email}</strong
                         >
-                        {#if senderIdentity.attributes.filter((a) => !a.type.includes('email') && a.value).length > 0}
-                            <div class="attr-chips">
-                                {#each senderIdentity.attributes.filter((a) => !a.type.includes('email') && a.value) as attr (attr.type)}
-                                    <span class="attr-chip">{attr.value}</span>
+                        {#if verifiedAttributesFor(senderIdentity).length > 0}
+                            <p class="sender-label sender-label-extra">
+                                {$_('filesharing.decryptpanel.verifiedExtra')}
+                            </p>
+                            <dl class="attr-list">
+                                {#each verifiedAttributesFor(senderIdentity) as attr (attr.type)}
+                                    <dt>{$_(attr.labelKey)}</dt>
+                                    <dd>{attr.value}</dd>
                                 {/each}
-                            </div>
+                            </dl>
                         {/if}
                     </div>
                 {/if}
@@ -638,23 +654,30 @@
         margin-top: 0.1rem;
     }
 
-    .attr-chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-        justify-content: center;
+    .sender-label-extra {
+        margin-top: 0.5rem;
     }
 
-    .attr-chip {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.2rem 0.6rem;
-        border: 1px solid var(--pg-strong-background);
-        border-radius: 4px;
-        font-size: var(--pg-font-size-sm);
-        color: var(--pg-text-secondary);
+    .attr-list {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        column-gap: 0.6rem;
+        row-gap: 0.2rem;
+        margin: 0;
         font-family: var(--pg-font-family);
-        background: var(--pg-general-background);
+        font-size: var(--pg-font-size-sm);
+    }
+
+    .attr-list dt {
+        color: var(--pg-text-secondary);
+        text-align: right;
+    }
+
+    .attr-list dd {
+        margin: 0;
+        color: var(--pg-text);
+        font-weight: var(--pg-font-weight-bold);
+        text-align: left;
     }
 
     .retry-wrapper,
