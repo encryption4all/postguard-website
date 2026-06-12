@@ -31,7 +31,7 @@ jobs:
       - run: npx svelte-kit sync
       - run: npx svelte-check --threshold warning
 
-  # Run prettier --check and eslint.
+  # Run prettier --check, eslint, and stylelint.
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -44,6 +44,8 @@ jobs:
       - run: npm ci
       - run: npx svelte-kit sync
       - run: npm run lint
+      # Fail on references to undefined CSS custom properties (e.g. typo'd --pg-* tokens).
+      - run: npm run lint:css
 
   # Create a GitHub release (and tag) when conventional commits warrant one.
   release-please:
