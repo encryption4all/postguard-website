@@ -23,6 +23,7 @@
         isWeakSenderIdentity,
         verifiedAttributesFor,
     } from '$lib/components/filesharing/verifiedAttributes'
+    import UnsignedConfirmModal from '$lib/components/filesharing/UnsignedConfirmModal.svelte'
     import { isMobile } from '$lib/browser-detect'
     import Chip from '$lib/components/Chip.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
@@ -63,24 +64,10 @@
     const YIVI_SUCCESS_HOLD_MS = 1400
     let pendingDecryptFlip: ReturnType<typeof setTimeout> | null = null
 
-    // An unsigned file (no verifiable sender) time-locks the download
-    // button so the recipient is forced to read the strong warning before
-    // they can accept. Every other case stays clickable immediately.
-    const TRUST_UNLOCK_MS = 5000
-    let acceptUnlocked = $state(false)
-    const acceptGated = $derived.by(
-        () => downloadState === 'Confirm' && isUnsignedSender(senderIdentity)
-    )
-    const downloadCountingDown = $derived(acceptGated && !acceptUnlocked)
-
-    $effect(() => {
-        if (!acceptGated) return
-        acceptUnlocked = false
-        const timer = setTimeout(() => {
-            acceptUnlocked = true
-        }, TRUST_UNLOCK_MS)
-        return () => clearTimeout(timer)
-    })
+    // An unsigned file (no verifiable sender) is the weakest case, so
+    // accepting it takes one extra confirmation in a modal rather than a
+    // single click. Every other case downloads immediately on click.
+    let showUnsignedConfirm = $state(false)
 
     let isMobileDevice = isMobile()
 
@@ -199,7 +186,18 @@
         }
     }
 
+    // Unsigned files route through an extra confirmation modal; everything
+    // else downloads straight away.
+    function requestAccept() {
+        if (isUnsignedSender(senderIdentity)) {
+            showUnsignedConfirm = true
+        } else {
+            acceptDownload()
+        }
+    }
+
     function acceptDownload() {
+        showUnsignedConfirm = false
         decryptResult?.download()
         decryptResult = null
         downloadState = 'Done'
@@ -505,22 +503,18 @@
                     <button
                         type="button"
                         class="trust-btn trust-btn-accept"
-                        class:trust-btn-locked={downloadCountingDown}
-                        onclick={acceptDownload}
-                        disabled={downloadCountingDown}
+                        onclick={requestAccept}
                     >
-                        {#if downloadCountingDown}
-                            <span
-                                class="trust-btn-progress"
-                                style="animation-duration: {TRUST_UNLOCK_MS}ms"
-                                aria-hidden="true"
-                            ></span>
-                        {/if}
-                        <span class="trust-btn-label">
-                            {$_('filesharing.decryptpanel.trustAccept')}
-                        </span>
+                        {$_('filesharing.decryptpanel.trustAccept')}
                     </button>
                 </div>
+
+                {#if showUnsignedConfirm}
+                    <UnsignedConfirmModal
+                        onConfirm={acceptDownload}
+                        onCancel={() => (showUnsignedConfirm = false)}
+                    />
+                {/if}
             </div>
         {:else if downloadState === 'Done'}
             <div
@@ -887,12 +881,13 @@
     }
 
     .trust-warning {
+        --trust-accent: var(--pg-warning);
         display: flex;
         gap: 0.6rem;
         align-items: flex-start;
         padding: 0.85rem 1rem;
-        border: 1px solid var(--pg-input-error);
-        background: color-mix(in srgb, var(--pg-input-error) 8%, transparent);
+        border: 1px solid var(--trust-accent);
+        background: color-mix(in srgb, var(--trust-accent) 8%, transparent);
         border-radius: var(--pg-border-radius-md);
         color: var(--pg-text);
 
@@ -904,21 +899,16 @@
         }
     }
 
-    /* The unsigned case is the weakest of all, so its warning is louder
-       than the email-only one: thicker border, more saturated fill. */
+    /* The unsigned case is the most severe: same layout as the email-only
+       warning, but red instead of orange. */
     .trust-warning-strong {
-        border-width: 2px;
-        background: color-mix(in srgb, var(--pg-input-error) 16%, transparent);
-    }
-
-    .trust-warning-strong p {
-        font-weight: var(--pg-font-weight-medium);
+        --trust-accent: var(--pg-input-error);
     }
 
     .trust-warning-icon {
         width: 20px;
         height: 20px;
-        color: var(--pg-input-error);
+        color: var(--trust-accent);
         flex-shrink: 0;
         margin-top: 0.05rem;
     }
@@ -962,49 +952,10 @@
         background: color-mix(in srgb, var(--pg-input-error) 8%, transparent);
     }
 
-    .trust-btn-accept {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .trust-btn-accept:hover:not(:disabled),
+    .trust-btn-accept:hover,
     .trust-btn-accept:focus-visible {
         color: var(--pg-success);
         border-color: var(--pg-success);
         background: color-mix(in srgb, var(--pg-success) 10%, transparent);
-    }
-
-    .trust-btn-label {
-        position: relative;
-        z-index: 1;
-    }
-
-    /* Fill the download button left-to-right over TRUST_UNLOCK_MS (set via
-       the inline animation-duration) so an unsigned-file recipient sees the
-       button arming and is forced to wait — and read — before accepting. */
-    .trust-btn-progress {
-        position: absolute;
-        inset: 0 auto 0 0;
-        width: 0;
-        background: color-mix(in srgb, var(--pg-success) 22%, transparent);
-        animation-name: trust-btn-fill;
-        animation-timing-function: linear;
-        animation-fill-mode: forwards;
-        pointer-events: none;
-    }
-
-    @keyframes trust-btn-fill {
-        from {
-            width: 0;
-        }
-        to {
-            width: 100%;
-        }
-    }
-
-    .trust-btn-locked {
-        cursor: not-allowed;
-        color: var(--pg-text-secondary);
-        border-color: var(--pg-input-normal);
     }
 </style>

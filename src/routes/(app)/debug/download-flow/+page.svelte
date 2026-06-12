@@ -8,6 +8,7 @@
     import ReportErrorButton from '$lib/components/filesharing/ReportErrorButton.svelte'
     import Chip from '$lib/components/Chip.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
+    import UnsignedConfirmModal from '$lib/components/filesharing/UnsignedConfirmModal.svelte'
     import type { FriendlySender } from '@e4a/pg-js'
     import {
         isUnsignedSender,
@@ -85,24 +86,22 @@
         raw: { public: { con: [] } },
     })
 
-    // Mirror the production download button time-lock so the unsigned
-    // preview behaves like the real page (see download/+page.svelte).
-    const TRUST_UNLOCK_MS = 5000
-    let acceptUnlocked = $state(false)
-    const acceptGated = $derived.by(
-        () =>
-            downloadState === 'Confirm' && isUnsignedSender(mockSenderIdentity)
-    )
-    const downloadCountingDown = $derived(acceptGated && !acceptUnlocked)
+    // Mirror the production flow: unsigned files route the download action
+    // through an extra confirmation modal (see download/+page.svelte).
+    let showUnsignedConfirm = $state(false)
 
-    $effect(() => {
-        if (!acceptGated) return
-        acceptUnlocked = false
-        const timer = setTimeout(() => {
-            acceptUnlocked = true
-        }, TRUST_UNLOCK_MS)
-        return () => clearTimeout(timer)
-    })
+    function requestAccept() {
+        if (isUnsignedSender(mockSenderIdentity)) {
+            showUnsignedConfirm = true
+        } else {
+            setStateManual('Done')
+        }
+    }
+
+    function confirmAccept() {
+        showUnsignedConfirm = false
+        setStateManual('Done')
+    }
 
     let showSenderIdentity = $state(true)
     let multipleRecipients = $state(false)
@@ -261,6 +260,7 @@
 
     function setStateManual(s: DownloadState) {
         clearScenario()
+        showUnsignedConfirm = false
         downloadState = s
         if (s === 'Decrypting') {
             // leave pct as-is so the slider value persists
@@ -756,22 +756,18 @@
                             <button
                                 type="button"
                                 class="trust-btn trust-btn-accept"
-                                class:trust-btn-locked={downloadCountingDown}
-                                onclick={() => setStateManual('Done')}
-                                disabled={downloadCountingDown}
+                                onclick={requestAccept}
                             >
-                                {#if downloadCountingDown}
-                                    <span
-                                        class="trust-btn-progress"
-                                        style="animation-duration: {TRUST_UNLOCK_MS}ms"
-                                        aria-hidden="true"
-                                    ></span>
-                                {/if}
-                                <span class="trust-btn-label">
-                                    {$_('filesharing.decryptpanel.trustAccept')}
-                                </span>
+                                {$_('filesharing.decryptpanel.trustAccept')}
                             </button>
                         </div>
+
+                        {#if showUnsignedConfirm}
+                            <UnsignedConfirmModal
+                                onConfirm={confirmAccept}
+                                onCancel={() => (showUnsignedConfirm = false)}
+                            />
+                        {/if}
                     </div>
                 {:else if downloadState === 'Done'}
                     <div
@@ -1303,12 +1299,13 @@
     }
 
     .trust-warning {
+        --trust-accent: var(--pg-warning);
         display: flex;
         gap: 0.6rem;
         align-items: flex-start;
         padding: 0.85rem 1rem;
-        border: 1px solid var(--pg-input-error);
-        background: color-mix(in srgb, var(--pg-input-error) 8%, transparent);
+        border: 1px solid var(--trust-accent);
+        background: color-mix(in srgb, var(--trust-accent) 8%, transparent);
         border-radius: var(--pg-border-radius-md);
         color: var(--pg-text);
 
@@ -1320,21 +1317,16 @@
         }
     }
 
-    /* The unsigned case is the weakest of all, so its warning is louder
-       than the email-only one: thicker border, more saturated fill. */
+    /* The unsigned case is the most severe: same layout as the email-only
+       warning, but red instead of orange. */
     .trust-warning-strong {
-        border-width: 2px;
-        background: color-mix(in srgb, var(--pg-input-error) 16%, transparent);
-    }
-
-    .trust-warning-strong p {
-        font-weight: var(--pg-font-weight-medium);
+        --trust-accent: var(--pg-input-error);
     }
 
     .trust-warning-icon {
         width: 20px;
         height: 20px;
-        color: var(--pg-input-error);
+        color: var(--trust-accent);
         flex-shrink: 0;
         margin-top: 0.05rem;
     }
@@ -1378,50 +1370,11 @@
         background: color-mix(in srgb, var(--pg-input-error) 8%, transparent);
     }
 
-    .trust-btn-accept {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .trust-btn-accept:hover:not(:disabled),
+    .trust-btn-accept:hover,
     .trust-btn-accept:focus-visible {
         color: var(--pg-success);
         border-color: var(--pg-success);
         background: color-mix(in srgb, var(--pg-success) 10%, transparent);
-    }
-
-    .trust-btn-label {
-        position: relative;
-        z-index: 1;
-    }
-
-    /* Fill the download button left-to-right over TRUST_UNLOCK_MS (set via
-       the inline animation-duration) so an unsigned-file recipient sees the
-       button arming and is forced to wait — and read — before accepting. */
-    .trust-btn-progress {
-        position: absolute;
-        inset: 0 auto 0 0;
-        width: 0;
-        background: color-mix(in srgb, var(--pg-success) 22%, transparent);
-        animation-name: trust-btn-fill;
-        animation-timing-function: linear;
-        animation-fill-mode: forwards;
-        pointer-events: none;
-    }
-
-    @keyframes trust-btn-fill {
-        from {
-            width: 0;
-        }
-        to {
-            width: 100%;
-        }
-    }
-
-    .trust-btn-locked {
-        cursor: not-allowed;
-        color: var(--pg-text-secondary);
-        border-color: var(--pg-input-normal);
     }
 
     .error-description {
