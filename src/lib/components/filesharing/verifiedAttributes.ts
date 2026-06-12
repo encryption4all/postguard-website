@@ -23,3 +23,24 @@ export function verifiedAttributesFor(
             value: a.value as string,
         }))
 }
+
+/** A sender that verified an email address but disclosed nothing beyond
+ *  it is a "weak" identity claim — anyone who controls the mailbox could
+ *  have signed. The download-page trust gate uses this to escalate the
+ *  warning. A missing sender (an unsigned file) is not "weak email-only":
+ *  there is no email to caveat, so the email-only warning does not apply. */
+export function isWeakSenderIdentity(
+    sender: FriendlySender | null | undefined
+): boolean {
+    return !!sender?.email && verifiedAttributesFor(sender).length === 0
+}
+
+/** A file with no verifiable sender at all: it was not signed, or the
+ *  signature carries no email (the public signing identity). This is the
+ *  weakest case — there is no identity claim to evaluate — so the download
+ *  gate shows the strongest warning and time-locks the download button. */
+export function isUnsignedSender(
+    sender: FriendlySender | null | undefined
+): boolean {
+    return !sender?.email
+}

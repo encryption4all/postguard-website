@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import { verifiedAttributesFor } from './verifiedAttributes'
+import {
+    isUnsignedSender,
+    isWeakSenderIdentity,
+    verifiedAttributesFor,
+} from './verifiedAttributes'
 import type { FriendlySender } from '@e4a/pg-js'
 
 const sender = (attrs: { type: string; value?: string }[]): FriendlySender => ({
@@ -89,5 +93,104 @@ describe('verifiedAttributesFor', () => {
             sender([{ type: 'pbdf.sidn-pbdf.email.email', value: 'a@b.com' }])
         )
         expect(result).toEqual([])
+    })
+})
+
+describe('isWeakSenderIdentity', () => {
+    it('does not treat a missing sender as email-only weak', () => {
+        // An unsigned file has no email to caveat, so the email-only
+        // warning copy does not apply — flagging it would be inaccurate.
+        expect(isWeakSenderIdentity(null)).toBe(false)
+        expect(isWeakSenderIdentity(undefined)).toBe(false)
+    })
+
+    it('does not treat a sender with no verified email as email-only weak', () => {
+        // No email and nothing else disclosed: there is no email claim to
+        // warn about, so this is not the email-only case.
+        expect(isWeakSenderIdentity(sender([]))).toBe(false)
+    })
+
+    it('treats an email-only sender as weak', () => {
+        expect(
+            isWeakSenderIdentity(
+                sender([
+                    {
+                        type: 'pbdf.sidn-pbdf.email.email',
+                        value: 'a@b.com',
+                    },
+                ])
+            )
+        ).toBe(true)
+    })
+
+    it('treats a sender with any verified non-email attribute as strong', () => {
+        expect(
+            isWeakSenderIdentity(
+                sender([
+                    {
+                        type: 'pbdf.sidn-pbdf.email.email',
+                        value: 'a@b.com',
+                    },
+                    {
+                        type: 'pbdf.gemeente.personalData.fullname',
+                        value: 'R.A. Hensen',
+                    },
+                ])
+            )
+        ).toBe(false)
+    })
+
+    it('ignores non-email attributes whose value is empty', () => {
+        // An attribute type without a value carries no signal — it must
+        // not flip the gate from "weak" to "strong".
+        expect(
+            isWeakSenderIdentity(
+                sender([
+                    {
+                        type: 'pbdf.sidn-pbdf.email.email',
+                        value: 'a@b.com',
+                    },
+                    {
+                        type: 'pbdf.gemeente.personalData.fullname',
+                        value: undefined,
+                    },
+                ])
+            )
+        ).toBe(true)
+    })
+})
+
+describe('isUnsignedSender', () => {
+    it('treats a missing sender as unsigned', () => {
+        expect(isUnsignedSender(null)).toBe(true)
+        expect(isUnsignedSender(undefined)).toBe(true)
+    })
+
+    it('treats a sender with no verified email as unsigned', () => {
+        expect(isUnsignedSender(sender([]))).toBe(true)
+    })
+
+    it('does not treat an email-only sender as unsigned', () => {
+        expect(
+            isUnsignedSender(
+                sender([
+                    { type: 'pbdf.sidn-pbdf.email.email', value: 'a@b.com' },
+                ])
+            )
+        ).toBe(false)
+    })
+
+    it('does not treat a fully verified sender as unsigned', () => {
+        expect(
+            isUnsignedSender(
+                sender([
+                    { type: 'pbdf.sidn-pbdf.email.email', value: 'a@b.com' },
+                    {
+                        type: 'pbdf.gemeente.personalData.fullname',
+                        value: 'R.A. Hensen',
+                    },
+                ])
+            )
+        ).toBe(false)
     })
 })

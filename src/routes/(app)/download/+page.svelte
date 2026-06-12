@@ -18,7 +18,12 @@
     import FileList from '$lib/components/filesharing/FileList.svelte'
     import DecryptionProgress from '$lib/components/filesharing/DecryptionProgress.svelte'
     import ReportErrorButton from '$lib/components/filesharing/ReportErrorButton.svelte'
-    import { verifiedAttributesFor } from '$lib/components/filesharing/verifiedAttributes'
+    import {
+        isUnsignedSender,
+        isWeakSenderIdentity,
+        verifiedAttributesFor,
+    } from '$lib/components/filesharing/verifiedAttributes'
+    import UnsignedConfirmModal from '$lib/components/filesharing/UnsignedConfirmModal.svelte'
     import { isMobile } from '$lib/browser-detect'
     import Chip from '$lib/components/Chip.svelte'
     import HelpToggle from '$lib/components/HelpToggle.svelte'
@@ -28,7 +33,9 @@
         | 'Recipients'
         | 'Ready'
         | 'Decrypting'
+        | 'Confirm'
         | 'Done'
+        | 'Discarded'
         | 'Fail'
         | 'ServerError'
         | 'IdentityMismatch'
@@ -45,6 +52,10 @@
     let fileList: string[] = $state([])
     let decryptPct: number | undefined = $state(undefined)
     let lastError: unknown = $state(null)
+    // Held in memory between decrypt completion and the user accepting
+    // the trust gate. Cleared after a successful download (so blobs can
+    // be GC'd once the browser has them) or on discard.
+    let decryptResult: DecryptFileResult | null = $state(null)
 
     let opened: Awaited<ReturnType<typeof pg.open>> | null = null
 
@@ -52,6 +63,11 @@
     // animation can finish before we swap in the progress banner.
     const YIVI_SUCCESS_HOLD_MS = 1400
     let pendingDecryptFlip: ReturnType<typeof setTimeout> | null = null
+
+    // An unsigned file (no verifiable sender) is the weakest case, so
+    // accepting it takes one extra confirmation in a modal rather than a
+    // single click. Every other case downloads immediately on click.
+    let showUnsignedConfirm = $state(false)
 
     let isMobileDevice = isMobile()
 
@@ -148,12 +164,12 @@
 
             senderIdentity = result.sender
             fileList = result.files.map((f) => f.name)
+            decryptResult = result
 
-            // Trigger automatic download (one browser download per file)
-            result.download()
-
+            // Files are decrypted into in-memory blobs; we hand them to
+            // the browser only after the user passes the trust gate.
             retryStatus.set(null)
-            downloadState = 'Done'
+            downloadState = 'Confirm'
         } catch (e) {
             if (dev) console.error('[download] decrypt error:', e)
             retryStatus.set(null)
@@ -168,6 +184,28 @@
                 downloadState = 'Fail'
             }
         }
+    }
+
+    // Unsigned files route through an extra confirmation modal; everything
+    // else downloads straight away.
+    function requestAccept() {
+        if (isUnsignedSender(senderIdentity)) {
+            showUnsignedConfirm = true
+        } else {
+            acceptDownload()
+        }
+    }
+
+    function acceptDownload() {
+        showUnsignedConfirm = false
+        decryptResult?.download()
+        decryptResult = null
+        downloadState = 'Done'
+    }
+
+    function discardDownload() {
+        decryptResult = null
+        downloadState = 'Discarded'
     }
 
     function retry() {
@@ -186,6 +224,10 @@
                 {$_('filesharing.decryptpanel.serverErrorTitle')}
             {:else if downloadState === 'IdentityMismatch'}
                 {$_('filesharing.decryptpanel.identityMismatchTitle')}
+            {:else if downloadState === 'Confirm'}
+                {$_('filesharing.decryptpanel.trustHeader')}
+            {:else if downloadState === 'Discarded'}
+                {$_('filesharing.decryptpanel.discardedTitle')}
             {:else}
                 {$_('filesharing.decryptpanel.header')}
             {/if}
@@ -304,20 +346,16 @@
                             >{senderIdentity.email}</strong
                         >
                         {#if verifiedAttributesFor(senderIdentity).length > 0}
-                            <p class="sender-label sender-label-extra">
-                                {$_('filesharing.decryptpanel.verifiedExtra')}
-                            </p>
-                            <dl class="attr-list">
+                            <div class="attr-chips">
                                 {#each verifiedAttributesFor(senderIdentity) as attr (attr.type)}
-                                    <dt>{$_(attr.labelKey)}</dt>
-                                    <dd>{attr.value}</dd>
+                                    <span class="attr-chip">{attr.value}</span>
                                 {/each}
-                            </dl>
+                            </div>
                         {/if}
                     </div>
                 {/if}
             </div>
-        {:else if downloadState === 'Decrypting' || downloadState === 'Done'}
+        {:else if downloadState === 'Decrypting'}
             <div
                 class="state-wrap"
                 in:fade={{ duration: 300, delay: 200 }}
@@ -325,38 +363,15 @@
             >
                 <div class="success-banner">
                     <div class="banner-row">
-                        {#if downloadState === 'Done'}
-                            <svg
-                                class="banner-check"
-                                viewBox="0 0 12 10"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                in:fade={{ duration: 250, delay: 100 }}
-                            >
-                                <path
-                                    d="M1 5L4.5 8.5L11 1"
-                                    stroke="currentColor"
-                                    stroke-width="1.75"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
-                        {/if}
                         <p role="status">
-                            {downloadState === 'Done'
-                                ? $_(
-                                      'filesharing.decryptpanel.doneMessageComplete'
-                                  )
-                                : $_('filesharing.decryptpanel.doneMessage')}
+                            {$_('filesharing.decryptpanel.doneMessage')}
                         </p>
                     </div>
-                    {#if downloadState === 'Decrypting'}
-                        <div transition:slide={{ duration: 280 }}>
-                            <DecryptionProgress percentage={decryptPct} />
-                        </div>
-                    {/if}
+                    <div transition:slide={{ duration: 280 }}>
+                        <DecryptionProgress percentage={decryptPct} />
+                    </div>
                 </div>
-                {#if downloadState === 'Decrypting' && $retryStatus}
+                {#if $retryStatus}
                     <p class="retry-status" role="status">
                         {$_('filesharing.encryptPanel.retrying', {
                             values: {
@@ -366,14 +381,175 @@
                         })}
                     </p>
                 {/if}
+            </div>
+        {:else if downloadState === 'Confirm'}
+            <div
+                class="state-wrap"
+                in:fade={{ duration: 300, delay: 100 }}
+                out:fade={{ duration: 200 }}
+            >
+                <div class="success-banner">
+                    <div class="banner-row">
+                        <svg
+                            class="banner-check"
+                            viewBox="0 0 12 10"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            in:fade={{ duration: 250, delay: 100 }}
+                        >
+                            <path
+                                d="M1 5L4.5 8.5L11 1"
+                                stroke="currentColor"
+                                stroke-width="1.75"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <p role="status">
+                            {$_('filesharing.decryptpanel.readyToDownload')}
+                        </p>
+                    </div>
+                </div>
 
-                {#if downloadState === 'Done'}
-                    <div in:fade={{ duration: 300, delay: 200 }}>
-                        <FileList files={fileList} />
+                <FileList files={fileList} />
+
+                {#if senderIdentity?.email}
+                    <div class="sender-section">
+                        <svg
+                            class="checkmark"
+                            viewBox="0 0 12 10"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M1 5L4.5 8.5L11 1"
+                                stroke="currentColor"
+                                stroke-width="1.75"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <p class="sender-label">
+                            {$_('filesharing.decryptpanel.verifiedEmail')}
+                        </p>
+                        <strong class="sender-email"
+                            >{senderIdentity.email}</strong
+                        >
+                        {#if verifiedAttributesFor(senderIdentity).length > 0}
+                            <div class="attr-chips">
+                                {#each verifiedAttributesFor(senderIdentity) as attr (attr.type)}
+                                    <span class="attr-chip">{attr.value}</span>
+                                {/each}
+                            </div>
+                        {/if}
                     </div>
                 {/if}
 
-                {#if downloadState === 'Done' && senderIdentity?.email}
+                {#if isUnsignedSender(senderIdentity)}
+                    <div
+                        class="trust-warning trust-warning-strong"
+                        role="alert"
+                    >
+                        <svg
+                            class="trust-warning-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                        >
+                            <path
+                                d="M12 3L2 21h20L12 3zm0 6v6m0 2v2"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <p>
+                            {$_('filesharing.decryptpanel.trustWarnUnsigned')}
+                        </p>
+                    </div>
+                {:else if isWeakSenderIdentity(senderIdentity)}
+                    <div class="trust-warning" role="alert">
+                        <svg
+                            class="trust-warning-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                        >
+                            <path
+                                d="M12 3L2 21h20L12 3zm0 6v6m0 2v2"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <p>
+                            {$_('filesharing.decryptpanel.trustWarnEmailOnly')}
+                        </p>
+                    </div>
+                {/if}
+
+                <div class="trust-actions">
+                    <button
+                        type="button"
+                        class="trust-btn trust-btn-decline"
+                        onclick={discardDownload}
+                    >
+                        {$_('filesharing.decryptpanel.trustDecline')}
+                    </button>
+                    <button
+                        type="button"
+                        class="trust-btn trust-btn-accept"
+                        onclick={requestAccept}
+                    >
+                        {$_('filesharing.decryptpanel.trustAccept')}
+                    </button>
+                </div>
+
+                {#if showUnsignedConfirm}
+                    <UnsignedConfirmModal
+                        onConfirm={acceptDownload}
+                        onCancel={() => (showUnsignedConfirm = false)}
+                    />
+                {/if}
+            </div>
+        {:else if downloadState === 'Done'}
+            <div
+                class="state-wrap"
+                in:fade={{ duration: 300, delay: 200 }}
+                out:fade={{ duration: 200 }}
+            >
+                <div class="success-banner">
+                    <div class="banner-row">
+                        <svg
+                            class="banner-check"
+                            viewBox="0 0 12 10"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            in:fade={{ duration: 250, delay: 100 }}
+                        >
+                            <path
+                                d="M1 5L4.5 8.5L11 1"
+                                stroke="currentColor"
+                                stroke-width="1.75"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <p role="status">
+                            {$_('filesharing.decryptpanel.doneMessageComplete')}
+                        </p>
+                    </div>
+                </div>
+
+                <div in:fade={{ duration: 300, delay: 200 }}>
+                    <FileList files={fileList} />
+                </div>
+
+                {#if senderIdentity?.email}
                     <div
                         class="sender-section"
                         in:fade={{ duration: 300, delay: 280 }}
@@ -399,18 +575,24 @@
                             >{senderIdentity.email}</strong
                         >
                         {#if verifiedAttributesFor(senderIdentity).length > 0}
-                            <p class="sender-label sender-label-extra">
-                                {$_('filesharing.decryptpanel.verifiedExtra')}
-                            </p>
-                            <dl class="attr-list">
+                            <div class="attr-chips">
                                 {#each verifiedAttributesFor(senderIdentity) as attr (attr.type)}
-                                    <dt>{$_(attr.labelKey)}</dt>
-                                    <dd>{attr.value}</dd>
+                                    <span class="attr-chip">{attr.value}</span>
                                 {/each}
-                            </dl>
+                            </div>
                         {/if}
                     </div>
                 {/if}
+            </div>
+        {:else if downloadState === 'Discarded'}
+            <div
+                class="state-wrap"
+                in:fade={{ duration: 300, delay: 100 }}
+                out:fade={{ duration: 200 }}
+            >
+                <p class="description" role="status">
+                    {$_('filesharing.decryptpanel.discardedBody')}
+                </p>
             </div>
         {:else if downloadState === 'SessionExpired'}
             <p class="error-description">
@@ -471,11 +653,20 @@
     }
 
     .content {
-        width: calc(250px + 3rem);
-        max-width: 400px;
+        width: 100%;
+        max-width: 350px;
+        padding-inline: 1rem;
         display: flex;
         flex-direction: column;
         gap: 1.25rem;
+    }
+
+    /* Let the Yivi QR fill the (now narrower) column instead of capping
+       at the global 330px. With column = 350px and the decrypt-card's
+       padding the QR lands around the previous 330px mark while staying
+       linked to the column width. */
+    :global(#yivi-download.yivi-qr-container.responsive) {
+        max-width: 100%;
     }
 
     h2 {
@@ -654,30 +845,23 @@
         margin-top: 0.1rem;
     }
 
-    .sender-label-extra {
-        margin-top: 0.5rem;
+    .attr-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        justify-content: center;
     }
 
-    .attr-list {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        column-gap: 0.6rem;
-        row-gap: 0.2rem;
-        margin: 0;
-        font-family: var(--pg-font-family);
+    .attr-chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0.6rem;
+        border: 1px solid var(--pg-strong-background);
+        border-radius: 4px;
         font-size: var(--pg-font-size-sm);
-    }
-
-    .attr-list dt {
         color: var(--pg-text-secondary);
-        text-align: right;
-    }
-
-    .attr-list dd {
-        margin: 0;
-        color: var(--pg-text);
-        font-weight: var(--pg-font-weight-bold);
-        text-align: left;
+        font-family: var(--pg-font-family);
+        background: var(--pg-general-background);
     }
 
     .retry-wrapper,
@@ -694,5 +878,84 @@
         line-height: 1.5;
         text-align: center;
         color: var(--pg-text);
+    }
+
+    .trust-warning {
+        --trust-accent: var(--pg-warning);
+        display: flex;
+        gap: 0.6rem;
+        align-items: flex-start;
+        padding: 0.85rem 1rem;
+        border: 1px solid var(--trust-accent);
+        background: color-mix(in srgb, var(--trust-accent) 8%, transparent);
+        border-radius: var(--pg-border-radius-md);
+        color: var(--pg-text);
+
+        p {
+            margin: 0;
+            font-family: var(--pg-font-family);
+            font-size: var(--pg-font-size-sm);
+            line-height: 1.45;
+        }
+    }
+
+    /* The unsigned case is the most severe: same layout as the email-only
+       warning, but red instead of orange. */
+    .trust-warning-strong {
+        --trust-accent: var(--pg-input-error);
+    }
+
+    .trust-warning-icon {
+        width: 20px;
+        height: 20px;
+        color: var(--trust-accent);
+        flex-shrink: 0;
+        margin-top: 0.05rem;
+    }
+
+    .trust-actions {
+        display: flex;
+        gap: 0.6rem;
+        justify-content: center;
+        margin-top: 0.25rem;
+    }
+
+    .trust-btn {
+        all: unset;
+        flex: 1 1 0;
+        box-sizing: border-box;
+        text-align: center;
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-font-size-md);
+        font-weight: var(--pg-font-weight-medium);
+        color: var(--pg-text-secondary);
+        background: transparent;
+        border: 1px solid var(--pg-input-normal);
+        border-radius: var(--pg-border-radius-sm);
+        padding: 0.55rem 1rem;
+        cursor: pointer;
+        transition:
+            background 0.2s ease,
+            color 0.2s ease,
+            border-color 0.2s ease;
+    }
+
+    .trust-btn:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+    }
+
+    .trust-btn-decline:hover,
+    .trust-btn-decline:focus-visible {
+        color: var(--pg-input-error);
+        border-color: var(--pg-input-error);
+        background: color-mix(in srgb, var(--pg-input-error) 8%, transparent);
+    }
+
+    .trust-btn-accept:hover,
+    .trust-btn-accept:focus-visible {
+        color: var(--pg-success);
+        border-color: var(--pg-success);
+        background: color-mix(in srgb, var(--pg-success) 10%, transparent);
     }
 </style>
