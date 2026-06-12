@@ -696,7 +696,7 @@
     .cancel-upload-btn:hover:not(:disabled) {
         color: var(--pg-text);
         background: color-mix(in srgb, var(--pg-text) 8%, transparent);
-        border-color: var(--pg-input-normal-hover);
+        border-color: var(--pg-input-hover);
     }
 
     .cancel-upload-btn:focus-visible {
