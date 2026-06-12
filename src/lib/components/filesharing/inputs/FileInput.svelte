@@ -478,7 +478,7 @@
         width: 100%;
         margin-bottom: 0;
         padding: 0;
-        border-bottom: 2px solid var(--pg-input-normal-light);
+        border-bottom: 2px solid var(--pg-input-normal);
     }
 
     .dz-previews :global(.files > div:first-child) {

@@ -26,7 +26,7 @@
         width: 100%;
         margin-bottom: 0;
         padding: 8px 0;
-        border-bottom: 2px solid var(--pg-input-normal-light);
+        border-bottom: 2px solid var(--pg-input-normal);
     }
 
     .files > div:first-child {

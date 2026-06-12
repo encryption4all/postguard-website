@@ -60,6 +60,7 @@ body {
 
     /* Colors */
     --pg-primary: #3095de;
+    --pg-primary-rgb: 48, 149, 222;
     --pg-primary-contrast: #1673b6;
     --pg-general-background: #ffffff;
     --pg-soft-background: #f2f8fd;
@@ -83,6 +84,7 @@ body {
 .dark {
     /* Dark mode */
     --pg-primary: #3095de;
+    --pg-primary-rgb: 48, 149, 222;
     --pg-primary-contrast: #3095de;
     --pg-general-background: #061b2d;
     --pg-soft-background: #092944;
@@ -198,7 +200,7 @@ textarea.pg-input {
 input.pg-input:hover,
 select.pg-input:hover,
 textarea.pg-input:hover {
-    border-color: var(--pg-input-normal-hover);
+    border-color: var(--pg-input-hover);
 }
 
 input.pg-input:focus,
@@ -467,7 +469,7 @@ h3 {
 /* ── Filesharing shared styles (from filesharing/shared-styles.css) ───── */
 
 .crypt-select-protection-input-box {
-    background-color: var(--pg-hard-background);
+    background-color: var(--pg-general-background);
     padding: 0.25rem;
     display: flex;
     flex-direction: column;
