@@ -24,13 +24,13 @@ export function verifiedAttributesFor(
         }))
 }
 
-/** A sender that disclosed nothing beyond an email address is a "weak"
- *  identity claim — anyone who controls the mailbox could have signed.
- *  The download-page trust gate uses this to escalate the warning.
- *  A missing sender is also weak: if the file was not signed at all,
- *  the recipient has no verified claim to act on. */
+/** A sender that verified an email address but disclosed nothing beyond
+ *  it is a "weak" identity claim — anyone who controls the mailbox could
+ *  have signed. The download-page trust gate uses this to escalate the
+ *  warning. A missing sender (an unsigned file) is not "weak email-only":
+ *  there is no email to caveat, so the email-only warning does not apply. */
 export function isWeakSenderIdentity(
     sender: FriendlySender | null | undefined
 ): boolean {
-    return verifiedAttributesFor(sender).length === 0
+    return !!sender?.email && verifiedAttributesFor(sender).length === 0
 }

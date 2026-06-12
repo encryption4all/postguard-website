@@ -96,12 +96,17 @@ describe('verifiedAttributesFor', () => {
 })
 
 describe('isWeakSenderIdentity', () => {
-    it('treats a null sender as weak', () => {
-        // Defensive: if the file was not signed at all we cannot tell
-        // anything about the sender, so the safest answer is "weak"
-        // (the strongest warning the UI can give).
-        expect(isWeakSenderIdentity(null)).toBe(true)
-        expect(isWeakSenderIdentity(undefined)).toBe(true)
+    it('does not treat a missing sender as email-only weak', () => {
+        // An unsigned file has no email to caveat, so the email-only
+        // warning copy does not apply — flagging it would be inaccurate.
+        expect(isWeakSenderIdentity(null)).toBe(false)
+        expect(isWeakSenderIdentity(undefined)).toBe(false)
+    })
+
+    it('does not treat a sender with no verified email as email-only weak', () => {
+        // No email and nothing else disclosed: there is no email claim to
+        // warn about, so this is not the email-only case.
+        expect(isWeakSenderIdentity(sender([]))).toBe(false)
     })
 
     it('treats an email-only sender as weak', () => {

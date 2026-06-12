@@ -170,6 +170,7 @@
             "askDownloadText": "Druk op onderstaande knop om de bestanden te ontsleutelen en downloaden.",
             "doneMessage": "Je bestanden worden gedownload en ontsleuteld",
             "doneMessageComplete": "Je bestanden zijn gedownload en ontsleuteld",
+            "readyToDownload": "Je bestanden zijn ontsleuteld en klaar om te downloaden",
             "verifiedEmail": "De bestanden komen van",
             "trustHeader": "Vertrouw je deze afzender?",
             "trustWarnEmailOnly": "De afzender heeft alleen een e-mailadres geverifieerd. Iedereen met toegang tot die mailbox kan deze bestanden hebben ondertekend. Controleer of het adres echt van degene is die je verwacht — bij voorkeur via een ander kanaal dan e-mail — voordat je downloadt.",

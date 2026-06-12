@@ -328,15 +328,11 @@
                             >{senderIdentity.email}</strong
                         >
                         {#if verifiedAttributesFor(senderIdentity).length > 0}
-                            <p class="sender-label sender-label-extra">
-                                {$_('filesharing.decryptpanel.verifiedExtra')}
-                            </p>
-                            <dl class="attr-list">
+                            <div class="attr-chips">
                                 {#each verifiedAttributesFor(senderIdentity) as attr (attr.type)}
-                                    <dt>{$_(attr.labelKey)}</dt>
-                                    <dd>{attr.value}</dd>
+                                    <span class="attr-chip">{attr.value}</span>
                                 {/each}
-                            </dl>
+                            </div>
                         {/if}
                     </div>
                 {/if}
@@ -392,7 +388,7 @@
                             />
                         </svg>
                         <p role="status">
-                            {$_('filesharing.decryptpanel.doneMessageComplete')}
+                            {$_('filesharing.decryptpanel.readyToDownload')}
                         </p>
                     </div>
                 </div>
