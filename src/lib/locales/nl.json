@@ -174,6 +174,7 @@
             "verifiedEmail": "De bestanden komen van",
             "trustHeader": "Vertrouw je deze afzender?",
             "trustWarnEmailOnly": "De afzender heeft alleen een e-mailadres geverifieerd. Iedereen met toegang tot die mailbox kan deze bestanden hebben ondertekend. Controleer of het adres echt van degene is die je verwacht — bij voorkeur via een ander kanaal dan e-mail — voordat je downloadt.",
+            "trustWarnUnsigned": "Dit bestand is niet ondertekend. Er is geen geverifieerde afzender, dus iedereen kan het gemaakt hebben en er is geen manier om te bevestigen waar het vandaan komt. Ga alleen verder als je zeker weet dat je de bron vertrouwt.",
             "trustAccept": "Bestanden downloaden",
             "trustDecline": "Niet downloaden",
             "discardedTitle": "Bestanden weggegooid",

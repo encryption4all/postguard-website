@@ -10,6 +10,7 @@
     import HelpToggle from '$lib/components/HelpToggle.svelte'
     import type { FriendlySender } from '@e4a/pg-js'
     import {
+        isUnsignedSender,
         isWeakSenderIdentity,
         verifiedAttributesFor,
     } from '$lib/components/filesharing/verifiedAttributes'
@@ -67,14 +68,40 @@
         { type: 'pbdf.sidn-pbdf.email.email', value: 'alice@example.com' },
     ]
 
-    let weakIdentity = $state(false)
-    /** Cast to FriendlySender so verifiedAttributesFor/isWeakSenderIdentity
-     *  accept the mock. `raw` is unused by those helpers — the field
-     *  exists on the real type for power-user pass-through only. */
+    type IdentityMode = 'strong' | 'emailOnly' | 'unsigned'
+    let identityMode = $state<IdentityMode>('strong')
+    /** Cast to FriendlySender so verifiedAttributesFor/isWeakSenderIdentity/
+     *  isUnsignedSender accept the mock. `raw` is unused by those helpers —
+     *  the field exists on the real type for power-user pass-through only.
+     *  `unsigned` models a file with no verifiable sender (email is null). */
     const mockSenderIdentity = $derived<FriendlySender>({
-        email: 'alice@example.com',
-        attributes: weakIdentity ? EMAIL_ONLY_ATTRS : STRONG_ATTRS,
+        email: identityMode === 'unsigned' ? null : 'alice@example.com',
+        attributes:
+            identityMode === 'strong'
+                ? STRONG_ATTRS
+                : identityMode === 'emailOnly'
+                  ? EMAIL_ONLY_ATTRS
+                  : [],
         raw: { public: { con: [] } },
+    })
+
+    // Mirror the production download button time-lock so the unsigned
+    // preview behaves like the real page (see download/+page.svelte).
+    const TRUST_UNLOCK_MS = 5000
+    let acceptUnlocked = $state(false)
+    const acceptGated = $derived.by(
+        () =>
+            downloadState === 'Confirm' && isUnsignedSender(mockSenderIdentity)
+    )
+    const downloadCountingDown = $derived(acceptGated && !acceptUnlocked)
+
+    $effect(() => {
+        if (!acceptGated) return
+        acceptUnlocked = false
+        const timer = setTimeout(() => {
+            acceptUnlocked = true
+        }, TRUST_UNLOCK_MS)
+        return () => clearTimeout(timer)
     })
 
     let showSenderIdentity = $state(true)
@@ -391,8 +418,14 @@
                     Show verified sender identity
                 </label>
                 <label class="toggle">
-                    <input type="checkbox" bind:checked={weakIdentity} />
-                    Weak identity (email only)
+                    Sender identity
+                    <select bind:value={identityMode}>
+                        <option value="strong">
+                            Strong (email + attributes)
+                        </option>
+                        <option value="emailOnly">Weak (email only)</option>
+                        <option value="unsigned">Unsigned (no signer)</option>
+                    </select>
                 </label>
                 <label class="toggle">
                     <input type="checkbox" bind:checked={multipleRecipients} />
@@ -538,7 +571,7 @@
                             linkUrl="https://yivi.app"
                             bordered
                         />
-                        {#if showSenderIdentity}
+                        {#if showSenderIdentity && mockSenderIdentity.email}
                             <div class="sender-section">
                                 <svg
                                     class="checkmark"
@@ -617,7 +650,7 @@
                                 </svg>
                                 <p role="status">
                                     {$_(
-                                        'filesharing.decryptpanel.doneMessageComplete'
+                                        'filesharing.decryptpanel.readyToDownload'
                                     )}
                                 </p>
                             </div>
@@ -625,7 +658,7 @@
 
                         <FileList files={fileList} />
 
-                        {#if showSenderIdentity}
+                        {#if showSenderIdentity && mockSenderIdentity.email}
                             <div class="sender-section">
                                 <svg
                                     class="checkmark"
@@ -661,7 +694,33 @@
                             </div>
                         {/if}
 
-                        {#if isWeakSenderIdentity(mockSenderIdentity)}
+                        {#if isUnsignedSender(mockSenderIdentity)}
+                            <div
+                                class="trust-warning trust-warning-strong"
+                                role="alert"
+                            >
+                                <svg
+                                    class="trust-warning-icon"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="M12 3L2 21h20L12 3zm0 6v6m0 2v2"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                                <p>
+                                    {$_(
+                                        'filesharing.decryptpanel.trustWarnUnsigned'
+                                    )}
+                                </p>
+                            </div>
+                        {:else if isWeakSenderIdentity(mockSenderIdentity)}
                             <div class="trust-warning" role="alert">
                                 <svg
                                     class="trust-warning-icon"
@@ -697,9 +756,20 @@
                             <button
                                 type="button"
                                 class="trust-btn trust-btn-accept"
+                                class:trust-btn-locked={downloadCountingDown}
                                 onclick={() => setStateManual('Done')}
+                                disabled={downloadCountingDown}
                             >
-                                {$_('filesharing.decryptpanel.trustAccept')}
+                                {#if downloadCountingDown}
+                                    <span
+                                        class="trust-btn-progress"
+                                        style="animation-duration: {TRUST_UNLOCK_MS}ms"
+                                        aria-hidden="true"
+                                    ></span>
+                                {/if}
+                                <span class="trust-btn-label">
+                                    {$_('filesharing.decryptpanel.trustAccept')}
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -738,7 +808,7 @@
                             <FileList files={fileList} />
                         </div>
 
-                        {#if showSenderIdentity}
+                        {#if showSenderIdentity && mockSenderIdentity.email}
                             <div
                                 class="sender-section"
                                 in:fade={{ duration: 300, delay: 280 }}
@@ -1250,6 +1320,17 @@
         }
     }
 
+    /* The unsigned case is the weakest of all, so its warning is louder
+       than the email-only one: thicker border, more saturated fill. */
+    .trust-warning-strong {
+        border-width: 2px;
+        background: color-mix(in srgb, var(--pg-input-error) 16%, transparent);
+    }
+
+    .trust-warning-strong p {
+        font-weight: var(--pg-font-weight-medium);
+    }
+
     .trust-warning-icon {
         width: 20px;
         height: 20px;
@@ -1297,11 +1378,50 @@
         background: color-mix(in srgb, var(--pg-input-error) 8%, transparent);
     }
 
-    .trust-btn-accept:hover,
+    .trust-btn-accept {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .trust-btn-accept:hover:not(:disabled),
     .trust-btn-accept:focus-visible {
         color: var(--pg-success);
         border-color: var(--pg-success);
         background: color-mix(in srgb, var(--pg-success) 10%, transparent);
+    }
+
+    .trust-btn-label {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Fill the download button left-to-right over TRUST_UNLOCK_MS (set via
+       the inline animation-duration) so an unsigned-file recipient sees the
+       button arming and is forced to wait — and read — before accepting. */
+    .trust-btn-progress {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 0;
+        background: color-mix(in srgb, var(--pg-success) 22%, transparent);
+        animation-name: trust-btn-fill;
+        animation-timing-function: linear;
+        animation-fill-mode: forwards;
+        pointer-events: none;
+    }
+
+    @keyframes trust-btn-fill {
+        from {
+            width: 0;
+        }
+        to {
+            width: 100%;
+        }
+    }
+
+    .trust-btn-locked {
+        cursor: not-allowed;
+        color: var(--pg-text-secondary);
+        border-color: var(--pg-input-normal);
     }
 
     .error-description {

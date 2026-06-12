@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import {
+    isUnsignedSender,
     isWeakSenderIdentity,
     verifiedAttributesFor,
 } from './verifiedAttributes'
@@ -156,5 +157,40 @@ describe('isWeakSenderIdentity', () => {
                 ])
             )
         ).toBe(true)
+    })
+})
+
+describe('isUnsignedSender', () => {
+    it('treats a missing sender as unsigned', () => {
+        expect(isUnsignedSender(null)).toBe(true)
+        expect(isUnsignedSender(undefined)).toBe(true)
+    })
+
+    it('treats a sender with no verified email as unsigned', () => {
+        expect(isUnsignedSender(sender([]))).toBe(true)
+    })
+
+    it('does not treat an email-only sender as unsigned', () => {
+        expect(
+            isUnsignedSender(
+                sender([
+                    { type: 'pbdf.sidn-pbdf.email.email', value: 'a@b.com' },
+                ])
+            )
+        ).toBe(false)
+    })
+
+    it('does not treat a fully verified sender as unsigned', () => {
+        expect(
+            isUnsignedSender(
+                sender([
+                    { type: 'pbdf.sidn-pbdf.email.email', value: 'a@b.com' },
+                    {
+                        type: 'pbdf.gemeente.personalData.fullname',
+                        value: 'R.A. Hensen',
+                    },
+                ])
+            )
+        ).toBe(false)
     })
 })

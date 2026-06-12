@@ -19,6 +19,7 @@
     import DecryptionProgress from '$lib/components/filesharing/DecryptionProgress.svelte'
     import ReportErrorButton from '$lib/components/filesharing/ReportErrorButton.svelte'
     import {
+        isUnsignedSender,
         isWeakSenderIdentity,
         verifiedAttributesFor,
     } from '$lib/components/filesharing/verifiedAttributes'
@@ -61,6 +62,25 @@
     // animation can finish before we swap in the progress banner.
     const YIVI_SUCCESS_HOLD_MS = 1400
     let pendingDecryptFlip: ReturnType<typeof setTimeout> | null = null
+
+    // An unsigned file (no verifiable sender) time-locks the download
+    // button so the recipient is forced to read the strong warning before
+    // they can accept. Every other case stays clickable immediately.
+    const TRUST_UNLOCK_MS = 5000
+    let acceptUnlocked = $state(false)
+    const acceptGated = $derived.by(
+        () => downloadState === 'Confirm' && isUnsignedSender(senderIdentity)
+    )
+    const downloadCountingDown = $derived(acceptGated && !acceptUnlocked)
+
+    $effect(() => {
+        if (!acceptGated) return
+        acceptUnlocked = false
+        const timer = setTimeout(() => {
+            acceptUnlocked = true
+        }, TRUST_UNLOCK_MS)
+        return () => clearTimeout(timer)
+    })
 
     let isMobileDevice = isMobile()
 
@@ -427,7 +447,31 @@
                     </div>
                 {/if}
 
-                {#if isWeakSenderIdentity(senderIdentity)}
+                {#if isUnsignedSender(senderIdentity)}
+                    <div
+                        class="trust-warning trust-warning-strong"
+                        role="alert"
+                    >
+                        <svg
+                            class="trust-warning-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                        >
+                            <path
+                                d="M12 3L2 21h20L12 3zm0 6v6m0 2v2"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <p>
+                            {$_('filesharing.decryptpanel.trustWarnUnsigned')}
+                        </p>
+                    </div>
+                {:else if isWeakSenderIdentity(senderIdentity)}
                     <div class="trust-warning" role="alert">
                         <svg
                             class="trust-warning-icon"
@@ -461,9 +505,20 @@
                     <button
                         type="button"
                         class="trust-btn trust-btn-accept"
+                        class:trust-btn-locked={downloadCountingDown}
                         onclick={acceptDownload}
+                        disabled={downloadCountingDown}
                     >
-                        {$_('filesharing.decryptpanel.trustAccept')}
+                        {#if downloadCountingDown}
+                            <span
+                                class="trust-btn-progress"
+                                style="animation-duration: {TRUST_UNLOCK_MS}ms"
+                                aria-hidden="true"
+                            ></span>
+                        {/if}
+                        <span class="trust-btn-label">
+                            {$_('filesharing.decryptpanel.trustAccept')}
+                        </span>
                     </button>
                 </div>
             </div>
@@ -849,6 +904,17 @@
         }
     }
 
+    /* The unsigned case is the weakest of all, so its warning is louder
+       than the email-only one: thicker border, more saturated fill. */
+    .trust-warning-strong {
+        border-width: 2px;
+        background: color-mix(in srgb, var(--pg-input-error) 16%, transparent);
+    }
+
+    .trust-warning-strong p {
+        font-weight: var(--pg-font-weight-medium);
+    }
+
     .trust-warning-icon {
         width: 20px;
         height: 20px;
@@ -896,10 +962,49 @@
         background: color-mix(in srgb, var(--pg-input-error) 8%, transparent);
     }
 
-    .trust-btn-accept:hover,
+    .trust-btn-accept {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .trust-btn-accept:hover:not(:disabled),
     .trust-btn-accept:focus-visible {
         color: var(--pg-success);
         border-color: var(--pg-success);
         background: color-mix(in srgb, var(--pg-success) 10%, transparent);
+    }
+
+    .trust-btn-label {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Fill the download button left-to-right over TRUST_UNLOCK_MS (set via
+       the inline animation-duration) so an unsigned-file recipient sees the
+       button arming and is forced to wait — and read — before accepting. */
+    .trust-btn-progress {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 0;
+        background: color-mix(in srgb, var(--pg-success) 22%, transparent);
+        animation-name: trust-btn-fill;
+        animation-timing-function: linear;
+        animation-fill-mode: forwards;
+        pointer-events: none;
+    }
+
+    @keyframes trust-btn-fill {
+        from {
+            width: 0;
+        }
+        to {
+            width: 100%;
+        }
+    }
+
+    .trust-btn-locked {
+        cursor: not-allowed;
+        color: var(--pg-text-secondary);
+        border-color: var(--pg-input-normal);
     }
 </style>
