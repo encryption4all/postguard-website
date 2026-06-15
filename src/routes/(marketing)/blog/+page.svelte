@@ -54,15 +54,6 @@
     jsonLd={blogJsonLd}
 />
 
-<svelte:head>
-    <link
-        rel="alternate"
-        type="application/rss+xml"
-        title="PostGuard Blog RSS Feed"
-        href="/blog/rss.xml"
-    />
-</svelte:head>
-
 <div class="blog-index">
     <div class="header">
         <h1>Blog</h1>
