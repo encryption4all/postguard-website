@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
-import { join } from 'node:path'
+import { extname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { expect, test } from '@playwright/test'
 
@@ -26,13 +26,17 @@ const DEBUG_ONLY_MARKERS = [
     'postguard-main.cs.ru.nl/pkg', // debug/url hardcoded PKG
 ]
 
+// Debug markers only ever leak into text output, so skip binary assets
+// (images, fonts, .wasm) — reading those as utf8 is wasteful and never matches.
+const TEXT_EXTENSIONS = new Set(['.html', '.js', '.css', '.json'])
+
 function walk(dir: string): string[] {
     const files: string[] = []
     for (const entry of readdirSync(dir)) {
         const full = join(dir, entry)
         if (statSync(full).isDirectory()) {
             files.push(...walk(full))
-        } else {
+        } else if (TEXT_EXTENSIONS.has(extname(full))) {
             files.push(full)
         }
     }
