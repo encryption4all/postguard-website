@@ -7,7 +7,14 @@ package
 .vscode
 .env.local
 .env.*.local
-*.pem 
+
+# Playwright
+/test-results
+/playwright-report
+/blob-report
+/playwright/.cache
+
+*.pem
 *.pub
 *.sec
 

@@ -192,6 +192,13 @@
                     message: encryptState.message,
                     language: lang as 'EN' | 'NL',
                 },
+                // Captured here (not from the upload() return value) so the
+                // staging email-preview modal can render even if a later
+                // chunk fails — the uuid is what links the preview to the
+                // /download?uuid=… link cryptify would have emailed.
+                onUploadInit: ({ uuid }) => {
+                    encryptState.uploadUuid = uuid
+                },
             })
 
             const totalBytes = encryptState.files.reduce(
@@ -674,16 +681,22 @@
         font-family: var(--pg-font-family);
         font-size: var(--pg-font-size-sm);
         font-weight: var(--pg-font-weight-medium);
-        color: var(--pg-on-primary);
-        background: var(--pg-input-error);
+        color: var(--pg-text-secondary);
+        background: transparent;
+        border: 1px solid var(--pg-input-normal);
         border-radius: var(--pg-border-radius-sm);
-        padding: 0.4rem 0.9rem;
+        padding: 0.35rem 0.85rem;
         cursor: pointer;
-        transition: background 0.2s ease;
+        transition:
+            background 0.2s ease,
+            color 0.2s ease,
+            border-color 0.2s ease;
     }
 
     .cancel-upload-btn:hover:not(:disabled) {
-        background: color-mix(in srgb, var(--pg-input-error) 85%, black);
+        color: var(--pg-text);
+        background: color-mix(in srgb, var(--pg-text) 8%, transparent);
+        border-color: var(--pg-input-hover);
     }
 
     .cancel-upload-btn:focus-visible {

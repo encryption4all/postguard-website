@@ -1,6 +1,7 @@
+import { SITE_URL } from '$lib/env'
+
 export const prerender = true
 
-const SITE_URL = 'https://postguard.eu'
 const FEED_URL = `${SITE_URL}/blog/rss.xml`
 const FEED_TITLE = 'PostGuard Blog'
 const FEED_DESCRIPTION =

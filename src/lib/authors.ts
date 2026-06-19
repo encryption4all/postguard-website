@@ -1,3 +1,5 @@
+import { SITE_URL } from '$lib/env'
+
 export interface Author {
     name: string
     role?: string
@@ -21,12 +23,12 @@ export const authors: Record<string, Author> = {
         image: 'https://github.com/rubenhensen.png',
         github: 'https://github.com/rubenhensen',
         linkedin: 'https://linkedin.com/in/rubenhensen',
-        url: 'https://postguard.eu/about',
+        url: `${SITE_URL}/about`,
     },
 }
 
 /** Look up an author by name, falling back to a generic entry. */
 export function getAuthor(name: string | undefined): Author {
-    if (!name) return { name: 'PostGuard', url: 'https://postguard.eu' }
-    return authors[name] ?? { name, url: 'https://postguard.eu/about' }
+    if (!name) return { name: 'PostGuard', url: SITE_URL }
+    return authors[name] ?? { name, url: `${SITE_URL}/about` }
 }

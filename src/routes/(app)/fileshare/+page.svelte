@@ -11,6 +11,8 @@
     import FileInput from '$lib/components/filesharing/inputs/FileInput.svelte'
     import ErrorPanel from '$lib/components/filesharing/Error.svelte'
     import Done from '$lib/components/filesharing/Done.svelte'
+    import CrashReport from '$lib/components/filesharing/CrashReport.svelte'
+    import { SITE_URL } from '$lib/env'
 
     const ATTRIBUTES: Array<AttType> = [
         'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
@@ -55,7 +57,7 @@
         '@context': 'https://schema.org',
         '@type': 'WebApplication',
         name: 'PostGuard Secure File Sharing',
-        url: 'https://postguard.eu/fileshare',
+        url: `${SITE_URL}/fileshare`,
         description:
             'Send end-to-end encrypted files to anyone using their email address. Encryption happens entirely in your browser.',
         applicationCategory: 'SecurityApplication',
@@ -66,7 +68,7 @@
             priceCurrency: 'EUR',
         },
         isPartOf: {
-            '@id': 'https://postguard.eu/#website',
+            '@id': `${SITE_URL}/#website`,
         },
     }
 </script>
@@ -85,37 +87,48 @@
         encryptState.encryptionState === EncryptionState.Error}
     class:done={encryptState.encryptionState === EncryptionState.Done}
 >
-    <FileInput
-        bind:files={encryptState.files}
-        bind:percentages={encryptState.percentages}
-        bind:done={encryptState.done}
-        bind:stage={encryptState.encryptionState}
-    />
-    {#if encryptState.encryptionState === EncryptionState.FileSelection || encryptState.encryptionState === EncryptionState.Sign || encryptState.encryptionState === EncryptionState.Encrypting}
-        <div class="inputs-container">
-            <RecipientSelection
-                bind:recipients={encryptState.recipients}
-                attributes={ATTRIBUTES}
-                readonly={encryptState.encryptionState ===
-                    EncryptionState.Encrypting}
+    <svelte:boundary>
+        <FileInput
+            bind:files={encryptState.files}
+            bind:percentages={encryptState.percentages}
+            bind:done={encryptState.done}
+            bind:stage={encryptState.encryptionState}
+        />
+        {#if encryptState.encryptionState === EncryptionState.FileSelection || encryptState.encryptionState === EncryptionState.Sign || encryptState.encryptionState === EncryptionState.Encrypting}
+            <div class="inputs-container">
+                <RecipientSelection
+                    bind:recipients={encryptState.recipients}
+                    attributes={ATTRIBUTES}
+                    readonly={encryptState.encryptionState ===
+                        EncryptionState.Encrypting}
+                />
+                <MessageInput
+                    bind:message={encryptState.message}
+                    readonly={encryptState.encryptionState ===
+                        EncryptionState.Encrypting}
+                />
+                <SendButton bind:encryptState />
+            </div>
+        {:else if encryptState.encryptionState === EncryptionState.Error}
+            <div class="inputs-container">
+                <ErrorPanel
+                    bind:encryptionState={encryptState.encryptionState}
+                    serverError={encryptState.serverError}
+                />
+            </div>
+        {:else if encryptState.encryptionState === EncryptionState.Done}
+            <Done bind:encryptState {createDefaultEncryptState} />
+        {/if}
+        {#snippet failed(error, reset)}
+            <CrashReport
+                {error}
+                reset={() => {
+                    encryptState = createDefaultEncryptState()
+                    reset()
+                }}
             />
-            <MessageInput
-                bind:message={encryptState.message}
-                readonly={encryptState.encryptionState ===
-                    EncryptionState.Encrypting}
-            />
-            <SendButton bind:encryptState />
-        </div>
-    {:else if encryptState.encryptionState === EncryptionState.Error}
-        <div class="inputs-container">
-            <ErrorPanel
-                bind:encryptionState={encryptState.encryptionState}
-                serverError={encryptState.serverError}
-            />
-        </div>
-    {:else if encryptState.encryptionState === EncryptionState.Done}
-        <Done bind:encryptState {createDefaultEncryptState} />
-    {/if}
+        {/snippet}
+    </svelte:boundary>
 </div>
 
 <style lang="scss">

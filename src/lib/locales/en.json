@@ -140,6 +140,14 @@
         "serverError": "Our server encountered an error while processing your request. Please try again later. If the problem persists, please <a href=\"mailto:info@postguard.eu\">contact us</a>.",
         "tryAgain": "Try again",
         "cancel": "Cancel",
+        "crash": {
+            "title": "Something went wrong",
+            "message": "An unexpected error broke this part of the page. You can try again, or send the error details to PostGuard so we can fix it.",
+            "report": "Tell PostGuard",
+            "sending": "Sending…",
+            "sentButton": "Thank you!",
+            "failed": "Could not reach the reporting server. Please try again later."
+        },
         "sign": {
             "scanQR": "Verify your identity by scanning this QR code with the free Yivi app on your phone.",
             "close": "Close",
@@ -161,6 +169,7 @@
             "askDownload": "Download",
             "askDownloadText": "Press the button below to start decrypting and downloading your files",
             "doneMessage": "Your files are being downloaded and decrypted",
+            "doneMessageComplete": "Your files have been downloaded and decrypted",
             "verifiedEmail": "The files are from",
             "verifiedExtra": "The files were signed using",
             "notFoundTitle": "These files no longer exist",
@@ -255,6 +264,23 @@
                 "serverBlockedTitle": "Upload rejected by server",
                 "serverBlocked": "The server rejected this upload because you have used {used} GB of your {limit} GB 2-week limit. Your limit resets on {resets}."
             }
+        },
+        "emailPreview": {
+            "title": "Notification email preview",
+            "subtitle": "Staging only — cryptify does not actually send notification emails on staging. This is what each recipient would have received.",
+            "loading": "Loading preview…",
+            "error": "Could not load preview.",
+            "empty": "No recipients to preview.",
+            "close": "Close",
+            "from": "From",
+            "replyTo": "Reply to",
+            "subject": "Subject",
+            "to": "To",
+            "confirmationTag": "sender copy",
+            "iframeTitle": "Notification email body",
+            "reopen": "Show email preview",
+            "viewHtml": "HTML",
+            "viewText": "Plain text"
         },
         "attributes": {
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobile phone number",

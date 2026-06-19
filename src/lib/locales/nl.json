@@ -140,6 +140,14 @@
         "serverError": "Onze server heeft een fout ondervonden bij het verwerken van je verzoek. Probeer het later opnieuw. Als het probleem aanhoudt, <a href=\"mailto:info@postguard.eu\">neem dan contact met ons op</a>.",
         "tryAgain": "Probeer opnieuw",
         "cancel": "Annuleer",
+        "crash": {
+            "title": "Er ging iets mis",
+            "message": "Een onverwachte fout heeft dit deel van de pagina onderbroken. Je kunt het opnieuw proberen, of de foutgegevens naar PostGuard sturen zodat we het kunnen oplossen.",
+            "report": "Vertel PostGuard",
+            "sending": "Verzenden…",
+            "sentButton": "Bedankt!",
+            "failed": "Kon de rapportageserver niet bereiken. Probeer het later opnieuw."
+        },
         "sign": {
             "scanQR": "Bewijs wie je bent door deze QR-code te scannen met de gratis Yivi-app op je telefoon.",
             "close": "Sluit",
@@ -161,6 +169,7 @@
             "askDownload": "Download",
             "askDownloadText": "Druk op onderstaande knop om de bestanden te ontsleutelen en downloaden.",
             "doneMessage": "Je bestanden worden gedownload en ontsleuteld",
+            "doneMessageComplete": "Je bestanden zijn gedownload en ontsleuteld",
             "verifiedEmail": "De bestanden komen van",
             "verifiedExtra": "De bestanden zijn ondertekend met",
             "notFoundTitle": "Deze bestanden bestaan niet (meer)",
@@ -254,6 +263,23 @@
                 "serverBlockedTitle": "Upload geweigerd door de server",
                 "serverBlocked": "De server weigerde deze upload omdat je {used} GB van je {limit} GB-limiet (2 weken) hebt gebruikt. De limiet reset op {resets}."
             }
+        },
+        "emailPreview": {
+            "title": "Voorbeeld notificatie-e-mail",
+            "subtitle": "Alleen staging — cryptify verstuurt op staging geen e-mails. Dit is wat elke ontvanger zou hebben gezien.",
+            "loading": "Voorbeeld laden…",
+            "error": "Voorbeeld kon niet worden geladen.",
+            "empty": "Geen ontvangers om weer te geven.",
+            "close": "Sluiten",
+            "from": "Van",
+            "replyTo": "Antwoord aan",
+            "subject": "Onderwerp",
+            "to": "Aan",
+            "confirmationTag": "bevestigingskopie",
+            "iframeTitle": "Inhoud van de notificatie-e-mail",
+            "reopen": "Toon e-mailvoorbeeld",
+            "viewHtml": "HTML",
+            "viewText": "Platte tekst"
         },
         "attributes": {
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobiel telefoonnummer",

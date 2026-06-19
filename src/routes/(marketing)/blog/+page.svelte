@@ -1,21 +1,21 @@
 <script lang="ts">
     import SEO from '$lib/components/SEO.svelte'
     import { resolve } from '$app/paths'
+    import { SITE_URL } from '$lib/env'
 
     let { data } = $props()
 
-    const siteUrl = 'https://postguard.eu'
     const blogJsonLd = $derived({
         '@context': 'https://schema.org',
         '@graph': [
             {
                 '@type': 'CollectionPage',
-                url: `${siteUrl}/blog`,
+                url: `${SITE_URL}/blog`,
                 name: 'PostGuard Blog',
                 description:
                     'News, updates, and insights about PostGuard — secure end-to-end encryption for email and files.',
                 isPartOf: {
-                    '@id': `${siteUrl}/#website`,
+                    '@id': `${SITE_URL}/#website`,
                 },
                 mainEntity: {
                     '@type': 'ItemList',
@@ -23,7 +23,7 @@
                         '@type': 'ListItem',
                         position: i + 1,
                         name: post.title,
-                        url: `${siteUrl}/blog/${post.slug}`,
+                        url: `${SITE_URL}/blog/${post.slug}`,
                     })),
                 },
             },
@@ -34,13 +34,13 @@
                         '@type': 'ListItem',
                         position: 1,
                         name: 'Home',
-                        item: siteUrl,
+                        item: SITE_URL,
                     },
                     {
                         '@type': 'ListItem',
                         position: 2,
                         name: 'Blog',
-                        item: `${siteUrl}/blog`,
+                        item: `${SITE_URL}/blog`,
                     },
                 ],
             },
@@ -53,15 +53,6 @@
     description="News, updates, and insights about PostGuard — secure end-to-end encryption for email and files."
     jsonLd={blogJsonLd}
 />
-
-<svelte:head>
-    <link
-        rel="alternate"
-        type="application/rss+xml"
-        title="PostGuard Blog RSS Feed"
-        href="/blog/rss.xml"
-    />
-</svelte:head>
 
 <div class="blog-index">
     <div class="header">

@@ -2,18 +2,19 @@
     import { _ } from 'svelte-i18n'
     import aboutImg from '$lib/assets/images/about.svg'
     import SEO from '$lib/components/SEO.svelte'
+    import { SITE_URL } from '$lib/env'
 
     const aboutJsonLd = {
         '@context': 'https://schema.org',
         '@graph': [
             {
                 '@type': 'AboutPage',
-                url: 'https://postguard.eu/about',
+                url: `${SITE_URL}/about`,
                 name: 'About PostGuard',
                 description:
                     'Learn how PostGuard uses identity-based encryption and the Yivi app to provide free, easy-to-use end-to-end encryption for emails and files.',
                 isPartOf: {
-                    '@id': 'https://postguard.eu/#website',
+                    '@id': `${SITE_URL}/#website`,
                 },
             },
             {
@@ -23,13 +24,13 @@
                         '@type': 'ListItem',
                         position: 1,
                         name: 'Home',
-                        item: 'https://postguard.eu',
+                        item: SITE_URL,
                     },
                     {
                         '@type': 'ListItem',
                         position: 2,
                         name: 'About PostGuard',
-                        item: 'https://postguard.eu/about',
+                        item: `${SITE_URL}/about`,
                     },
                 ],
             },

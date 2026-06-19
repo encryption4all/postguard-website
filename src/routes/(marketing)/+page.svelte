@@ -3,7 +3,7 @@
     import { _ } from 'svelte-i18n'
     import { resolve } from '$app/paths'
     import SEO from '$lib/components/SEO.svelte'
-    import { FF_BUSINESS } from '$lib/env'
+    import { FF_BUSINESS, SITE_URL } from '$lib/env'
 
     let contactEl: HTMLAnchorElement
 
@@ -20,13 +20,13 @@
         '@graph': [
             {
                 '@type': 'WebSite',
-                '@id': 'https://postguard.eu/#website',
-                url: 'https://postguard.eu',
+                '@id': `${SITE_URL}/#website`,
+                url: SITE_URL,
                 name: 'PostGuard',
                 description:
                     'Free, open-source end-to-end encryption for emails and files.',
                 publisher: {
-                    '@id': 'https://postguard.eu/#organization',
+                    '@id': `${SITE_URL}/#organization`,
                 },
             },
             {
@@ -41,23 +41,23 @@
                     price: '0',
                     priceCurrency: 'EUR',
                 },
-                url: 'https://postguard.eu',
+                url: SITE_URL,
                 license: 'https://opensource.org/licenses/MIT',
                 softwareRequirements: 'Yivi (IRMA) app',
                 author: {
-                    '@id': 'https://postguard.eu/#organization',
+                    '@id': `${SITE_URL}/#organization`,
                 },
             },
             {
                 '@type': 'Organization',
-                '@id': 'https://postguard.eu/#organization',
+                '@id': `${SITE_URL}/#organization`,
                 name: 'PostGuard',
-                url: 'https://postguard.eu',
+                url: SITE_URL,
                 description:
                     'Free, open-source identity-based encryption for emails and files.',
                 logo: {
                     '@type': 'ImageObject',
-                    url: 'https://postguard.eu/pg_logo.png',
+                    url: `${SITE_URL}/pg_logo.png`,
                     width: 512,
                     height: 512,
                 },
