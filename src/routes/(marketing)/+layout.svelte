@@ -19,6 +19,17 @@
     })
 </script>
 
+<svelte:head>
+    <!-- Site-wide RSS autodiscovery so feed readers pointed at any marketing
+         page (including the root domain) find the blog feed. -->
+    <link
+        rel="alternate"
+        type="application/rss+xml"
+        title="PostGuard Blog RSS Feed"
+        href="/blog/rss.xml"
+    />
+</svelte:head>
+
 {#if !$isLoading}
     <a class="sr-only sr-only-focusable skip-link" href="#main-content">
         {$_('common.skipToMain', { default: 'Skip to main content' })}
