@@ -35,6 +35,7 @@
             class="bar-track"
             role="progressbar"
             aria-labelledby="decryption-progress-label"
+            aria-busy="true"
         >
             <div class="bar-indeterminate"></div>
         </div>
