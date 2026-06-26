@@ -52,6 +52,7 @@
                     for="recipient-email-{recipient.email}"
                 >
                     {$_('filesharing.encryptPanel.emailRecipient')}
+                    <span class="required-asterisk" aria-hidden="true">*</span>
                 </label>
             </div>
             <input
@@ -61,6 +62,8 @@
                 )}
                 type="email"
                 required
+                aria-required="true"
+                aria-describedby="required-fields-legend"
                 class="pg-input"
                 class:is-confirming-bg={isConfirming}
                 bind:value={recipient.email}
@@ -162,6 +165,11 @@
         font-weight: var(--pg-font-weight-extrabold);
         color: var(--pg-text);
         font-family: var(--pg-font-family);
+    }
+
+    .required-asterisk {
+        color: var(--pg-error, #e53e3e);
+        margin-left: 0.125rem;
     }
 
     .optionals-container {
