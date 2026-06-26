@@ -75,8 +75,7 @@
         }
     }
 
-    /* Hide the footer on mobile / small viewports — it costs too much screen
-       real estate there. Mirrors the Header's 768px desktop breakpoint. */
+    /* Match Header's 768px desktop breakpoint. */
     @media only screen and (max-width: 767.98px) {
         .app-footer {
             display: none;
