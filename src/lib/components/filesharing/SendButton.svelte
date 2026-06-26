@@ -558,7 +558,11 @@
             <li>{error}</li>
         {/each}
     </ul>
-    <button class="primary-btn" onclick={() => (showValidationModal = false)}>
+    <button
+        type="button"
+        class="primary-btn"
+        onclick={() => (showValidationModal = false)}
+    >
         {$_('filesharing.encryptPanel.validation.continueButton')}
     </button>
 </dialog>
@@ -925,7 +929,13 @@
     }
 
     .validation-modal .primary-btn {
+        /* Full-width so the dismiss action reads as the modal's primary,
+           clickable control rather than a label that happens to be dark.
+           `.primary-btn` sets `width: fit-content`, which silently defeats
+           `align-self: stretch`, so set the width explicitly here. */
         align-self: stretch;
+        width: 100%;
         justify-content: center;
+        margin-top: 0.25rem;
     }
 </style>
