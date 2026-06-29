@@ -307,8 +307,9 @@
     // Computed here as a script-level $derived rather than inline in the template
     // via {@const} to dodge an upstream prettier-plugin-svelte crash on ternaries
     // with a BinaryExpression test inside {@const}
-    // (https://github.com/sveltejs/prettier-plugin-svelte/issues/528). Once that
-    // fix is confirmed in the pinned plugin version, this can move back inline.
+    // (https://github.com/sveltejs/prettier-plugin-svelte/issues/528). The pinned
+    // ^4.0.1 already includes the #528 fix, so this can move back inline as a
+    // {@const} ternary once verified with `prettier --check` on 4.0.1.
     let totalProgress = $derived(
         encryptState.percentages.length > 0
             ? Math.round(
