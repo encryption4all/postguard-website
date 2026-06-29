@@ -74,4 +74,11 @@
             opacity: 0.5;
         }
     }
+
+    /* Match Header's 768px desktop breakpoint. */
+    @media only screen and (max-width: 767.98px) {
+        .app-footer {
+            display: none;
+        }
+    }
 </style>
