@@ -304,6 +304,11 @@
     let buttonRef: HTMLButtonElement | null = $state(null)
     let dialogRef: HTMLDialogElement | null = $state(null)
 
+    // Computed here as a script-level $derived rather than inline in the template
+    // via {@const} to dodge an upstream prettier-plugin-svelte crash on ternaries
+    // with a BinaryExpression test inside {@const}
+    // (https://github.com/sveltejs/prettier-plugin-svelte/issues/528). Once that
+    // fix is confirmed in the pinned plugin version, this can move back inline.
     let totalProgress = $derived(
         encryptState.percentages.length > 0
             ? Math.round(
