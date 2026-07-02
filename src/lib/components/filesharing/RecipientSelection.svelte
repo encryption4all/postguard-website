@@ -48,6 +48,9 @@
                 title={$_('filesharing.encryptPanel.RecipientsHelpToggle')}
                 content={$_('filesharing.encryptPanel.RecipientsText')}
             />
+            <p id="required-fields-legend" class="required-legend">
+                {$_('filesharing.encryptPanel.requiredFieldsLegend')}
+            </p>
         {/if}
 
         {#each recipients as recipient, index (recipient)}
@@ -83,5 +86,12 @@
 
     .remove-border {
         border: none;
+    }
+
+    .required-legend {
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        margin: 0.5rem 0 0;
+        font-family: var(--pg-font-family);
     }
 </style>

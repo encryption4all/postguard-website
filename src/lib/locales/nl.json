@@ -206,6 +206,7 @@
             "emailRecipient": "E-mailadres",
             "emailRecipientPlaceholder": "ontvanger@voorbeeld.nl",
             "RecipientsText": "Geef de ontvangers op en welke attributen ze moeten aantonen om de bestanden te ontsleutelen. Alleen de ontvangers kunnen deze gegevens zien.",
+            "requiredFieldsLegend": "Velden gemarkeerd met * zijn verplicht.",
             "RecipientsOptionalHeading": "Extra vereiste attributen",
             "emailSender": "E-mailadres",
             "emailSenderHeading": "Jouw gegevens",
@@ -288,7 +289,8 @@
             "pbdf.gemeente.personalData.fullname": "Volledige naam",
             "pbdf.gemeente.personalData.fullname.placeholder": "Jan Jansen",
             "pbdf.gemeente.personalData.dateofbirth": "Geboortedatum",
-            "pbdf.gemeente.personalData.dateofbirth.placeholder": "15-01-1990"
+            "pbdf.gemeente.personalData.dateofbirth.placeholder": "15-01-1990",
+            "optional": "optioneel"
         }
     },
     "error": {

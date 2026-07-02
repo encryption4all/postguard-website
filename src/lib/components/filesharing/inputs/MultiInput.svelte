@@ -121,6 +121,9 @@
 <div class="input-wrapper">
     <label for={randomId}>
         {$_(translation_key)}
+        <span class="optional-text"
+            >({$_('filesharing.attributes.optional')})</span
+        >
     </label>
     <div class="optional-value" class:removed-del-border={isConfirming}>
         {#if translation_key === 'filesharing.attributes.pbdf.sidn-pbdf.mobilenumber.mobilenumber'}
@@ -213,6 +216,11 @@
         font-weight: var(--pg-font-weight-extrabold);
         color: var(--pg-text);
         display: block;
+    }
+
+    .optional-text {
+        font-weight: var(--pg-font-weight-regular);
+        color: var(--pg-text-secondary);
     }
 
     .btn-delete {

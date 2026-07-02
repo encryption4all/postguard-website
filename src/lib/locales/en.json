@@ -207,6 +207,7 @@
             "emailRecipient": "Email address",
             "emailRecipientPlaceholder": "recipient@example.com",
             "RecipientsText": "Specify the recipients and what attributes they must prove to decrypt the files. Only the recipients will see this data.",
+            "requiredFieldsLegend": "Fields marked with * are required.",
             "RecipientsOptionalHeading": "Additional required attributes",
             "emailSender": "Email address",
             "emailSenderHeading": "Your information",
@@ -289,7 +290,8 @@
             "pbdf.gemeente.personalData.fullname": "Full name",
             "pbdf.gemeente.personalData.fullname.placeholder": "John Doe",
             "pbdf.gemeente.personalData.dateofbirth": "Date of birth",
-            "pbdf.gemeente.personalData.dateofbirth.placeholder": "15-01-1990"
+            "pbdf.gemeente.personalData.dateofbirth.placeholder": "15-01-1990",
+            "optional": "optional"
         }
     },
     "error": {
