@@ -47,6 +47,40 @@ jobs:
       # Fail on references to undefined CSS custom properties (e.g. typo'd --pg-* tokens).
       - run: npm run lint:css
 
+  # Validate the nginx configs with crossplane (NGINX Inc.'s syntax parser).
+  # `nginx -t` is not usable here: the prod nginx.conf load_module's brotli
+  # (present only in the built image) and the dev config's direct proxy_pass
+  # hostnames make `nginx -t` fail on DNS. crossplane checks directive
+  # syntax/arg-count/context without loading modules or resolving hosts, so it
+  # catches e.g. a malformed add_header or a brace mismatch in these files.
+  nginx:
+    name: nginx config test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: pip install crossplane
+
+      # Dev config is a full standalone nginx.conf; --single-file skips the
+      # include of /etc/nginx/mime.types (absent in CI, not a syntax concern).
+      - name: Validate docker/nginx.dev.conf
+        run: |
+          crossplane parse --single-file -o /tmp/dev.json docker/nginx.dev.conf
+          python -c "import json,sys; d=json.load(open('/tmp/dev.json')); [print('::error file=docker/nginx.dev.conf,line={}::{}'.format(e.get('line'), e['error'])) for e in d.get('errors', [])]; sys.exit(0 if d['status']=='ok' else 1)"
+
+      # Prod server template is rendered by the image's envsubst entrypoint into
+      # conf.d at runtime; render its two upstream vars and wrap in http{} so it
+      # is parsed in the same context it actually runs in.
+      - name: Validate docker/default.conf.template
+        run: |
+          IRMA_UPSTREAM_URL=http://irma-server:8088 PKG_UPSTREAM_URL=http://postguard-pkg:8087 \
+            envsubst '${IRMA_UPSTREAM_URL} ${PKG_UPSTREAM_URL}' < docker/default.conf.template > /tmp/server.conf
+          { echo 'events {}'; echo 'http {'; cat /tmp/server.conf; echo '}'; } > /tmp/prod-nginx.conf
+          crossplane parse -o /tmp/prod.json /tmp/prod-nginx.conf
+          python -c "import json,sys; d=json.load(open('/tmp/prod.json')); [print('::error file=docker/default.conf.template::{}'.format(e['error'])) for e in d.get('errors', [])]; sys.exit(0 if d['status']=='ok' else 1)"
+
   # Create a GitHub release (and tag) when conventional commits warrant one.
   release-please:
     name: Release Please

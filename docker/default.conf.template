@@ -7,6 +7,10 @@ server {
 
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header Referrer-Policy "no-referrer" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    # Report-only for now: violations are logged to the browser console but not
+    # blocked. Tighten to `Content-Security-Policy` (enforcing) once verified clean.
+    add_header Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';" always;
 
     location /health {
         access_log off;
@@ -77,6 +81,15 @@ server {
 
     location / {
         add_header Cache-Control "no-cache";
+        # nginx does not merge add_header across levels: a block with any
+        # add_header of its own drops all inherited ones. The security headers
+        # set at server level must therefore be repeated here, or HTML responses
+        # served through this block (every prerendered page + the SPA fallback)
+        # would receive none of them.
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header Referrer-Policy "no-referrer" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';" always;
         try_files $uri $uri/ /200.html;
     }
 }
