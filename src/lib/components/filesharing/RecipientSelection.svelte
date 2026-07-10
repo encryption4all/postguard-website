@@ -91,7 +91,7 @@
     .required-legend {
         font-size: var(--pg-font-size-sm);
         color: var(--pg-text-secondary);
-        margin: 0.5rem 0 0;
+        margin: 0;
         font-family: var(--pg-font-family);
     }
 </style>
