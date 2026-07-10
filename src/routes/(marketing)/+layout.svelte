@@ -164,6 +164,17 @@
         margin-bottom: 2rem;
     }
 
+    /* Anchor the columns to the left, centre and right of the row so the
+       footer reads as intentionally spread rather than left-clumped. Reset
+       to left when the grid collapses to a single column (mobile). */
+    .footer-grid .footer-col:nth-child(2) {
+        text-align: center;
+    }
+
+    .footer-grid .footer-col:nth-child(3) {
+        text-align: right;
+    }
+
     .footer-col {
         h4 {
             font-size: var(--pg-font-size-sm);
@@ -199,6 +210,7 @@
 
         p {
             margin: 0;
+            font-size: var(--pg-font-size-xs);
         }
 
         a {
@@ -216,6 +228,11 @@
         .footer-grid {
             grid-template-columns: 1fr;
             gap: 1.5rem;
+        }
+
+        .footer-grid .footer-col:nth-child(2),
+        .footer-grid .footer-col:nth-child(3) {
+            text-align: left;
         }
     }
 </style>
