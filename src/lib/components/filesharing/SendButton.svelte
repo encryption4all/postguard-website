@@ -4,7 +4,6 @@
     import { NetworkError, UploadSessionExpiredError } from '@e4a/pg-js'
     import { tick } from 'svelte'
 
-    import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
     import {
         EncryptionState,
         type EncryptState,
@@ -390,13 +389,7 @@
             class="primary-btn send-btn"
             onclick={onSign}
         >
-            <img
-                src={yiviLogoDark}
-                alt=""
-                aria-hidden="true"
-                width={50}
-                height={27}
-            />
+            <span class="yivi-mark" aria-hidden="true"></span>
             {$_('filesharing.encryptPanel.encryptSend')}
         </button>
 
@@ -570,6 +563,26 @@
         margin: 1.5rem 0 0.8rem 0;
     }
 
+    /* The Yivi wordmark is a fixed multi-colour asset that clashes with any
+       coloured button. Render it as a mask painted in the button's own text
+       colour (currentColor) instead, so it always matches the label and
+       adapts to the button colour and to light/dark mode automatically. */
+    .yivi-mark {
+        display: inline-block;
+        width: 50px;
+        height: 27px;
+        flex-shrink: 0;
+        background-color: currentColor;
+        -webkit-mask-image: url('../../assets/images/non-free/yivi-logo.svg');
+        mask-image: url('../../assets/images/non-free/yivi-logo.svg');
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+    }
+
     .limit-exceeded-banner {
         position: relative;
         width: 100%;
@@ -614,10 +627,6 @@
 
     .limit-exceeded-dismiss:hover {
         color: var(--pg-text);
-    }
-    /* Fade the Yivi logo when the button is disabled */
-    .primary-btn:disabled img {
-        opacity: 0.5;
     }
 
     .button-container {
