@@ -251,7 +251,7 @@
                 "continueButton": "Continue filling in",
                 "noFiles": "You haven't added any files yet",
                 "noEmail": "You haven't filled in an email address for a recipient",
-                "invalidEmail": "The email address {email} is not valid",
+                "invalidEmail": "The email address {email} is not valid. Please check it for typos.",
                 "missingAttribute": "{attribute} of {email} is missing",
                 "invalidPhone": "The phone number of {email} is not valid"
             },

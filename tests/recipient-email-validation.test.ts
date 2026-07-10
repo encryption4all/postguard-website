@@ -1,0 +1,60 @@
+import { expect, test } from '@playwright/test'
+
+// Regression tests for encryption4all/postguard-website#293.
+//
+// In the July 2026 user test a participant mistyped the recipient address.
+// The address still passed the format check, so the flow reported "sent"
+// while no mail was ever delivered to either party — a silent failure.
+//
+// The recipient address must be validated BEFORE the send starts and, when it
+// is malformed, a clear blocking modal must appear instead of the flow
+// proceeding. The key gap was that an address with no dotted TLD (a common
+// typo, e.g. a missing dot before "com") used to be accepted.
+
+test.beforeEach(async ({ page }) => {
+    await page.goto('/fileshare/')
+    await expect(
+        page.getByRole('textbox', { name: /email address/i })
+    ).toBeVisible()
+})
+
+test('a mistyped recipient with no TLD is blocked with a clear error', async ({
+    page,
+}) => {
+    await page
+        .getByRole('textbox', { name: /email address/i })
+        .fill('jane@examplecom')
+
+    await page
+        .getByRole('button', { name: /encrypt|send/i })
+        .first()
+        .click({ force: true })
+
+    // The blocking validation dialog appears and names the offending address.
+    const dialog = page.locator('dialog.validation-modal')
+    await expect(dialog).toBeVisible()
+    await expect(dialog).toContainText(/not valid/i)
+    await expect(dialog).toContainText('jane@examplecom')
+
+    // The Yivi signing step must NOT have started — nothing was sent.
+    await expect(page.locator('#crypt-irma-qr')).toHaveCount(0)
+})
+
+test('a correctly formatted recipient passes the email format check', async ({
+    page,
+}) => {
+    await page
+        .getByRole('textbox', { name: /email address/i })
+        .fill('jane@example.com')
+
+    await page
+        .getByRole('button', { name: /encrypt|send/i })
+        .first()
+        .click({ force: true })
+
+    // With no file attached the modal still opens, but it must complain about
+    // the missing file — never about the (valid) email address.
+    const dialog = page.locator('dialog.validation-modal')
+    await expect(dialog).toBeVisible()
+    await expect(dialog).not.toContainText(/not valid/i)
+})

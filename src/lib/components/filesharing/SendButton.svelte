@@ -35,8 +35,15 @@
 
     let SMOOTH_TIME = 2
 
+    // The domain MUST end in a dotted TLD of at least two letters. The old
+    // pattern made the whole `(?:\.label)` group optional, so a mistyped
+    // address with no TLD — e.g. `jane@examplecom` (missing the dot) or
+    // `jane@localhost` — passed validation, "sent" successfully, yet no mail
+    // was ever delivered to either party (encryption4all/postguard-website#293,
+    // July 2026 user test). Requiring a real TLD blocks that silent-failure
+    // class before the send starts.
     const emailRegex =
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/
 
     let canEncrypt = $derived.by(() => {
         if (encryptState.files.length === 0) return false
@@ -44,7 +51,7 @@
         if (totalSize >= MAX_UPLOAD_SIZE) return false
         if (
             !encryptState.recipients.every(({ email }) =>
-                emailRegex.test(email)
+                emailRegex.test(email.trim())
             )
         )
             return false
@@ -86,7 +93,7 @@
         encryptState.recipients.forEach(({ email, extra }) => {
             if (!email || email.trim() === '') {
                 errors.push($_('filesharing.encryptPanel.validation.noEmail'))
-            } else if (!emailRegex.test(email)) {
+            } else if (!emailRegex.test(email.trim())) {
                 errors.push(
                     $_('filesharing.encryptPanel.validation.invalidEmail', {
                         values: { email },
@@ -144,7 +151,11 @@
             // Build recipients
             const recipients = encryptState.recipients.map(
                 ({ email, extra }) => {
-                    const r = pg.recipient.email(email.toLowerCase())
+                    // Trim before lowercasing so a pasted address with stray
+                    // surrounding whitespace is encrypted to the same value the
+                    // recipient's wallet holds — a mismatch here decrypts to a
+                    // silent KEM error on their end.
+                    const r = pg.recipient.email(email.trim().toLowerCase())
                     for (const a of extra) {
                         r.extraAttribute(a.t, a.v ?? '')
                     }
