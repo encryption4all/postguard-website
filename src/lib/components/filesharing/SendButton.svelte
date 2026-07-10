@@ -388,6 +388,7 @@
         <button
             bind:this={buttonRef}
             class="primary-btn send-btn"
+            aria-disabled={!canEncrypt}
             onclick={onSign}
         >
             <img
@@ -619,8 +620,26 @@
     .limit-exceeded-dismiss:hover {
         color: var(--pg-text);
     }
-    /* Fade the Yivi logo when the button is disabled */
-    .primary-btn:disabled img {
+    /* The send button is never natively `disabled`: it must stay focusable
+       (in the tab order) and clickable so activating it can surface the
+       validation modal that explains what is still wrong. We mark it
+       `aria-disabled` instead and mirror the disabled look here, so a sighted
+       user can see at a glance whether the form is ready to send. */
+    .send-btn[aria-disabled='true'] {
+        background: var(--pg-disabled-background);
+        color: var(--pg-disabled-foreground);
+        box-shadow: none;
+        cursor: not-allowed;
+    }
+
+    .send-btn[aria-disabled='true']:hover,
+    .send-btn[aria-disabled='true']:active {
+        background: var(--pg-disabled-background);
+        transform: none;
+        box-shadow: none;
+    }
+
+    .send-btn[aria-disabled='true'] img {
         opacity: 0.5;
     }
 
