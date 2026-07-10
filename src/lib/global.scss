@@ -429,10 +429,13 @@ h3 {
     font-size: var(--pg-font-size-lg);
     font-weight: var(--pg-font-weight-medium);
     font-family: var(--pg-font-family);
-    border-radius: var(--pg-border-radius-sm);
-    background: var(--pg-text);
+    border-radius: var(--pg-border-radius-md);
+    background: var(--pg-primary-contrast);
     color: var(--pg-general-background);
-    box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.5);
+    box-shadow:
+        inset 0 -3px 0 rgba(0, 0, 0, 0.2),
+        0 2px 4px rgba(0, 0, 0, 0.2),
+        0 6px 14px rgba(0, 0, 0, 0.16);
     cursor: pointer;
     box-sizing: border-box;
     transition:
@@ -443,14 +446,19 @@ h3 {
 }
 
 .primary-btn:hover:not(:disabled) {
-    background: var(--pg-input-active);
+    background: color-mix(in srgb, var(--pg-primary-contrast) 82%, #000);
     transform: translateY(-1px);
-    box-shadow: 0 6px 4px -2px rgba(0, 0, 0, 0.5);
+    box-shadow:
+        inset 0 -3px 0 rgba(0, 0, 0, 0.2),
+        0 4px 6px rgba(0, 0, 0, 0.22),
+        0 10px 20px rgba(0, 0, 0, 0.18);
 }
 
 .primary-btn:active:not(:disabled) {
-    transform: translateY(0);
-    box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.5);
+    transform: translateY(1px);
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.25),
+        0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .primary-btn:focus-visible {
@@ -618,19 +626,6 @@ h3 {
     html,
     body {
         -webkit-font-smoothing: subpixel-antialiased;
-    }
-
-    .primary-btn {
-        box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.25);
-    }
-
-    .primary-btn:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 4px -2px rgba(0, 0, 0, 0.25);
-    }
-
-    .primary-btn:active:not(:disabled) {
-        box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.25);
     }
 
     .primary-btn:focus-visible {
