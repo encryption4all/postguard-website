@@ -4,6 +4,7 @@
     import { NetworkError, UploadSessionExpiredError } from '@e4a/pg-js'
     import { tick } from 'svelte'
 
+    import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
     import {
         EncryptionState,
         type EncryptState,
@@ -389,7 +390,14 @@
             class="primary-btn send-btn"
             onclick={onSign}
         >
-            <span class="yivi-mark" aria-hidden="true"></span>
+            <img
+                class="yivi-logo"
+                src={yiviLogoDark}
+                alt=""
+                aria-hidden="true"
+                width={50}
+                height={27}
+            />
             {$_('filesharing.encryptPanel.encryptSend')}
         </button>
 
@@ -563,24 +571,20 @@
         margin: 1.5rem 0 0.8rem 0;
     }
 
-    /* The Yivi wordmark is a fixed multi-colour asset that clashes with any
-       coloured button. Render it as a mask painted in the button's own text
-       colour (currentColor) instead, so it always matches the label and
-       adapts to the button colour and to light/dark mode automatically. */
-    .yivi-mark {
-        display: inline-block;
-        width: 50px;
-        height: 27px;
+    /* The Yivi wordmark is a fixed multi-colour asset whose colours don't
+       separate from the coloured button. Give it a thin outline (a stack of
+       hard 1px drop-shadows around the glyph alpha) in the button's own text
+       colour, so it lifts off the button and tracks the label from light to
+       dark mode while keeping the brand colours. */
+    .yivi-logo {
         flex-shrink: 0;
-        background-color: currentColor;
-        -webkit-mask-image: url('../../assets/images/non-free/yivi-logo.svg');
-        mask-image: url('../../assets/images/non-free/yivi-logo.svg');
-        -webkit-mask-repeat: no-repeat;
-        mask-repeat: no-repeat;
-        -webkit-mask-position: center;
-        mask-position: center;
-        -webkit-mask-size: contain;
-        mask-size: contain;
+        filter: drop-shadow(1px 0 0 currentColor)
+            drop-shadow(-1px 0 0 currentColor) drop-shadow(0 1px 0 currentColor)
+            drop-shadow(0 -1px 0 currentColor)
+            drop-shadow(1px 1px 0 currentColor)
+            drop-shadow(-1px -1px 0 currentColor)
+            drop-shadow(1px -1px 0 currentColor)
+            drop-shadow(-1px 1px 0 currentColor);
     }
 
     .limit-exceeded-banner {
