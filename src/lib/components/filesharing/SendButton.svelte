@@ -304,15 +304,6 @@
     let buttonRef: HTMLButtonElement | null = $state(null)
     let dialogRef: HTMLDialogElement | null = $state(null)
 
-    let totalProgress = $derived(
-        encryptState.percentages.length > 0
-            ? Math.round(
-                  encryptState.percentages.reduce((a, b) => a + b, 0) /
-                      encryptState.percentages.length
-              )
-            : 0
-    )
-
     $effect(() => {
         if (!browser || !dialogRef) return
         if (showValidationModal) {
@@ -341,6 +332,13 @@
         </div>
     {/if}
     {#if encryptState.encryptionState === EncryptionState.Encrypting}
+        {@const totalProgress =
+            encryptState.percentages.length > 0
+                ? Math.round(
+                      encryptState.percentages.reduce((a, b) => a + b, 0) /
+                          encryptState.percentages.length
+                  )
+                : 0}
         <!-- Loading info box during upload -->
         <div class="upload-info-box">
             <div
