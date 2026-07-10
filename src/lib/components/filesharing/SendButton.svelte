@@ -426,6 +426,10 @@
         bordered
     />
 
+    <p id="required-fields-legend" class="required-legend">
+        {$_('filesharing.encryptPanel.requiredFieldsLegend')}
+    </p>
+
     <!-- Desktop Yivi popup above the button -->
     {#if !isMobileDevice && encryptState.encryptionState === EncryptionState.Sign && buttonRef}
         <button
@@ -749,6 +753,14 @@
     }
 
     .yivi-tip {
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    .required-legend {
         font-size: var(--pg-font-size-sm);
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
