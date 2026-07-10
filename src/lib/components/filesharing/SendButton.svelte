@@ -304,21 +304,6 @@
     let buttonRef: HTMLButtonElement | null = $state(null)
     let dialogRef: HTMLDialogElement | null = $state(null)
 
-    // Computed here as a script-level $derived rather than inline in the template
-    // via {@const} to dodge an upstream prettier-plugin-svelte crash on ternaries
-    // with a BinaryExpression test inside {@const}
-    // (https://github.com/sveltejs/prettier-plugin-svelte/issues/528). The pinned
-    // ^4.0.1 already includes the #528 fix, so this can move back inline as a
-    // {@const} ternary once verified with `prettier --check` on 4.0.1.
-    let totalProgress = $derived(
-        encryptState.percentages.length > 0
-            ? Math.round(
-                  encryptState.percentages.reduce((a, b) => a + b, 0) /
-                      encryptState.percentages.length
-              )
-            : 0
-    )
-
     $effect(() => {
         if (!browser || !dialogRef) return
         if (showValidationModal) {
@@ -347,6 +332,13 @@
         </div>
     {/if}
     {#if encryptState.encryptionState === EncryptionState.Encrypting}
+        {@const totalProgress =
+            encryptState.percentages.length > 0
+                ? Math.round(
+                      encryptState.percentages.reduce((a, b) => a + b, 0) /
+                          encryptState.percentages.length
+                  )
+                : 0}
         <!-- Loading info box during upload -->
         <div class="upload-info-box">
             <div
