@@ -6,12 +6,22 @@
         mode?: 'qr' | 'deeplink'
         id?: string
         responsive?: boolean
+        /** Called once when the Yivi widget enters a terminal, recoverable
+         *  state — the disclosure was cancelled, the Yivi app was closed
+         *  mid-flow, or the session timed out. In all of these YiviWeb renders
+         *  its own small "session cancelled / try again" screen (identified by
+         *  the `.yivi-web-restart-button`) but the surrounding pg-js
+         *  `encrypt()` promise never settles, so the send flow would otherwise
+         *  hang silently. The parent uses this to surface a clear recovery
+         *  action instead. See #294. */
+        oninterrupted?: () => void
     }
 
     let {
         mode = 'qr',
         id = 'crypt-irma-qr',
         responsive = false,
+        oninterrupted,
     }: props = $props()
 
     let qrLoaded = $state(false)
@@ -19,12 +29,32 @@
 
     onMount(() => {
         let autoClicked = false
+        let interrupted = false
 
         const observer = new MutationObserver(() => {
-            // Check for QR canvas (Yivi renders QR codes as canvas elements)
-            if (containerEl.querySelector('canvas')) {
-                qrLoaded = true
+            // Terminal recoverable states (Cancelled / TimedOut / Error) all
+            // render a restart button. Detect it and hand control back to the
+            // parent exactly once so it can offer a clear retry instead of
+            // leaving the user stuck on Yivi's buried "try again" link.
+            if (
+                !interrupted &&
+                containerEl.querySelector('.yivi-web-restart-button')
+            ) {
+                interrupted = true
                 observer.disconnect()
+                oninterrupted?.()
+                return
+            }
+
+            // Check for a rendered QR code (Yivi renders it as a <canvas> or,
+            // in newer versions, an inline <svg>). We keep observing after it
+            // loads so the terminal-state detection above still fires if the
+            // user later cancels or the session times out.
+            if (
+                containerEl.querySelector('canvas') ||
+                containerEl.querySelector('.yivi-web-qr-code')
+            ) {
+                qrLoaded = true
                 return
             }
 

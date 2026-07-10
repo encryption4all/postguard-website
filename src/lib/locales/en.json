@@ -264,6 +264,12 @@
                 "blockedBody": "You have reached your {limit} GB upload limit for this 2-week period. Your limit resets on {resets}.",
                 "serverBlockedTitle": "Upload rejected by server",
                 "serverBlocked": "The server rejected this upload because you have used {used} GB of your {limit} GB 2-week limit. Your limit resets on {resets}."
+            },
+            "yiviInterrupted": {
+                "title": "Yivi verification was interrupted",
+                "body": "It looks like the Yivi verification was cancelled or the app was closed before it finished. Your files and recipients are still here — you can try again.",
+                "retryButton": "Try again",
+                "dismiss": "Dismiss"
             }
         },
         "emailPreview": {
