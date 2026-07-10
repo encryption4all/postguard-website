@@ -388,6 +388,7 @@
         <button
             bind:this={buttonRef}
             class="primary-btn send-btn"
+            aria-disabled={!canEncrypt}
             onclick={onSign}
         >
             <img
@@ -425,6 +426,10 @@
         linkUrl="https://yivi.app"
         bordered
     />
+
+    <p id="required-fields-legend" class="required-legend">
+        {$_('filesharing.encryptPanel.requiredFieldsLegend')}
+    </p>
 
     <!-- Desktop Yivi popup above the button -->
     {#if !isMobileDevice && encryptState.encryptionState === EncryptionState.Sign && buttonRef}
@@ -615,8 +620,26 @@
     .limit-exceeded-dismiss:hover {
         color: var(--pg-text);
     }
-    /* Fade the Yivi logo when the button is disabled */
-    .primary-btn:disabled img {
+    /* The send button is never natively `disabled`: it must stay focusable
+       (in the tab order) and clickable so activating it can surface the
+       validation modal that explains what is still wrong. We mark it
+       `aria-disabled` instead and mirror the disabled look here, so a sighted
+       user can see at a glance whether the form is ready to send. */
+    .send-btn[aria-disabled='true'] {
+        background: var(--pg-disabled-background);
+        color: var(--pg-disabled-foreground);
+        box-shadow: none;
+        cursor: not-allowed;
+    }
+
+    .send-btn[aria-disabled='true']:hover,
+    .send-btn[aria-disabled='true']:active {
+        background: var(--pg-disabled-background);
+        transform: none;
+        box-shadow: none;
+    }
+
+    .send-btn[aria-disabled='true'] img {
         opacity: 0.5;
     }
 
@@ -749,6 +772,14 @@
     }
 
     .yivi-tip {
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    .required-legend {
         font-size: var(--pg-font-size-sm);
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
