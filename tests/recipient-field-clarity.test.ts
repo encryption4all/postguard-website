@@ -43,10 +43,12 @@ test('the recipient field comes before the optional message box', async ({
     await expect(message).toBeVisible()
 
     // recipient precedes message in document order (DOCUMENT_POSITION_FOLLOWING).
+    const messageHandle = await message.elementHandle()
+    if (!messageHandle) throw new Error('message textarea handle not found')
     const recipientIsFirst = await recipient.evaluate(
         (r, m) =>
             !!(r.compareDocumentPosition(m) & Node.DOCUMENT_POSITION_FOLLOWING),
-        await message.elementHandle()
+        messageHandle
     )
     expect(recipientIsFirst).toBe(true)
 })
