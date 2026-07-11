@@ -13,6 +13,25 @@
     import Done from '$lib/components/filesharing/Done.svelte'
     import CrashReport from '$lib/components/filesharing/CrashReport.svelte'
     import { SITE_URL } from '$lib/env'
+    import { afterNavigate } from '$app/navigation'
+    import { tick } from 'svelte'
+
+    // The compose step opens inside `#main-content` (and, on desktop, the
+    // `.inputs-container` panel), each of which is its own scroll container.
+    // SvelteKit's scroll handling targets the window, but the window never
+    // scrolls here because html/body are `height: 100%` flex columns — so a
+    // scroll position carried over from a previous view can leave this step
+    // opening pre-scrolled, hiding the instructional heading at the top of the
+    // panel (see encryption4all/postguard-website#295). Reset the relevant
+    // containers to the top whenever we navigate to this step so the
+    // instructions are the first thing the user sees. `afterNavigate` fires on
+    // the initial mount as well as on later navigations into this route.
+    afterNavigate(async () => {
+        await tick()
+        document.getElementById('main-content')?.scrollTo({ top: 0 })
+        document.querySelector('.inputs-container')?.scrollTo({ top: 0 })
+        window.scrollTo({ top: 0 })
+    })
 
     const ATTRIBUTES: Array<AttType> = [
         'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
