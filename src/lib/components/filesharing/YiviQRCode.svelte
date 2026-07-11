@@ -152,8 +152,10 @@
     }
 
     /* Keep the enlarged QR modules crisp (no blurry interpolation) so the
-       black/white edges stay sharp for the scanner. */
-    .yivi-qr-container :global(canvas) {
+       black/white edges stay sharp for the scanner. yivi-web renders the QR as
+       an inline <svg class="yivi-web-qr-code"> (not a <canvas>), so cover both. */
+    .yivi-qr-container :global(canvas),
+    .yivi-qr-container :global(svg) {
         image-rendering: pixelated;
     }
 
