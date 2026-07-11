@@ -198,7 +198,8 @@
                 "chooseFilesButton": "Kies bestanden",
                 "maxSizeText": "nog {max} GB beschikbaar",
                 "addMoreFiles": "Voeg meer bestanden toe",
-                "fileSummary": "{count} {count, plural, one {bestand} other {bestanden}} toegevoegd, nog {size} GB over",
+                "filesAttached": "{count, plural, one {# bestand toegevoegd} other {# bestanden toegevoegd}}",
+                "fileSummary": "nog {size} GB over",
                 "overLimitText": "{over} GB over de limiet. Verwijder bestanden"
             },
             "RecipientsHeading": "Ontvangers",

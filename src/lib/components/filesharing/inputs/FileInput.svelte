@@ -199,6 +199,37 @@
 
             <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
             <div class="files-container" class:hidden={files.length <= 0}>
+                {#if stage === EncryptionState.FileSelection}
+                    <div
+                        class="files-attached"
+                        role="status"
+                        aria-live="polite"
+                    >
+                        <svg
+                            class="files-attached-icon"
+                            viewBox="0 0 24 24"
+                            width="20"
+                            height="20"
+                            aria-hidden="true"
+                        >
+                            <path
+                                d="M20 6 9 17l-5-5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <span class="files-attached-text">
+                            {$_(
+                                'filesharing.encryptPanel.fileBox.filesAttached',
+                                { values: { count: files.length } }
+                            )}
+                        </span>
+                    </div>
+                {/if}
+
                 <div
                     id="previews"
                     class="dz-previews"
@@ -206,19 +237,6 @@
                     class:encrypting={stage === EncryptionState.Encrypting}
                     class:error={stage === EncryptionState.Error}
                 ></div>
-
-                {#if stage !== EncryptionState.Encrypting}
-                    <div class="add-more-chip-container">
-                        <Chip
-                            text={$_(
-                                'filesharing.encryptPanel.fileBox.addMoreFiles'
-                            )}
-                            icon="+"
-                            size="lg"
-                            variant="default"
-                        />
-                    </div>
-                {/if}
 
                 <div class="file-summary" class:over-limit={overLimit}>
                     <p>
@@ -239,7 +257,6 @@
                                 'filesharing.encryptPanel.fileBox.fileSummary',
                                 {
                                     values: {
-                                        count: files.length,
                                         size: remainingSizeGB,
                                     },
                                 }
@@ -247,6 +264,19 @@
                         {/if}
                     </p>
                 </div>
+
+                {#if stage !== EncryptionState.Encrypting}
+                    <div class="add-more-chip-container">
+                        <Chip
+                            text={$_(
+                                'filesharing.encryptPanel.fileBox.addMoreFiles'
+                            )}
+                            icon="+"
+                            size="sm"
+                            variant="default"
+                        />
+                    </div>
+                {/if}
             </div>
         </div>
     </div>
@@ -424,6 +454,23 @@
         gap: 1rem;
     }
 
+    .files-attached {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--pg-primary);
+        font-weight: var(--pg-font-weight-bold);
+        font-size: var(--pg-font-size-lg);
+    }
+
+    .files-attached-icon {
+        flex-shrink: 0;
+    }
+
+    .files-attached-text {
+        min-width: 0;
+    }
+
     .dropzone-box.has-files .files-container {
         pointer-events: auto;
     }
@@ -564,7 +611,7 @@
 
     .add-more-chip-container {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         pointer-events: auto;
     }
 

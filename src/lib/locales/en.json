@@ -199,7 +199,8 @@
                 "chooseFilesButton": "Choose files",
                 "maxSizeText": "{max} GB remaining",
                 "addMoreFiles": "Add more files",
-                "fileSummary": "{count} {count, plural, one {file} other {files}} added, {size} GB remaining",
+                "filesAttached": "{count, plural, one {# file attached} other {# files attached}}",
+                "fileSummary": "{size} GB remaining",
                 "overLimitText": "{over} GB over the limit. Remove some files"
             },
             "RecipientsHeading": "Recipients",
