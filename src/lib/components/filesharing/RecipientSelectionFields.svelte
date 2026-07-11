@@ -55,20 +55,40 @@
                     <span class="required-asterisk" aria-hidden="true">*</span>
                 </label>
             </div>
-            <input
-                id="recipient-email-{recipient.email}"
-                placeholder={$_(
-                    'filesharing.encryptPanel.emailRecipientPlaceholder'
-                )}
-                type="email"
-                required
-                aria-required="true"
-                aria-describedby="required-fields-legend"
-                class="pg-input"
-                class:is-confirming-bg={isConfirming}
-                bind:value={recipient.email}
-                disabled={isConfirming}
-            />
+            <div class="address-input">
+                <svg
+                    class="address-input-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    focusable="false"
+                >
+                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                </svg>
+                <input
+                    id="recipient-email-{recipient.email}"
+                    placeholder={$_(
+                        'filesharing.encryptPanel.emailRecipientPlaceholder'
+                    )}
+                    type="email"
+                    required
+                    aria-required="true"
+                    aria-describedby="required-fields-legend"
+                    autocomplete="email"
+                    inputmode="email"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    class="pg-input"
+                    class:is-confirming-bg={isConfirming}
+                    bind:value={recipient.email}
+                    disabled={isConfirming}
+                />
+            </div>
 
             <div class="optionals-container">
                 {#if isConfirming}
@@ -177,5 +197,27 @@
         flex-direction: column;
         gap: 0.5rem;
         margin-top: 0.5rem;
+    }
+
+    /* Distinct "address field" affordance: a leading envelope icon so the
+       recipient input reads as "who you're sending to" and is visually set
+       apart from the optional free-text message box (#289). */
+    .address-input {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .address-input-icon {
+        position: absolute;
+        left: 0.85rem;
+        width: 18px;
+        height: 18px;
+        color: var(--pg-text-secondary);
+        pointer-events: none;
+    }
+
+    .address-input > :global(input.pg-input) {
+        padding-left: 2.6rem;
     }
 </style>
