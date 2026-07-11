@@ -14,14 +14,14 @@
 <div class="test-container">
     <h1>Yivi QR Code Test Page</h1>
 
-    <YiviQRCode />
+    <YiviQRCode showInstructions />
     <br />
     <div class="debug-info">
         <h2>Debug Info:</h2>
         <ul>
-            <li>QR Wrapper: 240px × 240px with rounded corners</li>
-            <li>QR Inner: 230px × 230px</li>
-            <li>QR Code: max 220px × 220px</li>
+            <li>QR container: 360px × 360px with rounded corners</li>
+            <li>Quiet-zone padding: 16px of white around the code</li>
+            <li>Scan instructions rendered beneath the code</li>
         </ul>
     </div>
 </div>

@@ -271,6 +271,7 @@
                         id="yivi-download"
                         responsive
                         mode={isMobileDevice ? 'deeplink' : 'qr'}
+                        showInstructions={!isMobileDevice}
                     />
                 </div>
                 <HelpToggle

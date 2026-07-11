@@ -302,7 +302,13 @@
     },
     "yivi": {
         "iosHref": "https://apps.apple.com/nl/app/yivi/id1294092994",
-        "androidHref": "https://play.google.com/store/apps/details?id=org.irmacard.cardemu&hl=nl"
+        "androidHref": "https://play.google.com/store/apps/details?id=org.irmacard.cardemu&hl=nl",
+        "scan": {
+            "heading": "Zo scan je",
+            "step1": "Open de gratis Yivi-app op je telefoon.",
+            "step2": "Tik op de QR-scanknop in de app.",
+            "step3": "Richt de camera van je telefoon op de code hierboven."
+        }
     },
     "privacypolicy": {
         "title": "Privacybeleid",

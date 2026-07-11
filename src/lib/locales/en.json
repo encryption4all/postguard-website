@@ -303,7 +303,13 @@
     },
     "yivi": {
         "iosHref": "https://apps.apple.com/us/app/yivi/id1294092994",
-        "androidHref": "https://play.google.com/store/apps/details?id=org.irmacard.cardemu&hl=en"
+        "androidHref": "https://play.google.com/store/apps/details?id=org.irmacard.cardemu&hl=en",
+        "scan": {
+            "heading": "How to scan",
+            "step1": "Open the free Yivi app on your phone.",
+            "step2": "Tap the QR-scan button in the app.",
+            "step3": "Point your phone's camera at the code above."
+        }
     },
     "privacypolicy": {
         "title": "Privacy Policy",

@@ -247,6 +247,7 @@
                 id="yivi-fallback"
                 responsive
                 mode={isMobileDevice ? 'deeplink' : 'qr'}
+                showInstructions={!isMobileDevice}
             />
         </div>
     {:else if decryptState === STATES.Decrypting}
