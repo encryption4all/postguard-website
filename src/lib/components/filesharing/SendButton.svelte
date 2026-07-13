@@ -8,7 +8,11 @@
     // `validator/lib/isEmail` deep path: validator is CJS-only and Vite's dev
     // server fails to resolve the subpath.
     import validator from 'validator'
-    import { NetworkError, UploadSessionExpiredError } from '@e4a/pg-js'
+    import {
+        NetworkError,
+        UploadSessionExpiredError,
+        YiviSessionError,
+    } from '@e4a/pg-js'
     import { tick } from 'svelte'
 
     import yiviLogo from '$lib/assets/images/non-free/yivi-logo.svg'
@@ -40,6 +44,11 @@
     let showValidationModal = $state(false)
     let validationErrors: string[] = $state([])
     let limitExceededMessage: string | null = $state(null)
+    // Set when a Yivi disclosure is cancelled or interrupted (the user closed
+    // the Yivi app, declined, or the session timed out). We stay on the
+    // compose screen with all input intact and surface a friendly banner with
+    // a retry action rather than the generic error panel. See #294.
+    let yiviInterrupted = $state(false)
 
     let SMOOTH_TIME = 2
 
@@ -125,6 +134,8 @@
     }
 
     async function onSign(): Promise<void> {
+        // Clear any interrupted-disclosure banner from a previous attempt.
+        yiviInterrupted = false
         const errors = getValidationErrors()
         if (errors.length > 0) {
             validationErrors = errors
@@ -228,6 +239,16 @@
                 encryptState.encryptionState = EncryptionState.FileSelection
                 encryptState.selfAborted = false
                 encryptState.encryptStartTime = 0
+            } else if (e instanceof YiviSessionError) {
+                // Fallback path: the Yivi session rejected outright (e.g. the
+                // widget aborted, or a build where restart isn't offered). The
+                // common cancel/close/timeout case is caught earlier at the DOM
+                // level by `onYiviInterrupted` because pg-js leaves the
+                // encrypt() promise pending in that state. Either way this is a
+                // recoverable, user-driven interruption — not a failure on our
+                // side — so recover gracefully rather than showing the generic
+                // error panel. See #294.
+                enterInterruptedRecovery()
             } else if (e instanceof UploadSessionExpiredError) {
                 // cryptify evicted the upload session (idle past the
                 // configured TTL or the server restarted). Retry won't help —
@@ -281,6 +302,27 @@
         // AbortController is single-use — provide a fresh one so a subsequent
         // send attempt can be cancelled too.
         encryptState.abort = new AbortController()
+    }
+
+    // Drop back to the compose screen with all input intact and surface the
+    // interrupted-disclosure banner (with its retry action). Shared by the DOM
+    // detection callback and the YiviSessionError fallback. See #294.
+    function enterInterruptedRecovery(): void {
+        encryptState.percentages = encryptState.files.map(() => 0)
+        encryptState.done = encryptState.files.map(() => false)
+        encryptState.encryptionState = EncryptionState.FileSelection
+        encryptState.encryptStartTime = 0
+        mobilePopupMode = 'none'
+        yiviInterrupted = true
+    }
+
+    // The Yivi widget entered a terminal recoverable state (cancelled, app
+    // closed mid-flow, or timed out). pg-js leaves the encrypt() promise
+    // pending in that case, so we detect it via the widget DOM and recover
+    // here rather than hanging on the QR screen.
+    function onYiviInterrupted(): void {
+        if (encryptState.encryptionState !== EncryptionState.Sign) return
+        enterInterruptedRecovery()
     }
 
     function updateProgress(pct: number) {
@@ -338,6 +380,32 @@
                 )}
                 onclick={() => (limitExceededMessage = null)}>×</button
             >
+        </div>
+    {/if}
+    {#if yiviInterrupted}
+        <div class="yivi-interrupted-banner" role="alert">
+            <p class="yivi-interrupted-title">
+                {$_('filesharing.encryptPanel.yiviInterrupted.title')}
+            </p>
+            <p class="yivi-interrupted-body">
+                {$_('filesharing.encryptPanel.yiviInterrupted.body')}
+            </p>
+            <div class="yivi-interrupted-actions">
+                <button
+                    type="button"
+                    class="yivi-interrupted-retry"
+                    onclick={onSign}
+                >
+                    {$_('filesharing.encryptPanel.yiviInterrupted.retryButton')}
+                </button>
+                <button
+                    type="button"
+                    class="yivi-interrupted-dismiss"
+                    onclick={() => (yiviInterrupted = false)}
+                >
+                    {$_('filesharing.encryptPanel.yiviInterrupted.dismiss')}
+                </button>
+            </div>
         </div>
     {/if}
     {#if encryptState.encryptionState === EncryptionState.Encrypting}
@@ -501,7 +569,7 @@
                 <p class="popup-instruction">{$_('filesharing.sign.scanQR')}</p>
 
                 <div class="qr-code-wrapper">
-                    <YiviQRCode />
+                    <YiviQRCode oninterrupted={onYiviInterrupted} />
                 </div>
 
                 <HelpToggle
@@ -536,7 +604,9 @@
                     <p class="bottom-sheet-instruction">
                         {$_('filesharing.sign.scanQR')}
                     </p>
-                    <div class="qr-code-wrapper"><YiviQRCode /></div>
+                    <div class="qr-code-wrapper">
+                        <YiviQRCode oninterrupted={onYiviInterrupted} />
+                    </div>
                     <HelpToggle
                         title={$_('filesharing.encryptPanel.yiviInfo')}
                         content={$_('filesharing.encryptPanel.yiviInfoText')}
@@ -559,7 +629,10 @@
                         {$_('filesharing.sign.followSteps')}
                     </p>
                     <div style="display: none;">
-                        <YiviQRCode mode="deeplink" />
+                        <YiviQRCode
+                            mode="deeplink"
+                            oninterrupted={onYiviInterrupted}
+                        />
                     </div>
                     <Chip
                         text={$_('filesharing.sign.cancel')}
@@ -691,6 +764,87 @@
 
     .limit-exceeded-dismiss:hover {
         color: var(--pg-text);
+    }
+
+    .yivi-interrupted-banner {
+        width: 100%;
+        padding: 0.85rem 1rem;
+        margin: 0.5rem 0;
+        border-radius: var(--pg-border-radius-md);
+        background: color-mix(
+            in srgb,
+            var(--pg-primary) 8%,
+            var(--pg-general-background)
+        );
+        border: 1px solid color-mix(in srgb, var(--pg-primary) 30%, transparent);
+        font-family: var(--pg-font-family);
+        box-sizing: border-box;
+    }
+
+    .yivi-interrupted-title {
+        margin: 0 0 0.25rem 0;
+        font-weight: var(--pg-font-weight-bold);
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text);
+    }
+
+    .yivi-interrupted-body {
+        margin: 0;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        line-height: 1.4;
+    }
+
+    .yivi-interrupted-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.75rem;
+    }
+
+    .yivi-interrupted-retry {
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-font-size-sm);
+        font-weight: var(--pg-font-weight-medium);
+        color: var(--pg-general-background);
+        background: var(--pg-text);
+        border: none;
+        border-radius: var(--pg-border-radius-sm);
+        padding: 0.4rem 1rem;
+        cursor: pointer;
+        transition:
+            background 0.2s ease,
+            transform 0.1s ease;
+    }
+
+    .yivi-interrupted-retry:hover {
+        background: var(--pg-input-active);
+        transform: translateY(-1px);
+    }
+
+    .yivi-interrupted-retry:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+    }
+
+    .yivi-interrupted-dismiss {
+        all: unset;
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-font-size-sm);
+        font-weight: var(--pg-font-weight-medium);
+        color: var(--pg-text-secondary);
+        cursor: pointer;
+        padding: 0.4rem 0.5rem;
+        border-radius: var(--pg-border-radius-sm);
+    }
+
+    .yivi-interrupted-dismiss:hover {
+        color: var(--pg-text);
+    }
+
+    .yivi-interrupted-dismiss:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
     }
     /* The send button is never natively `disabled`: it must stay focusable
        (in the tab order) and clickable so activating it can surface the

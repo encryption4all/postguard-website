@@ -266,6 +266,12 @@
                 "blockedBody": "Je hebt je {limit} GB-uploadlimiet voor deze 2-weken periode bereikt. De limiet reset op {resets}.",
                 "serverBlockedTitle": "Upload geweigerd door de server",
                 "serverBlocked": "De server weigerde deze upload omdat je {used} GB van je {limit} GB-limiet (2 weken) hebt gebruikt. De limiet reset op {resets}."
+            },
+            "yiviInterrupted": {
+                "title": "Yivi-verificatie is onderbroken",
+                "body": "Het lijkt erop dat de Yivi-verificatie is geannuleerd of dat de app is gesloten voordat deze klaar was. Je bestanden en ontvangers staan er nog — je kunt het opnieuw proberen.",
+                "retryButton": "Probeer opnieuw",
+                "dismiss": "Sluiten"
             }
         },
         "emailPreview": {
