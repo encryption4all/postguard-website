@@ -218,6 +218,7 @@
             "messageText": "This message will not be encrypted and will be included in the notification email.",
             "messagePlaceholder": "Type your message here...",
             "encryptSend": "Sign & send",
+            "poweredBy": "Signing powered by",
             "yiviInfo": "What is Yivi?",
             "yiviInfoText": "Yivi is a free and privacy-friendly authentication app. With Yivi you can prove who you are by selectively sharing personal data, such as your email address, phone number, or name. At PostGuard we use Yivi to securely encrypt and decrypt files.",
             "yiviInfoLink": "Learn more about Yivi",
