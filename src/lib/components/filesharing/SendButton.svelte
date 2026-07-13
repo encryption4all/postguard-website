@@ -1,6 +1,10 @@
 <script lang="ts">
     import { _, locale } from 'svelte-i18n'
     import { isValidPhoneNumber } from 'libphonenumber-js/mobile'
+    // `isEmail` requires a dotted TLD by default, so no-TLD typos like
+    // `jane@examplecom` / `jane@localhost` are rejected — the silent-failure
+    // class from the July 2026 user test (encryption4all/postguard-website#293).
+    import isEmail from 'validator/lib/isEmail'
     import { NetworkError, UploadSessionExpiredError } from '@e4a/pg-js'
     import { tick } from 'svelte'
 
@@ -35,24 +39,12 @@
 
     let SMOOTH_TIME = 2
 
-    // The domain MUST end in a dotted TLD of at least two letters. The old
-    // pattern made the whole `(?:\.label)` group optional, so a mistyped
-    // address with no TLD — e.g. `jane@examplecom` (missing the dot) or
-    // `jane@localhost` — passed validation, "sent" successfully, yet no mail
-    // was ever delivered to either party (encryption4all/postguard-website#293,
-    // July 2026 user test). Requiring a real TLD blocks that silent-failure
-    // class before the send starts.
-    const emailRegex =
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/
-
     let canEncrypt = $derived.by(() => {
         if (encryptState.files.length === 0) return false
         const totalSize = encryptState.files.reduce((a, f) => a + f.size, 0)
         if (totalSize >= MAX_UPLOAD_SIZE) return false
         if (
-            !encryptState.recipients.every(({ email }) =>
-                emailRegex.test(email.trim())
-            )
+            !encryptState.recipients.every(({ email }) => isEmail(email.trim()))
         )
             return false
         if (
@@ -93,7 +85,7 @@
         encryptState.recipients.forEach(({ email, extra }) => {
             if (!email || email.trim() === '') {
                 errors.push($_('filesharing.encryptPanel.validation.noEmail'))
-            } else if (!emailRegex.test(email.trim())) {
+            } else if (!isEmail(email.trim())) {
                 errors.push(
                     $_('filesharing.encryptPanel.validation.invalidEmail', {
                         values: { email },

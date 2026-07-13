@@ -58,3 +58,21 @@ test('a correctly formatted recipient passes the email format check', async ({
     await expect(dialog).toBeVisible()
     await expect(dialog).not.toContainText(/not valid/i)
 })
+
+test('a mistyped domain surfaces a "did you mean" suggestion that fixes the address', async ({
+    page,
+}) => {
+    // `jane@gmial.com` is *structurally valid* — a format/TLD check accepts it —
+    // yet the domain is a typo of `gmail.com`. This is exactly the #293 class a
+    // regex/isEmail cannot catch, so we surface an advisory correction instead.
+    const emailField = page.getByRole('textbox', { name: /email address/i })
+    await emailField.fill('jane@gmial.com')
+
+    const suggestion = page.getByRole('button', { name: 'jane@gmail.com' })
+    await expect(suggestion).toBeVisible()
+
+    // Clicking the suggestion applies the correction to the field.
+    await suggestion.click()
+    await expect(emailField).toHaveValue('jane@gmail.com')
+    await expect(suggestion).toBeHidden()
+})

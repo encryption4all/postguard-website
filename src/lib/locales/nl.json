@@ -205,6 +205,7 @@
             "RecipientsHelpToggle": "Wat vul ik hier in?",
             "emailRecipient": "E-mailadres",
             "emailRecipientPlaceholder": "ontvanger@voorbeeld.nl",
+            "emailSuggestion": "Bedoelde je",
             "RecipientsText": "Geef de ontvangers op en welke attributen ze moeten aantonen om de bestanden te ontsleutelen. Alleen de ontvangers kunnen deze gegevens zien.",
             "requiredFieldsLegend": "Velden gemarkeerd met * zijn verplicht.",
             "RecipientsOptionalHeading": "Extra vereiste attributen",

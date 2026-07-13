@@ -206,6 +206,7 @@
             "RecipientsHelpToggle": "What should I fill in here?",
             "emailRecipient": "Email address",
             "emailRecipientPlaceholder": "recipient@example.com",
+            "emailSuggestion": "Did you mean",
             "RecipientsText": "Specify the recipients and what attributes they must prove to decrypt the files. Only the recipients will see this data.",
             "requiredFieldsLegend": "Fields marked with * are required.",
             "RecipientsOptionalHeading": "Additional required attributes",

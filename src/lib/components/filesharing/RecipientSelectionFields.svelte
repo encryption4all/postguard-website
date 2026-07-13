@@ -1,5 +1,6 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
+    import emailSpellChecker from '@zootools/email-spell-checker'
     import type { AttributeCon } from '$lib/types/filesharing/attributes'
     import type { AttType } from '$lib/types/filesharing/attributes'
     import closebutton from '$lib/assets/images/google-icons/close.svg'
@@ -26,6 +27,16 @@
     let addableButtons: AttType[] = $derived(
         attributes.filter((att) => !recipient.extra.some(({ t }) => t === att))
     )
+
+    // Suggest a correction for a likely-mistyped domain (e.g. `gmial.com` →
+    // `gmail.com`). This catches the structurally-valid typo class that
+    // `isEmail` cannot — the root cause of the silent send failure in #293.
+    // Advisory only: the address still validates, so we never block on it.
+    let emailSuggestion = $derived.by(() => {
+        const email = recipient.email?.trim()
+        if (isConfirming || !email) return undefined
+        return emailSpellChecker.run({ email })
+    })
 </script>
 
 <li class="crypt-recipient" class:is-confirming-bg={isConfirming}>
@@ -69,6 +80,20 @@
                 bind:value={recipient.email}
                 disabled={isConfirming}
             />
+
+            {#if emailSuggestion}
+                {@const suggested = emailSuggestion.full}
+                <p class="email-suggestion" aria-live="polite">
+                    {$_('filesharing.encryptPanel.emailSuggestion')}
+                    <button
+                        type="button"
+                        class="email-suggestion-btn"
+                        onclick={() => (recipient.email = suggested)}
+                    >
+                        {suggested}
+                    </button>?
+                </p>
+            {/if}
 
             <div class="optionals-container">
                 {#if isConfirming}
@@ -177,5 +202,30 @@
         flex-direction: column;
         gap: 0.5rem;
         margin-top: 0.5rem;
+    }
+
+    .email-suggestion {
+        margin: 0.4rem 0 0;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
+    }
+
+    .email-suggestion-btn {
+        all: unset;
+        cursor: pointer;
+        color: var(--pg-primary-contrast);
+        font-weight: var(--pg-font-weight-medium);
+        text-decoration: underline;
+    }
+
+    .email-suggestion-btn:hover {
+        color: var(--pg-primary);
+    }
+
+    .email-suggestion-btn:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+        border-radius: var(--pg-border-radius-sm);
     }
 </style>
