@@ -76,3 +76,27 @@ test('a mistyped domain surfaces a "did you mean" suggestion that fixes the addr
     await expect(emailField).toHaveValue('jane@gmail.com')
     await expect(suggestion).toBeHidden()
 })
+
+test('an invalid address shows an inline error once the field is left', async ({
+    page,
+}) => {
+    const emailField = page.getByRole('textbox', { name: /email address/i })
+    await emailField.fill('r@h')
+
+    // Nothing while still editing — we don't nag mid-typing.
+    await expect(page.locator('.email-error')).toHaveCount(0)
+
+    // Leaving the field surfaces the inline invalidity (native :invalid never
+    // fires for `r@h`, which is why this is driven by validator.isEmail).
+    await emailField.blur()
+    await expect(emailField).toHaveAttribute('aria-invalid', 'true')
+    const error = page.locator('.email-error')
+    await expect(error).toBeVisible()
+    await expect(error).toContainText('r@h')
+    await expect(error).toContainText(/not valid/i)
+
+    // Correcting the address clears the error live.
+    await emailField.fill('r@hotmail.com')
+    await expect(page.locator('.email-error')).toHaveCount(0)
+    await expect(emailField).not.toHaveAttribute('aria-invalid', 'true')
+})
