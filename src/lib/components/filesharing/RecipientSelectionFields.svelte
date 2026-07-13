@@ -1,5 +1,7 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n'
+    import validator from 'validator'
+    import emailSpellChecker from '@zootools/email-spell-checker'
     import type { AttributeCon } from '$lib/types/filesharing/attributes'
     import type { AttType } from '$lib/types/filesharing/attributes'
     import closebutton from '$lib/assets/images/google-icons/close.svg'
@@ -26,6 +28,27 @@
     let addableButtons: AttType[] = $derived(
         attributes.filter((att) => !recipient.extra.some(({ t }) => t === att))
     )
+
+    // Suggest a correction for a likely-mistyped domain (e.g. `gmial.com` →
+    // `gmail.com`). This catches the structurally-valid typo class that
+    // `isEmail` cannot — the root cause of the silent send failure in #293.
+    // Advisory only: the address still validates, so we never block on it.
+    let emailSuggestion = $derived.by(() => {
+        const email = recipient.email?.trim()
+        if (isConfirming || !email) return undefined
+        return emailSpellChecker.run({ email })
+    })
+
+    // Inline invalidity, shown only after the field has been left (`touched`)
+    // so we don't nag mid-typing, then live-updated until it becomes valid.
+    // Native `:invalid` can't cover this: `type="email"` treats `r@h` (no TLD)
+    // as valid, so the field never went red. `validator.isEmail` matches the
+    // send-time check, so what turns red here is exactly what would be blocked.
+    let touched = $state(false)
+    let showEmailError = $derived.by(() => {
+        const email = recipient.email?.trim()
+        return touched && !isConfirming && !!email && !validator.isEmail(email)
+    })
 </script>
 
 <li class="crypt-recipient" class:is-confirming-bg={isConfirming}>
@@ -63,12 +86,37 @@
                 type="email"
                 required
                 aria-required="true"
+                aria-invalid={showEmailError || undefined}
                 aria-describedby="required-fields-legend"
                 class="pg-input"
                 class:is-confirming-bg={isConfirming}
+                class:input-invalid={showEmailError}
                 bind:value={recipient.email}
                 disabled={isConfirming}
+                onblur={() => (touched = true)}
             />
+
+            {#if showEmailError}
+                <p class="email-error" aria-live="polite">
+                    {$_('filesharing.encryptPanel.validation.invalidEmail', {
+                        values: { email: recipient.email.trim() },
+                    })}
+                </p>
+            {/if}
+
+            {#if emailSuggestion}
+                {@const suggested = emailSuggestion.full}
+                <p class="email-suggestion" aria-live="polite">
+                    {$_('filesharing.encryptPanel.emailSuggestion')}
+                    <button
+                        type="button"
+                        class="email-suggestion-btn"
+                        onclick={() => (recipient.email = suggested)}
+                    >
+                        {suggested}
+                    </button>?
+                </p>
+            {/if}
 
             <div class="optionals-container">
                 {#if isConfirming}
@@ -177,5 +225,46 @@
         flex-direction: column;
         gap: 0.5rem;
         margin-top: 0.5rem;
+    }
+
+    .email-suggestion {
+        margin: 0.4rem 0 0;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
+    }
+
+    .email-suggestion-btn {
+        all: unset;
+        cursor: pointer;
+        color: var(--pg-primary-contrast);
+        font-weight: var(--pg-font-weight-medium);
+        text-decoration: underline;
+    }
+
+    .email-suggestion-btn:hover {
+        color: var(--pg-primary);
+    }
+
+    .email-suggestion-btn:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+        border-radius: var(--pg-border-radius-sm);
+    }
+
+    .email-error {
+        margin: 0.4rem 0 0;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-input-error);
+        font-family: var(--pg-font-family);
+    }
+
+    /* Red border for the invalid state. Native `input:invalid` styling in
+       global.scss can't catch it (see the script), and the pairing here
+       (two classes, plus the :focus variant) outweighs the global base and
+       focus border rules so the red shows whether or not the field is focused. */
+    .pg-input.input-invalid,
+    .pg-input.input-invalid:focus {
+        border-color: var(--pg-input-error);
     }
 </style>

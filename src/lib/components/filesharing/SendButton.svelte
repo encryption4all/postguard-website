@@ -1,9 +1,17 @@
 <script lang="ts">
     import { _, locale } from 'svelte-i18n'
     import { isValidPhoneNumber } from 'libphonenumber-js/mobile'
+    // `validator.isEmail` requires a dotted TLD by default, so no-TLD typos
+    // like `jane@examplecom` / `jane@localhost` are rejected — the silent-
+    // failure class from the July 2026 user test
+    // (encryption4all/postguard-website#293). Import the package entry, not the
+    // `validator/lib/isEmail` deep path: validator is CJS-only and Vite's dev
+    // server fails to resolve the subpath.
+    import validator from 'validator'
     import { NetworkError, UploadSessionExpiredError } from '@e4a/pg-js'
     import { tick } from 'svelte'
 
+    import yiviLogo from '$lib/assets/images/non-free/yivi-logo.svg'
     import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
     import {
         EncryptionState,
@@ -35,16 +43,13 @@
 
     let SMOOTH_TIME = 2
 
-    const emailRegex =
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-
     let canEncrypt = $derived.by(() => {
         if (encryptState.files.length === 0) return false
         const totalSize = encryptState.files.reduce((a, f) => a + f.size, 0)
         if (totalSize >= MAX_UPLOAD_SIZE) return false
         if (
             !encryptState.recipients.every(({ email }) =>
-                emailRegex.test(email)
+                validator.isEmail(email.trim())
             )
         )
             return false
@@ -86,7 +91,7 @@
         encryptState.recipients.forEach(({ email, extra }) => {
             if (!email || email.trim() === '') {
                 errors.push($_('filesharing.encryptPanel.validation.noEmail'))
-            } else if (!emailRegex.test(email)) {
+            } else if (!validator.isEmail(email.trim())) {
                 errors.push(
                     $_('filesharing.encryptPanel.validation.invalidEmail', {
                         values: { email },
@@ -144,7 +149,11 @@
             // Build recipients
             const recipients = encryptState.recipients.map(
                 ({ email, extra }) => {
-                    const r = pg.recipient.email(email.toLowerCase())
+                    // Trim before lowercasing so a pasted address with stray
+                    // surrounding whitespace is encrypted to the same value the
+                    // recipient's wallet holds — a mismatch here decrypts to a
+                    // silent KEM error on their end.
+                    const r = pg.recipient.email(email.trim().toLowerCase())
                     for (const a of extra) {
                         r.extraAttribute(a.t, a.v ?? '')
                     }
@@ -402,15 +411,30 @@
                 : undefined}
             onclick={onSign}
         >
-            <img
-                src={yiviLogoDark}
-                alt=""
-                aria-hidden="true"
-                width={50}
-                height={27}
-            />
             {$_('filesharing.encryptPanel.encryptSend')}
         </button>
+
+        <!-- Yivi attribution below the button. The wordmark is a fixed
+             multi-colour asset, so it sits on the page background (not the
+             coloured button) and swaps between the light and dark variants to
+             stay legible on either theme — mirrors Header.svelte's logo swap. -->
+        <p class="powered-by">
+            {$_('filesharing.encryptPanel.poweredBy')}
+            <img
+                class="yivi-logo yivi-logo--light"
+                src={yiviLogo}
+                alt="Yivi"
+                width={38}
+                height={21}
+            />
+            <img
+                class="yivi-logo yivi-logo--dark"
+                src={yiviLogoDark}
+                alt="Yivi"
+                width={38}
+                height={21}
+            />
+        </p>
 
         <!-- Mobile: Always show QR option when button is enabled -->
         {#if isMobileDevice}
@@ -437,10 +461,6 @@
         linkUrl="https://yivi.app"
         bordered
     />
-
-    <p id="required-fields-legend" class="required-legend">
-        {$_('filesharing.encryptPanel.requiredFieldsLegend')}
-    </p>
 
     <!-- Desktop Yivi popup above the button -->
     {#if !isMobileDevice && encryptState.encryptionState === EncryptionState.Sign && buttonRef}
@@ -558,6 +578,14 @@
     {/if}
 </div>
 
+<!-- Required-fields legend: kept out of `.button-container` so it can sit as
+     a footnote pinned to the bottom of the compose column, not glued to the
+     button group. `id` is unchanged — RecipientSelectionFields still points
+     its `aria-describedby` here. -->
+<p id="required-fields-legend" class="required-legend">
+    {$_('filesharing.encryptPanel.requiredFieldsLegend')}
+</p>
+
 <dialog
     bind:this={dialogRef}
     class="validation-modal"
@@ -583,7 +611,40 @@
 
 <style lang="scss">
     .send-btn {
-        margin: 1.5rem 0 0.8rem 0;
+        margin: 1.5rem 0 0 0;
+    }
+
+    /* Yivi attribution caption below the send button. */
+    .powered-by {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin: 0;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
+    }
+
+    .yivi-logo {
+        height: 18px;
+        width: auto;
+    }
+
+    /* Theme-aware wordmark swap — same mechanism as Header.svelte's logo. */
+    .yivi-logo--light {
+        display: block;
+    }
+
+    .yivi-logo--dark {
+        display: none;
+    }
+
+    :global(.dark) .yivi-logo--light {
+        display: none;
+    }
+
+    :global(.dark) .yivi-logo--dark {
+        display: block;
     }
 
     .limit-exceeded-banner {
@@ -648,10 +709,6 @@
         background: var(--pg-disabled-background);
         transform: none;
         box-shadow: none;
-    }
-
-    .send-btn[aria-disabled='true'] img {
-        opacity: 0.5;
     }
 
     .button-container {
@@ -790,11 +847,14 @@
         line-height: 1.4;
     }
 
+    /* Required-fields legend as a footnote at the foot of the compose column:
+       small and muted. On desktop it's pinned to the bottom of the column
+       (see the media query). */
     .required-legend {
-        font-size: var(--pg-font-size-sm);
+        margin: 0;
+        font-size: var(--pg-font-size-xs);
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
-        margin: 0;
         line-height: 1.4;
     }
 
@@ -805,6 +865,18 @@
         text-align: center;
         margin: 0;
         line-height: 1.4;
+    }
+
+    @media only screen and (min-width: 768px) {
+        /* The column (`.inputs-container`) is a fixed-height flex column; an
+           auto top margin collects any slack above the legend so it rests at
+           the very bottom rather than trailing the "What is Yivi?" block.
+           `padding-left` matches the column's other items (`.button-container`,
+           `.crypt-select-protection-input-box`) so the footnote lines up. */
+        .required-legend {
+            margin-top: auto;
+            padding-left: 1.25rem;
+        }
     }
 
     /* Desktop Yivi popup styles */
