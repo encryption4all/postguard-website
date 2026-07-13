@@ -443,10 +443,6 @@
         bordered
     />
 
-    <p id="required-fields-legend" class="required-legend">
-        {$_('filesharing.encryptPanel.requiredFieldsLegend')}
-    </p>
-
     <!-- Desktop Yivi popup above the button -->
     {#if !isMobileDevice && encryptState.encryptionState === EncryptionState.Sign && buttonRef}
         <button
@@ -562,6 +558,14 @@
         </div>
     {/if}
 </div>
+
+<!-- Required-fields legend: kept out of `.button-container` so it can sit as
+     a footnote pinned to the bottom of the compose column, not glued to the
+     button group. `id` is unchanged — RecipientSelectionFields still points
+     its `aria-describedby` here. -->
+<p id="required-fields-legend" class="required-legend">
+    {$_('filesharing.encryptPanel.requiredFieldsLegend')}
+</p>
 
 <dialog
     bind:this={dialogRef}
@@ -824,12 +828,28 @@
         line-height: 1.4;
     }
 
+    /* Required-fields legend as a footnote at the foot of the compose column:
+       small, muted, set off from the content above by a hairline rule. On
+       desktop it's pinned to the bottom of the column (see the media query). */
     .required-legend {
-        font-size: var(--pg-font-size-sm);
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--pg-strong-background);
+        font-size: var(--pg-font-size-xs);
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
-        margin: 0;
         line-height: 1.4;
+    }
+
+    @media only screen and (min-width: 768px) {
+        /* The column (`.inputs-container`) is a fixed-height flex column; an
+           auto top margin collects any slack above the legend so it rests at
+           the very bottom rather than trailing the "What is Yivi?" block. */
+        .required-legend {
+            margin-top: auto;
+        }
     }
 
     /* Desktop Yivi popup styles */
