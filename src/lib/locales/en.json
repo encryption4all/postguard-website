@@ -225,7 +225,6 @@
             "emailSuggestion": "Did you mean",
             "RecipientsText": "Specify the recipients and what attributes they must prove to decrypt the files. Only the recipients will see this data.",
             "requiredFieldsLegend": "Fields marked with * are required.",
-            "attachFilePrompt": "Attach at least one file before sending.",
             "RecipientsOptionalHeading": "Additional required attributes",
             "attributesExplainer": "Optionally require the recipient to prove more about themselves, like their date of birth or phone number, before they can open the files.",
             "emailSender": "Email address",
