@@ -29,31 +29,31 @@
         "title": "PostGuard",
         "par": "PostGuard biedt gratis en gebruiksvriendelijke end-to-end encryptie voor e-mails en bestanden. Alleen de beoogde ontvangers kunnen de e-mails en bestanden die je met PostGuard verzendt, ontsleutelen en lezen.",
         "subtitle1": "Waarom PostGuard?",
-        "subpar1": "De meeste e-mailtoepassingen (zoals Apple Mail, Gmail en Outlook) en toepassingen voor het delen van bestanden passen standaard geen end-to-end-versleuteling toe. Dit betekent dat onbevoegde partijen toegang kunnen krijgen tot en knoeien met uw e-mails en bestanden. Dit is niet geschikt voor e-mails en bestanden die gevoelige informatie bevatten."
+        "subpar1": "Versleutelde e-mail bestaat al lang — maar PGP en S/MIME zijn zo lastig dat in één onderzoek slechts 1 op de 10 koppels erin slaagde om één versleuteld bericht uit te wisselen. PostGuard is gemaakt zodat versleuteling bruikbaar is voor iedereen."
     },
     "landing": {
         "cta": "Begin met bestanden delen",
         "learnMore": "Meer informatie",
-        "heroHeadline": "Verstuur e-mail en bestanden veilig, op basis van identiteit",
-        "heroSubtext": "Alleen de persoon die je noemt kan openen wat je verstuurt — geverifieerd via hun echte identiteit. Gratis en open source.",
+        "heroHeadline": "Verstuur versleutelde e-mail en bestanden — zonder sleutels, zonder voorbereiding",
+        "heroSubtext": "Traditionele e-mailversleuteling laat iedereen eerst sleutels uitwisselen — en de meeste mensen krijgen dat nooit voor elkaar. PostGuard versleutelt in plaats daarvan op basis van iemands identiteit: verstuur direct, en je ontvanger toont met de Yivi-app aan wie ze zijn om het te openen.",
         "howItWorks": {
             "eyebrow": "Hoe het werkt",
             "step1Title": "Voeg je bestanden toe",
             "step1Desc": "Sleep de bestanden die je wilt delen erin — tot 5 GB, versleuteld in je browser.",
             "step2Title": "Stel de identiteit van de ontvanger in",
-            "step2Desc": "Vul hun e-mailadres in, en vraag eventueel om geboortedatum of telefoonnummer.",
+            "step2Desc": "Alleen hun e-mailadres — geen sleutels uitwisselen. Voeg eventueel geboortedatum of telefoonnummer toe.",
             "step3Title": "Onderteken met je eigen identiteit",
             "step3Desc": "Bevestig met de Yivi-app en je bestanden zijn onderweg — veilig."
         },
         "finalCta": {
             "heading": "Klaar om iets veilig te versturen?"
         },
-        "feature1Title": "End-to-end versleuteld",
-        "feature1Desc": "Je bestanden worden in je browser versleuteld voordat ze je apparaat verlaten. Wij zien nooit je onversleutelde gegevens.",
-        "feature2Title": "Identiteitsgebaseerd",
-        "feature2Desc": "Geen sleuteluitwisseling nodig. Ontvangers bewijzen hun identiteit met de Yivi-app om bestanden te ontsleutelen.",
-        "feature3Title": "Gratis & open source",
-        "feature3Desc": "PostGuard wordt ontwikkeld door de Radboud Universiteit en is gratis beschikbaar voor iedereen.",
+        "feature1Title": "Geen sleutels beheren",
+        "feature1Desc": "Geen publieke en privésleutels genereren, uitwisselen of bewaren. PostGuard versleutelt op basis van de identiteit van je ontvanger — die toont simpelweg met de Yivi-app aan wie ze zijn.",
+        "feature2Title": "Vooraf niets instellen",
+        "feature2Desc": "Je hebt vooraf niets van je ontvanger nodig. Verstuur nu; de ontvanger bevestigt daarna hun identiteit om het te lezen — geen account of installatie vooraf.",
+        "feature3Title": "Gratis, open source & end-to-end",
+        "feature3Desc": "Bestanden worden in je browser versleuteld, zodat alleen de bedoelde ontvanger ze kan openen. Gratis en open source, ontwikkeld aan de Radboud Universiteit.",
         "businessTitle": "PostGuard for Business",
         "businessDesc": "Verstuur versleutelde e-mails en bestanden programmatisch via de PostGuard API, of gebruik uw eigen e-maildomein. Gebouwd voor organisaties die veilige communicatie op schaal nodig hebben.",
         "businessCardDesc": "Versleutel e-mails en bestanden programmatisch via de API, of verstuur vanaf uw eigen domein. Gebouwd voor organisaties die veilige communicatie op schaal nodig hebben.",

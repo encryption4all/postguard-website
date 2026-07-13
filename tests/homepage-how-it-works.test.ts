@@ -15,9 +15,7 @@ test.beforeEach(async ({ page }) => {
 })
 
 test('the hero states the value proposition', async ({ page }) => {
-    await expect(page.locator('.intro h1')).toHaveText(
-        /send email and files safely/i
-    )
+    await expect(page.locator('.intro h1')).toHaveText(/no keys, no setup/i)
 })
 
 test('the "how it works" section shows three ordered, numbered steps', async ({
