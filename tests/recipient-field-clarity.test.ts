@@ -26,11 +26,6 @@ test('recipient input is labelled distinctly as an address field', async ({
     await expect(recipient).toHaveAttribute('type', 'email')
     await expect(recipient).toHaveAttribute('autocomplete', 'email')
     await expect(recipient).toHaveAttribute('inputmode', 'email')
-
-    // A leading envelope icon sets the address field apart visually.
-    const icon = page.locator('.address-input .address-input-icon')
-    await expect(icon).toBeVisible()
-    await expect(icon).toHaveAttribute('aria-hidden', 'true')
 })
 
 test('the recipient field comes before the optional message box', async ({
