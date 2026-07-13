@@ -29,29 +29,29 @@
         "title": "PostGuard",
         "par": "PostGuard offers free and easy-to-use end-to-end-encryption for emails and files. Only the intended recipients can decrypt and read the emails and files you send with PostGuard.",
         "subtitle1": "Why PostGuard?",
-        "subpar1": "Encrypted email isn't new — but PGP and S/MIME are so hard to use that in one study only 1 in 10 pairs of people managed to exchange a single encrypted message. PostGuard was built so that encryption is something anyone can actually use."
+        "subpar1": "Encrypted email isn't new. But PGP and S/MIME are so hard to use that, in one study, only 1 in 10 pairs of people managed to exchange a single encrypted message. PostGuard was built so encryption is something anyone can actually use."
     },
     "landing": {
         "cta": "Start sharing files",
         "learnMore": "Learn more",
-        "heroHeadline": "Send encrypted email and files — no keys, no setup",
-        "heroSubtext": "Traditional email encryption makes everyone swap keys before the first message — and most people never manage it. PostGuard encrypts to a person's identity instead: send right away, and your recipient proves who they are with the Yivi app to open it.",
+        "heroHeadline": "Send encrypted email and files. No keys, no setup.",
+        "heroSubtext": "Traditional email encryption makes everyone swap keys before the first message, and most people never manage it. PostGuard encrypts to a person's identity instead: send right away, and your recipient proves who they are with the Yivi app to open it.",
         "howItWorks": {
             "eyebrow": "How it works",
             "step1Title": "Add your files",
-            "step1Desc": "Drag in the files you want to share — up to 5 GB, encrypted right in your browser.",
+            "step1Desc": "Drag in the files you want to share. Up to 5 GB, encrypted right in your browser.",
             "step2Title": "Set the recipient's identity",
-            "step2Desc": "Just their email address — no keys to exchange. Optionally add their date of birth or phone number.",
+            "step2Desc": "Just their email address, no keys to exchange. Optionally add their date of birth or phone number.",
             "step3Title": "Sign with your own identity",
-            "step3Desc": "Confirm with the Yivi app, and your files are on their way — securely."
+            "step3Desc": "Confirm with the Yivi app, and your files are on their way."
         },
         "finalCta": {
             "heading": "Ready to send something securely?"
         },
         "feature1Title": "No keys to manage",
-        "feature1Desc": "No generating, exchanging or safeguarding public and private keys. PostGuard encrypts to your recipient's identity — they just prove who they are with the Yivi app.",
+        "feature1Desc": "No generating, exchanging or safeguarding public and private keys. PostGuard encrypts to your recipient's identity, and they just prove who they are with the Yivi app.",
         "feature2Title": "Nothing to set up first",
-        "feature2Desc": "You don't need anything from your recipient in advance. Send now; they verify their identity afterwards to read it — no accounts or installs beforehand.",
+        "feature2Desc": "You don't need anything from your recipient in advance. Send now; they verify their identity afterwards to read it, with no accounts or installs beforehand.",
         "feature3Title": "Free, open source & end-to-end",
         "feature3Desc": "Files are encrypted in your browser, so only the intended recipient can open them. Free and open source, developed at Radboud University.",
         "businessTitle": "PostGuard for Business",
@@ -227,7 +227,7 @@
             "requiredFieldsLegend": "Fields marked with * are required.",
             "attachFilePrompt": "Attach at least one file before sending.",
             "RecipientsOptionalHeading": "Additional required attributes",
-            "attributesExplainer": "Optionally require the recipient to prove more about themselves — like their date of birth or phone number — before they can open the files.",
+            "attributesExplainer": "Optionally require the recipient to prove more about themselves, like their date of birth or phone number, before they can open the files.",
             "emailSender": "Email address",
             "emailSenderHeading": "Your information",
             "emailSenderSubHeadingToggle": "Why do you need this information?",

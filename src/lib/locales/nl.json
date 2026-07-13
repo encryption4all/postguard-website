@@ -29,29 +29,29 @@
         "title": "PostGuard",
         "par": "PostGuard biedt gratis en gebruiksvriendelijke end-to-end encryptie voor e-mails en bestanden. Alleen de beoogde ontvangers kunnen de e-mails en bestanden die je met PostGuard verzendt, ontsleutelen en lezen.",
         "subtitle1": "Waarom PostGuard?",
-        "subpar1": "Versleutelde e-mail bestaat al lang — maar PGP en S/MIME zijn zo lastig dat in één onderzoek slechts 1 op de 10 koppels erin slaagde om één versleuteld bericht uit te wisselen. PostGuard is gemaakt zodat versleuteling bruikbaar is voor iedereen."
+        "subpar1": "Versleutelde e-mail bestaat al lang. Maar PGP en S/MIME zijn zo lastig dat in één onderzoek slechts 1 op de 10 koppels erin slaagde om één versleuteld bericht uit te wisselen. PostGuard is gemaakt zodat versleuteling bruikbaar is voor iedereen."
     },
     "landing": {
         "cta": "Begin met bestanden delen",
         "learnMore": "Meer informatie",
-        "heroHeadline": "Verstuur versleutelde e-mail en bestanden — zonder sleutels, zonder voorbereiding",
-        "heroSubtext": "Traditionele e-mailversleuteling laat iedereen eerst sleutels uitwisselen — en de meeste mensen krijgen dat nooit voor elkaar. PostGuard versleutelt in plaats daarvan op basis van iemands identiteit: verstuur direct, en je ontvanger toont met de Yivi-app aan wie ze zijn om het te openen.",
+        "heroHeadline": "Verstuur versleutelde e-mail en bestanden. Zonder sleutels, zonder voorbereiding.",
+        "heroSubtext": "Traditionele e-mailversleuteling laat iedereen eerst sleutels uitwisselen, en de meeste mensen krijgen dat nooit voor elkaar. PostGuard versleutelt in plaats daarvan op basis van iemands identiteit: verstuur direct, en je ontvanger toont met de Yivi-app aan wie ze zijn om het te openen.",
         "howItWorks": {
             "eyebrow": "Hoe het werkt",
             "step1Title": "Voeg je bestanden toe",
-            "step1Desc": "Sleep de bestanden die je wilt delen erin — tot 5 GB, versleuteld in je browser.",
+            "step1Desc": "Sleep de bestanden die je wilt delen erin. Tot 5 GB, versleuteld in je browser.",
             "step2Title": "Stel de identiteit van de ontvanger in",
-            "step2Desc": "Alleen hun e-mailadres — geen sleutels uitwisselen. Voeg eventueel geboortedatum of telefoonnummer toe.",
+            "step2Desc": "Alleen hun e-mailadres, geen sleutels uitwisselen. Voeg eventueel geboortedatum of telefoonnummer toe.",
             "step3Title": "Onderteken met je eigen identiteit",
-            "step3Desc": "Bevestig met de Yivi-app en je bestanden zijn onderweg — veilig."
+            "step3Desc": "Bevestig met de Yivi-app en je bestanden zijn veilig onderweg."
         },
         "finalCta": {
             "heading": "Klaar om iets veilig te versturen?"
         },
         "feature1Title": "Geen sleutels beheren",
-        "feature1Desc": "Geen publieke en privésleutels genereren, uitwisselen of bewaren. PostGuard versleutelt op basis van de identiteit van je ontvanger — die toont simpelweg met de Yivi-app aan wie ze zijn.",
+        "feature1Desc": "Geen publieke en privésleutels genereren, uitwisselen of bewaren. PostGuard versleutelt op basis van de identiteit van je ontvanger, die simpelweg met de Yivi-app aantoont wie ze zijn.",
         "feature2Title": "Vooraf niets instellen",
-        "feature2Desc": "Je hebt vooraf niets van je ontvanger nodig. Verstuur nu; de ontvanger bevestigt daarna hun identiteit om het te lezen — geen account of installatie vooraf.",
+        "feature2Desc": "Je hebt vooraf niets van je ontvanger nodig. Verstuur nu; de ontvanger bevestigt daarna hun identiteit om het te lezen, zonder account of installatie vooraf.",
         "feature3Title": "Gratis, open source & end-to-end",
         "feature3Desc": "Bestanden worden in je browser versleuteld, zodat alleen de bedoelde ontvanger ze kan openen. Gratis en open source, ontwikkeld aan de Radboud Universiteit.",
         "businessTitle": "PostGuard for Business",
@@ -226,7 +226,7 @@
             "requiredFieldsLegend": "Velden gemarkeerd met * zijn verplicht.",
             "attachFilePrompt": "Voeg minstens één bestand toe voordat je verstuurt.",
             "RecipientsOptionalHeading": "Extra vereiste attributen",
-            "attributesExplainer": "Vraag de ontvanger eventueel om meer over zichzelf te bewijzen — zoals geboortedatum of telefoonnummer — voordat de bestanden geopend kunnen worden.",
+            "attributesExplainer": "Vraag de ontvanger eventueel om meer over zichzelf te bewijzen, zoals geboortedatum of telefoonnummer, voordat de bestanden geopend kunnen worden.",
             "emailSender": "E-mailadres",
             "emailSenderHeading": "Jouw gegevens",
             "emailSenderSubHeadingToggle": "Waarom heb je deze gegevens nodig?",
