@@ -216,6 +216,7 @@
             "messageText": "Dit bericht wordt niet versleuteld en wordt opgenomen in de notificatie-e-mail.",
             "messagePlaceholder": "Typ hier je bericht...",
             "encryptSend": "Onderteken & verzend",
+            "poweredBy": "Ondertekenen mogelijk gemaakt door",
             "yiviInfo": "Wat is Yivi?",
             "yiviInfoText": "Yivi is een gratis en privacy-vriendelijke authenticatie-app. Met Yivi kun je bewijzen wie je bent door selectief persoonlijke gegevens te delen, zoals je e-mailadres, telefoonnummer of naam. Bij PostGuard gebruiken we Yivi om bestanden veilig te versleutelen en ontsleutelen.",
             "yiviInfoLink": "Meer informatie over Yivi",

@@ -4,6 +4,7 @@
     import { NetworkError, UploadSessionExpiredError } from '@e4a/pg-js'
     import { tick } from 'svelte'
 
+    import yiviLogo from '$lib/assets/images/non-free/yivi-logo.svg'
     import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
     import {
         EncryptionState,
@@ -390,16 +391,30 @@
             class="primary-btn send-btn"
             onclick={onSign}
         >
-            <img
-                class="yivi-logo"
-                src={yiviLogoDark}
-                alt=""
-                aria-hidden="true"
-                width={50}
-                height={27}
-            />
             {$_('filesharing.encryptPanel.encryptSend')}
         </button>
+
+        <!-- Yivi attribution below the button. The wordmark is a fixed
+             multi-colour asset, so it sits on the page background (not the
+             coloured button) and swaps between the light and dark variants to
+             stay legible on either theme — mirrors Header.svelte's logo swap. -->
+        <p class="powered-by">
+            {$_('filesharing.encryptPanel.poweredBy')}
+            <img
+                class="yivi-logo yivi-logo--light"
+                src={yiviLogo}
+                alt="Yivi"
+                width={38}
+                height={21}
+            />
+            <img
+                class="yivi-logo yivi-logo--dark"
+                src={yiviLogoDark}
+                alt="Yivi"
+                width={38}
+                height={21}
+            />
+        </p>
 
         <!-- Mobile: Always show QR option when button is enabled -->
         {#if isMobileDevice}
@@ -568,23 +583,40 @@
 
 <style lang="scss">
     .send-btn {
-        margin: 1.5rem 0 0.8rem 0;
+        margin: 1.5rem 0 0 0;
     }
 
-    /* The Yivi wordmark is a fixed multi-colour asset whose colours don't
-       separate from the coloured button. Give it a thin outline (a stack of
-       hard 1px drop-shadows around the glyph alpha) in the button's own text
-       colour, so it lifts off the button and tracks the label from light to
-       dark mode while keeping the brand colours. */
+    /* Yivi attribution caption below the send button. */
+    .powered-by {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin: 0;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
+    }
+
     .yivi-logo {
-        flex-shrink: 0;
-        filter: drop-shadow(1px 0 0 currentColor)
-            drop-shadow(-1px 0 0 currentColor) drop-shadow(0 1px 0 currentColor)
-            drop-shadow(0 -1px 0 currentColor)
-            drop-shadow(1px 1px 0 currentColor)
-            drop-shadow(-1px -1px 0 currentColor)
-            drop-shadow(1px -1px 0 currentColor)
-            drop-shadow(-1px 1px 0 currentColor);
+        height: 18px;
+        width: auto;
+    }
+
+    /* Theme-aware wordmark swap — same mechanism as Header.svelte's logo. */
+    .yivi-logo--light {
+        display: block;
+    }
+
+    .yivi-logo--dark {
+        display: none;
+    }
+
+    :global(.dark) .yivi-logo--light {
+        display: none;
+    }
+
+    :global(.dark) .yivi-logo--dark {
+        display: block;
     }
 
     .limit-exceeded-banner {
