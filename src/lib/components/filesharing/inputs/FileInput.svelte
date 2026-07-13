@@ -382,13 +382,8 @@
         width: 80%;
         max-width: 300px;
         height: auto;
-        transition: transform 0.2s ease;
         user-select: none;
         pointer-events: none;
-    }
-
-    .upload-butt:hover img {
-        transform: scale(1.1);
     }
 
     .drag-text {
