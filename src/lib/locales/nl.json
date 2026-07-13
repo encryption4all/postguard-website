@@ -205,8 +205,10 @@
             "RecipientsHelpToggle": "Wat vul ik hier in?",
             "emailRecipient": "E-mailadres ontvanger",
             "emailRecipientPlaceholder": "ontvanger@voorbeeld.nl",
+            "emailSuggestion": "Bedoelde je",
             "RecipientsText": "Geef de ontvangers op en welke attributen ze moeten aantonen om de bestanden te ontsleutelen. Alleen de ontvangers kunnen deze gegevens zien.",
             "requiredFieldsLegend": "Velden gemarkeerd met * zijn verplicht.",
+            "attachFilePrompt": "Voeg minstens één bestand toe voordat je verstuurt.",
             "RecipientsOptionalHeading": "Extra vereiste attributen",
             "emailSender": "E-mailadres",
             "emailSenderHeading": "Jouw gegevens",
@@ -216,6 +218,7 @@
             "messageText": "Dit bericht wordt niet versleuteld en wordt opgenomen in de notificatie-e-mail.",
             "messagePlaceholder": "Typ hier je bericht...",
             "encryptSend": "Onderteken & verzend",
+            "poweredBy": "Ondertekenen mogelijk gemaakt door",
             "yiviInfo": "Wat is Yivi?",
             "yiviInfoText": "Yivi is een gratis en privacy-vriendelijke authenticatie-app. Met Yivi kun je bewijzen wie je bent door selectief persoonlijke gegevens te delen, zoals je e-mailadres, telefoonnummer of naam. Bij PostGuard gebruiken we Yivi om bestanden veilig te versleutelen en ontsleutelen.",
             "yiviInfoLink": "Meer informatie over Yivi",
@@ -250,7 +253,7 @@
                 "continueButton": "Verder met invullen",
                 "noFiles": "Je hebt nog geen bestanden toegevoegd",
                 "noEmail": "Je hebt nog geen e-mailadres voor een ontvanger ingevuld",
-                "invalidEmail": "Het e-mailadres {email} is niet geldig",
+                "invalidEmail": "Het e-mailadres {email} is niet geldig. Controleer het op typefouten.",
                 "missingAttribute": "{attribute} van {email} ontbreekt",
                 "invalidPhone": "Het telefoonnummer van {email} is niet geldig"
             },
@@ -263,6 +266,12 @@
                 "blockedBody": "Je hebt je {limit} GB-uploadlimiet voor deze 2-weken periode bereikt. De limiet reset op {resets}.",
                 "serverBlockedTitle": "Upload geweigerd door de server",
                 "serverBlocked": "De server weigerde deze upload omdat je {used} GB van je {limit} GB-limiet (2 weken) hebt gebruikt. De limiet reset op {resets}."
+            },
+            "yiviInterrupted": {
+                "title": "Yivi-verificatie is onderbroken",
+                "body": "Het lijkt erop dat de Yivi-verificatie is geannuleerd of dat de app is gesloten voordat deze klaar was. Je bestanden en ontvangers staan er nog — je kunt het opnieuw proberen.",
+                "retryButton": "Probeer opnieuw",
+                "dismiss": "Sluiten"
             }
         },
         "emailPreview": {

@@ -206,8 +206,10 @@
             "RecipientsHelpToggle": "What should I fill in here?",
             "emailRecipient": "Recipient email address",
             "emailRecipientPlaceholder": "recipient@example.com",
+            "emailSuggestion": "Did you mean",
             "RecipientsText": "Specify the recipients and what attributes they must prove to decrypt the files. Only the recipients will see this data.",
             "requiredFieldsLegend": "Fields marked with * are required.",
+            "attachFilePrompt": "Attach at least one file before sending.",
             "RecipientsOptionalHeading": "Additional required attributes",
             "emailSender": "Email address",
             "emailSenderHeading": "Your information",
@@ -217,6 +219,7 @@
             "messageText": "This message will not be encrypted and will be included in the notification email.",
             "messagePlaceholder": "Type your message here...",
             "encryptSend": "Sign & send",
+            "poweredBy": "Signing powered by",
             "yiviInfo": "What is Yivi?",
             "yiviInfoText": "Yivi is a free and privacy-friendly authentication app. With Yivi you can prove who you are by selectively sharing personal data, such as your email address, phone number, or name. At PostGuard we use Yivi to securely encrypt and decrypt files.",
             "yiviInfoLink": "Learn more about Yivi",
@@ -251,7 +254,7 @@
                 "continueButton": "Continue filling in",
                 "noFiles": "You haven't added any files yet",
                 "noEmail": "You haven't filled in an email address for a recipient",
-                "invalidEmail": "The email address {email} is not valid",
+                "invalidEmail": "The email address {email} is not valid. Please check it for typos.",
                 "missingAttribute": "{attribute} of {email} is missing",
                 "invalidPhone": "The phone number of {email} is not valid"
             },
@@ -264,6 +267,12 @@
                 "blockedBody": "You have reached your {limit} GB upload limit for this 2-week period. Your limit resets on {resets}.",
                 "serverBlockedTitle": "Upload rejected by server",
                 "serverBlocked": "The server rejected this upload because you have used {used} GB of your {limit} GB 2-week limit. Your limit resets on {resets}."
+            },
+            "yiviInterrupted": {
+                "title": "Yivi verification was interrupted",
+                "body": "It looks like the Yivi verification was cancelled or the app was closed before it finished. Your files and recipients are still here — you can try again.",
+                "retryButton": "Try again",
+                "dismiss": "Dismiss"
             }
         },
         "emailPreview": {

@@ -1,9 +1,21 @@
 <script lang="ts">
     import { _, locale } from 'svelte-i18n'
     import { isValidPhoneNumber } from 'libphonenumber-js/mobile'
-    import { NetworkError, UploadSessionExpiredError } from '@e4a/pg-js'
+    // `validator.isEmail` requires a dotted TLD by default, so no-TLD typos
+    // like `jane@examplecom` / `jane@localhost` are rejected — the silent-
+    // failure class from the July 2026 user test
+    // (encryption4all/postguard-website#293). Import the package entry, not the
+    // `validator/lib/isEmail` deep path: validator is CJS-only and Vite's dev
+    // server fails to resolve the subpath.
+    import validator from 'validator'
+    import {
+        NetworkError,
+        UploadSessionExpiredError,
+        YiviSessionError,
+    } from '@e4a/pg-js'
     import { tick } from 'svelte'
 
+    import yiviLogo from '$lib/assets/images/non-free/yivi-logo.svg'
     import yiviLogoDark from '$lib/assets/images/non-free/yivi-logo-dark.svg'
     import {
         EncryptionState,
@@ -32,11 +44,13 @@
     let showValidationModal = $state(false)
     let validationErrors: string[] = $state([])
     let limitExceededMessage: string | null = $state(null)
+    // Set when a Yivi disclosure is cancelled or interrupted (the user closed
+    // the Yivi app, declined, or the session timed out). We stay on the
+    // compose screen with all input intact and surface a friendly banner with
+    // a retry action rather than the generic error panel. See #294.
+    let yiviInterrupted = $state(false)
 
     let SMOOTH_TIME = 2
-
-    const emailRegex =
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
     let canEncrypt = $derived.by(() => {
         if (encryptState.files.length === 0) return false
@@ -44,7 +58,7 @@
         if (totalSize >= MAX_UPLOAD_SIZE) return false
         if (
             !encryptState.recipients.every(({ email }) =>
-                emailRegex.test(email)
+                validator.isEmail(email.trim())
             )
         )
             return false
@@ -86,7 +100,7 @@
         encryptState.recipients.forEach(({ email, extra }) => {
             if (!email || email.trim() === '') {
                 errors.push($_('filesharing.encryptPanel.validation.noEmail'))
-            } else if (!emailRegex.test(email)) {
+            } else if (!validator.isEmail(email.trim())) {
                 errors.push(
                     $_('filesharing.encryptPanel.validation.invalidEmail', {
                         values: { email },
@@ -120,6 +134,8 @@
     }
 
     async function onSign(): Promise<void> {
+        // Clear any interrupted-disclosure banner from a previous attempt.
+        yiviInterrupted = false
         const errors = getValidationErrors()
         if (errors.length > 0) {
             validationErrors = errors
@@ -144,7 +160,11 @@
             // Build recipients
             const recipients = encryptState.recipients.map(
                 ({ email, extra }) => {
-                    const r = pg.recipient.email(email.toLowerCase())
+                    // Trim before lowercasing so a pasted address with stray
+                    // surrounding whitespace is encrypted to the same value the
+                    // recipient's wallet holds — a mismatch here decrypts to a
+                    // silent KEM error on their end.
+                    const r = pg.recipient.email(email.trim().toLowerCase())
                     for (const a of extra) {
                         r.extraAttribute(a.t, a.v ?? '')
                     }
@@ -219,6 +239,16 @@
                 encryptState.encryptionState = EncryptionState.FileSelection
                 encryptState.selfAborted = false
                 encryptState.encryptStartTime = 0
+            } else if (e instanceof YiviSessionError) {
+                // Fallback path: the Yivi session rejected outright (e.g. the
+                // widget aborted, or a build where restart isn't offered). The
+                // common cancel/close/timeout case is caught earlier at the DOM
+                // level by `onYiviInterrupted` because pg-js leaves the
+                // encrypt() promise pending in that state. Either way this is a
+                // recoverable, user-driven interruption — not a failure on our
+                // side — so recover gracefully rather than showing the generic
+                // error panel. See #294.
+                enterInterruptedRecovery()
             } else if (e instanceof UploadSessionExpiredError) {
                 // cryptify evicted the upload session (idle past the
                 // configured TTL or the server restarted). Retry won't help —
@@ -272,6 +302,27 @@
         // AbortController is single-use — provide a fresh one so a subsequent
         // send attempt can be cancelled too.
         encryptState.abort = new AbortController()
+    }
+
+    // Drop back to the compose screen with all input intact and surface the
+    // interrupted-disclosure banner (with its retry action). Shared by the DOM
+    // detection callback and the YiviSessionError fallback. See #294.
+    function enterInterruptedRecovery(): void {
+        encryptState.percentages = encryptState.files.map(() => 0)
+        encryptState.done = encryptState.files.map(() => false)
+        encryptState.encryptionState = EncryptionState.FileSelection
+        encryptState.encryptStartTime = 0
+        mobilePopupMode = 'none'
+        yiviInterrupted = true
+    }
+
+    // The Yivi widget entered a terminal recoverable state (cancelled, app
+    // closed mid-flow, or timed out). pg-js leaves the encrypt() promise
+    // pending in that case, so we detect it via the widget DOM and recover
+    // here rather than hanging on the QR screen.
+    function onYiviInterrupted(): void {
+        if (encryptState.encryptionState !== EncryptionState.Sign) return
+        enterInterruptedRecovery()
     }
 
     function updateProgress(pct: number) {
@@ -331,6 +382,32 @@
             >
         </div>
     {/if}
+    {#if yiviInterrupted}
+        <div class="yivi-interrupted-banner" role="alert">
+            <p class="yivi-interrupted-title">
+                {$_('filesharing.encryptPanel.yiviInterrupted.title')}
+            </p>
+            <p class="yivi-interrupted-body">
+                {$_('filesharing.encryptPanel.yiviInterrupted.body')}
+            </p>
+            <div class="yivi-interrupted-actions">
+                <button
+                    type="button"
+                    class="yivi-interrupted-retry"
+                    onclick={onSign}
+                >
+                    {$_('filesharing.encryptPanel.yiviInterrupted.retryButton')}
+                </button>
+                <button
+                    type="button"
+                    class="yivi-interrupted-dismiss"
+                    onclick={() => (yiviInterrupted = false)}
+                >
+                    {$_('filesharing.encryptPanel.yiviInterrupted.dismiss')}
+                </button>
+            </div>
+        </div>
+    {/if}
     {#if encryptState.encryptionState === EncryptionState.Encrypting}
         {@const totalProgress =
             encryptState.percentages.length > 0
@@ -384,22 +461,48 @@
             {/if}
         </div>
     {:else}
+        <!-- Empty-state prompt: a fileless message is never valid, so make the
+             reason the send button is inactive visible up front instead of only
+             after the user clicks and gets the validation modal (#290). -->
+        {#if encryptState.files.length === 0}
+            <p id="attach-file-prompt" class="attach-file-prompt" role="note">
+                {$_('filesharing.encryptPanel.attachFilePrompt')}
+            </p>
+        {/if}
         <!-- Normal button -->
         <button
             bind:this={buttonRef}
             class="primary-btn send-btn"
             aria-disabled={!canEncrypt}
+            aria-describedby={encryptState.files.length === 0
+                ? 'attach-file-prompt'
+                : undefined}
             onclick={onSign}
         >
-            <img
-                src={yiviLogoDark}
-                alt=""
-                aria-hidden="true"
-                width={50}
-                height={27}
-            />
             {$_('filesharing.encryptPanel.encryptSend')}
         </button>
+
+        <!-- Yivi attribution below the button. The wordmark is a fixed
+             multi-colour asset, so it sits on the page background (not the
+             coloured button) and swaps between the light and dark variants to
+             stay legible on either theme — mirrors Header.svelte's logo swap. -->
+        <p class="powered-by">
+            {$_('filesharing.encryptPanel.poweredBy')}
+            <img
+                class="yivi-logo yivi-logo--light"
+                src={yiviLogo}
+                alt="Yivi"
+                width={38}
+                height={21}
+            />
+            <img
+                class="yivi-logo yivi-logo--dark"
+                src={yiviLogoDark}
+                alt="Yivi"
+                width={38}
+                height={21}
+            />
+        </p>
 
         <!-- Mobile: Always show QR option when button is enabled -->
         {#if isMobileDevice}
@@ -426,10 +529,6 @@
         linkUrl="https://yivi.app"
         bordered
     />
-
-    <p id="required-fields-legend" class="required-legend">
-        {$_('filesharing.encryptPanel.requiredFieldsLegend')}
-    </p>
 
     <!-- Desktop Yivi popup above the button -->
     {#if !isMobileDevice && encryptState.encryptionState === EncryptionState.Sign && buttonRef}
@@ -470,7 +569,7 @@
                 <p class="popup-instruction">{$_('filesharing.sign.scanQR')}</p>
 
                 <div class="qr-code-wrapper">
-                    <YiviQRCode />
+                    <YiviQRCode oninterrupted={onYiviInterrupted} />
                 </div>
 
                 <HelpToggle
@@ -505,7 +604,9 @@
                     <p class="bottom-sheet-instruction">
                         {$_('filesharing.sign.scanQR')}
                     </p>
-                    <div class="qr-code-wrapper"><YiviQRCode /></div>
+                    <div class="qr-code-wrapper">
+                        <YiviQRCode oninterrupted={onYiviInterrupted} />
+                    </div>
                     <HelpToggle
                         title={$_('filesharing.encryptPanel.yiviInfo')}
                         content={$_('filesharing.encryptPanel.yiviInfoText')}
@@ -528,7 +629,10 @@
                         {$_('filesharing.sign.followSteps')}
                     </p>
                     <div style="display: none;">
-                        <YiviQRCode mode="deeplink" />
+                        <YiviQRCode
+                            mode="deeplink"
+                            oninterrupted={onYiviInterrupted}
+                        />
                     </div>
                     <Chip
                         text={$_('filesharing.sign.cancel')}
@@ -546,6 +650,14 @@
         </div>
     {/if}
 </div>
+
+<!-- Required-fields legend: kept out of `.button-container` so it can sit as
+     a footnote pinned to the bottom of the compose column, not glued to the
+     button group. `id` is unchanged — RecipientSelectionFields still points
+     its `aria-describedby` here. -->
+<p id="required-fields-legend" class="required-legend">
+    {$_('filesharing.encryptPanel.requiredFieldsLegend')}
+</p>
 
 <dialog
     bind:this={dialogRef}
@@ -572,7 +684,40 @@
 
 <style lang="scss">
     .send-btn {
-        margin: 1.5rem 0 0.8rem 0;
+        margin: 1.5rem 0 0 0;
+    }
+
+    /* Yivi attribution caption below the send button. */
+    .powered-by {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin: 0;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
+    }
+
+    .yivi-logo {
+        height: 18px;
+        width: auto;
+    }
+
+    /* Theme-aware wordmark swap — same mechanism as Header.svelte's logo. */
+    .yivi-logo--light {
+        display: block;
+    }
+
+    .yivi-logo--dark {
+        display: none;
+    }
+
+    :global(.dark) .yivi-logo--light {
+        display: none;
+    }
+
+    :global(.dark) .yivi-logo--dark {
+        display: block;
     }
 
     .limit-exceeded-banner {
@@ -620,6 +765,87 @@
     .limit-exceeded-dismiss:hover {
         color: var(--pg-text);
     }
+
+    .yivi-interrupted-banner {
+        width: 100%;
+        padding: 0.85rem 1rem;
+        margin: 0.5rem 0;
+        border-radius: var(--pg-border-radius-md);
+        background: color-mix(
+            in srgb,
+            var(--pg-primary) 8%,
+            var(--pg-general-background)
+        );
+        border: 1px solid color-mix(in srgb, var(--pg-primary) 30%, transparent);
+        font-family: var(--pg-font-family);
+        box-sizing: border-box;
+    }
+
+    .yivi-interrupted-title {
+        margin: 0 0 0.25rem 0;
+        font-weight: var(--pg-font-weight-bold);
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text);
+    }
+
+    .yivi-interrupted-body {
+        margin: 0;
+        font-size: var(--pg-font-size-sm);
+        color: var(--pg-text-secondary);
+        line-height: 1.4;
+    }
+
+    .yivi-interrupted-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.75rem;
+    }
+
+    .yivi-interrupted-retry {
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-font-size-sm);
+        font-weight: var(--pg-font-weight-medium);
+        color: var(--pg-general-background);
+        background: var(--pg-text);
+        border: none;
+        border-radius: var(--pg-border-radius-sm);
+        padding: 0.4rem 1rem;
+        cursor: pointer;
+        transition:
+            background 0.2s ease,
+            transform 0.1s ease;
+    }
+
+    .yivi-interrupted-retry:hover {
+        background: var(--pg-input-active);
+        transform: translateY(-1px);
+    }
+
+    .yivi-interrupted-retry:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+    }
+
+    .yivi-interrupted-dismiss {
+        all: unset;
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-font-size-sm);
+        font-weight: var(--pg-font-weight-medium);
+        color: var(--pg-text-secondary);
+        cursor: pointer;
+        padding: 0.4rem 0.5rem;
+        border-radius: var(--pg-border-radius-sm);
+    }
+
+    .yivi-interrupted-dismiss:hover {
+        color: var(--pg-text);
+    }
+
+    .yivi-interrupted-dismiss:focus-visible {
+        outline: 2px solid var(--pg-primary);
+        outline-offset: 2px;
+    }
     /* The send button is never natively `disabled`: it must stay focusable
        (in the tab order) and clickable so activating it can surface the
        validation modal that explains what is still wrong. We mark it
@@ -637,10 +863,6 @@
         background: var(--pg-disabled-background);
         transform: none;
         box-shadow: none;
-    }
-
-    .send-btn[aria-disabled='true'] img {
-        opacity: 0.5;
     }
 
     .button-container {
@@ -779,12 +1001,36 @@
         line-height: 1.4;
     }
 
+    /* Required-fields legend as a footnote at the foot of the compose column:
+       small and muted. On desktop it's pinned to the bottom of the column
+       (see the media query). */
     .required-legend {
-        font-size: var(--pg-font-size-sm);
+        margin: 0;
+        font-size: var(--pg-font-size-xs);
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
+        line-height: 1.4;
+    }
+
+    .attach-file-prompt {
+        font-size: var(--pg-font-size-md);
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
+        text-align: center;
         margin: 0;
         line-height: 1.4;
+    }
+
+    @media only screen and (min-width: 768px) {
+        /* The column (`.inputs-container`) is a fixed-height flex column; an
+           auto top margin collects any slack above the legend so it rests at
+           the very bottom rather than trailing the "What is Yivi?" block.
+           `padding-left` matches the column's other items (`.button-container`,
+           `.crypt-select-protection-input-box`) so the footnote lines up. */
+        .required-legend {
+            margin-top: auto;
+            padding-left: 1.25rem;
+        }
     }
 
     /* Desktop Yivi popup styles */
