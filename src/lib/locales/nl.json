@@ -1,4 +1,7 @@
 {
+    "common": {
+        "opensNewTab": "opent in een nieuw tabblad"
+    },
     "header": {
         "fs": "Bestanden Delen",
         "home": "Home",

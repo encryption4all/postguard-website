@@ -1,4 +1,7 @@
 {
+    "common": {
+        "opensNewTab": "opens in a new tab"
+    },
     "header": {
         "fs": "File Sharing",
         "home": "Home",

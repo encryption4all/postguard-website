@@ -8,6 +8,7 @@
     import { page } from '$app/state'
     import { resolve } from '$app/paths'
     import ThemeSwitcher from './ThemeSwitcher.svelte'
+    import ExternalLinkIcon from './ExternalLinkIcon.svelte'
     import { BUSINESS_URL } from '$lib/env'
 
     const items = [
@@ -15,8 +16,8 @@
         { name: 'about', route: '/about/' },
         { name: 'blog', route: '/blog/' },
         { name: 'pol', route: '/privacy/' },
-        { name: 'business', route: BUSINESS_URL },
-        { name: 'docs', route: 'https://docs.postguard.eu' },
+        { name: 'business', route: BUSINESS_URL, external: true },
+        { name: 'docs', route: 'https://docs.postguard.eu', external: true },
     ]
 
     function isSelected(route: string) {
@@ -45,10 +46,17 @@
         <ul>
             {#each items as item (item.name)}
                 <li class:selected={isSelected(item.route)}>
-                    <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-                    <a href={item.route}>
-                        {$_(`header.${item.name}`)}
+                    <!-- eslint-disable svelte/no-navigation-without-resolve -->
+                    <a
+                        href={item.route}
+                        target={item.external ? '_blank' : undefined}
+                        rel={item.external ? 'noopener noreferrer' : undefined}
+                    >
+                        {$_(
+                            `header.${item.name}`
+                        )}{#if item.external}<ExternalLinkIcon />{/if}
                     </a>
+                    <!-- eslint-enable svelte/no-navigation-without-resolve -->
                 </li>
             {/each}
         </ul>
