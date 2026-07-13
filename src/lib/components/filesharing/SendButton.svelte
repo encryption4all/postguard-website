@@ -842,9 +842,12 @@
     @media only screen and (min-width: 768px) {
         /* The column (`.inputs-container`) is a fixed-height flex column; an
            auto top margin collects any slack above the legend so it rests at
-           the very bottom rather than trailing the "What is Yivi?" block. */
+           the very bottom rather than trailing the "What is Yivi?" block.
+           `padding-left` matches the column's other items (`.button-container`,
+           `.crypt-select-protection-input-box`) so the footnote lines up. */
         .required-legend {
             margin-top: auto;
+            padding-left: 1.25rem;
         }
     }
 
