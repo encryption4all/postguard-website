@@ -13,12 +13,20 @@
 
     let myDropzone: Dropzone | null = null
     let isDragging = $state(false)
+    // Flips true once Dropzone is constructed so the restore effect below can
+    // wait for it (files restored from a draft may arrive after mount).
+    let dropzoneReady = $state(false)
+    let injectedInitial = false
 
     interface props {
         files: File[]
         percentages: number[]
         done: boolean[]
         stage: EncryptionState
+        /** Files restored from a saved draft, re-injected into Dropzone on load
+         *  so their previews appear and they flow into `files` like a normal
+         *  add. Empty in the common (no draft) case. */
+        initialFiles?: File[]
     }
 
     import { MAX_UPLOAD_SIZE, ROLLING_LIMIT } from '$lib/env'
@@ -31,11 +39,26 @@
         percentages = $bindable(),
         done = $bindable(),
         stage = $bindable(),
+        initialFiles = [],
     }: props = $props()
 
     $effect(() => {
         if (files.length === 0 && myDropzone && myDropzone.files.length > 0) {
             myDropzone.removeAllFiles(true)
+        }
+    })
+
+    // Re-inject draft files once Dropzone exists. addFile() emits 'addedfile',
+    // so the handler below renders each preview and appends to `files` exactly
+    // as a user drop would — no separate restore path to keep in sync.
+    $effect(() => {
+        if (!dropzoneReady || injectedInitial || !myDropzone) return
+        if (initialFiles.length === 0) return
+        injectedInitial = true
+        for (const file of initialFiles) {
+            // addFile() augments a plain File into a DropzoneFile at runtime;
+            // the type just doesn't reflect that it accepts a bare File.
+            myDropzone.addFile(file as Parameters<Dropzone['addFile']>[0])
         }
     })
 
@@ -130,6 +153,8 @@
                 done = done.slice(0, index).concat(done.slice(index + 1))
             }
         })
+
+        dropzoneReady = true
 
         return () => {
             if (myDropzone) {
