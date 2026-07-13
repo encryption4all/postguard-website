@@ -8,9 +8,9 @@
     import { page } from '$app/state'
     import { resolve } from '$app/paths'
     import ThemeSwitcher from './ThemeSwitcher.svelte'
-    import { FF_BUSINESS, BUSINESS_URL } from '$lib/env'
+    import { BUSINESS_URL } from '$lib/env'
 
-    const allItems = [
+    const items = [
         { name: 'fs', route: '/fileshare' },
         { name: 'about', route: '/about/' },
         { name: 'blog', route: '/blog/' },
@@ -18,10 +18,6 @@
         { name: 'business', route: BUSINESS_URL },
         { name: 'docs', route: 'https://docs.postguard.eu' },
     ]
-
-    let items = FF_BUSINESS
-        ? allItems
-        : allItems.filter((i) => i.name !== 'business')
 
     function isSelected(route: string) {
         return page.url.pathname === route

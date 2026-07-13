@@ -4,7 +4,7 @@
     import { _ } from 'svelte-i18n'
     import { onMount } from 'svelte'
     import { resolve } from '$app/paths'
-    import { FF_BUSINESS, BUSINESS_URL } from '$lib/env'
+    import { BUSINESS_URL } from '$lib/env'
 
     let { children } = $props()
     let contactEl = $state<HTMLAnchorElement>()
@@ -99,10 +99,9 @@
                             >
                         </li>
                         <!-- eslint-disable svelte/no-navigation-without-resolve -->
-                        {#if FF_BUSINESS}<li>
-                                <a href={BUSINESS_URL}>PostGuard for Business</a
-                                >
-                            </li>{/if}
+                        <li>
+                            <a href={BUSINESS_URL}>PostGuard for Business</a>
+                        </li>
                         <!-- eslint-enable svelte/no-navigation-without-resolve -->
                     </ul>
                 </div>
