@@ -88,6 +88,10 @@
                 aria-required="true"
                 aria-invalid={showEmailError || undefined}
                 aria-describedby="required-fields-legend"
+                autocomplete="email"
+                inputmode="email"
+                autocapitalize="none"
+                spellcheck="false"
                 class="pg-input"
                 class:is-confirming-bg={isConfirming}
                 class:input-invalid={showEmailError}

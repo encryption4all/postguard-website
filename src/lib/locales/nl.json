@@ -1,4 +1,7 @@
 {
+    "common": {
+        "opensNewTab": "opent in een nieuw tabblad"
+    },
     "header": {
         "fs": "Bestanden Delen",
         "home": "Home",
@@ -221,7 +224,7 @@
             },
             "RecipientsHeading": "Ontvangers",
             "RecipientsHelpToggle": "Wat vul ik hier in?",
-            "emailRecipient": "E-mailadres",
+            "emailRecipient": "E-mailadres ontvanger",
             "emailRecipientPlaceholder": "ontvanger@voorbeeld.nl",
             "emailSuggestion": "Bedoelde je",
             "RecipientsText": "Geef de ontvangers op en welke attributen ze moeten aantonen om de bestanden te ontsleutelen. Alleen de ontvangers kunnen deze gegevens zien.",

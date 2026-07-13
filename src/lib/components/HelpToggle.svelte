@@ -1,4 +1,7 @@
 <script lang="ts">
+    import { slide } from 'svelte/transition'
+    import { MediaQuery } from 'svelte/reactivity'
+
     interface props {
         title: string
         content: string
@@ -14,29 +17,53 @@
         linkText,
         linkUrl,
     }: props = $props()
+
+    let open = $state(false)
+
+    // Stable, hydration-safe id so the toggle button can point at its content
+    // region for assistive tech (the disclosure pattern we get for free from
+    // <details> but must wire up by hand now that we control the animation).
+    const contentId = $props.id()
+
+    // Respect the user's motion preference: collapse instantly instead of
+    // sliding when reduce-motion is set.
+    const reducedMotion = new MediaQuery('(prefers-reduced-motion: reduce)')
+    let slideDuration = $derived(reducedMotion.current ? 0 : 220)
 </script>
 
-<details class="help-section" class:bordered>
-    <summary class="help-toggle">
-        <span class="arrow">▶</span>
+<div class="help-section" class:bordered>
+    <button
+        type="button"
+        class="help-toggle"
+        aria-expanded={open}
+        aria-controls={contentId}
+        onclick={() => (open = !open)}
+    >
+        <span class="arrow" class:open>▶</span>
         <span class="toggle-label">{title}</span>
-    </summary>
-    <div class="help-content">
-        <p class="help-text">{content}</p>
-        {#if linkText && linkUrl}
-            <!-- eslint-disable svelte/no-navigation-without-resolve -->
-            <a
-                href={linkUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="help-link"
-            >
-                {linkText} →
-            </a>
-            <!-- eslint-enable svelte/no-navigation-without-resolve -->
-        {/if}
-    </div>
-</details>
+    </button>
+    {#if open}
+        <div
+            id={contentId}
+            class="help-content"
+            transition:slide={{ duration: slideDuration }}
+        >
+            <p class="help-text">{content}</p>
+            {#if linkText && linkUrl}
+                <!-- eslint-disable svelte/no-navigation-without-resolve -->
+                <a
+                    href={linkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="help-link"
+                >
+                    {linkText} →
+                </a>
+                <!-- eslint-enable svelte/no-navigation-without-resolve -->
+            {/if}
+        </div>
+    {/if}
+</div>
 
 <style>
     .help-section {
@@ -85,7 +112,7 @@
         display: inline-block;
     }
 
-    details[open] .arrow {
+    .arrow.open {
         transform: rotate(90deg);
     }
 

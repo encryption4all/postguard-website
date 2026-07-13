@@ -1105,7 +1105,7 @@
     }
 
     .popup-title {
-        font-size: var(--pg-font-size-sm);
+        font-size: var(--pg-font-size-md);
         font-weight: var(--pg-font-weight-bold);
         margin: 0;
         text-align: left;
@@ -1171,7 +1171,7 @@
     }
 
     .bottom-sheet-title {
-        font-size: var(--pg-font-size-sm);
+        font-size: var(--pg-font-size-md);
         font-weight: var(--pg-font-weight-bold);
         margin: 0;
         text-align: center;
