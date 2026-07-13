@@ -393,11 +393,22 @@
             {/if}
         </div>
     {:else}
+        <!-- Empty-state prompt: a fileless message is never valid, so make the
+             reason the send button is inactive visible up front instead of only
+             after the user clicks and gets the validation modal (#290). -->
+        {#if encryptState.files.length === 0}
+            <p id="attach-file-prompt" class="attach-file-prompt" role="note">
+                {$_('filesharing.encryptPanel.attachFilePrompt')}
+            </p>
+        {/if}
         <!-- Normal button -->
         <button
             bind:this={buttonRef}
             class="primary-btn send-btn"
             aria-disabled={!canEncrypt}
+            aria-describedby={encryptState.files.length === 0
+                ? 'attach-file-prompt'
+                : undefined}
             onclick={onSign}
         >
             {$_('filesharing.encryptPanel.encryptSend')}
@@ -844,6 +855,15 @@
         font-size: var(--pg-font-size-xs);
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
+        line-height: 1.4;
+    }
+
+    .attach-file-prompt {
+        font-size: var(--pg-font-size-md);
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
+        text-align: center;
+        margin: 0;
         line-height: 1.4;
     }
 

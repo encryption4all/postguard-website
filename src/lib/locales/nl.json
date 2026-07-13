@@ -208,6 +208,7 @@
             "emailSuggestion": "Bedoelde je",
             "RecipientsText": "Geef de ontvangers op en welke attributen ze moeten aantonen om de bestanden te ontsleutelen. Alleen de ontvangers kunnen deze gegevens zien.",
             "requiredFieldsLegend": "Velden gemarkeerd met * zijn verplicht.",
+            "attachFilePrompt": "Voeg minstens één bestand toe voordat je verstuurt.",
             "RecipientsOptionalHeading": "Extra vereiste attributen",
             "emailSender": "E-mailadres",
             "emailSenderHeading": "Jouw gegevens",
