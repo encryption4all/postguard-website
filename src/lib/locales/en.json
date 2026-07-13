@@ -34,6 +34,20 @@
     "landing": {
         "cta": "Start sharing files",
         "learnMore": "Learn more",
+        "heroHeadline": "Send email and files safely, based on identity",
+        "heroSubtext": "Only the person you name can open what you send — verified by their real-world identity. Free and open source.",
+        "howItWorks": {
+            "eyebrow": "How it works",
+            "step1Title": "Add your files",
+            "step1Desc": "Drag in the files you want to share — up to 5 GB, encrypted right in your browser.",
+            "step2Title": "Set the recipient's identity",
+            "step2Desc": "Enter their email, and optionally require their date of birth or phone number.",
+            "step3Title": "Sign with your own identity",
+            "step3Desc": "Confirm with the Yivi app, and your files are on their way — securely."
+        },
+        "finalCta": {
+            "heading": "Ready to send something securely?"
+        },
         "feature1Title": "End-to-end encrypted",
         "feature1Desc": "Your files are encrypted in your browser before they leave your device. We never see your unencrypted data.",
         "feature2Title": "Identity-based",
@@ -42,6 +56,8 @@
         "feature3Desc": "PostGuard is developed by Radboud University and freely available for everyone.",
         "businessTitle": "PostGuard for Business",
         "businessDesc": "Send encrypted emails and files programmatically with the PostGuard API, or use your own email domain. Built for organisations that need secure communication at scale.",
+        "businessCardDesc": "Encrypt emails and files programmatically with the API, or send from your own domain. Built for organisations that need secure communication at scale.",
+        "businessCardCta": "Explore PostGuard for Business",
         "business1Title": "API-driven encryption",
         "business1Desc": "Integrate encrypted email and file sharing directly into your applications using API keys. Send end-to-end encrypted messages programmatically.",
         "business2Title": "Custom email domains",
@@ -211,6 +227,7 @@
             "requiredFieldsLegend": "Fields marked with * are required.",
             "attachFilePrompt": "Attach at least one file before sending.",
             "RecipientsOptionalHeading": "Additional required attributes",
+            "attributesExplainer": "Optionally require the recipient to prove more about themselves — like their date of birth or phone number — before they can open the files.",
             "emailSender": "Email address",
             "emailSenderHeading": "Your information",
             "emailSenderSubHeadingToggle": "Why do you need this information?",

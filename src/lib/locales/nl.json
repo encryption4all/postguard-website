@@ -34,6 +34,20 @@
     "landing": {
         "cta": "Begin met bestanden delen",
         "learnMore": "Meer informatie",
+        "heroHeadline": "Verstuur e-mail en bestanden veilig, op basis van identiteit",
+        "heroSubtext": "Alleen de persoon die je noemt kan openen wat je verstuurt — geverifieerd via hun echte identiteit. Gratis en open source.",
+        "howItWorks": {
+            "eyebrow": "Hoe het werkt",
+            "step1Title": "Voeg je bestanden toe",
+            "step1Desc": "Sleep de bestanden die je wilt delen erin — tot 5 GB, versleuteld in je browser.",
+            "step2Title": "Stel de identiteit van de ontvanger in",
+            "step2Desc": "Vul hun e-mailadres in, en vraag eventueel om geboortedatum of telefoonnummer.",
+            "step3Title": "Onderteken met je eigen identiteit",
+            "step3Desc": "Bevestig met de Yivi-app en je bestanden zijn onderweg — veilig."
+        },
+        "finalCta": {
+            "heading": "Klaar om iets veilig te versturen?"
+        },
         "feature1Title": "End-to-end versleuteld",
         "feature1Desc": "Je bestanden worden in je browser versleuteld voordat ze je apparaat verlaten. Wij zien nooit je onversleutelde gegevens.",
         "feature2Title": "Identiteitsgebaseerd",
@@ -42,6 +56,8 @@
         "feature3Desc": "PostGuard wordt ontwikkeld door de Radboud Universiteit en is gratis beschikbaar voor iedereen.",
         "businessTitle": "PostGuard for Business",
         "businessDesc": "Verstuur versleutelde e-mails en bestanden programmatisch via de PostGuard API, of gebruik uw eigen e-maildomein. Gebouwd voor organisaties die veilige communicatie op schaal nodig hebben.",
+        "businessCardDesc": "Versleutel e-mails en bestanden programmatisch via de API, of verstuur vanaf uw eigen domein. Gebouwd voor organisaties die veilige communicatie op schaal nodig hebben.",
+        "businessCardCta": "Ontdek PostGuard for Business",
         "business1Title": "API-gestuurde versleuteling",
         "business1Desc": "Integreer versleutelde e-mail en bestandsdeling rechtstreeks in uw applicaties met API-sleutels. Verstuur end-to-end versleutelde berichten programmatisch.",
         "business2Title": "Eigen e-maildomein",
@@ -210,6 +226,7 @@
             "requiredFieldsLegend": "Velden gemarkeerd met * zijn verplicht.",
             "attachFilePrompt": "Voeg minstens één bestand toe voordat je verstuurt.",
             "RecipientsOptionalHeading": "Extra vereiste attributen",
+            "attributesExplainer": "Vraag de ontvanger eventueel om meer over zichzelf te bewijzen — zoals geboortedatum of telefoonnummer — voordat de bestanden geopend kunnen worden.",
             "emailSender": "E-mailadres",
             "emailSenderHeading": "Jouw gegevens",
             "emailSenderSubHeadingToggle": "Waarom heb je deze gegevens nodig?",
