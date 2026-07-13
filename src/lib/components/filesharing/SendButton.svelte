@@ -39,6 +39,15 @@
 
     let { encryptState = $bindable() }: props = $props()
 
+    // The QR instruction ("… scanning this QR code with the free Yivi app …")
+    // renders the Yivi wordmark in place of the word "Yivi". The wordmark is
+    // just the word, so the image is decorative (alt="", aria-hidden) and the
+    // word is kept as visually-hidden text — screen readers read the whole
+    // sentence normally instead of announcing an image. Splitting on the word
+    // keeps the logo where "Yivi" sits in each locale (EN "Yivi app" /
+    // NL "Yivi-app").
+    let scanQrParts = $derived($_('filesharing.sign.scanQR').split('Yivi'))
+
     let isMobileDevice = isMobile()
     let mobilePopupMode: 'none' | 'direct' | 'qr' = $state('none')
     let showValidationModal = $state(false)
@@ -365,6 +374,21 @@
     })
 </script>
 
+{#snippet yiviScanInstruction()}{#if scanQrParts.length === 2}{scanQrParts[0]}<span
+            class="yivi-inline"
+            ><span class="sr-only">Yivi</span><img
+                class="yivi-inline-logo yivi-inline-logo--light"
+                src={yiviLogo}
+                alt=""
+                aria-hidden="true"
+            /><img
+                class="yivi-inline-logo yivi-inline-logo--dark"
+                src={yiviLogoDark}
+                alt=""
+                aria-hidden="true"
+            /></span
+        >{scanQrParts[1]}{:else}{$_('filesharing.sign.scanQR')}{/if}{/snippet}
+
 <div class="button-container">
     {#if limitExceededMessage}
         <div class="limit-exceeded-banner" role="alert">
@@ -461,22 +485,13 @@
             {/if}
         </div>
     {:else}
-        <!-- Empty-state prompt: a fileless message is never valid, so make the
-             reason the send button is inactive visible up front instead of only
-             after the user clicks and gets the validation modal (#290). -->
-        {#if encryptState.files.length === 0}
-            <p id="attach-file-prompt" class="attach-file-prompt" role="note">
-                {$_('filesharing.encryptPanel.attachFilePrompt')}
-            </p>
-        {/if}
-        <!-- Normal button -->
+        <!-- Normal button. When the message isn't sendable yet (e.g. no files
+             attached) the button is aria-disabled but still clickable, so a
+             click surfaces the validation modal explaining what's missing. -->
         <button
             bind:this={buttonRef}
             class="primary-btn send-btn"
             aria-disabled={!canEncrypt}
-            aria-describedby={encryptState.files.length === 0
-                ? 'attach-file-prompt'
-                : undefined}
             onclick={onSign}
         >
             {$_('filesharing.encryptPanel.encryptSend')}
@@ -566,7 +581,7 @@
                     />
                 </div>
 
-                <p class="popup-instruction">{$_('filesharing.sign.scanQR')}</p>
+                <p class="popup-instruction">{@render yiviScanInstruction()}</p>
 
                 <div class="qr-code-wrapper">
                     <YiviQRCode oninterrupted={onYiviInterrupted} />
@@ -602,7 +617,7 @@
                         {$_('filesharing.encryptPanel.encryptSend')}
                     </h2>
                     <p class="bottom-sheet-instruction">
-                        {$_('filesharing.sign.scanQR')}
+                        {@render yiviScanInstruction()}
                     </p>
                     <div class="qr-code-wrapper">
                         <YiviQRCode oninterrupted={onYiviInterrupted} />
@@ -718,6 +733,32 @@
 
     :global(.dark) .yivi-logo--dark {
         display: block;
+    }
+
+    /* Yivi wordmark shown inline within the scan instruction, sized to the
+       surrounding text. The word itself is kept as visually-hidden text
+       (.sr-only) for screen readers, so these images are decorative and use
+       the same light/dark swap as the "powered by" wordmark above. */
+    .yivi-inline-logo {
+        height: 1em;
+        width: auto;
+        vertical-align: -0.1em;
+    }
+
+    .yivi-inline-logo--light {
+        display: inline-block;
+    }
+
+    .yivi-inline-logo--dark {
+        display: none;
+    }
+
+    :global(.dark) .yivi-inline-logo--light {
+        display: none;
+    }
+
+    :global(.dark) .yivi-inline-logo--dark {
+        display: inline-block;
     }
 
     .limit-exceeded-banner {
@@ -1012,15 +1053,6 @@
         line-height: 1.4;
     }
 
-    .attach-file-prompt {
-        font-size: var(--pg-font-size-md);
-        color: var(--pg-text-secondary);
-        font-family: var(--pg-font-family);
-        text-align: center;
-        margin: 0;
-        line-height: 1.4;
-    }
-
     @media only screen and (min-width: 768px) {
         /* The column (`.inputs-container`) is a fixed-height flex column; an
            auto top margin collects any slack above the legend so it rests at
@@ -1083,7 +1115,7 @@
     }
 
     .popup-instruction {
-        font-size: var(--pg-font-size-sm);
+        font-size: var(--pg-font-size-md);
         font-weight: var(--pg-font-weight-bold);
         margin: 0 0 0.5rem 0;
         text-align: left;
@@ -1148,7 +1180,7 @@
     }
 
     .bottom-sheet-instruction {
-        font-size: var(--pg-font-size-sm);
+        font-size: var(--pg-font-size-md);
         font-weight: var(--pg-font-weight-bold);
         margin: 0;
         text-align: center;

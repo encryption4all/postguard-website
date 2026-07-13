@@ -142,6 +142,11 @@
                             }}
                         />
                     {/each}
+                    {#if addableButtons.length > 0}
+                        <p class="attributes-explainer">
+                            {$_('filesharing.encryptPanel.attributesExplainer')}
+                        </p>
+                    {/if}
                     <div class="attributes-list">
                         {#each addableButtons as attribute (attribute)}
                             <AttributeButton
@@ -225,6 +230,16 @@
         flex-direction: column;
         gap: 0.5rem;
         margin-top: 0.5rem;
+    }
+
+    /* Short helper above the add-attribute chips explaining what requiring an
+       extra attribute (date of birth, phone number) does for the recipient. */
+    .attributes-explainer {
+        margin: 0;
+        font-size: var(--pg-font-size-sm);
+        line-height: 1.4;
+        color: var(--pg-text-secondary);
+        font-family: var(--pg-font-family);
     }
 
     .email-suggestion {
