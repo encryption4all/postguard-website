@@ -829,14 +829,10 @@
     }
 
     /* Required-fields legend as a footnote at the foot of the compose column:
-       small, muted, set off from the content above by a hairline rule. On
-       desktop it's pinned to the bottom of the column (see the media query). */
+       small and muted. On desktop it's pinned to the bottom of the column
+       (see the media query). */
     .required-legend {
-        width: 100%;
-        box-sizing: border-box;
         margin: 0;
-        padding-top: 0.75rem;
-        border-top: 1px solid var(--pg-strong-background);
         font-size: var(--pg-font-size-xs);
         color: var(--pg-text-secondary);
         font-family: var(--pg-font-family);
