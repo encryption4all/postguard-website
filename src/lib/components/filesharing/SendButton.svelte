@@ -1,10 +1,13 @@
 <script lang="ts">
     import { _, locale } from 'svelte-i18n'
     import { isValidPhoneNumber } from 'libphonenumber-js/mobile'
-    // `isEmail` requires a dotted TLD by default, so no-TLD typos like
-    // `jane@examplecom` / `jane@localhost` are rejected — the silent-failure
-    // class from the July 2026 user test (encryption4all/postguard-website#293).
-    import isEmail from 'validator/lib/isEmail'
+    // `validator.isEmail` requires a dotted TLD by default, so no-TLD typos
+    // like `jane@examplecom` / `jane@localhost` are rejected — the silent-
+    // failure class from the July 2026 user test
+    // (encryption4all/postguard-website#293). Import the package entry, not the
+    // `validator/lib/isEmail` deep path: validator is CJS-only and Vite's dev
+    // server fails to resolve the subpath.
+    import validator from 'validator'
     import { NetworkError, UploadSessionExpiredError } from '@e4a/pg-js'
     import { tick } from 'svelte'
 
@@ -44,7 +47,9 @@
         const totalSize = encryptState.files.reduce((a, f) => a + f.size, 0)
         if (totalSize >= MAX_UPLOAD_SIZE) return false
         if (
-            !encryptState.recipients.every(({ email }) => isEmail(email.trim()))
+            !encryptState.recipients.every(({ email }) =>
+                validator.isEmail(email.trim())
+            )
         )
             return false
         if (
@@ -85,7 +90,7 @@
         encryptState.recipients.forEach(({ email, extra }) => {
             if (!email || email.trim() === '') {
                 errors.push($_('filesharing.encryptPanel.validation.noEmail'))
-            } else if (!isEmail(email.trim())) {
+            } else if (!validator.isEmail(email.trim())) {
                 errors.push(
                     $_('filesharing.encryptPanel.validation.invalidEmail', {
                         values: { email },
