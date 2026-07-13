@@ -1,6 +1,13 @@
 <script lang="ts">
     import { _, locale } from 'svelte-i18n'
     import { isValidPhoneNumber } from 'libphonenumber-js/mobile'
+    // `validator.isEmail` requires a dotted TLD by default, so no-TLD typos
+    // like `jane@examplecom` / `jane@localhost` are rejected — the silent-
+    // failure class from the July 2026 user test
+    // (encryption4all/postguard-website#293). Import the package entry, not the
+    // `validator/lib/isEmail` deep path: validator is CJS-only and Vite's dev
+    // server fails to resolve the subpath.
+    import validator from 'validator'
     import { NetworkError, UploadSessionExpiredError } from '@e4a/pg-js'
     import { tick } from 'svelte'
 
@@ -35,16 +42,13 @@
 
     let SMOOTH_TIME = 2
 
-    const emailRegex =
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-
     let canEncrypt = $derived.by(() => {
         if (encryptState.files.length === 0) return false
         const totalSize = encryptState.files.reduce((a, f) => a + f.size, 0)
         if (totalSize >= MAX_UPLOAD_SIZE) return false
         if (
             !encryptState.recipients.every(({ email }) =>
-                emailRegex.test(email)
+                validator.isEmail(email.trim())
             )
         )
             return false
@@ -86,7 +90,7 @@
         encryptState.recipients.forEach(({ email, extra }) => {
             if (!email || email.trim() === '') {
                 errors.push($_('filesharing.encryptPanel.validation.noEmail'))
-            } else if (!emailRegex.test(email)) {
+            } else if (!validator.isEmail(email.trim())) {
                 errors.push(
                     $_('filesharing.encryptPanel.validation.invalidEmail', {
                         values: { email },
@@ -144,7 +148,11 @@
             // Build recipients
             const recipients = encryptState.recipients.map(
                 ({ email, extra }) => {
-                    const r = pg.recipient.email(email.toLowerCase())
+                    // Trim before lowercasing so a pasted address with stray
+                    // surrounding whitespace is encrypted to the same value the
+                    // recipient's wallet holds — a mismatch here decrypts to a
+                    // silent KEM error on their end.
+                    const r = pg.recipient.email(email.trim().toLowerCase())
                     for (const a of extra) {
                         r.extraAttribute(a.t, a.v ?? '')
                     }
