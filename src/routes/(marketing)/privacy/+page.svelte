@@ -1,6 +1,7 @@
 <script>
     import { _ } from 'svelte-i18n'
     import SEO from '$lib/components/SEO.svelte'
+    import SimpleSummary from '$lib/components/SimpleSummary.svelte'
     import { SITE_URL } from '$lib/env'
 
     const privacyJsonLd = {
@@ -12,7 +13,7 @@
                 url: `${SITE_URL}/privacy`,
                 description:
                     "PostGuard's privacy policy. Learn how we handle your data when you use our end-to-end encryption services.",
-                dateModified: '2026-04-21',
+                dateModified: '2026-07-13',
                 isPartOf: {
                     '@id': `${SITE_URL}/#website`,
                 },
@@ -50,7 +51,14 @@
 <div class="privacy-container">
     <div class="privacy-content">
         <h2><span>{$_('privacypolicy.title')}</span></h2>
-        <p class="last-updated">Last updated: April 21, 2026</p>
+        <p class="last-updated">{$_('privacypolicy.lastUpdated')}</p>
+        <SimpleSummary
+            id="privacy-summary"
+            title={$_('privacypolicy.simple.title')}
+        >
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+            {@html $_('privacypolicy.simple.body')}
+        </SimpleSummary>
         <div class="privacy-text">
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html $_('privacypolicy.full')}

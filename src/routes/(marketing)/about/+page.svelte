@@ -2,6 +2,7 @@
     import { _ } from 'svelte-i18n'
     import aboutImg from '$lib/assets/images/about.svg'
     import SEO from '$lib/components/SEO.svelte'
+    import SimpleSummary from '$lib/components/SimpleSummary.svelte'
     import { SITE_URL } from '$lib/env'
 
     const aboutJsonLd = {
@@ -45,32 +46,47 @@
 />
 
 <div class="page-wrapper">
-    <div class="grid-container">
-        <div class="grid-item header">
+    <div class="about-layout">
+        <div class="grid-item header intro">
             <h2><span>{$_('about.title')}</span></h2>
-            <div class="text-content">
-                <h3>{$_('about.subtitle1')}</h3>
-                <p>
-                    {$_('about.subpar1')}
-                </p>
-                <h3>{$_('about.subtitle2')}</h3>
-                <p>
-                    {$_('about.subpar2')}
-                </p>
-                <h3>{$_('about.subtitle3')}</h3>
-                <p>
-                    {$_('about.subpar3')}
-                </p>
-            </div>
+            <SimpleSummary id="about-summary" title={$_('about.simple.title')}>
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                {@html $_('about.simple.body')}
+            </SimpleSummary>
         </div>
-        <div class="grid-item content-box">
-            <img src={aboutImg} alt="" aria-hidden="true" class="invert" />
-            <div id="team">
-                <h3>{$_('about.team.header')}</h3>
-                <p>
-                    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                    {@html $_('about.team.par')}
-                </p>
+
+        <img
+            class="about-separator invert"
+            src={aboutImg}
+            alt=""
+            aria-hidden="true"
+        />
+
+        <div class="grid-container">
+            <div class="grid-item">
+                <div class="text-content">
+                    <h3>{$_('about.subtitle1')}</h3>
+                    <p>
+                        {$_('about.subpar1')}
+                    </p>
+                    <h3>{$_('about.subtitle2')}</h3>
+                    <p>
+                        {$_('about.subpar2')}
+                    </p>
+                    <h3>{$_('about.subtitle3')}</h3>
+                    <p>
+                        {$_('about.subpar3')}
+                    </p>
+                </div>
+            </div>
+            <div class="grid-item">
+                <div id="team">
+                    <h3>{$_('about.team.header')}</h3>
+                    <p>
+                        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                        {@html $_('about.team.par')}
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -86,10 +102,31 @@
         padding: 1.5rem 1rem;
     }
 
+    .about-layout {
+        max-width: 1100px;
+        width: 100%;
+        height: fit-content;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
     .grid-item {
         height: 100%;
         display: flex;
         flex-direction: column;
+    }
+
+    .intro {
+        height: auto;
+        gap: 1rem;
+    }
+
+    .about-separator {
+        display: block;
+        width: 60%;
+        max-width: 400px;
+        margin: 0 auto 2rem;
     }
 
     .grid-container {
@@ -97,12 +134,13 @@
         grid-template-columns: repeat(2, minmax(0, 550px));
         height: fit-content;
         align-items: start;
+        justify-content: center;
+        column-gap: 1.5rem;
         margin: auto;
     }
 
-    img {
-        width: 90%;
-        margin-bottom: 1rem;
+    .grid-container .grid-item {
+        height: auto;
     }
 
     .text-content {
@@ -120,13 +158,6 @@
             line-height: 1.6;
             margin-bottom: 0.5rem;
         }
-    }
-
-    .content-box {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
     }
 
     #team {
@@ -149,6 +180,10 @@
     @media only screen and (max-width: 800px) {
         .grid-container {
             grid-template-columns: 1fr;
+        }
+
+        .about-separator {
+            width: 75%;
         }
     }
 </style>
