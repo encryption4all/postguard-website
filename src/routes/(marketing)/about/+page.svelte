@@ -103,12 +103,14 @@
     }
 
     .about-layout {
-        max-width: 1100px;
+        max-width: var(--pg-reading-width);
         width: 100%;
         height: fit-content;
         margin: auto;
         display: flex;
         flex-direction: column;
+        /* Enable kerning + ligatures for the whole page (inherited). */
+        text-rendering: optimizeLegibility;
     }
 
     .grid-item {
@@ -120,6 +122,10 @@
     .intro {
         height: auto;
         gap: 1rem;
+
+        h2 {
+            text-wrap: balance;
+        }
     }
 
     .about-separator {
@@ -131,11 +137,11 @@
 
     .grid-container {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 550px));
+        grid-template-columns: 1fr;
         height: fit-content;
         align-items: start;
         justify-content: center;
-        column-gap: 1.5rem;
+        row-gap: 2rem;
         margin: auto;
     }
 
@@ -144,9 +150,13 @@
     }
 
     .text-content {
+        /* Let quotes/bullets hang into the margin (optical alignment). */
+        hanging-punctuation: first last;
+
         h3 {
             margin-top: 1.5rem;
             margin-bottom: 0.5rem;
+            text-wrap: balance;
         }
 
         h3:first-child {
@@ -157,6 +167,14 @@
             font-size: var(--pg-font-size-base);
             line-height: 1.6;
             margin-bottom: 0.5rem;
+            /* Knuth-Plass-style breaking: avoids orphans, evens the rag. */
+            text-wrap: pretty;
+            /* Justified, hyphenated setting for a typeset LaTeX-like look.
+               Hyphenation keys off the page `lang` (set per locale in the
+               root layout), so it breaks correctly in both en and nl. */
+            text-align: justify;
+            -webkit-hyphens: auto;
+            hyphens: auto;
         }
     }
 
@@ -164,24 +182,29 @@
         border: 1px dashed black;
         border-radius: 8px;
         padding: 20px;
+        /* Let quotes/bullets hang into the margin (optical alignment). */
+        hanging-punctuation: first last;
 
         h3 {
             margin-top: 0;
             margin-bottom: 0.75rem;
+            text-wrap: balance;
         }
 
         p {
             font-size: var(--pg-font-size-base);
             line-height: 1.6;
             margin: 0;
+            /* Knuth-Plass-style breaking: avoids orphans, evens the rag. */
+            text-wrap: pretty;
+            /* Justified, hyphenated setting to match the rest of the page. */
+            text-align: justify;
+            -webkit-hyphens: auto;
+            hyphens: auto;
         }
     }
 
     @media only screen and (max-width: 800px) {
-        .grid-container {
-            grid-template-columns: 1fr;
-        }
-
         .about-separator {
             width: 75%;
         }

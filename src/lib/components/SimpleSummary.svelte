@@ -34,15 +34,21 @@
         font-size: var(--pg-font-size-lg);
         font-weight: var(--pg-font-weight-bold);
         color: var(--pg-text);
+        /* Balance the heading so it never breaks to a lone trailing word. */
+        text-wrap: balance;
     }
 
     .simple-summary__body {
         /* Cap the line length so the plain-language text stays easy to read
            even when the card spans a wide container. */
-        max-width: 62ch;
+        max-width: var(--pg-reading-width);
         color: var(--pg-text);
         font-size: var(--pg-font-size-base);
         line-height: 1.6;
+        /* Knuth-Plass-style breaking: avoids orphans and evens out the rag. */
+        text-wrap: pretty;
+        /* Let quotes/bullets hang into the margin (optical alignment). */
+        hanging-punctuation: first last;
 
         /* Body is injected via {@html} in the parent, so it carries no scope
            class — target it with :global (same approach as the privacy page). */
