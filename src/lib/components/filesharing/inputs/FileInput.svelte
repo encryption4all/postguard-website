@@ -362,7 +362,14 @@
     }
 
     .drop-hint-text {
-        font-size: clamp(var(--pg-font-size-lg), 3vw, var(--pg-font-size-2xl));
+        /* Fluid, but anchored to a rem base so it tracks the root type scale.
+           A bare `vw` middle term is viewport-locked and ignores the root
+           font size; `calc(rem + vw)` keeps the fluidity while still scaling. */
+        font-size: clamp(
+            var(--pg-font-size-lg),
+            calc(var(--pg-font-size-lg) + 2vw),
+            var(--pg-font-size-2xl)
+        );
         font-weight: var(--pg-font-weight-extrabold);
         color: var(--pg-primary);
         text-align: center;
