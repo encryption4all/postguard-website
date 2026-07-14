@@ -254,6 +254,7 @@
             "succesInfo": "Your encrypted files have been encrypted and uploaded. An email with a download link has been sent to: ",
             "filesHeader": "Files",
             "recipientsHeader": "To",
+            "senderConfirmation": "A confirmation email has also been sent to you.",
             "whatRecipientGets": "What does a recipient get",
             "whatRecipientGetsText": "The recipient receives an email with a link to the PostGuard website. On this page, they can download the files by proving their identity with the Yivi app. They scan a QR code with Yivi, after which they gain access to the encrypted files and can decrypt them.",
             "another": "Send something else",

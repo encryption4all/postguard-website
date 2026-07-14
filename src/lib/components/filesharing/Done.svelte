@@ -53,6 +53,12 @@
         </div>
     </div>
 
+    <!-- Confirmation email note: the sender always receives a confirmation
+         email too (upload is sent with notify.sender: true in SendButton). -->
+    <p class="sender-confirmation">
+        {$_('filesharing.encryptPanel.senderConfirmation')}
+    </p>
+
     <!-- Help section -->
     <HelpToggle
         title={$_('filesharing.encryptPanel.whatRecipientGets')}
@@ -160,6 +166,15 @@
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
+    }
+
+    .sender-confirmation {
+        width: 100%;
+        margin: 0;
+        font-family: var(--pg-font-family);
+        font-size: var(--pg-font-size-md);
+        color: var(--pg-text);
+        text-align: center;
     }
 
     .spacer {
