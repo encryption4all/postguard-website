@@ -224,6 +224,21 @@
 
             <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
             <div class="files-container" class:hidden={files.length <= 0}>
+                {#if stage === EncryptionState.FileSelection}
+                    <div
+                        class="files-attached"
+                        role="status"
+                        aria-live="polite"
+                    >
+                        <span class="files-attached-text">
+                            {$_(
+                                'filesharing.encryptPanel.fileBox.filesAttached',
+                                { values: { count: files.length } }
+                            )}
+                        </span>
+                    </div>
+                {/if}
+
                 <div
                     id="previews"
                     class="dz-previews"
@@ -231,19 +246,6 @@
                     class:encrypting={stage === EncryptionState.Encrypting}
                     class:error={stage === EncryptionState.Error}
                 ></div>
-
-                {#if stage !== EncryptionState.Encrypting}
-                    <div class="add-more-chip-container">
-                        <Chip
-                            text={$_(
-                                'filesharing.encryptPanel.fileBox.addMoreFiles'
-                            )}
-                            icon="+"
-                            size="lg"
-                            variant="default"
-                        />
-                    </div>
-                {/if}
 
                 <div class="file-summary" class:over-limit={overLimit}>
                     <p>
@@ -264,7 +266,6 @@
                                 'filesharing.encryptPanel.fileBox.fileSummary',
                                 {
                                     values: {
-                                        count: files.length,
                                         size: remainingSizeGB,
                                     },
                                 }
@@ -272,6 +273,19 @@
                         {/if}
                     </p>
                 </div>
+
+                {#if stage !== EncryptionState.Encrypting}
+                    <div class="add-more-chip-container">
+                        <Chip
+                            text={$_(
+                                'filesharing.encryptPanel.fileBox.addMoreFiles'
+                            )}
+                            icon="+"
+                            size="sm"
+                            variant="default"
+                        />
+                    </div>
+                {/if}
             </div>
         </div>
     </div>
@@ -449,6 +463,19 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
+    }
+
+    .files-attached {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--pg-primary);
+        font-weight: var(--pg-font-weight-bold);
+        font-size: var(--pg-font-size-lg);
+    }
+
+    .files-attached-text {
+        min-width: 0;
     }
 
     .dropzone-box.has-files .files-container {
