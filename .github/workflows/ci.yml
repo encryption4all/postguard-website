@@ -31,6 +31,20 @@ jobs:
       - run: npx svelte-kit sync
       - run: npx svelte-check --threshold warning
 
+  # Run the Vitest unit tests (src/**). test:unit runs svelte-kit sync itself,
+  # so it is self-contained from a bare npm ci.
+  test-unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run test:unit
+
   # Run prettier --check, eslint, and stylelint.
   lint:
     name: Lint
