@@ -173,7 +173,7 @@
             "scanQR": "Verify your identity by scanning this QR code with the free Yivi app on your phone.",
             "close": "Close",
             "signOtherDevice": "Sign with Yivi on another device",
-            "followSteps": "Follow the steps in the Yivi app",
+            "followSteps": "Tap the button below to open the Yivi app and verify your identity.",
             "cancel": "Cancel"
         },
         "decryptpanel": {

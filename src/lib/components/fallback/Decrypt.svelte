@@ -226,15 +226,24 @@
     {:else if decryptState === STATES.Qr}
         <div class="decrypt-card">
             <h3>
-                {$_('fallback.decrypt.scanQr', {
-                    default: 'Scan QR code with Yivi',
-                })}
+                {isMobileDevice
+                    ? $_('fallback.decrypt.openApp', {
+                          default: 'Open the Yivi app',
+                      })
+                    : $_('fallback.decrypt.scanQr', {
+                          default: 'Scan QR code with Yivi',
+                      })}
             </h3>
             <p class="card-subtitle">
-                {$_('fallback.decrypt.scanQrDesc', {
-                    default:
-                        'Verify your identity by scanning this QR code with the free Yivi app on your phone.',
-                })}
+                {isMobileDevice
+                    ? $_('fallback.decrypt.openAppDesc', {
+                          default:
+                              'Tap the button below to open the free Yivi app and verify your identity.',
+                      })
+                    : $_('fallback.decrypt.scanQrDesc', {
+                          default:
+                              'Verify your identity by scanning this QR code with the free Yivi app on your phone.',
+                      })}
             </p>
             {#if showHints}
                 <div class="hints">
@@ -246,7 +255,7 @@
             <YiviQRCode
                 id="yivi-fallback"
                 responsive
-                mode={isMobileDevice ? 'deeplink' : 'qr'}
+                mode={isMobileDevice ? 'button' : 'qr'}
             />
         </div>
     {:else if decryptState === STATES.Decrypting}

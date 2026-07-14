@@ -316,7 +316,7 @@
                     <YiviQRCode
                         id="yivi-download"
                         responsive
-                        mode={isMobileDevice ? 'deeplink' : 'qr'}
+                        mode={isMobileDevice ? 'button' : 'qr'}
                     />
                 </div>
                 <HelpToggle

@@ -3,7 +3,17 @@
     import { onMount } from 'svelte'
 
     interface props {
-        mode?: 'qr' | 'deeplink'
+        /** `qr` renders (and, on mobile, forces) a scannable QR code. `button`
+         *  renders Yivi's native "Open Yivi app" button for the user to tap —
+         *  used on mobile so the app opens from a genuine user gesture. We must
+         *  never auto-click that button: it points at a Universal Link
+         *  (https://open.yivi.app/...), and iOS only hands a Universal Link off
+         *  to the installed app when the navigation happens inside an active
+         *  user-activation context. A synthetic click fired from the load
+         *  observer runs outside that window, so iOS ignores the app and just
+         *  loads the fallback web page in Safari — which looks exactly as if no
+         *  Yivi app were installed. */
+        mode?: 'qr' | 'button'
         id?: string
         responsive?: boolean
         /** Called once when the Yivi widget enters a terminal, recoverable
@@ -24,7 +34,7 @@
         oninterrupted,
     }: props = $props()
 
-    let qrLoaded = $state(false)
+    let widgetLoaded = $state(false)
     let containerEl: HTMLDivElement
 
     onMount(() => {
@@ -54,31 +64,33 @@
                 containerEl.querySelector('canvas') ||
                 containerEl.querySelector('.yivi-web-qr-code')
             ) {
-                qrLoaded = true
+                widgetLoaded = true
                 return
             }
 
-            // On mobile, YiviWeb shows a button instead of a QR code.
-            // Handle based on mode:
+            // On mobile, YiviWeb shows an "Open Yivi app" button instead of a
+            // QR code. Handle based on mode:
+            if (mode === 'button') {
+                // Button mode: leave Yivi's native app button in place for the
+                // user to tap. We must NOT auto-click it — see the `mode` prop
+                // doc: a synthetic click can't open the app on iOS and would
+                // instead navigate the tab to the Yivi fallback web page.
+                if (containerEl.querySelector('.yivi-web-button-link')) {
+                    widgetLoaded = true
+                }
+                return
+            }
+
+            // QR mode: on mobile YiviWeb first shows the app button, so click
+            // its "QR code" option once to force the QR to render. (On desktop
+            // the QR renders directly and this button is absent.)
             if (!autoClicked) {
-                if (mode === 'deeplink') {
-                    // Deep link mode: auto-click the app button to open Yivi
-                    const buttonLink = containerEl.querySelector<HTMLElement>(
-                        '.yivi-web-button-link'
-                    )
-                    if (buttonLink) {
-                        autoClicked = true
-                        buttonLink.click()
-                    }
-                } else {
-                    // QR mode: auto-click "show QR" to force QR rendering
-                    const chooseQR = containerEl.querySelector<HTMLElement>(
-                        '[data-yivi-glue-transition="chooseQR"]'
-                    )
-                    if (chooseQR) {
-                        autoClicked = true
-                        chooseQR.click()
-                    }
+                const chooseQR = containerEl.querySelector<HTMLElement>(
+                    '[data-yivi-glue-transition="chooseQR"]'
+                )
+                if (chooseQR) {
+                    autoClicked = true
+                    chooseQR.click()
                 }
             }
         })
@@ -87,8 +99,14 @@
     })
 </script>
 
-<div {id} class="yivi-qr-container" class:responsive bind:this={containerEl}>
-    {#if !qrLoaded}
+<div
+    {id}
+    class="yivi-qr-container"
+    class:responsive
+    class:button-mode={mode === 'button'}
+    bind:this={containerEl}
+>
+    {#if !widgetLoaded}
         <svg class="spinner" viewBox="0 0 24 24" width="32" height="32">
             <circle
                 class="spinner-circle"
@@ -129,6 +147,22 @@
     .yivi-qr-container.responsive :global(svg) {
         width: 100% !important;
         height: auto !important;
+    }
+
+    /* Button mode renders Yivi's own self-styled "Open Yivi app" widget rather
+       than a QR code, so drop the fixed square QR frame and let the widget size
+       to its natural content. Placed after the `.responsive` rules so it wins
+       when a caller sets both (the decrypt/download flows do). */
+    .yivi-qr-container.button-mode {
+        width: 100%;
+        max-width: 360px;
+        height: auto;
+        min-height: 0;
+        aspect-ratio: auto;
+        background: transparent;
+        border: none;
+        padding: 0;
+        overflow: visible;
     }
 
     .spinner {

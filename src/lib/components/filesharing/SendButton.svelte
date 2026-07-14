@@ -643,9 +643,9 @@
                     <p class="bottom-sheet-instruction">
                         {$_('filesharing.sign.followSteps')}
                     </p>
-                    <div style="display: none;">
+                    <div class="qr-code-wrapper">
                         <YiviQRCode
-                            mode="deeplink"
+                            mode="button"
                             oninterrupted={onYiviInterrupted}
                         />
                     </div>
