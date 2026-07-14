@@ -253,6 +253,7 @@
             "succesInfo": "Jouw bestanden zijn versleuteld en verzonden. Een e-mail met een download link is verstuurd naar: ",
             "filesHeader": "Bestanden",
             "recipientsHeader": "Naar",
+            "senderConfirmation": "Er is ook een bevestigingsmail naar jou verzonden.",
             "whatRecipientGets": "Wat krijgt een ontvanger",
             "whatRecipientGetsText": "De ontvanger ontvangt een e-mail met een link naar de PostGuard website. Op deze pagina kunnen ze de bestanden downloaden door hun identiteit te bewijzen met de Yivi-app. Ze scannen een QR-code met Yivi, waarna ze toegang krijgen tot de versleutelde bestanden en deze kunnen ontsleutelen.",
             "another": "Nog iets versturen",
