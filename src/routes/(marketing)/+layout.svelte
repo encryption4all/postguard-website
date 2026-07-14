@@ -1,10 +1,11 @@
 <script lang="ts">
     import Header from '$lib/components/Header.svelte'
+    import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte'
     import { isLoading } from 'svelte-i18n'
     import { _ } from 'svelte-i18n'
     import { onMount } from 'svelte'
     import { resolve } from '$app/paths'
-    import { FF_BUSINESS, BUSINESS_URL } from '$lib/env'
+    import { BUSINESS_URL } from '$lib/env'
 
     let { children } = $props()
     let contactEl = $state<HTMLAnchorElement>()
@@ -71,8 +72,11 @@
                             <a href={resolve('/blog/')}>{$_('footer.blog')}</a>
                         </li>
                         <li>
-                            <a href="https://docs.postguard.eu"
-                                >{$_('footer.docs')}</a
+                            <a
+                                href="https://docs.postguard.eu"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >{$_('footer.docs')}<ExternalLinkIcon /></a
                             >
                         </li>
                         <li>
@@ -94,23 +98,41 @@
                             >
                         </li>
                         <li>
-                            <a href="https://github.com/encryption4all"
-                                >GitHub</a
+                            <a
+                                href="https://github.com/encryption4all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >GitHub<ExternalLinkIcon /></a
                             >
                         </li>
                         <!-- eslint-disable svelte/no-navigation-without-resolve -->
-                        {#if FF_BUSINESS}<li>
-                                <a href={BUSINESS_URL}>PostGuard for Business</a
-                                >
-                            </li>{/if}
+                        <li>
+                            <a
+                                href={BUSINESS_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >PostGuard for Business<ExternalLinkIcon /></a
+                            >
+                        </li>
                         <!-- eslint-enable svelte/no-navigation-without-resolve -->
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>
-                    {$_('footer.builtBy')} <a href="https://yivi.app">Yivi</a> @
-                    <a href="https://caesar.nl">Caesar Groep</a>
+                    {$_('footer.builtBy')}
+                    <a
+                        href="https://yivi.app"
+                        target="_blank"
+                        rel="noopener noreferrer">Yivi<ExternalLinkIcon /></a
+                    >
+                    @
+                    <a
+                        href="https://caesar.nl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >Caesar Groep<ExternalLinkIcon /></a
+                    >
                 </p>
             </div>
         </div>

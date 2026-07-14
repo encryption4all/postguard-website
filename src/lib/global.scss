@@ -38,6 +38,16 @@ body {
     }
 }
 
+/* Global type scale.
+   Almost everything on the site sizes from the root font size via rem / ch / em
+   (the --pg-font-size-* scale, rem-based spacing and input heights, ch-based
+   widths…), so this is the single knob for scaling the whole UI up or down
+   while keeping every proportion — and therefore the site's feel — intact.
+   100% = browser default (16px). 106.25% = 17px. 112.5% = 18px. */
+html {
+    font-size: 106.25%;
+}
+
 :root {
     /* Typography */
     --pg-font-family: 'Overpass', sans-serif;
@@ -71,6 +81,7 @@ body {
     --pg-input-hover: #45545e;
     --pg-input-active: #2b343b;
     --pg-input-error: #b61616;
+    --pg-success: #1a9d57;
     --pg-on-primary: #ffffff;
     --pg-disabled-background: #6b7d8a;
     --pg-disabled-foreground: #ffffff;
@@ -79,6 +90,11 @@ body {
     --pg-border-radius-sm: 4px;
     --pg-border-radius-md: 6px;
     --pg-border-radius-lg: 8px;
+
+    /* Layout */
+    /* Standard content width for text/reading pages (privacy, about, blog).
+       ~62ch keeps line length in the comfortable range for readability. */
+    --pg-reading-width: 62ch;
 }
 
 .dark {
@@ -95,6 +111,7 @@ body {
     --pg-input-hover: #98a8b3;
     --pg-input-active: #c4cdd4;
     --pg-input-error: #de3030;
+    --pg-success: #34d17f;
 
     .invert {
         filter: invert(100%);
@@ -429,10 +446,18 @@ h3 {
     font-size: var(--pg-font-size-lg);
     font-weight: var(--pg-font-weight-medium);
     font-family: var(--pg-font-family);
-    border-radius: var(--pg-border-radius-sm);
-    background: var(--pg-text);
-    color: var(--pg-general-background);
-    box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.5);
+    border-radius: var(--pg-border-radius-md);
+    /* Routed through a local var so hover/active derive from the same base.
+       Dark mode overrides it (see `.dark .primary-btn`) because the shared
+       --pg-primary-contrast is too light there for a white label to clear
+       WCAG AA. */
+    --_btn-bg: var(--pg-primary-contrast);
+    background: var(--_btn-bg);
+    color: var(--pg-on-primary);
+    box-shadow:
+        inset 0 -3px 0 rgba(0, 0, 0, 0.2),
+        0 2px 4px rgba(0, 0, 0, 0.2),
+        0 6px 14px rgba(0, 0, 0, 0.16);
     cursor: pointer;
     box-sizing: border-box;
     transition:
@@ -443,14 +468,19 @@ h3 {
 }
 
 .primary-btn:hover:not(:disabled) {
-    background: var(--pg-input-active);
+    background: color-mix(in srgb, var(--_btn-bg) 82%, #000);
     transform: translateY(-1px);
-    box-shadow: 0 6px 4px -2px rgba(0, 0, 0, 0.5);
+    box-shadow:
+        inset 0 -3px 0 rgba(0, 0, 0, 0.2),
+        0 4px 6px rgba(0, 0, 0, 0.22),
+        0 10px 20px rgba(0, 0, 0, 0.18);
 }
 
 .primary-btn:active:not(:disabled) {
-    transform: translateY(0);
-    box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.5);
+    transform: translateY(1px);
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.25),
+        0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .primary-btn:focus-visible {
@@ -464,6 +494,14 @@ h3 {
     cursor: not-allowed;
     box-shadow: none;
     opacity: 1;
+}
+
+/* In dark mode --pg-primary-contrast is #3095de; a white label on it is only
+   3.24:1 (fails WCAG AA). Pin the button to a deeper blue so the label stays
+   white and legible — 4.82:1 here vs. 5.05:1 in light mode — instead of the
+   dark-on-blue that inverting the label would produce. */
+.dark .primary-btn {
+    --_btn-bg: #2277b3;
 }
 
 /* ── Filesharing shared styles (from filesharing/shared-styles.css) ───── */
@@ -618,19 +656,6 @@ h3 {
     html,
     body {
         -webkit-font-smoothing: subpixel-antialiased;
-    }
-
-    .primary-btn {
-        box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.25);
-    }
-
-    .primary-btn:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 4px -2px rgba(0, 0, 0, 0.25);
-    }
-
-    .primary-btn:active:not(:disabled) {
-        box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.25);
     }
 
     .primary-btn:focus-visible {

@@ -13,6 +13,32 @@
     import Done from '$lib/components/filesharing/Done.svelte'
     import CrashReport from '$lib/components/filesharing/CrashReport.svelte'
     import { SITE_URL } from '$lib/env'
+    import { afterNavigate } from '$app/navigation'
+    import { onMount, tick } from 'svelte'
+    import {
+        loadDraft,
+        saveDraftMeta,
+        saveDraftFiles,
+        clearDraft,
+        type DraftMeta,
+    } from '$lib/fileshareDraft'
+
+    // The compose step opens inside `#main-content` (and, on desktop, the
+    // `.inputs-container` panel), each of which is its own scroll container.
+    // SvelteKit's scroll handling targets the window, but the window never
+    // scrolls here because html/body are `height: 100%` flex columns — so a
+    // scroll position carried over from a previous view can leave this step
+    // opening pre-scrolled, hiding the instructional heading at the top of the
+    // panel (see encryption4all/postguard-website#295). Reset the relevant
+    // containers to the top whenever we navigate to this step so the
+    // instructions are the first thing the user sees. `afterNavigate` fires on
+    // the initial mount as well as on later navigations into this route.
+    afterNavigate(async () => {
+        await tick()
+        document.getElementById('main-content')?.scrollTo({ top: 0 })
+        document.querySelector('.inputs-container')?.scrollTo({ top: 0 })
+        window.scrollTo({ top: 0 })
+    })
 
     const ATTRIBUTES: Array<AttType> = [
         'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
@@ -36,6 +62,60 @@
     }
 
     let encryptState: EncryptState = $state(createDefaultEncryptState())
+
+    // ---- Draft persistence (survive a page refresh) --------------------------
+    // Files restored from a saved draft, handed to FileInput to re-inject.
+    let restoredFiles: File[] = $state([])
+    // Gate auto-save until the initial load has run, so an early empty save can
+    // never clobber the draft we're about to restore.
+    let draftLoaded = $state(false)
+    let metaSaveTimer: ReturnType<typeof setTimeout> | undefined
+
+    onMount(async () => {
+        const draft = await loadDraft()
+        if (
+            draft &&
+            encryptState.encryptionState === EncryptionState.FileSelection
+        ) {
+            encryptState.recipients = draft.recipients
+            encryptState.message = draft.message
+            restoredFiles = draft.files
+        }
+        draftLoaded = true
+    })
+
+    // Persist the recipient email(s), attributes and message (debounced) while
+    // the user is still composing.
+    $effect(() => {
+        if (!draftLoaded) return
+        if (encryptState.encryptionState !== EncryptionState.FileSelection)
+            return
+        const meta: DraftMeta = {
+            recipients: $state.snapshot(
+                encryptState.recipients
+            ) as DraftMeta['recipients'],
+            message: encryptState.message,
+        }
+        clearTimeout(metaSaveTimer)
+        metaSaveTimer = setTimeout(() => void saveDraftMeta(meta), 400)
+    })
+
+    // Persist the attached files whenever the list changes (add/remove).
+    $effect(() => {
+        if (!draftLoaded) return
+        const files = encryptState.files
+        if (encryptState.encryptionState !== EncryptionState.FileSelection)
+            return
+        void saveDraftFiles(files.slice())
+    })
+
+    // A successful send lands on the Done step — drop the draft so it isn't
+    // restored on the next visit within this session.
+    $effect(() => {
+        if (encryptState.encryptionState === EncryptionState.Done) {
+            void clearDraft()
+        }
+    })
 
     // Warn the user before they navigate away mid-upload. Cryptify does not
     // support resume yet, so navigating away silently aborts the upload and
@@ -93,6 +173,7 @@
             bind:percentages={encryptState.percentages}
             bind:done={encryptState.done}
             bind:stage={encryptState.encryptionState}
+            initialFiles={restoredFiles}
         />
         {#if encryptState.encryptionState === EncryptionState.FileSelection || encryptState.encryptionState === EncryptionState.Sign || encryptState.encryptionState === EncryptionState.Encrypting}
             <div class="inputs-container">
