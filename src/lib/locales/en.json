@@ -318,11 +318,14 @@
         "attributes": {
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobile phone number",
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber.placeholder": "612345678",
+            "pbdf.sidn-pbdf.mobilenumber.mobilenumber.tooltip": "Require the recipient to prove they own this mobile phone number with Yivi before they can open the files, so only that person can decrypt them.",
             "phoneInvalid": "Enter a valid phone number",
             "pbdf.gemeente.personalData.fullname": "Full name",
             "pbdf.gemeente.personalData.fullname.placeholder": "John Doe",
+            "pbdf.gemeente.personalData.fullname.tooltip": "Require the recipient to prove this is their full name with Yivi before they can open the files, so only that person can decrypt them.",
             "pbdf.gemeente.personalData.dateofbirth": "Date of birth",
             "pbdf.gemeente.personalData.dateofbirth.placeholder": "15-01-1990",
+            "pbdf.gemeente.personalData.dateofbirth.tooltip": "Require the recipient to prove this date of birth with Yivi before they can open the files, so only that person can decrypt them.",
             "optional": "optional"
         }
     },

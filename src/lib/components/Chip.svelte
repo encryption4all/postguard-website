@@ -6,6 +6,7 @@
         variant?: 'default' | 'filled' | 'dark'
         icon?: '+' | '×' | null
         disabled?: boolean
+        title?: string
     }
 
     let {
@@ -15,6 +16,7 @@
         variant = 'default',
         icon = null,
         disabled = false,
+        title,
     }: props = $props()
 
     let isInteractive = $derived(onclick !== undefined)
@@ -31,6 +33,7 @@
         class:chip-dark={variant === 'dark'}
         {onclick}
         {disabled}
+        title={title || undefined}
         type="button"
     >
         {#if icon}<span class="chip-icon">{icon}</span>{/if}<span
@@ -46,6 +49,7 @@
         class:chip-default={variant === 'default'}
         class:chip-filled={variant === 'filled'}
         class:chip-dark={variant === 'dark'}
+        title={title || undefined}
     >
         {#if icon}<span class="chip-icon">{icon}</span>{/if}<span
             class="chip-text">{text}</span
