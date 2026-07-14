@@ -76,12 +76,15 @@
     }
 
     .privacy-content {
-        max-width: 900px;
+        max-width: var(--pg-reading-width);
         width: 100%;
+        /* Enable kerning + ligatures for the whole page (inherited). */
+        text-rendering: optimizeLegibility;
     }
 
     h2 {
         margin-bottom: 0.5rem;
+        text-wrap: balance;
     }
 
     .last-updated {
@@ -92,10 +95,26 @@
 
     .privacy-text {
         text-align: left;
+        /* Let quotes/bullets hang into the margin (optical alignment). */
+        hanging-punctuation: first last;
 
         :global(p) {
             line-height: 1.6;
             font-size: var(--pg-font-size-base);
+            /* Knuth-Plass-style breaking: avoids orphans, evens the rag. */
+            text-wrap: pretty;
+            /* Justified, hyphenated setting for a typeset LaTeX-like look.
+               Hyphenation keys off the page `lang` (set per locale in the
+               root layout), so it breaks correctly in both en and nl. */
+            text-align: justify;
+            -webkit-hyphens: auto;
+            hyphens: auto;
+        }
+
+        :global(h2),
+        :global(h3),
+        :global(h4) {
+            text-wrap: balance;
         }
     }
 

@@ -90,6 +90,11 @@ html {
     --pg-border-radius-sm: 4px;
     --pg-border-radius-md: 6px;
     --pg-border-radius-lg: 8px;
+
+    /* Layout */
+    /* Standard content width for text/reading pages (privacy, about, blog).
+       ~62ch keeps line length in the comfortable range for readability. */
+    --pg-reading-width: 62ch;
 }
 
 .dark {

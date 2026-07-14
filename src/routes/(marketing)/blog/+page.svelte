@@ -105,7 +105,7 @@
 
 <style lang="scss">
     .blog-index {
-        max-width: 800px;
+        max-width: var(--pg-reading-width);
         margin: 0 auto;
         padding: 2rem 1rem;
 
