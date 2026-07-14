@@ -316,11 +316,14 @@
         "attributes": {
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber": "Mobiel telefoonnummer",
             "pbdf.sidn-pbdf.mobilenumber.mobilenumber.placeholder": "612345678",
+            "pbdf.sidn-pbdf.mobilenumber.mobilenumber.tooltip": "Vereis dat de ontvanger met Yivi bewijst dat dit mobiele telefoonnummer van hen is voordat ze de bestanden kunnen openen — zo kan alleen die persoon ze ontsleutelen.",
             "phoneInvalid": "Voer een geldig telefoonnummer in",
             "pbdf.gemeente.personalData.fullname": "Volledige naam",
             "pbdf.gemeente.personalData.fullname.placeholder": "Jan Jansen",
+            "pbdf.gemeente.personalData.fullname.tooltip": "Vereis dat de ontvanger met Yivi bewijst dat dit hun volledige naam is voordat ze de bestanden kunnen openen — zo kan alleen die persoon ze ontsleutelen.",
             "pbdf.gemeente.personalData.dateofbirth": "Geboortedatum",
             "pbdf.gemeente.personalData.dateofbirth.placeholder": "15-01-1990",
+            "pbdf.gemeente.personalData.dateofbirth.tooltip": "Vereis dat de ontvanger met Yivi deze geboortedatum bewijst voordat ze de bestanden kunnen openen — zo kan alleen die persoon ze ontsleutelen.",
             "optional": "optioneel"
         }
     },
