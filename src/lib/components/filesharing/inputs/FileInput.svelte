@@ -230,22 +230,6 @@
                         role="status"
                         aria-live="polite"
                     >
-                        <svg
-                            class="files-attached-icon"
-                            viewBox="0 0 24 24"
-                            width="20"
-                            height="20"
-                            aria-hidden="true"
-                        >
-                            <path
-                                d="M20 6 9 17l-5-5"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2.5"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                        </svg>
                         <span class="files-attached-text">
                             {$_(
                                 'filesharing.encryptPanel.fileBox.filesAttached',
@@ -490,10 +474,6 @@
         font-size: var(--pg-font-size-lg);
     }
 
-    .files-attached-icon {
-        flex-shrink: 0;
-    }
-
     .files-attached-text {
         min-width: 0;
     }
@@ -638,7 +618,7 @@
 
     .add-more-chip-container {
         display: flex;
-        justify-content: flex-start;
+        justify-content: center;
         pointer-events: auto;
     }
 
