@@ -38,6 +38,16 @@ body {
     }
 }
 
+/* Global type scale.
+   Almost everything on the site sizes from the root font size via rem / ch / em
+   (the --pg-font-size-* scale, rem-based spacing and input heights, ch-based
+   widths…), so this is the single knob for scaling the whole UI up or down
+   while keeping every proportion — and therefore the site's feel — intact.
+   100% = browser default (16px). 106.25% = 17px. 112.5% = 18px. */
+html {
+    font-size: 106.25%;
+}
+
 :root {
     /* Typography */
     --pg-font-family: 'Overpass', sans-serif;
