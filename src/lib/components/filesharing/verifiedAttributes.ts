@@ -41,7 +41,8 @@ export function isWeakSenderIdentity(
 /** A file with no verifiable sender at all: it was not signed, or the
  *  signature carries no email (the public signing identity). This is the
  *  weakest case — there is no identity claim to evaluate — so the download
- *  gate shows the strongest warning and time-locks the download button. */
+ *  gate shows the strongest warning and routes the download through an
+ *  extra confirmation modal (`UnsignedConfirmModal`) before releasing it. */
 export function isUnsignedSender(
     sender: FriendlySender | null | undefined
 ): boolean {
