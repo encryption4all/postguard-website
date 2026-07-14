@@ -6,18 +6,20 @@ import {
 } from './verifiedAttributes'
 import type { FriendlySender } from '@e4a/pg-js'
 
+const isEmail = (type: string) => type.endsWith('.email.email')
+
 const sender = (attrs: { type: string; value?: string }[]): FriendlySender => ({
-    email: attrs.find((a) => a.type.includes('email'))?.value ?? null,
+    email: attrs.find((a) => isEmail(a.type))?.value ?? null,
     attributes: attrs,
     raw: {
         public: {
             con: attrs
-                .filter((a) => a.type.includes('email'))
+                .filter((a) => isEmail(a.type))
                 .map((a) => ({ t: a.type, v: a.value })),
         },
         private: {
             con: attrs
-                .filter((a) => !a.type.includes('email'))
+                .filter((a) => !isEmail(a.type))
                 .map((a) => ({ t: a.type, v: a.value })),
         },
     },
@@ -29,7 +31,7 @@ describe('verifiedAttributesFor', () => {
         expect(verifiedAttributesFor(undefined)).toEqual([])
     })
 
-    it('returns each non-email attribute with its i18n label key and value', () => {
+    it('returns each non-email attribute with its type and value', () => {
         const result = verifiedAttributesFor(
             sender([
                 { type: 'pbdf.sidn-pbdf.email.email', value: 'a@b.com' },
@@ -50,22 +52,33 @@ describe('verifiedAttributesFor', () => {
         expect(result).toEqual([
             {
                 type: 'pbdf.gemeente.personalData.fullname',
-                labelKey:
-                    'filesharing.attributes.pbdf.gemeente.personalData.fullname',
                 value: 'R.A. Hensen',
             },
             {
                 type: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber',
-                labelKey:
-                    'filesharing.attributes.pbdf.sidn-pbdf.mobilenumber.mobilenumber',
                 value: '+31630222348',
             },
             {
                 type: 'pbdf.gemeente.personalData.dateofbirth',
-                labelKey:
-                    'filesharing.attributes.pbdf.gemeente.personalData.dateofbirth',
                 value: '27-05-1996',
             },
+        ])
+    })
+
+    it('keeps a non-email attribute whose type merely contains "email"', () => {
+        // The email filter matches the `.email.email` suffix, not any
+        // substring — an unrelated attribute is not silently dropped.
+        const result = verifiedAttributesFor(
+            sender([
+                { type: 'pbdf.sidn-pbdf.email.email', value: 'a@b.com' },
+                {
+                    type: 'pbdf.pbdf.emailverification.status',
+                    value: 'verified',
+                },
+            ])
+        )
+        expect(result.map((r) => r.type)).toEqual([
+            'pbdf.pbdf.emailverification.status',
         ])
     })
 

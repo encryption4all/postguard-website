@@ -85,6 +85,9 @@
                   : [],
         raw: { public: { con: [] } },
     })
+    const verifiedAttributes = $derived(
+        verifiedAttributesFor(mockSenderIdentity)
+    )
 
     // Mirror the production flow: unsigned files route the download action
     // through an extra confirmation modal (see download/+page.svelte).
@@ -682,9 +685,9 @@
                                 <strong class="sender-email">
                                     {mockSenderIdentity.email}
                                 </strong>
-                                {#if verifiedAttributesFor(mockSenderIdentity).length > 0}
+                                {#if verifiedAttributes.length > 0}
                                     <div class="attr-chips">
-                                        {#each verifiedAttributesFor(mockSenderIdentity) as attr (attr.type)}
+                                        {#each verifiedAttributes as attr (attr.type)}
                                             <span class="attr-chip">
                                                 {attr.value}
                                             </span>
@@ -831,9 +834,9 @@
                                 <strong class="sender-email">
                                     {mockSenderIdentity.email}
                                 </strong>
-                                {#if verifiedAttributesFor(mockSenderIdentity).length > 0}
+                                {#if verifiedAttributes.length > 0}
                                     <div class="attr-chips">
-                                        {#each verifiedAttributesFor(mockSenderIdentity) as attr (attr.type)}
+                                        {#each verifiedAttributes as attr (attr.type)}
                                             <span class="attr-chip">
                                                 {attr.value}
                                             </span>

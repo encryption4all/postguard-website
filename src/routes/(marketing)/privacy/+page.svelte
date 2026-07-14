@@ -1,6 +1,7 @@
 <script>
     import { _ } from 'svelte-i18n'
     import SEO from '$lib/components/SEO.svelte'
+    import SimpleSummary from '$lib/components/SimpleSummary.svelte'
     import { SITE_URL } from '$lib/env'
 
     const privacyJsonLd = {
@@ -12,7 +13,7 @@
                 url: `${SITE_URL}/privacy`,
                 description:
                     "PostGuard's privacy policy. Learn how we handle your data when you use our end-to-end encryption services.",
-                dateModified: '2026-04-21',
+                dateModified: '2026-07-13',
                 isPartOf: {
                     '@id': `${SITE_URL}/#website`,
                 },
@@ -50,7 +51,14 @@
 <div class="privacy-container">
     <div class="privacy-content">
         <h2><span>{$_('privacypolicy.title')}</span></h2>
-        <p class="last-updated">Last updated: April 21, 2026</p>
+        <p class="last-updated">{$_('privacypolicy.lastUpdated')}</p>
+        <SimpleSummary
+            id="privacy-summary"
+            title={$_('privacypolicy.simple.title')}
+        >
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+            {@html $_('privacypolicy.simple.body')}
+        </SimpleSummary>
         <div class="privacy-text">
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html $_('privacypolicy.full')}
@@ -68,12 +76,15 @@
     }
 
     .privacy-content {
-        max-width: 900px;
+        max-width: var(--pg-reading-width);
         width: 100%;
+        /* Enable kerning + ligatures for the whole page (inherited). */
+        text-rendering: optimizeLegibility;
     }
 
     h2 {
         margin-bottom: 0.5rem;
+        text-wrap: balance;
     }
 
     .last-updated {
@@ -84,10 +95,26 @@
 
     .privacy-text {
         text-align: left;
+        /* Let quotes/bullets hang into the margin (optical alignment). */
+        hanging-punctuation: first last;
 
         :global(p) {
             line-height: 1.6;
             font-size: var(--pg-font-size-base);
+            /* Knuth-Plass-style breaking: avoids orphans, evens the rag. */
+            text-wrap: pretty;
+            /* Justified, hyphenated setting for a typeset LaTeX-like look.
+               Hyphenation keys off the page `lang` (set per locale in the
+               root layout), so it breaks correctly in both en and nl. */
+            text-align: justify;
+            -webkit-hyphens: auto;
+            hyphens: auto;
+        }
+
+        :global(h2),
+        :global(h3),
+        :global(h4) {
+            text-wrap: balance;
         }
     }
 

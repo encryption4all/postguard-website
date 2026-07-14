@@ -1,25 +1,28 @@
 import type { FriendlySender } from '@e4a/pg-js'
 
 /** A non-email signed attribute prepared for rendering on the download
- *  page: `labelKey` is the svelte-i18n key for the human-readable label
- *  and `value` is the disclosed attribute value. The email is rendered
- *  separately (it is the public signing identity and always present),
- *  so it is filtered out here. */
+ *  page: `value` is the disclosed attribute value, shown as a chip. The
+ *  email is rendered separately (it is the public signing identity and
+ *  always present), so it is filtered out here. */
 export interface VerifiedAttribute {
     type: string
-    labelKey: string
     value: string
 }
+
+/** The Yivi email attribute type — the public signing identity, rendered
+ *  separately, so it is excluded from the private-attribute list. Match it
+ *  by suffix rather than substring so an unrelated future attribute whose
+ *  id merely contains `email` is not silently dropped. */
+const EMAIL_ATTR_SUFFIX = '.email.email'
 
 export function verifiedAttributesFor(
     sender: FriendlySender | null | undefined
 ): VerifiedAttribute[] {
     if (!sender) return []
     return sender.attributes
-        .filter((a) => !a.type.includes('email') && !!a.value)
+        .filter((a) => !a.type.endsWith(EMAIL_ATTR_SUFFIX) && !!a.value)
         .map((a) => ({
             type: a.type,
-            labelKey: `filesharing.attributes.${a.type}`,
             value: a.value as string,
         }))
 }

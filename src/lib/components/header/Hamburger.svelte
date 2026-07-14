@@ -7,9 +7,10 @@
     import logoDark from '$lib/assets/images/logo-dark.svg'
     import { _ } from 'svelte-i18n'
     import { page } from '$app/state'
+    import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte'
 
     interface props {
-        items: { name: string; route: string }[]
+        items: { name: string; route: string; external?: boolean }[]
     }
 
     let hamburgerOpen = $state(false)
@@ -84,11 +85,15 @@
                 <!-- eslint-disable svelte/no-navigation-without-resolve -->
                 <a
                     href={item.route}
+                    target={item.external ? '_blank' : undefined}
+                    rel={item.external ? 'noopener noreferrer' : undefined}
                     onclick={() => {
                         hamburgerOpen = false
                     }}
                 >
-                    {$_(`header.${item.name}`)}</a
+                    {$_(
+                        `header.${item.name}`
+                    )}{#if item.external}<ExternalLinkIcon />{/if}</a
                 >
                 <!-- eslint-enable svelte/no-navigation-without-resolve -->
             </li>

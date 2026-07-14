@@ -1,10 +1,11 @@
 <script lang="ts">
     import Header from '$lib/components/Header.svelte'
+    import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte'
     import { isLoading } from 'svelte-i18n'
     import { _ } from 'svelte-i18n'
     import { onMount } from 'svelte'
     import { resolve } from '$app/paths'
-    import { FF_BUSINESS, BUSINESS_URL } from '$lib/env'
+    import { BUSINESS_URL } from '$lib/env'
 
     let { children } = $props()
     let contactEl = $state<HTMLAnchorElement>()
@@ -18,6 +19,17 @@
         }
     })
 </script>
+
+<svelte:head>
+    <!-- Site-wide RSS autodiscovery so feed readers pointed at any marketing
+         page (including the root domain) find the blog feed. -->
+    <link
+        rel="alternate"
+        type="application/rss+xml"
+        title="PostGuard Blog RSS Feed"
+        href="/blog/rss.xml"
+    />
+</svelte:head>
 
 {#if !$isLoading}
     <a class="sr-only sr-only-focusable skip-link" href="#main-content">
@@ -60,8 +72,11 @@
                             <a href={resolve('/blog/')}>{$_('footer.blog')}</a>
                         </li>
                         <li>
-                            <a href="https://docs.postguard.eu"
-                                >{$_('footer.docs')}</a
+                            <a
+                                href="https://docs.postguard.eu"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >{$_('footer.docs')}<ExternalLinkIcon /></a
                             >
                         </li>
                         <li>
@@ -83,23 +98,41 @@
                             >
                         </li>
                         <li>
-                            <a href="https://github.com/encryption4all"
-                                >GitHub</a
+                            <a
+                                href="https://github.com/encryption4all"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >GitHub<ExternalLinkIcon /></a
                             >
                         </li>
                         <!-- eslint-disable svelte/no-navigation-without-resolve -->
-                        {#if FF_BUSINESS}<li>
-                                <a href={BUSINESS_URL}>PostGuard for Business</a
-                                >
-                            </li>{/if}
+                        <li>
+                            <a
+                                href={BUSINESS_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >PostGuard for Business<ExternalLinkIcon /></a
+                            >
+                        </li>
                         <!-- eslint-enable svelte/no-navigation-without-resolve -->
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>
-                    {$_('footer.builtBy')} <a href="https://yivi.app">Yivi</a> @
-                    <a href="https://caesar.nl">Caesar Groep</a>
+                    {$_('footer.builtBy')}
+                    <a
+                        href="https://yivi.app"
+                        target="_blank"
+                        rel="noopener noreferrer">Yivi<ExternalLinkIcon /></a
+                    >
+                    @
+                    <a
+                        href="https://caesar.nl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >Caesar Groep<ExternalLinkIcon /></a
+                    >
                 </p>
             </div>
         </div>
@@ -153,6 +186,17 @@
         margin-bottom: 2rem;
     }
 
+    /* Anchor the columns to the left, centre and right of the row so the
+       footer reads as intentionally spread rather than left-clumped. Reset
+       to left when the grid collapses to a single column (mobile). */
+    .footer-grid .footer-col:nth-child(2) {
+        text-align: center;
+    }
+
+    .footer-grid .footer-col:nth-child(3) {
+        text-align: right;
+    }
+
     .footer-col {
         h4 {
             font-size: var(--pg-font-size-sm);
@@ -188,6 +232,7 @@
 
         p {
             margin: 0;
+            font-size: var(--pg-font-size-xs);
         }
 
         a {
@@ -205,6 +250,11 @@
         .footer-grid {
             grid-template-columns: 1fr;
             gap: 1.5rem;
+        }
+
+        .footer-grid .footer-col:nth-child(2),
+        .footer-grid .footer-col:nth-child(3) {
+            text-align: left;
         }
     }
 </style>

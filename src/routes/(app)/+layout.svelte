@@ -1,5 +1,6 @@
 <script lang="ts">
     import Header from '$lib/components/Header.svelte'
+    import ExternalLinkIcon from '$lib/components/ExternalLinkIcon.svelte'
     import { isLoading } from 'svelte-i18n'
     import { resolve } from '$app/paths'
     import { page } from '$app/state'
@@ -25,7 +26,13 @@
             <span class="sep">&middot;</span>
             <a href={resolve('/privacy/')}>Privacy Policy</a>
             <span class="sep">&middot;</span>
-            <span>Built by <a href="https://yivi.app">Yivi</a></span>
+            <span
+                >Built by <a
+                    href="https://yivi.app"
+                    target="_blank"
+                    rel="noopener noreferrer">Yivi<ExternalLinkIcon /></a
+                ></span
+            >
         </footer>
     {/if}
 {/if}
@@ -79,6 +86,13 @@
 
         .sep {
             opacity: 0.5;
+        }
+    }
+
+    /* Match Header's 768px desktop breakpoint. */
+    @media only screen and (max-width: 767.98px) {
+        .app-footer {
+            display: none;
         }
     }
 </style>

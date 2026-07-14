@@ -54,15 +54,6 @@
     jsonLd={blogJsonLd}
 />
 
-<svelte:head>
-    <link
-        rel="alternate"
-        type="application/rss+xml"
-        title="PostGuard Blog RSS Feed"
-        href="/blog/rss.xml"
-    />
-</svelte:head>
-
 <div class="blog-index">
     <div class="header">
         <h1>Blog</h1>
@@ -114,7 +105,7 @@
 
 <style lang="scss">
     .blog-index {
-        max-width: 800px;
+        max-width: var(--pg-reading-width);
         margin: 0 auto;
         padding: 2rem 1rem;
 

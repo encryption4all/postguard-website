@@ -49,6 +49,9 @@
     let keylist: string[] = $state([])
     let key = $state('')
     let senderIdentity: FriendlySender | null = $state(null)
+    // The disclosed non-email signing attributes, derived once and reused
+    // across every panel that renders them (Ready, Confirm, Done).
+    const verifiedAttributes = $derived(verifiedAttributesFor(senderIdentity))
     let fileList: string[] = $state([])
     let decryptPct: number | undefined = $state(undefined)
     let lastError: unknown = $state(null)
@@ -345,9 +348,9 @@
                         <strong class="sender-email"
                             >{senderIdentity.email}</strong
                         >
-                        {#if verifiedAttributesFor(senderIdentity).length > 0}
+                        {#if verifiedAttributes.length > 0}
                             <div class="attr-chips">
-                                {#each verifiedAttributesFor(senderIdentity) as attr (attr.type)}
+                                {#each verifiedAttributes as attr (attr.type)}
                                     <span class="attr-chip">{attr.value}</span>
                                 {/each}
                             </div>
@@ -435,9 +438,9 @@
                         <strong class="sender-email"
                             >{senderIdentity.email}</strong
                         >
-                        {#if verifiedAttributesFor(senderIdentity).length > 0}
+                        {#if verifiedAttributes.length > 0}
                             <div class="attr-chips">
-                                {#each verifiedAttributesFor(senderIdentity) as attr (attr.type)}
+                                {#each verifiedAttributes as attr (attr.type)}
                                     <span class="attr-chip">{attr.value}</span>
                                 {/each}
                             </div>
@@ -574,9 +577,9 @@
                         <strong class="sender-email"
                             >{senderIdentity.email}</strong
                         >
-                        {#if verifiedAttributesFor(senderIdentity).length > 0}
+                        {#if verifiedAttributes.length > 0}
                             <div class="attr-chips">
-                                {#each verifiedAttributesFor(senderIdentity) as attr (attr.type)}
+                                {#each verifiedAttributes as attr (attr.type)}
                                     <span class="attr-chip">{attr.value}</span>
                                 {/each}
                             </div>

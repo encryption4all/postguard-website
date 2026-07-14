@@ -13,12 +13,20 @@
 
     let myDropzone: Dropzone | null = null
     let isDragging = $state(false)
+    // Flips true once Dropzone is constructed so the restore effect below can
+    // wait for it (files restored from a draft may arrive after mount).
+    let dropzoneReady = $state(false)
+    let injectedInitial = false
 
     interface props {
         files: File[]
         percentages: number[]
         done: boolean[]
         stage: EncryptionState
+        /** Files restored from a saved draft, re-injected into Dropzone on load
+         *  so their previews appear and they flow into `files` like a normal
+         *  add. Empty in the common (no draft) case. */
+        initialFiles?: File[]
     }
 
     import { MAX_UPLOAD_SIZE, ROLLING_LIMIT } from '$lib/env'
@@ -31,11 +39,26 @@
         percentages = $bindable(),
         done = $bindable(),
         stage = $bindable(),
+        initialFiles = [],
     }: props = $props()
 
     $effect(() => {
         if (files.length === 0 && myDropzone && myDropzone.files.length > 0) {
             myDropzone.removeAllFiles(true)
+        }
+    })
+
+    // Re-inject draft files once Dropzone exists. addFile() emits 'addedfile',
+    // so the handler below renders each preview and appends to `files` exactly
+    // as a user drop would — no separate restore path to keep in sync.
+    $effect(() => {
+        if (!dropzoneReady || injectedInitial || !myDropzone) return
+        if (initialFiles.length === 0) return
+        injectedInitial = true
+        for (const file of initialFiles) {
+            // addFile() augments a plain File into a DropzoneFile at runtime;
+            // the type just doesn't reflect that it accepts a bare File.
+            myDropzone.addFile(file as Parameters<Dropzone['addFile']>[0])
         }
     })
 
@@ -131,6 +154,8 @@
             }
         })
 
+        dropzoneReady = true
+
         return () => {
             if (myDropzone) {
                 myDropzone.destroy()
@@ -199,6 +224,21 @@
 
             <!-- couldn't simply do an else because the item was expected to be in the DOM before items can be dropped -->
             <div class="files-container" class:hidden={files.length <= 0}>
+                {#if stage === EncryptionState.FileSelection}
+                    <div
+                        class="files-attached"
+                        role="status"
+                        aria-live="polite"
+                    >
+                        <span class="files-attached-text">
+                            {$_(
+                                'filesharing.encryptPanel.fileBox.filesAttached',
+                                { values: { count: files.length } }
+                            )}
+                        </span>
+                    </div>
+                {/if}
+
                 <div
                     id="previews"
                     class="dz-previews"
@@ -206,19 +246,6 @@
                     class:encrypting={stage === EncryptionState.Encrypting}
                     class:error={stage === EncryptionState.Error}
                 ></div>
-
-                {#if stage !== EncryptionState.Encrypting}
-                    <div class="add-more-chip-container">
-                        <Chip
-                            text={$_(
-                                'filesharing.encryptPanel.fileBox.addMoreFiles'
-                            )}
-                            icon="+"
-                            size="lg"
-                            variant="default"
-                        />
-                    </div>
-                {/if}
 
                 <div class="file-summary" class:over-limit={overLimit}>
                     <p>
@@ -239,7 +266,6 @@
                                 'filesharing.encryptPanel.fileBox.fileSummary',
                                 {
                                     values: {
-                                        count: files.length,
                                         size: remainingSizeGB,
                                     },
                                 }
@@ -247,6 +273,19 @@
                         {/if}
                     </p>
                 </div>
+
+                {#if stage !== EncryptionState.Encrypting}
+                    <div class="add-more-chip-container">
+                        <Chip
+                            text={$_(
+                                'filesharing.encryptPanel.fileBox.addMoreFiles'
+                            )}
+                            icon="+"
+                            size="sm"
+                            variant="default"
+                        />
+                    </div>
+                {/if}
             </div>
         </div>
     </div>
@@ -337,7 +376,14 @@
     }
 
     .drop-hint-text {
-        font-size: clamp(var(--pg-font-size-lg), 3vw, var(--pg-font-size-2xl));
+        /* Fluid, but anchored to a rem base so it tracks the root type scale.
+           A bare `vw` middle term is viewport-locked and ignores the root
+           font size; `calc(rem + vw)` keeps the fluidity while still scaling. */
+        font-size: clamp(
+            var(--pg-font-size-lg),
+            calc(var(--pg-font-size-lg) + 2vw),
+            var(--pg-font-size-2xl)
+        );
         font-weight: var(--pg-font-weight-extrabold);
         color: var(--pg-primary);
         text-align: center;
@@ -382,13 +428,8 @@
         width: 80%;
         max-width: 300px;
         height: auto;
-        transition: transform 0.2s ease;
         user-select: none;
         pointer-events: none;
-    }
-
-    .upload-butt:hover img {
-        transform: scale(1.1);
     }
 
     .drag-text {
@@ -422,6 +463,19 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
+    }
+
+    .files-attached {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--pg-primary);
+        font-weight: var(--pg-font-weight-bold);
+        font-size: var(--pg-font-size-lg);
+    }
+
+    .files-attached-text {
+        min-width: 0;
     }
 
     .dropzone-box.has-files .files-container {
@@ -478,7 +532,7 @@
         width: 100%;
         margin-bottom: 0;
         padding: 0;
-        border-bottom: 2px solid var(--pg-input-normal-light);
+        border-bottom: 2px solid var(--pg-input-normal);
     }
 
     .dz-previews :global(.files > div:first-child) {

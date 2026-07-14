@@ -64,15 +64,6 @@
     jsonLd={articleJsonLd}
 />
 
-<svelte:head>
-    <link
-        rel="alternate"
-        type="application/rss+xml"
-        title="PostGuard Blog RSS Feed"
-        href="/blog/rss.xml"
-    />
-</svelte:head>
-
 <article class="blog-post">
     <header>
         <div class="meta">
@@ -121,9 +112,11 @@
 
 <style lang="scss">
     .blog-post {
-        max-width: 800px;
+        max-width: var(--pg-reading-width);
         margin: 0 auto;
         padding: 2rem 1rem;
+        /* Enable kerning + ligatures for the whole article (inherited). */
+        text-rendering: optimizeLegibility;
 
         header {
             margin-bottom: 1.5rem;
@@ -174,16 +167,27 @@
     .blog-post :global(h1) {
         font-size: var(--pg-font-size-2xl);
         margin-bottom: 1rem;
+        text-wrap: balance;
     }
 
     .blog-post :global(h2) {
         margin-top: 2rem;
         margin-bottom: 0.75rem;
+        text-wrap: balance;
     }
 
     .blog-post :global(p) {
         line-height: 1.7;
         margin-bottom: 1rem;
+        /* Knuth-Plass-style breaking: avoids orphans, evens the rag. */
+        text-wrap: pretty;
+        /* Justified, hyphenated setting for a typeset LaTeX-like look.
+           Hyphenation keys off the page `lang` (set per locale in the root
+           layout), so it breaks correctly in both en and nl. */
+        text-align: justify;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+        hanging-punctuation: first last;
     }
 
     .blog-post :global(img) {
@@ -210,6 +214,12 @@
     .blog-post :global(li) {
         line-height: 1.7;
         margin-bottom: 0.25rem;
+        /* List items here are full prose sentences, so set them like the
+           body paragraphs: justified, hyphenated, orphan-aware. */
+        text-wrap: pretty;
+        text-align: justify;
+        -webkit-hyphens: auto;
+        hyphens: auto;
     }
 
     .blog-post :global(code) {
@@ -218,5 +228,9 @@
         border-radius: var(--pg-border-radius-sm);
         font-family: var(--pg-mono-font-family, monospace);
         font-size: 0.9em;
+        /* Never hyphenate code: override the inherited `auto` from prose so
+           tokens inside a justified paragraph aren't broken with hyphens. */
+        -webkit-hyphens: manual;
+        hyphens: manual;
     }
 </style>
