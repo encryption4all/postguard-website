@@ -1,6 +1,3 @@
-
----
-
 ## Agent notes (migrated from the dobby memory repo)
 
 ## Architecture & toolchain
@@ -17,7 +14,6 @@
 - Bumping `@sveltejs/kit` to ≥ 2.59 requires adding `@types/node` to devDependencies in the same commit (`svelte-kit sync` writes `"types": ["node"]`, and `svelte-check --threshold warning` treats the missing types as fatal).
 - `pg-js` 0.10 → 1.x renamed the notify API: `UploadOptions.notify` is now `{ recipients?, sender?, message?, language? }` with both flags defaulting to `false`. To keep the old behaviour set `recipients: true, sender: true`. Only call site: `src/lib/components/filesharing/SendButton.svelte`.
 - `prettier-plugin-svelte` is on `^4.0.1`, which fixed the `{@const}` ternary crash (upstream sveltejs/prettier-plugin-svelte#528). No workaround needed on 4.0.1; the old `$derived` workaround was deliberately reverted (PR #285).
-- husky pre-commit fails on staged `.svelte` files (prettier "No parser could be inferred" — `prettier-plugin-svelte` is not in `package.json#prettier.plugins`). CI never sees this (its `prettier --check .` silently skips `.svelte`). Either commit with `--no-verify` and say why, or add the plugin — which reformats ~42 files and is its own scope.
 
 ## Encryption / file sharing
 
@@ -27,7 +23,7 @@
 - Sender attribute chips render `attr.value` only (no label lookup, no i18n keys per credential); email is filtered by the `.email.email` suffix, not a loose `includes('email')`.
 - Requires `@e4a/pg-js` ≥ 2.0.2 (`unseal` returns verified private `FriendlySender.attributes`); currently `^2.1.4`.
 - Do NOT reintroduce the old `SIGN_ATTRIBUTES` ordering workaround (empty `[]` alternative last / `[[attr],[]]` expansion) — the irmamobile bug it worked around is fixed in irmago 1.0. Clean form: empty alternative first, `{ t, optional: true }` shorthand.
-- Recipient email validation lives ONLY in `SendButton.svelte` (`emailRegex`, used by both `canEncrypt` and `getValidationErrors()`). The regex requires a dotted TLD (`\.[a-zA-Z]{2,}$`) and the address is trimmed before validation and before `pg.recipient.email()` — no-TLD typos used to pass and fail silently.
+- Recipient email validation lives ONLY in `SendButton.svelte` (`validator.isEmail(email.trim())` from the `validator` lib, used by both `canEncrypt` and `getValidationErrors()`). `validator.isEmail` requires a dotted TLD by default, and the address is trimmed before validation and before `pg.recipient.email()` — no-TLD typos used to pass and fail silently.
 - Yivi disclosure interruption: `pg.encrypt()` does NOT reject when the user cancels/closes the Yivi app (session `restart` keeps the promise pending). Detect via a `MutationObserver` watching for `.yivi-web-restart-button` in `#crypt-irma-qr`; `YiviQRCode.svelte` raises `oninterrupted` and `SendButton` shows a recovery banner. The QR renders as inline `<svg .yivi-web-qr-code>`, not `<canvas>`.
 - Recipient picker on `/download`: `checkRecipients()` filters empty strings BEFORE deciding to show the picker; use a `disabled selected` placeholder option, not `<option value="">`.
 
