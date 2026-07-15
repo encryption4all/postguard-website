@@ -12,6 +12,8 @@
         NetworkError,
         UploadSessionExpiredError,
         YiviSessionError,
+        type PreparedSign,
+        type SigningKeys,
     } from '@e4a/pg-js'
     import { tick } from 'svelte'
 
@@ -49,7 +51,23 @@
     let scanQrParts = $derived($_('filesharing.sign.scanQR').split('Yivi'))
 
     let isMobileDevice = isMobile()
-    let mobilePopupMode: 'none' | 'direct' | 'qr' = $state('none')
+    let mobilePopupMode: 'none' | 'direct' | 'qr' | 'onetap' = $state('none')
+
+    // --- iOS one-tap pre-warm ---------------------------------------------
+    // On iOS a Yivi Universal Link only opens the app inside a genuine user
+    // gesture. If we start the signing session on tap, the deep-link URL
+    // doesn't exist yet, so the tap can't open the app. Instead we pre-warm
+    // the session as soon as the compose form is valid (see the $effect
+    // below): pg.prepareSign() runs the disclosure ahead of time and hands us
+    // the app URL, which we put on the send button as a real <a href>. One tap
+    // then opens the app; the resolved signing keys are reused for encryption.
+    // Best-effort — until the URL is ready (or on desktop) we fall back to the
+    // two-tap button/QR flow.
+    let preparedSign: PreparedSign | null = null
+    let yiviAppUrl: string | null = $state(null)
+    // True while an actual send is in flight, so the pre-warm effect doesn't
+    // start a competing session or tear down the one we're consuming.
+    let sending = $state(false)
     let showValidationModal = $state(false)
     let validationErrors: string[] = $state([])
     let limitExceededMessage: string | null = $state(null)
@@ -86,6 +104,82 @@
         )
             return false
         return true
+    })
+
+    // Start (or restart) a pre-warmed Yivi signing session for the one-tap
+    // flow. Renders the Yivi widget into a hidden host purely to drive the
+    // session; the user never sees it — they tap our own send anchor instead.
+    // Synchronous up to assigning `preparedSign` so a re-entrant effect run
+    // can't start a second competing session. The hidden host is always in the
+    // DOM on mobile (rendered at mount), and effects run post-mount, so it's
+    // present here; if not, we simply skip and retry on the next trigger.
+    function startPrewarm(): void {
+        if (preparedSign || !browser) return
+        if (!document.querySelector('#prewarm-yivi')) return
+        const handle = pg.prepareSign({
+            element: '#prewarm-yivi',
+            attributes: SIGN_ATTRIBUTES,
+            includeSender: true,
+        })
+        preparedSign = handle
+        handle.mobileUrl
+            .then((url) => {
+                if (preparedSign === handle) yiviAppUrl = url
+            })
+            .catch(() => {
+                // Session failed before showing the app button; the keys
+                // handler below resets us to the fallback flow.
+            })
+        handle.keys.catch(() => {
+            // Session ended without a send (idle timeout, or cancelled in the
+            // app before tapping). Drop back to the two-tap fallback; a fresh
+            // pre-warm starts on the next form-valid / focus transition.
+            if (preparedSign === handle && !sending) {
+                preparedSign = null
+                yiviAppUrl = null
+            }
+        })
+    }
+
+    function cancelPrewarm(): void {
+        preparedSign?.cancel()
+        preparedSign = null
+        yiviAppUrl = null
+    }
+
+    // Drive the pre-warm lifecycle from compose state: warm while the form is
+    // valid and we're still composing; tear down otherwise (unless a send is
+    // consuming the session).
+    $effect(() => {
+        if (!browser || !isMobileDevice) return
+        const composing =
+            encryptState.encryptionState === EncryptionState.FileSelection
+        if (canEncrypt && composing && !preparedSign) {
+            startPrewarm()
+        } else if ((!canEncrypt || !composing) && preparedSign && !sending) {
+            cancelPrewarm()
+        }
+    })
+
+    // A pre-warmed session has a TTL. If the user backgrounds the tab and
+    // returns after it lapsed, re-warm so the one-tap URL is fresh. Reads
+    // canEncrypt inside the handler (not at setup) so this listener is
+    // installed once.
+    $effect(() => {
+        if (!browser || !isMobileDevice) return
+        const onFocus = () => {
+            if (
+                canEncrypt &&
+                encryptState.encryptionState ===
+                    EncryptionState.FileSelection &&
+                !preparedSign &&
+                !sending
+            ) {
+                startPrewarm()
+            }
+        }
+        window.addEventListener('focus', onFocus)
+        return () => window.removeEventListener('focus', onFocus)
     })
 
     function getValidationErrors(): string[] {
@@ -157,8 +251,16 @@
         await startEncryption()
     }
 
-    async function startEncryption(): Promise<void> {
+    // `signingKeys` is supplied by the one-tap flow (pg.prepareSign already ran
+    // the disclosure); when omitted, encrypt() starts its own Yivi session and
+    // renders the QR/button widget into #crypt-irma-qr as before.
+    async function startEncryption(signingKeys?: SigningKeys): Promise<void> {
+        sending = true
         encryptState.encryptionState = EncryptionState.Sign
+
+        // Fallback (widget) path: retire any idle pre-warmed session so we
+        // don't leave a second Yivi session dangling.
+        if (!signingKeys) cancelPrewarm()
 
         // Wait for Svelte to render the Yivi QR element into the DOM
         await tick()
@@ -197,6 +299,7 @@
                 files: encryptState.files,
                 recipients,
                 sign,
+                signingKeys,
                 onProgress: (pct) => {
                     // First progress callback means signing is done
                     if (encryptState.encryptionState === EncryptionState.Sign) {
@@ -298,6 +401,45 @@
                 encryptState.encryptionState = EncryptionState.Error
             }
             mobilePopupMode = 'none'
+        } finally {
+            sending = false
+        }
+    }
+
+    // One-tap send (iOS): the send control is an <a href> to the pre-warmed
+    // Yivi app URL, so tapping it opens the app on a genuine gesture. We do NOT
+    // preventDefault — the navigation is what opens the app. Alongside it we
+    // wait for the disclosure to complete (the user returns from Yivi), then
+    // encrypt with the pre-resolved keys. Falls back to onSign() if the
+    // pre-warmed session vanished between render and tap.
+    async function onSignOneTap(): Promise<void> {
+        yiviInterrupted = false
+        const handle = preparedSign
+        if (!handle) {
+            onSign()
+            return
+        }
+        sending = true
+        mobilePopupMode = 'onetap'
+        encryptState.encryptionState = EncryptionState.Sign
+        try {
+            const signingKeys = await handle.keys
+            // Consume the session so the pre-warm effect doesn't reuse it.
+            preparedSign = null
+            yiviAppUrl = null
+            await startEncryption(signingKeys)
+        } catch (e) {
+            preparedSign = null
+            yiviAppUrl = null
+            sending = false
+            if (e instanceof YiviSessionError) {
+                // Cancelled / timed out in the app — recover gracefully.
+                enterInterruptedRecovery()
+            } else {
+                encryptState.serverError = false
+                encryptState.encryptionState = EncryptionState.Error
+                mobilePopupMode = 'none'
+            }
         }
     }
 
@@ -484,10 +626,28 @@
                 </p>
             {/if}
         </div>
+    {:else if isMobileDevice && yiviAppUrl && canEncrypt}
+        <!-- iOS one-tap: a real <a href> to the pre-warmed Yivi app URL so a
+             single genuine tap opens the app (a Universal Link only hands off
+             to the app inside a user gesture). onSignOneTap runs alongside the
+             navigation; it must not preventDefault. The href is an external
+             Yivi deep link resolved at runtime, so SvelteKit's resolve() (for
+             internal routes) does not apply. -->
+        <!-- eslint-disable svelte/no-navigation-without-resolve -->
+        <a
+            class="primary-btn send-btn send-btn--link"
+            href={yiviAppUrl}
+            onclick={onSignOneTap}
+        >
+            {$_('filesharing.encryptPanel.encryptSend')}
+        </a>
+        <!-- eslint-enable svelte/no-navigation-without-resolve -->
     {:else}
         <!-- Normal button. When the message isn't sendable yet (e.g. no files
              attached) the button is aria-disabled but still clickable, so a
-             click surfaces the validation modal explaining what's missing. -->
+             click surfaces the validation modal explaining what's missing.
+             On mobile this is also the fallback until the one-tap URL is
+             ready (or if the pre-warmed session lapsed). -->
         <button
             bind:this={buttonRef}
             class="primary-btn send-btn"
@@ -639,6 +799,46 @@
                         size="md"
                         variant="dark"
                     />
+                {:else if mobilePopupMode === 'onetap'}
+                    <!-- One-tap: the Yivi app has been opened from the send
+                         anchor. No widget here — the disclosure runs in the
+                         pre-warmed session; we just wait for the user to come
+                         back from Yivi. -->
+                    <h2 class="bottom-sheet-title">
+                        {$_('filesharing.encryptPanel.encryptSend')}
+                    </h2>
+                    <p class="bottom-sheet-instruction">
+                        {$_('filesharing.sign.oneTapWaiting')}
+                    </p>
+                    <svg
+                        class="spinner"
+                        viewBox="0 0 24 24"
+                        width="28"
+                        height="28"
+                    >
+                        <circle
+                            class="spinner-circle"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="3"
+                        ></circle>
+                    </svg>
+                    <Chip
+                        text={$_('filesharing.sign.cancel')}
+                        onclick={() => {
+                            cancelPrewarm()
+                            sending = false
+                            encryptState.encryptionState =
+                                EncryptionState.FileSelection
+                            mobilePopupMode = 'none'
+                        }}
+                        icon="×"
+                        size="md"
+                        variant="dark"
+                    />
                 {:else}
                     <p class="bottom-sheet-instruction">
                         {$_('filesharing.sign.followSteps')}
@@ -663,6 +863,13 @@
                 {/if}
             </div>
         </div>
+    {/if}
+
+    <!-- Hidden host for the pre-warmed one-tap Yivi session. Kept in the DOM on
+         mobile so pg.prepareSign() can render its (invisible) widget here to
+         drive the session; the user interacts with the send anchor instead. -->
+    {#if isMobileDevice}
+        <div id="prewarm-yivi" class="prewarm-host" aria-hidden="true"></div>
     {/if}
 </div>
 
@@ -700,6 +907,30 @@
 <style lang="scss">
     .send-btn {
         margin: 1.5rem 0 0 0;
+    }
+
+    /* One-tap send rendered as an <a>. `.primary-btn` assumes a button, so
+       normalise the anchor: no underline, centred label, and inline-flex so it
+       matches the button's box. */
+    .send-btn--link {
+        text-decoration: none;
+        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Invisible host that drives the pre-warmed one-tap Yivi session. Not
+       `display:none` — some widget internals measure layout — but pulled fully
+       out of flow and hidden from view and a11y. */
+    .prewarm-host {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        pointer-events: none;
     }
 
     /* Yivi attribution caption below the send button. */
