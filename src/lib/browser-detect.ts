@@ -1,52 +1,5 @@
 import { browser } from '$app/environment'
 
-function GetBrowserInfo(): { name: string; version: string } {
-    let browserName = 'Unknown'
-    let browserVersion = 'Unknown'
-    if (browser) {
-        const userAgent = window.navigator.userAgent
-        let temp
-        let match =
-            userAgent.match(
-                /(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i
-            ) || []
-        if (/trident/i.test(match[1])) {
-            temp = /\brv[ :]+(\d+)/g.exec(userAgent) || []
-            browserName = 'IE'
-            browserVersion = temp[1] || ''
-        } else if (match[1] === 'Chrome') {
-            temp = userAgent.match(/\b(OPR|Edge)\/(\d+)/)
-            if (temp != null) {
-                browserName = temp[1].replace('OPR', 'Opera')
-                browserVersion = temp[2]
-            } else {
-                browserName = match[1]
-                browserVersion = match[2]
-            }
-        } else {
-            match = match[2]
-                ? [match[1], match[2]]
-                : [navigator.appName, navigator.appVersion, '-?']
-            temp = userAgent.match(/version\/(\d+)/i)
-            if (temp != null) {
-                match.splice(1, 1, temp[1])
-            }
-            browserName = match[0]
-            browserVersion = match[1]
-        }
-
-        return {
-            name: browserName,
-            version: browserVersion,
-        }
-    }
-
-    return {
-        name: browserName,
-        version: browserVersion,
-    }
-}
-
 function isMobile(): boolean {
     if (!browser || typeof window === 'undefined') {
         return false
@@ -81,4 +34,4 @@ function isMobile(): boolean {
     return false
 }
 
-export { GetBrowserInfo, isMobile }
+export { isMobile }
