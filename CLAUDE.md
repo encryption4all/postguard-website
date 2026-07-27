@@ -5,7 +5,7 @@
 - SvelteKit (Svelte 5 runes), TypeScript, `adapter-static`. Build: vite. Tests: Playwright (`test:e2e`, specs in `tests/`) + vitest (`test:unit`, specs in `src/**`). Lint: prettier + eslint. Release: Release-please.
 - PR titles must be conventional-commit (`fix:`, `feat:`, `chore:`, `docs:`) — the repo runs `amannn/action-semantic-pull-request` via `pr-title.yml`.
 - CI runs `npm run test:unit` as a PR gate (added in commit `19e8d9c`). `test:unit` is `svelte-kit sync && vitest run` — the sync is required because the root tsconfig extends the generated `.svelte-kit/tsconfig.json` (vitest errors with `TSCONFIG_ERROR` without it).
-- `npm run test:e2e` is NOT yet a CI gate. The `E2E Tests` job (chromium only) sits in the `ci.yml` patch on PR #329 and needs a maintainer to apply it, so until then nothing runs the Playwright specs in CI and you must run them locally. Once applied: Playwright's own `webServer` does the `npm run build && npm run preview` on port 4173, so CI and a local run take the identical path, and on failure the job uploads `playwright-report/` and `test-results/` (traces + screenshots).
+- CI also runs `npm run test:e2e` as a PR gate (job `E2E Tests`, chromium only). Playwright's own `webServer` does the `npm run build && npm run preview` on port 4173, so CI and a local run take the identical path. On failure the job uploads `playwright-report/` and `test-results/` (traces + screenshots).
 - Bot limitation: the GitHub App cannot push `.github/workflows/` changes — workflow edits need a maintainer.
 
 ## Dependency-bump gotchas
