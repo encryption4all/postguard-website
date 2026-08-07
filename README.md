@@ -2,6 +2,11 @@
 
 > For full documentation, visit [docs.postguard.eu](https://docs.postguard.eu/repos/postguard-website).
 
+> [!IMPORTANT]
+> **Development moved to [encryption4all/postguard-js](https://github.com/encryption4all/postguard-js), under `apps/website`.**
+> That repository publishes `ghcr.io/encryption4all/postguard-website` from its own `website.yml` workflow.
+> This repository is kept for history and is about to be archived. It no longer publishes container images.
+
 SvelteKit web frontend for encrypting and sending files using [Yivi](https://yivi.app) identity attributes. This is the main PostGuard web application where users can encrypt files and send them to recipients.
 
 ## Development
